@@ -82,3 +82,10 @@ http://butlerccwebdev.net/support/testingserver/vhosts-setup-win.html
 ## Other Resources
 
 [Link to GitHub Markdown Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet#links)
+
+---
+
+## To Do
+
+- Add a JS Comiler
+https://www.npmjs.com/package/jscompiler
