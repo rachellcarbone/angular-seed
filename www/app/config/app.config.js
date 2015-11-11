@@ -35,9 +35,4 @@ app.config(['$httpProvider', 'notificationsConfigProvider', 'flowFactoryProvider
             simultaneousUploads: 4
         };*/
         // flowFactoryProvider.factory = fustyFlowFactory;
-
-
-        /* Authentication Interceptor
-         * Checks the responses from the server to see if the user is still logged in. 
-        $httpProvider.interceptors.push('AuthInterceptor');*/
     }]);
