@@ -1,62 +1,78 @@
 'use strict';
 
 /* 
- * Auth Services
- * Sets Nav, Session and Build as global page variables. 
+ * Auth Broadcast Listeners 
+ * 
+ * Set up the variious event listeners for the auth module.
+ * 
+ * The module only listens to one Angular event, $stateChangeStart,
+ * all other events are in the auth.constants AUTH_EVENTS constant.
  */
 
-
-/* Auth Broadcast Listeners */
 angular.module('auth.listeners', ['auth.constants', 'auth.service'])
-    .run(['$rootScope', '$state', 'AUTH_EVENTS', 'AuthService', '$log',
+    .run(['$rootScope', '$state', 'AUTH_EVENTS', 'AuthService',
 
-    function($rootScope, $state, AUTH_EVENTS, AuthService, $log) {
+    function($rootScope, $state, AUTH_EVENTS, AuthService) {
 
-        /* On Start of Route Change
-         * Checks if user has permissions to access that route,
-         * if not broadcast a not authorized event.
+        // On state change start, check that the user is authorized
+        // https://docs.angularjs.org/api/ng/type/$rootScope.Scope#$on
         $rootScope.$on('$stateChangeStart',
                 function(event, toState, toParams, fromState, fromParams) {
                     AuthService.isAuthorized(toState.data.authorizedRoles).then(function(results) {
                         // Do nothing - they are authorized 
                     }, function(results) {
                         // Broadcast reason for failure
+                        // https://docs.angularjs.org/api/ng/type/$rootScope.Scope#$broadcast
                         $rootScope.$broadcast(results);
                     });
-                }); */
+                });
 
+        // On: Login Success
         $rootScope.$on(AUTH_EVENTS.loginSuccess, function() {
+            // Evaluate asynchronously
+            // https://docs.angularjs.org/api/ng/type/$rootScope.Scope#$evalAsync
             $rootScope.$evalAsync(function () {
+                // Go to the loged in user dashboard
                 $state.go('app.dashboard');
             });
         });
 
+        // On: Login Failure
         $rootScope.$on(AUTH_EVENTS.loginFailed, function() {
             $rootScope.$evalAsync(function () {
+                // Go to the login state
                 $state.go('auth.login');
             });
         });
 
+        // On: Logout Success
         $rootScope.$on(AUTH_EVENTS.logoutSuccess, function() {
             $rootScope.$evalAsync(function () {
+                // Go to the login state
                 $state.go('auth.login');
             });
         });
 
+        // On: Session Timeout
         $rootScope.$on(AUTH_EVENTS.sessionTimeout, function() {
             $rootScope.$evalAsync(function () {
+                // Go to the login state
                 $state.go('auth.login');
             });
         });
 
+        // On: User Not Authenticated
         $rootScope.$on(AUTH_EVENTS.notAuthenticated, function() {
             $rootScope.$evalAsync(function () {
+                // Go to the login state
                 $state.go('auth.login');
             });
         });
 
+        // On: User Not Authorized
         $rootScope.$on(AUTH_EVENTS.notAuthorized, function() {
             $rootScope.$evalAsync(function () {
+                // Go to the user not authorized error page
                 $state.go('app.error.notauthorized');
             });
         });

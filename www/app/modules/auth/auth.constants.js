@@ -1,12 +1,14 @@
 'use strict';
 
 /* 
- * Auth Services
- * Sets Nav, Session and Build as global page variables. 
+ * Auth Constants
+ * 
+ * Contstants used by the auth module.
  */
 
 var app = angular.module('auth.constants', []);
 
+// Events that are triggered by different auth states
 app.constant('AUTH_EVENTS',  {
     loginSuccess: 'auth-login-success',
     loginFailed: 'auth-login-failed',
@@ -16,6 +18,8 @@ app.constant('AUTH_EVENTS',  {
     notAuthorized: 'auth-not-authorized'
 });
 
+// Roles used for authorization and to determin
+// page access when navigating the website.
 app.constant('USER_ROLES', {
     guest: 1,
     expired: 2,
