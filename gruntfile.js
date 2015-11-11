@@ -16,18 +16,6 @@ module.exports = function (grunt) {
                 }
             }
         },
-        lessmin: {
-            development: {
-                options: {
-                    compress: true,
-                    yuicompress: true,
-                    optimization: 2
-                },
-                files: {
-                    "www/styles/styles.min.css": "www/styles/less/main.less" // destination file and source file
-                }
-            }
-        },
         nodestatic: {
             server: {
                 options: {
@@ -72,7 +60,7 @@ module.exports = function (grunt) {
         }
     });
 
-    grunt.registerTask('init', ['composer', 'bower', 'less', 'lessmin']);
-    grunt.registerTask('default', ['less', 'lessmin', 'nodestatic', 'watch']);
+    grunt.registerTask('init', ['composer', 'bower', 'less']);
+    grunt.registerTask('default', ['less', 'nodestatic', 'watch']);
     grunt.registerTask('styles', ['less', 'watch']);
 };
