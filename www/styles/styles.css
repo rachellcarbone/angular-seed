@@ -4,19 +4,195 @@
  * Contains imports for all other less files and 
  * guarantees that they are imported in a set order.
  */
-/*// Variables, Functions and Mixins
-@import 'vars-colors.less';
-@import 'vars-mixins.less';
-@import 'vars-animation.less';
-
-// General Styles
-@import 'base-typography.less';
-@import 'base-forms.less';
-
-// Page Layout(s) Header(s) and Footer(s)
-@import 'page-layout.less';
-@import 'page-header.less';
-@import 'page-footer.less';
-
-// Specific Components
-//@import 'ad-rotator.less';*/
+/*
+  * Less Named Colors
+  * 
+  * Color and sometimes size variables used by other less files.
+  * http://lesscss.org/features/#variables-feature
+  */
+/*
+  * Less Mixins
+  * 
+  * Mixins to be used as shortcuts by other less files.
+  * http://lesscss.org/features/#mixins-feature
+  */
+.mixin-fadeIn {
+  -webkit-opacity: 0.5;
+  -moz-opacity: 0.5;
+  opacity: 0.5;
+  -webkit-transition: all 1s ease;
+  -moz-transition: all 1s ease;
+  -ms-transition: all 1s ease;
+  -o-transition: all 1s ease;
+  transition: all 1s ease;
+}
+.mixin-fadeOut {
+  -webkit-transition: all 1s ease-in-out;
+  -moz-transition: all 1s ease-in-out;
+  -ms-transition: all 1s ease-in-out;
+  -o-transition: all 1s ease-in-out;
+  transition: all 1s ease-in-out;
+}
+.mixin-fadeOut:hover {
+  -webkit-opacity: 0.5;
+  -moz-opacity: 0.5;
+  opacity: 0.5;
+}
+.mixin-fade-between-colors {
+  -webkit-transition: color 0.5s, background 0.5s;
+  -moz-transition: color 0.5s, background 0.5s;
+  -ms-transition: color 0.5s, background 0.5s;
+  -o-transition: color 0.5s, background 0.5s;
+  transition: color 0.5s, background 0.5s;
+}
+/*
+  * Animation Mixins
+  * 
+  * Mixins for animations to be used as shortcuts by other less files.
+  * http://lesscss.org/features/#mixins-feature
+  */
+.animated {
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+@-webkit-keyframes wiggle {
+  0% {
+    -webkit-transform: skewX(9deg);
+  }
+  10% {
+    -webkit-transform: skewX(-8deg);
+  }
+  20% {
+    -webkit-transform: skewX(7deg);
+  }
+  30% {
+    -webkit-transform: skewX(-6deg);
+  }
+  40% {
+    -webkit-transform: skewX(5deg);
+  }
+  50% {
+    -webkit-transform: skewX(-4deg);
+  }
+  60% {
+    -webkit-transform: skewX(3deg);
+  }
+  70% {
+    -webkit-transform: skewX(-2deg);
+  }
+  80% {
+    -webkit-transform: skewX(1deg);
+  }
+  90% {
+    -webkit-transform: skewX(0deg);
+  }
+  100% {
+    -webkit-transform: skewX(0deg);
+  }
+}
+@keyframes wiggle {
+  0% {
+    transform: skewX(9deg);
+  }
+  10% {
+    transform: skewX(-8deg);
+  }
+  20% {
+    transform: skewX(7deg);
+  }
+  30% {
+    transform: skewX(-6deg);
+  }
+  40% {
+    transform: skewX(5deg);
+  }
+  50% {
+    transform: skewX(-4deg);
+  }
+  60% {
+    transform: skewX(3deg);
+  }
+  70% {
+    transform: skewX(-2deg);
+  }
+  80% {
+    transform: skewX(1deg);
+  }
+  90% {
+    transform: skewX(0deg);
+  }
+  100% {
+    transform: skewX(0deg);
+  }
+}
+.wiggle:hover {
+  -webkit-animation-name: wiggle;
+  animation-name: wiggle;
+  -webkit-animation-timing-function: ease-in;
+  animation-timing-function: ease-in;
+}
+.animated.wiggle {
+  -webkit-animation-duration: 0.75s;
+  animation-duration: 0.75s;
+}
+/*
+ * Typography Styles
+ * 
+ * General typography and text elements style overrides.
+ */
+/*
+ * Form Styles
+ * 
+ * Form and form element style overrides.
+ */
+/*
+ * Layout(s) Styles
+ * 
+ * Styles for each layout that the website may use.
+ */
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 60px;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 60px;
+  background-color: #f5f5f5;
+}
+/* Custom page CSS
+-------------------------------------------------- */
+/* Not required for template or sticky footer method. */
+body > .layout-view > .layout > .container {
+  padding: 60px 15px 0;
+}
+.container .text-muted {
+  margin: 20px 0;
+}
+.footer > .container {
+  padding-right: 15px;
+  padding-left: 15px;
+}
+code {
+  font-size: 80%;
+}
+/*
+ * Header(s) Styles
+ * 
+ * Styles for each area header that the website may use.
+ */
+/*
+ * Footer(s) Styles
+ * 
+ * Styles for each area footer that the website may use.
+ */
