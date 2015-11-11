@@ -9,7 +9,7 @@ angular.module('auth', [
     'auth.constants',
     'auth.session',
     'auth.service',
-    'auth.resolver',
+    //'auth.resolver',
     'auth.listeners',
     'auth.interceptor'
 ]);
