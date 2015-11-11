@@ -4,3 +4,45 @@
   * Mixins to be used as shortcuts by other less files.
   * http://lesscss.org/features/#mixins-feature
   */
+
+// Fade out on Mouse over
+.mixin-fadeIn {
+    -webkit-opacity: 0.5;
+    -moz-opacity: 0.5;
+    opacity: 0.5;
+    -webkit-transition: all 1s ease;
+    -moz-transition: all 1s ease;
+    -ms-transition: all 1s ease;
+    -o-transition: all 1s ease;
+    transition: all 1s ease;
+}
+
+// Fade in on Mouse over
+.mixin-fadeOut {
+    -webkit-transition: all 1s ease-in-out;
+    -moz-transition: all 1s ease-in-out;
+    -ms-transition: all 1s ease-in-out;
+    -o-transition: all 1s ease-in-out;
+    transition: all 1s ease-in-out;
+}
+.mixin-fadeOut:hover {
+    -webkit-opacity: 0.5;
+    -moz-opacity: 0.5;
+    opacity: 0.5;
+}
+
+// Fade Colors
+.mixin-fade-between-colors {
+    -webkit-transition: color 0.5s, background 0.5s;
+    -moz-transition: color 0.5s, background 0.5s;
+    -ms-transition: color 0.5s, background 0.5s;
+    -o-transition: color 0.5s, background 0.5s;
+    transition: color 0.5s, background 0.5s;
+}
+
+// Rounded Corners
+.mixin-border-radius(@radius: 5px) {
+  -webkit-border-radius: @radius;
+     -moz-border-radius: @radius;
+          border-radius: @radius;
+}
