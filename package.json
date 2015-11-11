@@ -1,0 +1,33 @@
+{
+  "name": "angular-seed",
+  "version": "0.0.1",
+  "license": "MIT",
+  "description": "A project seed used for creating single page AngularJS aplications.",
+  "author": "Rachel L Carbone <rachellcarbone@gmail.com>",
+  "contributors": [
+    {
+      "name": "Rachel L Carbone",
+      "email": "rachellcarbone@gmail.com"
+    }
+  ],
+  "main": "gruntfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rachellcarbone/angular-seed"
+  },
+  "bugs": {
+    "url": "https://github.com/rachellcarbone/angular-seed/issues"
+  },
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-bower-task": "^0.4.0",
+    "grunt-composer": "^0.4.4",
+    "grunt-contrib-less": "^1.0.1",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-nodestatic": "^0.1.2",
+    "jit-grunt": "^0.9.1"
+  }
+}
