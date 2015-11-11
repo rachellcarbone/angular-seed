@@ -13,7 +13,7 @@
  */
 
 var app = angular.module('app.router.public', [
-    'rachels.auth',
+    'auth.constants',
     'layout.public'
 ]);
 app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES) {

@@ -11,7 +11,7 @@
 
 var app = angular.module('app.router', [
   'ui.router',
-  'rachels.auth',
+  'auth.constants',
   'app.router.admin',
   'app.router.auth',
   'app.router.member',
