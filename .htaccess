@@ -1,16 +1,16 @@
 ### Redirect to new domain ###
 # RewriteEngine on
-# RewriteRule ^(.*)$ http://www.rachellcarbone.com/$1 [R=301,L]
+# RewriteRule ^(.*)$ http://www.angular-seed.dev/$1 [R=301,L]
 
 ### Redirect to www ###
 # RewriteEngine on
-# RewriteCond %{HTTP_HOST} ^rachellcarbone.com [NC]
-# RewriteRule ^(.*)$ http://www.rachellcarbone.com/$1 [R=301,L]
+# RewriteCond %{HTTP_HOST} ^angular-seed.dev [NC]
+# RewriteRule ^(.*)$ http://www.angular-seed.dev/$1 [R=301,L]
 
 ### Redirect iphones to moble site ###
 # RewriteEngine on
 # RewriteCond %{HTTP_USER_AGENT} iPhone
-# RewriteRule .* http://moble.rachellcarbone.com/ [R]
+# RewriteRule .* http://moble.angular-seed.dev/ [R]
 
 ### Redirect all requests to the index.html ###
 # RewriteEngine on
