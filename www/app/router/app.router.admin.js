@@ -25,7 +25,7 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
             data: {authorizedRoles: USER_ROLES.guest},
             views: {
                 'layout@': {
-                    templateUrl: 'app/layouts/admin/admin.html',
+                    templateUrl: 'app/views/admin/adminLayout/adminLayout.html',
                     controller: 'AdminLayoutCtrl'
                 }
             }
@@ -36,7 +36,7 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
             url: '/dashboard',
             views: {
                 'content@admin': {
-                    templateUrl: 'app/pages/admin/dashboard/dashboard.html',
+                    templateUrl: 'app/views/admin/dashboard/dashboard.html',
                     controller: 'AdminDashboardCtrl'
                 }
             }

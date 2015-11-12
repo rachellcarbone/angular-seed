@@ -7,5 +7,6 @@
  */
 
 angular.module('app.admin', [
-    'app.admin.layout'
+    'app.admin.layout',
+    'app.admin.dashboard'
 ]);
