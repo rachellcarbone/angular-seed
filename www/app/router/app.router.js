@@ -12,6 +12,8 @@
 var app = angular.module('app.router', [
   'ui.router',
   'rachels.auth.constants',
+  'app.maintenance',
+  'app.error',
   'app.router.admin',
   'app.router.auth',
   'app.router.member',
@@ -36,21 +38,34 @@ app.config(['$stateProvider', '$urlRouterProvider', 'USER_ROLES',
         /* Error Pages */
         $stateProvider.state('error.notfound', {
             title: 'Page Not Found',
-            url: '/error/404',
+            url: '/404',
             views: {
-                'content@admin': {
-                    templateUrl: 'app/views/error/errorLayout/errorLayout.html',
-                    controller: 'ErrorLayoutCtrl'
+                'content@error': {
+                    templateUrl: 'app/views/error/notFound/notFound.html',
+                    controller: 'ErrorNotFoundCtrl'
                 }
             }
         });
+        
         $stateProvider.state('error.notauthorized', {
             title: 'User Not Authorized',
-            url: '/error/unauthorized',
+            url: 'unauthorized',
             views: {
-                'content@admin': {
-                    templateUrl: 'app/views/error/errorLayout/errorLayout.html',
-                    controller: 'ErrorLayoutCtrl'
+                'content@error': {
+                    templateUrl: 'app/views/error/notAuthorized/notAuthorized.html',
+                    controller: 'ErrorNotAuthorizedCtrl'
+                }
+            }
+        });
+        
+        /* Maintenance Page */
+        $stateProvider.state('maintenance', {
+            title: 'Maintenance Mode',
+            url: '/maintenance',
+            views: {
+                'layout@': {
+                    templateUrl: 'app/views/maintenance/maintenance/maintenance.html',
+                    controller: 'MaintenanceCtrl'
                 }
             }
         });

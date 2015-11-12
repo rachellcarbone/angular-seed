@@ -7,7 +7,7 @@
  */
 
 var app = angular.module('app.error.notAuthorized', []);
-app.controller('ErrorNotAuthorized', ['$scope', '$state', '$timeout',
+app.controller('ErrorNotAuthorizedCtrl', ['$scope', '$state', '$timeout',
     function($scope, $state, $timeout) {
         $scope.timer = 5;
         

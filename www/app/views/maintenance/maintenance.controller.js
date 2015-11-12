@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('app.maintenance', [])
-    .controller('MaintenanceLayoutCtrl', ['$scope',
+    .controller('MaintenanceCtrl', ['$scope',
     function($scope) {
         
     }]);

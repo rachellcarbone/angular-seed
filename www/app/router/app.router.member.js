@@ -24,9 +24,17 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
             abstract: true,
             data: {authorizedRoles: USER_ROLES.guest},
             views: {
+                'header@member': {
+                    templateUrl: 'app/views/member/memberHeader/memberHeader.html',
+                    controller: 'MemberHeaderCtrl'
+                },
                 'layout@': {
                     templateUrl: 'app/views/member/memberLayout/memberLayout.html',
                     controller: 'MemberLayoutCtrl'
+                },
+                'footer@member': {
+                    templateUrl: 'app/views/member/memberFooter/memberFooter.html',
+                    controller: 'MemberFooterCtrl'
                 }
             }
         });
