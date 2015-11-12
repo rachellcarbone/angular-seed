@@ -14,7 +14,8 @@
 
 var app = angular.module('app.router.admin', [
     'auth.constants',
-    'layout.admin'
+    'layout.admin',
+    'pages.admin'
 ]);
 app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES) {
 
@@ -35,7 +36,10 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
             title: 'Admin Dashboard',
             url: '/dashboard',
             views: {
-                'content@': {}
+                'content@admin': {
+                    templateUrl: 'app/pages/admin/dashboard/dashboard.html',
+                    controller: 'AdminDashboardCtrl'
+                }
             }
         });
         
