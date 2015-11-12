@@ -14,7 +14,7 @@
 
 var app = angular.module('app.router.public', [
     'auth.constants',
-    'layout.public'
+    'app.public'
 ]);
 app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES) {
 
@@ -25,7 +25,7 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
             data: {authorizedRoles: USER_ROLES.guest},
             views: {
                 'layout@': {
-                    templateUrl: 'app/layouts/public/public.html',
+                    templateUrl: 'app/views/public/publicLayout/publicLayout.html',
                     controller: 'PublicLayoutCtrl'
                 }
             }

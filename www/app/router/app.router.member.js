@@ -14,7 +14,7 @@
 
 var app = angular.module('app.router.member', [
     'auth.constants',
-    'layout.member'
+    'app.member'
 ]);
 app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES) {
 
@@ -25,7 +25,7 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
             data: {authorizedRoles: USER_ROLES.guest},
             views: {
                 'layout@': {
-                    templateUrl: 'app/layouts/member/member.html',
+                    templateUrl: 'app/views/member/memberLayout/memberLayout.html',
                     controller: 'MemberLayoutCtrl'
                 }
             }

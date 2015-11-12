@@ -20,28 +20,43 @@ var app = angular.module('app.router', [
 app.config(['$stateProvider', '$urlRouterProvider', 'USER_ROLES', 
     function ($stateProvider, $urlRouterProvider, USER_ROLES) {
 
-        /* Error Pages 
-        $stateProvider.state('app.error', {
-            url: '',
+        /*  Abstract Error Route */
+        $stateProvider.state('error', {
+            url: '/error',
             abstract: true,
+            data: {authorizedRoles: USER_ROLES.guest},
             views: {
-                'container@': {
-                    templateUrl: 'js/app/controllers/general/views/errorPages.html'
+                'layout@': {
+                    templateUrl: 'app/views/error/errorLayout/errorLayout.html',
+                    controller: 'ErrorLayoutCtrl'
                 }
             }
-        })
-        .state('app.error.notfound', {
-            title: 'Page Not Found',
-            url: '/error/not-found'
-        })
-        .state('app.error.notauthorized', {
-            title: 'User Not Authorized',
-            url: '/error/not-authorized'
         });
-*/
+
+        /* Error Pages */
+        $stateProvider.state('error.notfound', {
+            title: 'Page Not Found',
+            url: '/error/404',
+            views: {
+                'content@admin': {
+                    templateUrl: 'app/views/error/errorLayout/errorLayout.html',
+                    controller: 'ErrorLayoutCtrl'
+                }
+            }
+        });
+        $stateProvider.state('error.notauthorized', {
+            title: 'User Not Authorized',
+            url: '/error/unauthorized',
+            views: {
+                'content@admin': {
+                    templateUrl: 'app/views/error/errorLayout/errorLayout.html',
+                    controller: 'ErrorLayoutCtrl'
+                }
+            }
+        });
 
         // For any unmatched url, redirect to /
         $urlRouterProvider.when('', '/');
         $urlRouterProvider.when('/#', '/');
-        $urlRouterProvider.otherwise('/error/not-found');
+        $urlRouterProvider.otherwise('/error/404');
     }]);
