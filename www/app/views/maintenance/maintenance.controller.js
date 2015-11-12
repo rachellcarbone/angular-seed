@@ -11,4 +11,6 @@
 angular.module('app.maintenance', [])
     .controller('MaintenanceCtrl', ['$scope', function($scope) {
         
+                $scope.currentYear = moment().year();
+        
     }]);

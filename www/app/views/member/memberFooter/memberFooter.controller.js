@@ -9,4 +9,6 @@
 angular.module('app.member.footer', [])
         .controller('MemberFooterCtrl', ['$scope', function ($scope) {
         
+                $scope.currentYear = moment().year();
+        
     }]);

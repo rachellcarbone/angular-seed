@@ -9,4 +9,6 @@
 angular.module('app.auth.footer', [])
         .controller('AuthFooterCtrl', ['$scope', function ($scope) {
         
+                $scope.currentYear = moment().year();
+        
     }]);
