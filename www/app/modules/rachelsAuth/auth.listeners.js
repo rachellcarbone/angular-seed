@@ -33,7 +33,7 @@ angular.module('rachels.auth.listeners', ['auth.constants', 'auth.service'])
             // https://docs.angularjs.org/api/ng/type/$rootScope.Scope#$evalAsync
             $rootScope.$evalAsync(function () {
                 // Go to the loged in user dashboard
-                $state.go('app.dashboard');
+                $state.go('member.dashboard');
             });
         });
 

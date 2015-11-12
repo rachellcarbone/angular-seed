@@ -25,7 +25,7 @@ app.controller('ErrorNotFoundCtrl', ['$scope', '$state', '$timeout',
         })();
         
         $scope.goToDashboard = function() {
-            $state.go('app.dashboard');
+            $state.go('member.dashboard');
         };
         
         $scope.isActiveState = function(state) {
