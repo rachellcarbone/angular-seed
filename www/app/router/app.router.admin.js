@@ -55,7 +55,7 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
             url: '/roles',
             views: {
                 'content@admin': {
-                    templateUrl: 'app/views/roles/roles/roles.html',
+                    templateUrl: 'app/views/admin/roles/roles.html',
                     controller: 'AdminRolesCtrl'
                 }
             }
@@ -66,7 +66,7 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
             url: '/users',
             views: {
                 'content@admin': {
-                    templateUrl: 'app/views/users/users/users.html',
+                    templateUrl: 'app/views/admin/users/users.html',
                     controller: 'AdminUsersCtrl'
                 }
             }

@@ -43,7 +43,32 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
             title: 'Member Dashboard',
             url: '/dashboard',
             views: {
-                'content@': {}
+                'content@member': {
+                    templateUrl: 'app/views/member/dashboard/dashboard.html',
+                    controller: 'MemberDashboardCtrl'
+                }
+            }
+        });
+
+        $stateProvider.state('member.profile', {
+            title: 'User Profile',
+            url: '/profile',
+            views: {
+                'content@member': {
+                    templateUrl: 'app/views/member/profile/profile.html',
+                    controller: 'MemberProfileCtrl'
+                }
+            }
+        });
+
+        $stateProvider.state('member.settings', {
+            title: 'User Settings',
+            url: '/settings',
+            views: {
+                'content@member': {
+                    templateUrl: 'app/views/member/settings/settings.html',
+                    controller: 'MemberSettingsCtrl'
+                }
             }
         });
         
