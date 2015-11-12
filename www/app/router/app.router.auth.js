@@ -43,7 +43,10 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
             title: 'Login',
             url: '/login',
             views: {
-                'content@': {}
+                'content@auth': {
+                    templateUrl: 'app/views/auth/login/login.html',
+                    controller: 'AuthLoginCtrl'
+                }
             }
         });
 
