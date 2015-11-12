@@ -8,7 +8,7 @@
  * area of the app.
  */
 
-angular.module('layout.public', [])
+angular.module('app.public.layout', [])
         .controller('PublicLayoutCtrl', ['$scope', function ($scope) {
         
     }]);

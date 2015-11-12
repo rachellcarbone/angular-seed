@@ -14,8 +14,7 @@
 
 var app = angular.module('app.router.admin', [
     'auth.constants',
-    'layout.admin',
-    'pages.admin'
+    'app.admin'
 ]);
 app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES) {
 

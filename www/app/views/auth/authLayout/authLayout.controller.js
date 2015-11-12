@@ -8,7 +8,7 @@
  * area of the app.
  */
 
-angular.module('layout.auth', [])
+angular.module('app.auth.layout', [])
         .controller('AuthLayoutCtrl', ['$scope', function ($scope) {
         
     }]);

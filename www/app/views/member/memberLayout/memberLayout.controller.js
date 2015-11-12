@@ -8,7 +8,7 @@
  * area of the app.
  */
 
-angular.module('layout.member', [])
+angular.module('app.member.layout', [])
         .controller('MemberLayoutCtrl', ['$scope', function ($scope) {
         
     }]);

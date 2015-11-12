@@ -8,7 +8,7 @@
  * area of the app.
  */
 
-angular.module('layout.admin', [])
+angular.module('app.admin.layout', [])
         .controller('AdminLayoutCtrl', ['$scope', function ($scope) {
         
     }]);
