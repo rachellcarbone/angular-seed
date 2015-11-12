@@ -5,7 +5,7 @@
  * Sets Nav, Session and Build as global page variables. 
  */
 
-angular.module('auth.session', [])
+angular.module('rachels.auth.session', [])
     .service('Session', [function() {
             
     var self = this;

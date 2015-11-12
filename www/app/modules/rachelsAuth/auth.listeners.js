@@ -9,7 +9,7 @@
  * all other events are in the auth.constants AUTH_EVENTS constant.
  */
 
-angular.module('auth.listeners', ['auth.constants', 'auth.service'])
+angular.module('rachels.auth.listeners', ['auth.constants', 'auth.service'])
     .run(['$rootScope', '$state', 'AUTH_EVENTS', 'AuthService',
 
     function($rootScope, $state, AUTH_EVENTS, AuthService) {

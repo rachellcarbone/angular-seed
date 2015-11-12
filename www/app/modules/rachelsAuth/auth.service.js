@@ -5,7 +5,7 @@
  * Sets Nav, Session and Build as global page variables. 
  */
 
-angular.module('auth.service', [])
+angular.module('rachels.auth.service', [])
     .factory('AuthService', ['$rootScope', function($rootScope) {
             
 /*
