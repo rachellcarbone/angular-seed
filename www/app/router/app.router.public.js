@@ -83,4 +83,15 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
             }
         });
         
+        /* Site Map */
+        $stateProvider.state('public.sitemap', {
+            title: 'Site Map',
+            url: '/sitemap',
+            views: {
+                'content@public': {
+                    templateUrl: 'app/views/public/sitemap/sitemap.html'
+                }
+            }
+        });
+        
     }]);
