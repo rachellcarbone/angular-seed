@@ -39,6 +39,35 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
             }
         });
 
+        /* Login / Authentication Related States */
+
+        $stateProvider.state('auth.signup', {
+            title: 'Sign Up',
+            url: '/signup',
+            views: {
+                'content@auth': {
+                }
+            }
+        });
+
+        $stateProvider.state('auth.signup.success', {
+            title: 'Please Confirm Your Email',
+            url: '/please-confirm-email',
+            views: {
+                'content@auth': {
+                }
+            }
+        });
+        
+        $stateProvider.state('auth.signup.confirmEmail', {
+            title: 'Success! Your Email is Confirmed',
+            url: '/success',
+            views: {
+                'content@auth': {
+                }
+            }
+        });
+        
         $stateProvider.state('auth.login', {
             title: 'Login',
             url: '/login',
@@ -49,70 +78,39 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
                 }
             }
         });
-
-        /* 
-         * Autherization Roles
-         
-
-        $stateProvider.state('auth', {
-            url: '',
-            abstract: true,
-            data: {authorizedRoles: USER_ROLES.guest},
-            resolve: {}
+        
+        $stateProvider.state('auth.login.forgotPassword', {
+            title: 'Sign Up',
+            url: '/forgot-password',
+            views: {
+                'content@auth': {
+                }
+            }
         });
-
-        $stateProvider.state('auth.login', {
-            title: 'Login',
-            url: '/login',
+        
+        $stateProvider.state('auth.login.forgotPassword.resetEmailSent', {
+            title: 'Reset Instructions Have Been Sent',
+            url: '/instructions-sent',
             views: {
-                'container@': {
-                    templateUrl: 'js/app/controllers/general/views/login.html',
-                    controller: 'LoginCtrl'
+                'content@auth': {
                 }
             }
-        }).state('auth.logout', {
-            title: 'Logout',
-            url: '/logout',
-            views: {
-                'container@': {
-                    templateUrl: 'js/app/controllers/general/views/login.html',
-                    controller: 'LoginCtrl'
-                }
-            }
-        }).state('auth.sendResetEmail', {
-            title: 'Forgot Password',
-            url: '/password-reset',
-            views: {
-                'container@': {
-                    templateUrl: 'js/app/controllers/general/views/resetPassword.html',
-                    controller: 'ResetPasswordCtrl'
-                }
-            }
-        }).state('auth.changePassword', {
+        });
+        
+        $stateProvider.state('auth.login.changePassword', {
             title: 'Change Your Password',
-            url: '/change-password/:token',
+            url: '/change-password',
             views: {
-                'container@': {
-                    templateUrl: 'js/app/controllers/general/views/changePassword.html',
-                    controller: 'ChangePasswordCtrl'
-                }
-            },
-            resolve: {
-                AuthService: 'AuthService',
-                passwordResetTokenRequest: function (AuthService, $stateParams) {
-                    return AuthService.validatePasswordReset($stateParams.token);
-                }
-            }
-        }).state('auth.confirmEmail', {
-            title: 'Confirm Your Email',
-            url: '/confirm-email',
-            views: {
-                'container@': {
-                    templateUrl: 'js/app/controllers/general/views/confirmEmail.html',
-                    controller: 'ConfirmEmailCtrl'
+                'content@auth': {
                 }
             }
         });
-    */
+
+        // This should catch incoming requests, 
+        // Trigger the logout method and then redirect
+        // to public.
+        $stateProvider.state('auth.logout', {
+            url: '/logout'
+        });
 
     }]);
