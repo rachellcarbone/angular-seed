@@ -10,7 +10,18 @@ var app = angular.module('app.config', [
   //'flow',
   //'ngNotificationsBar'
 ]);
-app.config([function () {
+app.config(['$locationProvider', function ($locationProvider) {
+        
+        // Allows for use of regular URL path segments (i.e. /articles/21), 
+        // instead of their hashbang equivalents (/#/articles/21).
+        // https://docs.angularjs.org/guide/$location#html5-mode
+        $locationProvider.html5Mode(true);
+        
+        /*
+         * Tripple check that I dont need this.
+         * $locationProvider.hashPrefix('!');
+         */
+        
         /*
 app.config(['$httpProvider', 'notificationsConfigProvider', 'flowFactoryProvider',
     function ($httpProvider, notificationsConfigProvider, flowFactoryProvider) {
