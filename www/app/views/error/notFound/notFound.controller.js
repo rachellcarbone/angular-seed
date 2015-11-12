@@ -1,10 +1,14 @@
 'use strict';
 
-/* @author  Rachel Carbone */
+/* 
+ * Page: Error 404 Page Not Found
+ * 
+ * Used to display a 404 page not found error page.
+ */
 
-var app = angular.module('editor.controllers', []);
-app.controller('ErrorPagesCtrl', ['$rootScope', '$scope', '$state', '$timeout',
-    function($rootScope, $scope, $state, $timeout) {
+var app = angular.module('app.error.notFound', []);
+app.controller('ErrorNotFoundCtrl', ['$scope', '$state', '$timeout',
+    function($scope, $state, $timeout) {
         $scope.timer = 5;
         
         $timeout(function () {

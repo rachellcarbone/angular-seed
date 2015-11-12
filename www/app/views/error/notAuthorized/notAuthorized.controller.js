@@ -1,10 +1,14 @@
 'use strict';
 
-/* @author  Rachel Carbone */
+/* 
+ * Page: Error Not Authorized
+ * 
+ * Used to display a not authorized message to users.
+ */
 
-var app = angular.module('editor.controllers', []);
-app.controller('ErrorPagesCtrl', ['$rootScope', '$scope', '$state', '$timeout',
-    function($rootScope, $scope, $state, $timeout) {
+var app = angular.module('app.error.notAuthorized', []);
+app.controller('ErrorNotAuthorized', ['$scope', '$state', '$timeout',
+    function($scope, $state, $timeout) {
         $scope.timer = 5;
         
         $timeout(function () {
