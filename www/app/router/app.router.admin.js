@@ -49,5 +49,27 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
                 }
             }
         });
+
+        $stateProvider.state('admin.roles', {
+            title: 'System Roles',
+            url: '/roles',
+            views: {
+                'content@admin': {
+                    templateUrl: 'app/views/roles/roles/roles.html',
+                    controller: 'AdminRolesCtrl'
+                }
+            }
+        });
+
+        $stateProvider.state('admin.users', {
+            title: 'System Users',
+            url: '/users',
+            views: {
+                'content@admin': {
+                    templateUrl: 'app/views/users/users/users.html',
+                    controller: 'AdminUsersCtrl'
+                }
+            }
+        });
         
     }]);
