@@ -7,7 +7,11 @@
  */
 
 angular.module('app.public', [
+    'app.public.about',
+    'app.public.contact',
+    'app.public.landing',
     'app.public.layout',
     'app.public.header',
-    'app.public.footer'
+    'app.public.footer',
+    'app.public.tour'
 ]);
