@@ -9,4 +9,5 @@
 angular.module('app.public.header', [])
         .controller('PublicHeaderCtrl', ['$scope', function ($scope) {
         
+        $scope.userIsLoggedIn = false;
     }]);
