@@ -10,6 +10,6 @@
 angular.module('theApp', [
     'app.config',
     'app.router',
-    'app.run.dev',
-    'app.run'
+    'app.run',
+    'app.run.dev'
 ]);
