@@ -6,8 +6,8 @@
  * Used to display a not authorized message to users.
  */
 
-var app = angular.module('app.error.notAuthorized', []);
-app.controller('ErrorNotAuthorizedCtrl', ['$scope', '$state', '$timeout',
+angular.module('app.error.notAuthorized', [])
+        .controller('ErrorNotAuthorizedCtrl', ['$scope', '$state', '$timeout',
     function($scope, $state, $timeout) {
         $scope.timer = 5;
         

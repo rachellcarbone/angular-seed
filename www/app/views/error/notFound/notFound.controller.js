@@ -6,8 +6,8 @@
  * Used to display a 404 page not found error page.
  */
 
-var app = angular.module('app.error.notFound', []);
-app.controller('ErrorNotFoundCtrl', ['$scope', '$state', '$timeout',
+angular.module('app.error.notFound', [])
+        .controller('ErrorNotFoundCtrl', ['$scope', '$state', '$timeout',
     function($scope, $state, $timeout) {
         $scope.timer = 5;
         
