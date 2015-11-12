@@ -43,7 +43,43 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
             title: 'Welcome',
             url: '/',
             views: {
-                'content@': {}
+                'content@public': {
+                    templateUrl: 'app/views/public/landing/landing.html',
+                    controller: 'PublicLandingCtrl'
+                }
+            }
+        });
+
+        $stateProvider.state('public.about', {
+            title: 'About Us',
+            url: '/about',
+            views: {
+                'content@public': {
+                    templateUrl: 'app/views/public/about/about.html',
+                    controller: 'PublicAboutCtrl'
+                }
+            }
+        });
+
+        $stateProvider.state('public.tour', {
+            title: 'Tour',
+            url: '/tour',
+            views: {
+                'content@public': {
+                    templateUrl: 'app/views/public/tour/tour.html',
+                    controller: 'PublicTourCtrl'
+                }
+            }
+        });
+
+        $stateProvider.state('public.contact', {
+            title: 'Contact Us',
+            url: '/contact',
+            views: {
+                'content@public': {
+                    templateUrl: 'app/views/public/contact/contact.html',
+                    controller: 'PublicContactCtrl'
+                }
             }
         });
         
