@@ -27,11 +27,45 @@ $ npm install -g getcomposer
 
 ---
 
+#### Project Directory Structure
+
+```
+/api
+    /v1                 Slim PHP API Coming Soon
+/node_modules           [.gitignored]
+/public                 Files that users upload, add sub directories as needed
+/www
+    /app
+    /components         Website components like a signup form or sidebar that is loaded from the state definition
+    /config             Angular app .confg and .run methods used to configure the application
+    /directives         Directives used by the application
+    /filters            Filters used by the application
+    /modules            I consider a module to be a grouping of services that are used by another controller or that configure themselfs to act on an event.
+    /router             Router files configure the states of the application
+    /views              View modules represent different areas of a website.
+        /admin          The administrative area for managing the application settings and databases
+        /auth           Auth pages like "Login" and "Sign Up".
+        /error          Error pages such as "404" and "User Not Authorized".
+        /maintenance    The maintenance / under construction blocking page.
+        /member         Logged in member pages like the "User Profile" page and "Member Dashboard"
+        /public         Public (unauthenticated) states, such as the landing page and "About Us"
+    app.js              "theApp" - Loads all of the modules used by the site
+    /bower_components   [.gitignored]
+    /media              Holds various resources for site content, add more sub directories as needed
+        /images         Theme and content images
+        /pdfs           PDF content
+        favicon.ico     The website fav icon, set in index.html
+    /styles             
+        /less           Less CSS Files to be compiled into styles.css
+        /styles.css     Site theme css file that is included in index.html
+```
+---
+
 ####  Front End
 
-##### Angular.js User Interface
+##### User Interface - Angular.js 
 
-- Requires Bower 
+Requires Bower 
 
 ```
 $ bower install
@@ -55,9 +89,9 @@ Requirements:
 
 #### Back End 
 
-##### API V1 - Slim PHP 
+##### API V1 - PHP and MySQL
 
-- Requires Composer 
+Requires Composer 
 
 ```
 $ cd api/v1
@@ -82,9 +116,8 @@ Requirements:
 
 ##### Install
 
-XAMP - Windows & Linux - https://www.apachefriends.org
-
-MAMP - OSX - https://www.mamp.info/en/
+- XAMP - Windows & Linux - https://www.apachefriends.org
+- MAMP - OSX - https://www.mamp.info/en/
 
 ##### Configure Apache Virtual Host 
 
@@ -117,13 +150,13 @@ http://butlerccwebdev.net/support/testingserver/vhosts-setup-win.html
 
 ---
 
-### Other Resources
+#### Other Resources
 
 [Link to GitHub Markdown Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet#links)
 
 ---
 
-### To Do v1.0
+###### To Do v1.0
 
 - MySQL Database Design
 - MySQL Upgrade Controlls (Versioning)
@@ -136,7 +169,7 @@ http://butlerccwebdev.net/support/testingserver/vhosts-setup-win.html
 - Admin Managment Pages
 - API Docs http://apidocjs.com/#getting-started
 
-### To Do v2.0
+###### To Do v2.0
 - MongoDB Database Design 
 - Add a JS Comiler https://www.npmjs.com/package/jscompiler
 - Express API http://expressjs.com/
