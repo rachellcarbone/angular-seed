@@ -132,7 +132,7 @@ http://butlerccwebdev.net/support/testingserver/vhosts-setup-win.html
 127.0.0.1       localhost
 #	::1         localhost
 
-127.0.0.1		www.newprojectseed.dev
+127.0.0.1		www.seed.dev
 ```
 
 ###### Edit httpd-vhosts.conf file: C:\xampp\apache\conf\extra\httpd-vhosts.conf
@@ -168,6 +168,7 @@ http://butlerccwebdev.net/support/testingserver/vhosts-setup-win.html
 - Read Site Config File
 - Admin Managment Pages
 - API Docs http://apidocjs.com/#getting-started
+- Add config file for the application
 
 ###### To Do v2.0
 - MongoDB Database Design 
@@ -177,3 +178,4 @@ http://butlerccwebdev.net/support/testingserver/vhosts-setup-win.html
 - Package this project for NPM?
 - Gallery / Portfolio Pages
 - Blog... maybe just Wordpress setup instructions / integration
+- Language settings (change seed.dev to yoursite.com everywhere)
