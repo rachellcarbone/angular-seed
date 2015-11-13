@@ -7,6 +7,8 @@
  */
 
 angular.module('app.auth.login', [])
-        .controller('AuthLoginCtrl', ['$scope', function ($scope) {
+        .controller('AuthLoginCtrl', ['$scope', '$state', function ($scope, $state) {
+        
+        $scope.$state = $state;
         
     }]);

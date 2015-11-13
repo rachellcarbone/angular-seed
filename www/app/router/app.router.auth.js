@@ -73,12 +73,17 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
             }
         });
         
+        $stateProvider.state('auth.login.locked', {
+            title: 'Account Locked',
+            url: '/account-locked'
+        });
+        
         $stateProvider.state('auth.login.forgotPassword', {
             title: 'Forgot Password',
             url: '/forgot-password'
         });
         
-        $stateProvider.state('auth.login.resetEmailSent', {
+        $stateProvider.state('auth.login.forgotPassword.resetEmailSent', {
             title: 'Reset Instructions Have Been Sent',
             url: '/reset-instructions-sent'
         });

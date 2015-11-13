@@ -1,36 +1,45 @@
 <div class="page auth login">
 
-    <div>
+    <div class="row" ng-if="$state.is('auth.signup.confirmEmail')">
+        <div class="col-sm-0 col-md-3"></div>
+        <div class="col-sm-12 col-md-6">
         
-        <div class="page-header">
-            <h1>Please Confirm Your Email</h1>
-        </div> 
+            <div class="page-header">
+                <h1>Please Confirm Your Email</h1>
+            </div> 
+
+            <p class="lead">Thank you for signing up with us.</p>
+
+            <p>A message has been sent to {{userEmail}} with a link
+            to confirm your email address.</p>
+            
+            <p>You will be redirected to the <a data-ui-sref="public.landing">home page</a> in <span data-state-redirect-timeout data-to-state="public.landing" data-timeout-seconds="10"></span> seconds.</p>
         
-        <p class="lead">Thank you for signing up with us.</p>
-        
-        <p>A message has been sent to {{userEmail}} with a link
-        to confirm your email address.</p>
-        
+        </div>
+        <div class="col-sm-0 col-md-3"></div>
     </div>
 
-    <div>
+    <div class="row" ng-if="$state.is('auth.signup.success')">
+        <div class="col-sm-0 col-md-3"></div>
+        <div class="col-sm-12 col-md-6">
         
-        <div class="page-header">
-            <h1>Success!</h1>
-        </div> 
+            <div class="page-header">
+                <h1>Success!</h1>
+            </div> 
+
+            <p class="lead">Your account has been confirmed.</p>
+
+            <p>In {{seconds}} you will be redirected to the 
+                <a ui-sref="auth.login">Login Page</a> in <span data-state-redirect-timeout data-to-state="auth.login" data-timeout-seconds="6"></span>
+                seconds to login with your new username and password.</p>
         
-        <p class="lead">Your account has been confirmed.</p>
-        
-        <p>In {{seconds}} you will be redirected to the 
-            <a ui-sref="auth.login">Login Page</a> to login with your new 
-            username and password.</p>
-        
+        </div>
+        <div class="col-sm-0 col-md-3"></div>
     </div>
     
-    
-    <div class="row">
-        <div class="col-md-4"></div>
-        <div class="col-md-4">
+    <div class="row" ng-if="$state.is('auth.signup')">
+        <div class="col-sm-0 col-md-3"></div>
+        <div class="col-sm-12 col-md-6">
 
             <form>
                 
@@ -53,6 +62,14 @@
                     <input type="email" class="form-control" id="userEmail" placeholder="Email">
                 </div>
                 
+                <div class="alert alert-info" role="alert">
+                    <p><strong>Passwords Must:</strong></p>
+                    <ul>
+                        <li>Be at least 8 characters in length.</li>
+                        <li>Contain at least one letter and number.</li>
+                    </ul>
+                </div>
+            
                 <div class="form-group">
                     <label for="userPassword">Password</label>
                     <input type="password" class="form-control" id="userPassword" placeholder="Password">
@@ -68,14 +85,17 @@
                     <input type="text" class="form-control" id="userReferredFrom" placeholder="Google, Facebook Ad, Email...">
                 </div>
                 
-                <button type="button" class="btn btn-default">Cancel</button>
+                <hr/>
                 
-                <button type="submit" class="btn btn-default">Sign Up</button>
+                <div class="form-group text-right">
+                    <button type="button" class="btn btn-default btn-lg" data-ui-sref="public.landing">Cancel</button>
+                    <button type="submit" class="btn btn-default btn-lg">Sign Up</button>
+                </div>
                 
             </form>
             
         </div>
-        <div class="col-md-4"></div>
+        <div class="col-sm-0 col-md-3"></div>
     </div>
 
 </div>

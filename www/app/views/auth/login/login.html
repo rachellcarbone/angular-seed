@@ -1,6 +1,6 @@
 <div class="page auth login">
-
-    <div class="row">
+    
+    <div class="row" ng-if="$state.is('auth.login')">
         <div class="col-sm-0 col-sm-2 col-md-3 col-lg-4"></div>
         <div class="col-sm-12 col-sm-8 col-md-6 col-lg-4">
 
@@ -33,7 +33,7 @@
                     </div>
                     
                     <div class="col-md-6">
-                        <p class="text-right"><a>Forgot Password</a></p>
+                        <p class="text-right"><a data-ui-sref="auth.login.forgotPassword">Forgot Password</a></p>
                     </div>
                     
                 </div>
@@ -46,7 +46,7 @@
                 
                 <p class="clearfix"><br/></p>
                 
-                <p class="text-center">Not a member yet? <a>Take a Tour</a> or <a>Sign Up</a>.</p>
+                <p class="text-center">Not a member yet? <a data-ui-sref="public.tour">Take a Tour</a> or <a data-ui-sref="auth.signup">Sign Up</a>.</p>
                 
             </form>
             
@@ -54,4 +54,135 @@
         <div class="col-sm-0 col-sm-2 col-md-3 col-lg-4"></div>
     </div>
 
+    <div class="row" ng-if="$state.is('auth.login.locked')">
+        <div class="col-sm-0 col-sm-2 col-md-3 col-lg-4"></div>
+        <div class="col-sm-12 col-sm-8 col-md-6 col-lg-4">
+
+            <div class="page-header">
+                <h1>Account Locked</h1>
+            </div>
+            
+            <p>There have been an suspicious number of login attempts for this email.
+                The account has been locked for security purposes.</p>
+            
+            <p>Please try again later.</p>
+            
+            <hr/>
+            
+            <p>Head <a data-ui-sref="public.landing">home</a> or <a data-ui-sref="auth.login">Return to Login</a>.</p>
+        </div>
+        <div class="col-sm-0 col-sm-2 col-md-3 col-lg-4"></div>
+    </div>
+    
+    <div class="row" ng-if="$state.is('auth.login.forgotPassword')">
+        <div class="col-sm-0 col-sm-2 col-md-3 col-lg-4"></div>
+        <div class="col-sm-12 col-sm-8 col-md-6 col-lg-4">
+
+            <div class="page-header">
+                <h1>Password Assistance</h1>
+            </div>
+            
+            <p>Enter the e-mail associated with your Seed.dev account</p>
+            
+            <p>We'll send you a link where you can easily create a new password.</p>
+            
+            <form>
+                
+                <hr/>
+                
+                <div class="form-group">
+                    <label for="userEmail">Email Address</label>
+                    <input type="email" class="form-control" id="userEmail" placeholder="Email address associated with your account">
+                </div>
+                
+                <div class="text-right">
+                    <button type="submit" class="btn btn-default">Send Password Reset Email</button>
+                </div>
+                
+                <p class="clearfix"><br/></p>
+                
+                <hr/>
+                
+                <p class="text-center">Did you remember your password? <a data-ui-sref="auth.login">Return to Login</a>.</p>
+                
+                
+            </form>
+            
+        </div>
+        <div class="col-sm-0 col-sm-2 col-md-3 col-lg-4"></div>
+    </div>
+    
+    <div class="row" ng-if="$state.is('auth.login.forgotPassword.resetEmailSent')">
+        <div class="col-sm-0 col-sm-2 col-md-3 col-lg-4"></div>
+        <div class="col-sm-12 col-sm-8 col-md-6 col-lg-4">
+
+            <div class="page-header">
+                <h1>Instructions Sent</h1>
+            </div>
+            
+            <p class="lead">Check your email</p>
+            
+            <p>If the e-mail address you entered is associated with a customer 
+                account in our records, you will receive an e-mail from us with 
+                instructions for resetting your password.</p>
+            
+            <p>If you don't receive this e-mail, please check your junk mail 
+                folder or visit our Help pages to contact Customer Service for 
+                further assistance</p>
+            
+            <p>Back to the <a data-ui-sref="public.landing">home page</a>.</p>
+        </div>
+        <div class="col-sm-0 col-sm-2 col-md-3 col-lg-4"></div>
+    </div>
+    
+    <div class="row" ng-if="$state.is('auth.login.forgotPassword.changePassword')">
+        <div class="col-sm-0 col-sm-2 col-md-3 col-lg-4"></div>
+        <div class="col-sm-12 col-sm-8 col-md-6 col-lg-4">
+
+            <div class="page-header">
+                <h1>Change Your Password</h1>
+            </div>
+            
+            <div class="alert alert-info" role="alert">
+                <p><strong>Passwords Must:</strong></p>
+                <ul>
+                    <li>Be at least 8 characters in length.</li>
+                    <li>Contain at least one letter and number.</li>
+                </ul>
+            </div>
+            
+            <form>
+                                
+                <div class="form-group">
+                    <label for="userEmail">Email Address</label>
+                    <input type="email" class="form-control" id="userEmail" placeholder="Email address associated with your account">
+                </div>
+                
+                <div class="form-group">
+                    <label for="newPassword">Reenter Password</label>
+                    <input type="password" class="form-control" id="newPassword" placeholder="Create a password">
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" class="form-control" id="confirmPassword" placeholder="Reenter password">
+                </div>
+                
+                <div class="text-right">
+                    <button type="submit" class="btn btn-default">Save New Password</button>
+                </div>
+                
+                <p class="clearfix"><br/></p>
+                
+                <hr/>
+                
+                <p class="text-center">Did you remember your password? <a data-ui-sref="auth.login">Return to Login</a>.</p>
+                
+                
+            </form>
+            
+        </div>
+        <div class="col-sm-0 col-sm-2 col-md-3 col-lg-4"></div>
+    </div>                 
+                 
 </div>

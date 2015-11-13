@@ -82,6 +82,11 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
                 }
             }
         });
+
+        $stateProvider.state('public.contact.confirmation', {
+            title: 'Message Sent',
+            url: '/message-sent'
+        });
         
         /* Site Map */
         $stateProvider.state('public.sitemap', {
