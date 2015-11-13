@@ -15,11 +15,15 @@ Windows Installer
 
 Bower - https://www.npmjs.com/package/bower
 
+```
 $ npm install -g bower
+```
 
 Composer - https://getcomposer.org/download/
 
+```
 $ npm install -g getcomposer
+```
 
 ---
 
@@ -27,33 +31,54 @@ $ npm install -g getcomposer
 
 ##### Angular.js User Interface
 
+- Requires Bower 
+
+```
+$ bower install
+```
+
+Requirements:
+
+- Angular https://angularjs.org/
+- Bootstrap http://getbootstrap.com/
+- Angular Bootstrap https://angular-ui.github.io/bootstrap/
+- Datatables https://www.datatables.net/
+- Angular Datatables https://l-lin.github.io/angular-datatables/#/welcome
+- Qtip2 http://qtip2.com/
+- Angular Qtip2 Directive https://github.com/romainberger/angular-qtip2-directive
+- Angular UI Router https://github.com/angular-ui/ui-router
+- Font Awesome https://fortawesome.github.io/Font-Awesome/
+- JQuery https://jquery.com/
+- Moment http://momentjs.com/
+
 ---
 
 #### Back End 
 
 ##### API V1 - Slim PHP 
 
-- Requires Bower 
+- Requires Composer 
 
+```
 $ cd api/v1
-$ bower install
+$ composer install
+```
 
 
-##### API V2 - Express JS
+Requirements:
 
-
-// Api Doc Js is used to generate documentation for the api
-http://apidocjs.com/#getting-started
-
-npm install apidoc -g
-apidoc -i api/v2/controllers/ -o docs/
-
+- Grunt http://gruntjs.com/
+- Grunt Bower https://github.com/yatskevich/grunt-bower-task
+- Grunt Bower Concat https://github.com/sapegin/grunt-bower-concat
+- Grunt Composer https://www.npmjs.com/package/grunt-composer
+- Grunt Less https://github.com/gruntjs/grunt-contrib-watch
+- Grunt Watch https://github.com/gruntjs/grunt-contrib-watch
+- Grunt Nodestatic https://github.com/ia3andy/grunt-nodestatic
+- Jit Grunt https://www.npmjs.com/package/jit-grunt
 
 ---
 
-#### Server Setup
-
-##### Apache and MySQL
+#### Server Setup - Apache and MySQL
 
 ##### Install
 
@@ -64,6 +89,8 @@ MAMP - OSX - https://www.mamp.info/en/
 ##### Configure Apache Virtual Host 
 
 These instructions were created with the paths for Windows 8 using XAMP
+
+http://butlerccwebdev.net/support/testingserver/vhosts-setup-win.html
 
 ###### Edit the hosts file: C:\windows\system32\drivers\etc\hosts
 
@@ -88,11 +115,6 @@ These instructions were created with the paths for Windows 8 using XAMP
 </VirtualHost>
 ```
 
-http://butlerccwebdev.net/support/testingserver/vhosts-setup-win.html
-
-
-##### Node Static
-
 ---
 
 ### Other Resources
@@ -112,6 +134,7 @@ http://butlerccwebdev.net/support/testingserver/vhosts-setup-win.html
 - Product Detail
 - Read Site Config File
 - Admin Managment Pages
+- API Docs http://apidocjs.com/#getting-started
 
 ### To Do v2.0
 - MongoDB Database Design 
