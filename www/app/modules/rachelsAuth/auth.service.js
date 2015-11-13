@@ -9,8 +9,8 @@ angular.module('rachels.auth.service', [])
     .factory('AuthService', ['$rootScope', function($rootScope) {
             
 /*
-app.factory('AuthService', ['$rootScope', '$q', '$log', 'Session', 'AUTH_EVENTS', 'USER_ROLES', 'APIV2Service', 
-    function($rootScope, $q, $log, Session, AUTH_EVENTS, USER_ROLES, API) {
+app.factory('AuthService', ['$rootScope', '$q', '$log', 'UserSession', 'AUTH_EVENTS', 'USER_ROLES', 'APIV2Service', 
+    function($rootScope, $q, $log, UserSession, AUTH_EVENTS, USER_ROLES, API) {
         var self = this;
         self.login = function(credentials) {
             return $q(function (resolve, reject) {
