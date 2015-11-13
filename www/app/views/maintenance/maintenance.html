@@ -1,14 +1,49 @@
-<div class="page error maintenance">
-    <div class="page-header">
-        <h1>Website Under Maintenance</h1>
-    </div>
-    
-    <p>So Sorry, we're doing some updates right now.</p>
-    <p>Please check back in a few minutes because we will be right back.</p>
-</div>
+<div class="layout">
 
-<div class="row">
-    
-    <p class="text-muted">© {{currentYear}} angular-seed.com</p>
-    
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand">Angular Seed</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="page error maintenance">
+            
+            <div class="row">
+                <div class="col-sm-1 col-md-3"></div>
+                <div class="col-sm-10 col-md-6">
+
+                    <div class="page-header">
+                        <h1>Website Under Maintenance</h1>
+                    </div>
+                    
+                    
+                    <div class="row">
+                        <div class="col-xs-12 col-xs-offset-0 col-sm-8 col-sm-offset-2 col-lg-6 col-lg-offset-3">
+                            <uib-progressbar class="progress-striped active" value="progressValue" type="info"><i>{{statusMessage}}</i></uib-progressbar>
+                        </div>
+                    </div>
+
+                    <p>So Sorry, we're doing some updates right now.</p>
+                    <p>Please check back in a few minutes because we will be right back.</p>
+                    
+                </div>
+                <div class="col-sm-1 col-md-3"></div>
+            </div>
+            
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+
+                <p class="text-muted">© {{currentYear}} angular-seed.com</p>
+
+            </div>
+        </div>
+    </footer>
+
 </div>

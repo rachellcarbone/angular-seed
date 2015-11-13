@@ -64,7 +64,7 @@ app.config(['$stateProvider', '$urlRouterProvider', 'USER_ROLES',
             url: '/maintenance',
             views: {
                 'layout@': {
-                    templateUrl: 'app/views/maintenance/maintenance/maintenance.html',
+                    templateUrl: 'app/views/maintenance/maintenance.html',
                     controller: 'MaintenanceCtrl'
                 }
             }
