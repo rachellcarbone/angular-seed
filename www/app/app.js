@@ -8,6 +8,7 @@
 
 // Include modules, and run application.
 angular.module('theApp', [
+    'ui.bootstrap',
     'app.config',
     'app.router',
     'app.run',
