@@ -7,5 +7,6 @@
  */
 
 angular.module('rachels.directives', [
-    'rachels.placeholdBrokenImg'
+    'rachels.placeholdBrokenImg',
+    'rachels.stateRedirectTimeout'
 ]);
