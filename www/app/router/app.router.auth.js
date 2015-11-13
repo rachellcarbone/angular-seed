@@ -46,26 +46,20 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
             url: '/signup',
             views: {
                 'content@auth': {
+                    templateUrl: 'app/views/auth/signup/signup.html',
+                    controller: 'AuthSignupCtrl'
                 }
             }
         });
 
         $stateProvider.state('auth.signup.success', {
             title: 'Please Confirm Your Email',
-            url: '/please-confirm-email',
-            views: {
-                'content@auth': {
-                }
-            }
+            url: '/please-confirm-email'
         });
         
         $stateProvider.state('auth.signup.confirmEmail', {
             title: 'Success! Your Email is Confirmed',
-            url: '/success',
-            views: {
-                'content@auth': {
-                }
-            }
+            url: '/success'
         });
         
         $stateProvider.state('auth.login', {
@@ -80,30 +74,18 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
         });
         
         $stateProvider.state('auth.login.forgotPassword', {
-            title: 'Sign Up',
-            url: '/forgot-password',
-            views: {
-                'content@auth': {
-                }
-            }
+            title: 'Forgot Password',
+            url: '/forgot-password'
         });
         
-        $stateProvider.state('auth.login.forgotPassword.resetEmailSent', {
+        $stateProvider.state('auth.login.resetEmailSent', {
             title: 'Reset Instructions Have Been Sent',
-            url: '/instructions-sent',
-            views: {
-                'content@auth': {
-                }
-            }
+            url: '/reset-instructions-sent'
         });
         
-        $stateProvider.state('auth.login.changePassword', {
+        $stateProvider.state('auth.login.forgotPassword.changePassword', {
             title: 'Change Your Password',
-            url: '/change-password',
-            views: {
-                'content@auth': {
-                }
-            }
+            url: '/change-password'
         });
 
         // This should catch incoming requests, 
