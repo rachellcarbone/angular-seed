@@ -5,14 +5,13 @@
  * Sets Nav, Session and Build as global page variables. 
  */
 
-angular.module('rachels.auth.service', [])
-    .factory('AuthService', ['$rootScope', function($rootScope) {
-            
-/*
-app.factory('AuthService', ['$rootScope', '$q', '$log', 'UserSession', 'AUTH_EVENTS', 'USER_ROLES', 'APIV2Service', 
-    function($rootScope, $q, $log, UserSession, AUTH_EVENTS, USER_ROLES, API) {
-        var self = this;
-        self.login = function(credentials) {
+angular.module('rachels.auth.service', ['rachels.auth.visibility'])
+    .factory('AuthService', ['$rootScope', '$q', '$log', 'UserSession', 'AUTH_EVENTS', 'VisibilityService', 'APIV2Service', 
+    function($rootScope, $q, $log, UserSession, AUTH_EVENTS, VisibilityService, API) {
+        
+        var api = {};
+        
+        api.login = function(credentials) {
             return $q(function (resolve, reject) {
                 var fd = new FormData();
                 fd.append('email', credentials.email);
@@ -20,9 +19,9 @@ app.factory('AuthService', ['$rootScope', '$q', '$log', 'UserSession', 'AUTH_EVE
 
                 API.post('auth/login/', fd, 'System unable to login.')
                     .then(function (data) {
-                        if (Session.create(data)) {
+                        if (UserSession.create(data)) {
                             $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
-                            resolve(Session.get());
+                            resolve(UserSession.get());
                         } else {
                             $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
                             $log.error(data);
@@ -35,11 +34,11 @@ app.factory('AuthService', ['$rootScope', '$q', '$log', 'UserSession', 'AUTH_EVE
             });
         };
 
-        self.logout = function() {                
+        api.logout = function() {                
             return $q(function (resolve, reject) {
                 API.post('auth/logout/', new FormData(), 'System unable to logout.')
                     .then(function (data) {
-                        Session.destroy();
+                        UserSession.destroy();
                         $rootScope.$broadcast(AUTH_EVENTS.logoutSuccess);
                         resolve(AUTH_EVENTS.logoutSuccess);
                     }, function (error) {
@@ -49,14 +48,14 @@ app.factory('AuthService', ['$rootScope', '$q', '$log', 'UserSession', 'AUTH_EVE
             });
         };
 
-        self.forgotPasswordEmail = function(email) {
+        api.forgotPasswordEmail = function(email) {
             var fd = new FormData();
             fd.append('email', email);
 
             return API.post('auth/password-reset/', fd, 'Error sending password reset email.');
         };
         
-        self.validatePasswordResetToken = function(token) {
+        api.validatePasswordResetToken = function(token) {
             if(!token) {
                 return API.reject('Invalid password reset token.');
             }
@@ -67,7 +66,7 @@ app.factory('AuthService', ['$rootScope', '$q', '$log', 'UserSession', 'AUTH_EVE
             return API.post('auth/validate-token/', fd, 'Error validating token.');
         };
 
-        self.changePassword = function(user) {
+        api.changePassword = function(user) {
             if(!user.id || !user.email || !user.token || 
                     !user.password || user.password <= 0) {
                 return API.reject('Invalid credentials please verify your information and try again.');
@@ -82,14 +81,14 @@ app.factory('AuthService', ['$rootScope', '$q', '$log', 'UserSession', 'AUTH_EVE
             return API.post('auth/change-password/', fd, 'Error changing password.');
         };
 
-        self.isAuthenticated = function() {
+        api.isAuthenticated = function() {
             return $q(function (resolve, reject) {
-                var user = Session.get();
+                var user = UserSession.get();
                 if (!user) {
                     API.get('auth/authenticated/', '[isAuthenticated] Error, User Not Authenticated.')
                         .then(function (data) {
-                            if (Session.create(data)) {
-                                resolve(Session.get());
+                            if (UserSession.create(data)) {
+                                resolve(UserSession.get());
                             } else {
                                 $log.error('[isAuthenticated] Session Couldn\'t be Created', data);
                                 reject(AUTH_EVENTS.notAuthenticated);
@@ -103,46 +102,33 @@ app.factory('AuthService', ['$rootScope', '$q', '$log', 'UserSession', 'AUTH_EVE
             });
         };
 
-        self.isAuthorized = function(authorizedRole) {
+        api.isAuthorized = function(authorizedRole) {
             return $q(function (resolve, reject) {
                 
-                if (authorizedRole === USER_ROLES.guest) {
+                // Checks a role (presumably for $state access or to see if a user can view
+                // a page or menu item etc) to see if it is publicly accessable to everyone
+                // including unautorized (not logged in) users.
+                if (VisibilityService.isAccessUnauthenticated(authorizedRole)) {
                     // User doesn't have to be logged in
                     resolve(true);
                 } else {
-                    self.isAuthenticated().then(function(results) {
-                        var role = Session.get().analystRole;
-                        var analystRole = USER_ROLES[role];
+                    // Confirm that the user is logged in
+                    api.isAuthenticated().then(function(results) {
                         
-                        if (authorizedRole <= analystRole) {
+                        if (VisibilityService.isVisibleToUser(authorizedRole, UserSession.role())) {
                             resolve(true);
                         } else {
                             reject(AUTH_EVENTS.notAuthorized);
                         }
+                        
                     }, function(results) {
+                        // Reject because the user was not logged in
                         reject(AUTH_EVENTS.notAuthenticated);
                     });
                 }
             });
         };
         
-        self.visibleToRole = function(authorizedRole) {
-            var user = Session.get();
-            return (authorizedRole === USER_ROLES.guest ||
-                    (user && authorizedRole <= USER_ROLES[user.analystRole]));
-        };
-
-        return {
-            getUser: Session.get,
-            login: self.login,
-            logout: self.logout,
-            forgotPasswordEmail: self.forgotPasswordEmail,
-            validatePasswordReset: self.validatePasswordResetToken,
-            changePassword: self.changePassword,
-            isAuthenticated: self.isAuthenticated,
-            isAuthorized: self.isAuthorized,
-            visibleToRole: self.visibleToRole
-        };
-        */
-        return {};
+        return api;
+        
     }]);

@@ -55,11 +55,40 @@ angular.module('rachels.auth.session', [])
         return angular.copy(self.user);
     };
     
+    // Safly return the User Id
+    self.id = function() {
+        return angular.copy(self.user.id);
+    };
+    
+    // Safly return the User Display Name
+    self.displayName = function() {
+        return angular.copy(self.user.displayName);
+    };
+    
+    // Safly return the User Email
+    self.email = function() {
+        return angular.copy(self.user.email);
+    };
+    
+    // Safly return the User Role Object
+    self.role = function() {
+        return angular.copy(self.user.role);
+    };
+    
+    // Safly return the User API Hash (unique key)
+    self.apiHash = function() {
+        return angular.copy(self.user.apiHash);
+    };
+    
     // Return public methods
     return {
             create : self.create,
             destroy : self.destroy,
-            get : self.get
+            get : self.get,
+            id : self.id,
+            displayName : self.displayName,
+            role : self.role,
+            apiHash : self.apiHash
         };
         
     }]);
