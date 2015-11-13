@@ -52,12 +52,12 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
             }
         });
 
-        $stateProvider.state('auth.signup.success', {
+        $stateProvider.state('auth.signup.confirmEmail', {
             title: 'Please Confirm Your Email',
             url: '/please-confirm-email'
         });
         
-        $stateProvider.state('auth.signup.confirmEmail', {
+        $stateProvider.state('auth.signup.success', {
             title: 'Success! Your Email is Confirmed',
             url: '/success'
         });
