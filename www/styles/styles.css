@@ -148,6 +148,31 @@
  * Form and form element style overrides.
  */
 /*
+ * Image Styles
+ * 
+ * 
+ */
+img.img-thumbnail {
+  margin: 20px;
+}
+img.img-thumbnail.top {
+  margin-top: 0;
+}
+img.img-thumbnail.bottom {
+  margin-bottom: 0;
+}
+img.img-thumbnail.left,
+img.img-thumbnail.pull-left {
+  margin-left: 0;
+}
+img.img-thumbnail.right,
+img.img-thumbnail.pull-right {
+  margin-right: 0;
+}
+img.img-thumbnail.no-margin {
+  margin: 0;
+}
+/*
  * Layout(s) Styles
  * 
  * Styles for each layout that the website may use.
