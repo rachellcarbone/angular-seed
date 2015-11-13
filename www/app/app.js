@@ -9,6 +9,7 @@
 // Include modules, and run application.
 angular.module('theApp', [
     'ui.bootstrap',
+    'rachels.directives',
     'app.config',
     'app.router',
     'app.run',
