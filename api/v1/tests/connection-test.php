@@ -1,5 +1,5 @@
 <?php namespace API\Data;
-require_once 'api.config.php';
+require_once dirname(dirname(__FILE__)) . '/config/config.php';
 
 /* 
  * Config and PDO Connection Tester
