@@ -1,14 +1,14 @@
 <?php namespace API\Data;
-require_once 'api.config.php';
+require_once dirname(dirname(__FILE__)) . '/config/config.php';
 
-class APIInit {
+class APIInstall {
     private $config;
     
     function __construct() {
-        $this->checkDirectories();
-        
         $config = new APIConfig();
         $this->config = $config->get();
+        
+        $this->checkDirectories();
     }
     
     private function checkDirectories() {
