@@ -1,4 +1,5 @@
-<?php namespace API\Data;
+<?php namespace API\Test;
+
 require_once dirname(dirname(__FILE__)) . '/config/config.php';
 
 /* 
@@ -8,7 +9,7 @@ require_once dirname(dirname(__FILE__)) . '/config/config.php';
  * Disply success or fail with data messages.
  */
 
-$config = new APIConfig();
+$config = new \API\APIConfig();
 $c = $config->get();
 
 echo "<pre><code>";
