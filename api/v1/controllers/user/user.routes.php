@@ -1,12 +1,11 @@
 <?php namespace API;
+ require_once dirname(__FILE__) . '/user.controller.php';
 
 class UserRoutes {
-
-    public function __construct() {}
     
-    static function addRoutes($app) {
-        
+    static function addRoutes() {
         $app = \Slim\Slim::getInstance();
+        $route = new UserController();
         
         /**
          * @api {get} /user/:userId Get User
@@ -27,9 +26,8 @@ class UserRoutes {
          * @apiSuccess {String} msg.user.email The users primary email.
          * @apiSuccess {int} msg.user.roleId User role id.
          */
-        $app->map("/user/:userId", function () use ($app, $class, $method) {
-            $apiRoute = new Users();
-            $apiRoute->getUser($app);
+        $app->get("/user/:userId", function ($userId) use ($app, $route) {
+            $route->getUser($app, $userId);
         });
     }
 }
