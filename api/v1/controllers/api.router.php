@@ -1,27 +1,24 @@
 <?php namespace API;
-require_once dirname(dirname(__FILE__)) . '\services\logging.php';  // Logging Service
-require_once 'user.routes.php';
+require_once dirname(dirname(__FILE__)) . '/services/logging.php';  // Logging Service
+require_once dirname(__FILE__) . '/user/user.routes.php';
 
 class ApiRouter {
-
-    function __construct() {
-        $this->warningLog = new Logging('router_warning');
-    }
     
-    public function addRoutes($app, $debugEnabled) {
-        
-        $this->addDefaultRoutes($app);
-        $this->addErrorRoutes($app, $debugEnabled);
+    public static function addRoutes($app, $debugEnabled) {
+        self::addDefaultRoutes($app);
+        self::addErrorRoutes($app, $debugEnabled);
+        UserRoutes::addRoutes();
     }
     
     
-    private function addDefaultRoutes($app) {
+    private static function addDefaultRoutes($app) {
         $app->get('/',  function () use ($app) {
             $app->render(200, array("msg" => "Congratulations, you have reached the Slim PHP API v1!"));
         });
     }
     
-    private function addErrorRoutes($app, $debugEnabled) {
+    private static function addErrorRoutes($app, $debugEnabled) {
+        $logger = new Logging('router_warning');
         
         /*
         $c = $app->getContainer();
