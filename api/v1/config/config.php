@@ -1,4 +1,4 @@
-<?php namespace API\Data;
+<?php namespace API;
 
 class APIConfig {
 

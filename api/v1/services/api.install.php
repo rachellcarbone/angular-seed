@@ -1,4 +1,4 @@
-<?php namespace API\Data;
+<?php namespace API;
 require_once dirname(dirname(__FILE__)) . '/config/config.php';
 
 class APIInstall {
