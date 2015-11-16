@@ -2,21 +2,40 @@
 require_once dirname(dirname(__FILE__)) . '/config/config.php';
 
 class DBConn {
-    private $pdo;
-   
-    public function __construct() {        
+    static $pdo;
+    static $logger;
+    
+    private static function connect() {
+        if(self::$pdo) {
+            return self::$pdo;
+        }
+        
         $config = new APIConfig();
         $c = $config->get();
-                
+
+        // Set options
+        $options = array(
+            \PDO::ATTR_PERSISTENT => true, 
+            \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION
+        );
+
         try {
-            $this->pdo = new \PDO("mysql:host={$c['dbHost']};dbname={$c['db']}", $c["dbUser"], $c["dbPass"]);
-            $this->pdo->setAttribute( \PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION );
+            self::$pdo = new \PDO("mysql:host={$c['dbHost']};dbname={$c['db']}", $c["dbUser"], $c["dbPass"], $options);
+            self::$pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+            return self::$pdo;
         } catch (\PDOException $e) {
-            return false;
+            die('Could not connect to the database:<br/>' . $e);
         }
     }
     
-    public function getLimit($limit = 20, $page = 1) {
+    private static function logPDOError($pdo) {
+        if(!self::$logger) {
+            self::$logger = new Logging('pdo_exception');
+        }
+        self::$logger->write($pdo->errorInfo());
+    }
+    
+    public static function getLimit($limit = 20, $page = 1) {
         $p = (is_numeric($page) && intval($page) > 1) ? intval($page) : 1;
         $l = (is_numeric($limit) && intval($limit) > 0) ? intval($limit) : 20;
         $offset = ($p - 1) * $l;
@@ -24,56 +43,80 @@ class DBConn {
         return "LIMIT {$offset}, {$l}";
     }
     
-    public function select($query) {
+    public static function select($query) {
+        $pdo = self::connect();
         try {
-            $q = $this->pdo->query($query);
-            $q->setFetchMode(\PDO::FETCH_ASSOC);
-            return $q->fetchAll();
+            $q = $pdo->query($query);
+            return $q->fetchAll(\PDO::FETCH_ASSOC);
         } catch (\PDOException $e) {
+            self::logPDOError($pdo);
             return false;
         }
     }
     
-    public function selectOne($query) {
+    public static function selectOne($query, $data = false) {
+        $pdo = self::connect();
+        
         try {
-            $q = $this->pdo->query($query);
-            $q->setFetchMode(\PDO::FETCH_ASSOC);
-            $r = $q->fetch();
-            return (isset($r[0])) ? $r[0] : $r;
+            if($data) {
+                $q = $pdo->prepare($query);
+                $q->execute($data);
+                return $q->fetch(\PDO::FETCH_ASSOC);
+            } else {
+                $q = $pdo->query($query);
+                return $q->fetch(\PDO::FETCH_ASSOC);
+            }
         } catch (\PDOException $e) {
+            self::logPDOError($pdo);
+            return false;
+        }
+        
+    }
+    
+    public static function query($query) {
+        $pdo = self::connect();
+        try {
+            return $pdo->query($query);
+        } catch (\PDOException $e) {
+            self::logPDOError($pdo);
             return false;
         }
     }
-    
-    public function query($query) {
+
+    public static function preparedQuery($query, $data) {
+        $pdo = self::connect();
         try {
-            return $this->pdo->query($query);
-        } catch (\PDOException $e) {
-            return false;
-        }
-    }
-    
-    public function prepairedQuery($query, $data) {
-        try {
-            $q = $this->pdo->prepare($query);
+            $q = $pdo->prepare($query);
             return $q->execute($data);
         } catch (\PDOException $e) {
+            self::logPDOError($pdo);
             return false;
         }
     }
     
-    public function insertQuery($query, $data) {
-        $q = $this->pdo->prepare($query);
+    public static function insertQuery($query, $data) {
+        $pdo = self::connect();
         try {
+            $q = $pdo->prepare($query);
             $e = $q->execute($data);
             if ($e === false) {
                 return false;
             } else {
-                $id = $this->pdo->lastInsertId();
+                $id = $pdo->lastInsertId();
                 return ($id === false) ? $e : $id;
             }
         } catch (\PDOException $e) {
+            self::logPDOError($pdo);
             return false;
         }
+    }
+    
+    public function rowCount() {
+        //return $this->stmt->rowCount();
+    }
+    
+    public function lastInsertId(){
+        $pdo = self::connect();
+        return $pdo->lastInsertId();
     }
 }
