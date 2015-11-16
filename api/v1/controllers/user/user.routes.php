@@ -5,7 +5,6 @@ class UserRoutes {
     
     static function addRoutes() {
         $app = \Slim\Slim::getInstance();
-        $route = new UserController();
         
         /**
          * @api {get} /user/:userId Get User
@@ -26,8 +25,24 @@ class UserRoutes {
          * @apiSuccess {String} msg.user.email The users primary email.
          * @apiSuccess {int} msg.user.roleId User role id.
          */
-        $app->get("/user/:userId", function ($userId) use ($app, $route) {
-            $route->getUser($app, $userId);
+        $app->get("/users", function () use ($app) {
+            UserController::getUsers($app);
+        });
+        
+        $app->get("/user/:userId", function ($userId) use ($app) {
+            UserController::getUser($app, $userId);
+        });
+        
+        $app->post("/user", function () use ($app) {
+            UserController::addUser($app);
+        });
+        
+        $app->post("/user/:userId", function ($userId) use ($app) {
+            UserController::saveUser($app, $userId);
+        });
+        
+        $app->delete("/delete/user/:userId", function ($userId) use ($app) {
+            UserController::deleteUser($app, $userId);
         });
     }
 }
