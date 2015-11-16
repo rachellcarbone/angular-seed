@@ -8,35 +8,57 @@ require_once dirname(__FILE__) . '/api.router.php'; // Router Module
 
 class V1Controller {
 
-    private $debugEnabled;
-
-    public function __construct() {
-        /* Get Server Config */
+    public static function run() {
         $config = new APIConfig();
-        $this->debugEnabled = $config->get('debugMode');
-    }
-
-    public function run() {
+        
         /* Create a new Slim app */
-        $app = $this->createSlim();
+        $app = self::createSlim();
 
-        $this->addMiddleware($app);
+        self::addMiddleware($app);
+        
+        ApiRouter::addRoutes($app, $config->get('debugMode'));
 
-        $this->addRoutes($app, $this->debugEnabled);
-
-        $this->setResponseHeaders($app);
+        self::setResponseHeaders($app);
 
         /* Start Slim */
         $app->run();
     }
 
-    private function createSlim() {
-        /* Create a PHP Slim API */
-        return new \Slim\Slim(array('mode' => 'development'));
+    private static function createSlim() {
+        /* 
+         * Create a PHP Slim API 
+         * 
+         * http://docs.slimframework.com/configuration/modes/
+         */
+        $app = new \Slim\Slim(array(
+            'mode' => 'development'
+        ));
+        
+        // Only invoked if mode is "production"
+        $app->configureMode('production', function () use ($app) {
+            $app->config(array(
+                'log.enable' => true,
+                'debug' => false
+            ));
+        });
+
+        // Only invoked if mode is "development"
+        $app->configureMode('development', function () use ($app) {
+            $app->config(array(
+                //'log.enable' => false,
+                'debug' => true,
+                
+                'log.enabled' => true,
+                'log.level' => \Slim\Log::DEBUG,
+                'log.writer' => new APILogWriter()
+            ));
+        });
+        
+        return $app;
     }
 
     // http://www.slimframework.com/docs/concepts/middleware.html
-    private function addMiddleware($app) {
+    private static function addMiddleware($app) {
         /* Slim-jsonAPI */
         $app->view(new \JsonApiView());
         $app->add(new \JsonApiMiddleware());
@@ -45,14 +67,19 @@ class V1Controller {
         //$app->add(new Middleware\AuthMiddleware());
     }
 
-    private function setResponseHeaders($app) {
+    private static function setResponseHeaders($app) {
         /* Set response content type */
         $app->response->headers->set('Content-Type', 'application/json');
     }
+}
 
-    private function addRoutes($app, $debugEnabled) {
-        /* Execute Route */
-        $router = new ApiRouter();
-        $router->addRoutes($app, $debugEnabled);
+/*
+ * APILogWriter: Custom log writer for our application
+ * We must implement write(mixed $message, int $level) */
+class APILogWriter extends Logging {
+    public function write($message, $level = SlimLog::DEBUG) {
+        /* Set PHP Error Handler to Logging */
+        $logger = new Logging('api_log'); 
+        $logger->write("[Slim API : Level {$level}] - {$message}");
     }
 }
