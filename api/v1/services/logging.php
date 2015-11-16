@@ -50,20 +50,20 @@ class Logging {
     /* 
      * Alias for the write function
      */
-    function log($text) {
+    function log($logItem) {
         // This is just a different way to call write
-        $this->write($text);
+        $this->write($logItem);
     }
     
     /* 
      * Prepend a timestamp to a line of text and write it to the log file.
      */
-    function write($text) {
+    function write($logItem) {
         // Get the timestamp
-        $timestamp = date("m d, Y, G:i:s T");
+        file_put_contents($this->logFile, date("m d, Y, G:i:s T"), FILE_APPEND);
         // Concatenate log text with the timestamp
-        $logItem = "{$timestamp} - {$text}\r\n";
-        // Append the log item (string) to the log file 
         file_put_contents($this->logFile, $logItem, FILE_APPEND);
+        // Append the log item (string) to the log file 
+        file_put_contents($this->logFile, "\n\r", FILE_APPEND);
     }
 }
