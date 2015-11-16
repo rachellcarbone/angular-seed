@@ -1,4 +1,4 @@
-<?php namespace API\Data;
+<?php namespace API;
 require_once dirname(dirname(__FILE__)) . '/config/config.php';
 
 /* 
@@ -65,58 +65,5 @@ class Logging {
         $logItem = "{$timestamp} - {$text}\r\n";
         // Append the log item (string) to the log file 
         file_put_contents($this->logFile, $logItem, FILE_APPEND);
-    }
-    
-    /* 
-     * PHP Exception Handeling
-     * http://php.net/manual/en/function.set-exception-handler.php
-     */
-    function loggingExceptionHandler() {
-        
-    }
-    
-    /* 
-     * PHP Error Handeling
-     * http://php.net/manual/en/function.set-error-handler.php
-     */
-    function loggingErrorHandler($errno, $errstr, $errfile, $errline) {
-        if (!(error_reporting() & $errno)) {
-            // This error code is not included in error_reporting
-            return;
-        }
-        
-        /* Log the message instead of printing */
-        switch ($errno) {
-            case E_ERROR:
-            case E_USER_ERROR:
-                $this->write("PHP ERROR: [{$errno}] {$errstr}\r\n"
-                    . "    Line {$errline} in file {$errfile},\r\n"
-                    . "    PHP " . PHP_VERSION . " (" . PHP_OS . ")\r\n"
-                    . "    Aborting...\r\n");
-                exit(1);
-                break;
-
-            case E_WARNING:
-            case E_USER_WARNING:
-                $this->write("PHP WARNING: [{$errno}] {$errstr}\r\n"
-                    . "    Line {$errline} in file {$errfile},\r\n");
-                break;
-            
-            case E_NOTICE:
-            case E_USER_NOTICE:
-                $this->write("PHP NOTICE: [{$errno}] {$errstr}\r\n"
-                    . "    Line {$errline} in file {$errfile},\r\n");
-                break;
-
-            default:
-                $this->write("UNKNOWN PHP ERROR: [{$errno}] {$errstr}\r\n"
-                    . "    Line {$errline} in file {$errfile},\r\n");
-                break;
-        }
-
-        /* If the function returns FALSE then the normal error handler continues.
-         * TRUE - If we are not in debug mode
-         * FALSE - If we are in debug mode */
-        return (!$this->debugMode);
     }
 }
