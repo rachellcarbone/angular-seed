@@ -19,9 +19,7 @@ class PhpErrorHandling {
     static function apiExceptionHandler($e) {
 
         /* Set PHP Error Handler to Logging */
-        $LogException = new \API\Logging('php_exception_handler');
-
-        $LogException->write("IN apiExceptionHandler Method");
+        $LogException = new \API\Logging('php_exception');
 
         $LogException->logException($e);
     }
@@ -32,9 +30,7 @@ class PhpErrorHandling {
      */
     static function apiErrorHandler($errno, $errstr, $errfile, $errline) {
         /* Set PHP Error Handler to Logging */
-        $LogError = new \API\Logging('php_error_handler');
-
-        $LogError->write("IN apiErrorHandler Method");
+        $LogError = new \API\Logging('php_error');
 
         if (!(error_reporting() & $errno)) {
             // This error code is not included in error_reporting
