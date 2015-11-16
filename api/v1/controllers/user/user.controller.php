@@ -1,5 +1,5 @@
 <?php namespace API;
-require_once dirname(dirname(__FILE__)) . 'API.Route.php';
+require_once dirname(__FILE__) . '/user.data.php';
 
 use \Respect\Validation\Validator as v;
 
