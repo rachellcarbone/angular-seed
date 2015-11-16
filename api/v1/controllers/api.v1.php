@@ -1,14 +1,14 @@
-<?php namespace API;
+<?php
+namespace API;
 
 require_once dirname(dirname(__FILE__)) . '\vendor\autoload.php';   // Composer components
 require_once dirname(dirname(__FILE__)) . '\config\config.php';     // API Coifg File (Add your settings!)
-require_once dirname(dirname(__FILE__)) . '\services\logging.php';  // Logging Service
 require_once dirname(dirname(__FILE__)) . '\routes\api.router.php'; // Router Module
 
 class V1Controller {
 
     private $debugEnabled;
-    
+
     public function __construct() {
         /* Get Server Config */
         $config = new Data\APIConfig();
@@ -17,7 +17,7 @@ class V1Controller {
 
     public function run() {
         /* Create a new Slim app */
-        $app = $this->createSlim($this->debugEnabled);
+        $app = $this->createSlim();
 
         $this->setResponseView($app);
 
@@ -33,16 +33,11 @@ class V1Controller {
         $app->run();
     }
 
-    private function createSlim($debugEnabled) {
+    private function createSlim() {
         /* Create a PHP Slim API */
-        return new \Slim\Slim(array(
-            'mode' => 'development',
-            'log.enabled' => $debugEnabled,
-            'log.level' => \Slim\Log::DEBUG,
-            'log.writer' => new APILogWriter()
-        ));
+        return new \Slim\Slim(array('mode' => 'development'));
     }
-    
+
     // http://www.slimframework.com/docs/concepts/middleware.html
     private function addMiddleware($app) {
         /* Authentication */
@@ -65,29 +60,4 @@ class V1Controller {
         $app->view(new \JsonApiView());
         $app->add(new \JsonApiMiddleware());
     }
-    
-    private function setPHPLogging() {
-        /* Set PHP Error Handler to Logging */
-        $Log = new Data\Logging();
-        
-        // http://php.net/manual/en/function.set-error-handler.php
-        set_error_handler(array($Log, 'loggingErrorHandler'));
-        
-        // http://php.net/manual/en/function.set-exception-handler.php
-        set_exception_handler (array($Log, 'loggingExceptionHandler'));
-
-    }
-
 }
-
-/*
- * APILogWriter: Custom log writer for our application
- * We must implement write(mixed $message, int $level) */
-
-class APILogWriter extends Data\Logging {
-
-    public function write($message, $level = SlimLog::DEBUG) {
-        $this->log("[Slim API : Level {$level}] - {$message}");
-    }
-
-} 
