@@ -3,19 +3,14 @@ require_once dirname(__FILE__) . '/user.data.php';
 
 use \Respect\Validation\Validator as v;
 
-class UserData {
+class UserController extends UserData {
   
-    function __construct() {
+    public function __construct() {
         parent::__construct();
     }
 
     public function getUser($app, $userId) {
         $user = $this->db_selectUserById($userId);
-
-        if ($user) {
-            $app->render(200, $this->setResponse->success(array( 'user' => $user )));
-        } else {
-            $app->render(200, $this->setResponse->fail(array( 'user' => false )));
-        }
+        $app->render(200, array( 'user' => $user ));
     }
 }
