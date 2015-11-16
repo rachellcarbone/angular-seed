@@ -11,7 +11,7 @@ class V1Controller {
 
     public function __construct() {
         /* Get Server Config */
-        $config = new Data\APIConfig();
+        $config = new APIConfig();
         $this->debugEnabled = $config->get('debugMode');
     }
 
