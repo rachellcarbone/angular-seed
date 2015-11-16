@@ -174,8 +174,11 @@ http://butlerccwebdev.net/support/testingserver/vhosts-setup-win.html
 - MongoDB Database Design 
 - Add a JS Comiler https://www.npmjs.com/package/jscompiler
 - Express API http://expressjs.com/
+- Build with Express testing
 - Package this project for Bower
 - Package this project for NPM?
 - Gallery / Portfolio Pages
 - Blog... maybe just Wordpress setup instructions / integration
 - Language settings (change seed.dev to yoursite.com everywhere)
+- Add testing api v1
+- Add testing front end
