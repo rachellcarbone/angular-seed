@@ -19,16 +19,12 @@ class V1Controller {
         /* Create a new Slim app */
         $app = $this->createSlim();
 
-        $this->setResponseView($app);
+        $this->addMiddleware($app);
+
+        $this->addRoutes($app, $this->debugEnabled);
 
         $this->setResponseHeaders($app);
 
-        //$this->addMiddleware($app);
-        
-        $this->setPHPLogging();
-
-        $this->addRoutes($app, $this->debugEnabled);
-        
         /* Start Slim */
         $app->run();
     }
@@ -40,6 +36,10 @@ class V1Controller {
 
     // http://www.slimframework.com/docs/concepts/middleware.html
     private function addMiddleware($app) {
+        /* Slim-jsonAPI */
+        $app->view(new \JsonApiView());
+        $app->add(new \JsonApiMiddleware());
+
         /* Authentication */
         //$app->add(new Middleware\AuthMiddleware());
     }
@@ -51,13 +51,7 @@ class V1Controller {
 
     private function addRoutes($app, $debugEnabled) {
         /* Execute Route */
-        $router = new ApiRouter($debugEnabled);
-        $router->addRoutes($app);
-    }
-    
-    private function setResponseView($app) {
-        /* Slim-jsonAPI */
-        $app->view(new \JsonApiView());
-        $app->add(new \JsonApiMiddleware());
+        $router = new ApiRouter();
+        $router->addRoutes($app, $debugEnabled);
     }
 }
