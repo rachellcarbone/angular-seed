@@ -75,11 +75,21 @@ class DBConn {
         return "LIMIT {$offset}, {$l}";
     }
     
-    public static function select($query) {
+    public static function select($query, $data = false) {
         $pdo = self::connect();
+        
         try {
             $q = $pdo->query($query);
             return $q->fetchAll(\PDO::FETCH_ASSOC);
+            
+            if ($data) {
+                $q = $pdo->prepare($query);
+                $q->execute($data);
+                return $q->fetch(\PDO::FETCH_ASSOC);
+            } else {
+                $q = $pdo->query($query);
+                return $q->fetch(\PDO::FETCH_ASSOC);
+            }
         } catch (\PDOException $e) {
             self::logPDOError($pdo);
             return false;
