@@ -14,7 +14,8 @@
 
 var app = angular.module('app.router.public', [
     'rachels.auth.constants',
-    'app.public'
+    'app.public',
+    'app.store'
 ]);
 app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES) {
 
@@ -95,6 +96,52 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
             views: {
                 'content@public': {
                     templateUrl: 'app/views/public/sitemap/sitemap.html'
+                }
+            }
+        });
+        
+        /* Store Pages */
+        
+        $stateProvider.state('public.store', {
+            title: 'Store Home',
+            url: '/store',
+            views: {
+                'content@public': {
+                    templateUrl: 'app/views/store/storeHome/storeHome.html',
+                    controller: 'StoreHomeCtrl'
+                }
+            }
+        });
+        
+        $stateProvider.state('public.store.cart', {
+            title: 'Shopping Cart',
+            url: '/store/cart',
+            views: {
+                'content@public': {
+                    templateUrl: 'app/views/store/cart/cart.html',
+                    controller: 'CartCtrl'
+                }
+            }
+        });
+        
+        $stateProvider.state('public.store.category', {
+            title: 'Store Category',
+            url: '/store/:category',
+            views: {
+                'content@public': {
+                    templateUrl: 'app/views/store/item/item.html',
+                    controller: 'StoreCategoryCtrl'
+                }
+            }
+        });
+        
+        $stateProvider.state('public.store.item', {
+            title: 'Store Item Details',
+            url: '/store/:category/:itemNumber',
+            views: {
+                'content@public': {
+                    templateUrl: 'app/views/store/item/item.html',
+                    controller: 'ItemDetailCtrl'
                 }
             }
         });
