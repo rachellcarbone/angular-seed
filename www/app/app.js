@@ -10,6 +10,7 @@
 angular.module('theApp', [
     'ui.bootstrap',
     'rachels.directives',
+    'rcCart',
     'app.config',
     'app.router',
     'app.run',
