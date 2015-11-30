@@ -49,7 +49,7 @@ app.config(['$stateProvider', '$urlRouterProvider', 'USER_ROLES',
         
         $stateProvider.state('error.notauthorized', {
             title: 'User Not Authorized',
-            url: 'unauthorized',
+            url: '/unauthorized',
             views: {
                 'content@error': {
                     templateUrl: 'app/views/error/notAuthorized/notAuthorized.html',
