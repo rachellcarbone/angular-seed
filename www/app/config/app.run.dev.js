@@ -13,7 +13,7 @@
  */
 
 var app = angular.module('app.run.dev', []);
-app.run(function ($rootScope, $templateCache) {
+app.run(function ($rootScope, $cacheFactory) {
     
     // Execute every time a state change begins
     $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
@@ -22,7 +22,8 @@ app.run(function ($rootScope, $templateCache) {
             // Loop through each view in the cached state
             for (var key in toState.views) {
                 // Delete templeate from cache
-                $templateCache.remove(toState.views[key].templateUrl);
+                console.log("Delete cached template: " + toState.views[key].templateUrl);
+                $cacheFactory.get('templates').remove(toState.views[key].templateUrl);
             }
         }
     });
