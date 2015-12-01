@@ -202,7 +202,7 @@ body {
 -------------------------------------------------- */
 /* Not required for template or sticky footer method. */
 body > .layout-view > .layout > .container {
-  padding: 60px 15px 0;
+  padding: 0 15px 0;
 }
 .container .text-muted {
   margin: 20px 0;
@@ -214,6 +214,15 @@ body > .layout-view > .layout > .container {
 code {
   font-size: 80%;
 }
+.clear-both {
+  clear: both;
+}
+.clear-left {
+  clear: left;
+}
+.clear-right {
+  clear: right;
+}
 /*
  * Header(s) Styles
  * 
@@ -224,3 +233,23 @@ code {
  * 
  * Styles for each area footer that the website may use.
  */
+.store.item-details .page-header {
+  margin-top: 0;
+}
+.store.item-details .price {
+  color: #286090;
+}
+.store.item-details .price .regular-price {
+  text-decoration: line-through;
+  color: #888;
+}
+.store.item-details .item-qty-subtotal {
+  margin-top: 15px;
+}
+.store.item-details .tab-pane.active {
+  border: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 0 0 4px 4px;
+  border-top: none;
+  margin-bottom: 15px;
+}

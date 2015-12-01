@@ -14,5 +14,6 @@ angular.module('theApp', [
     'app.config',
     'app.router',
     'app.run',
-    'app.run.dev'
+    'app.run.dev',
+    'app.filters'
 ]);

@@ -2,18 +2,26 @@
 
 /*
  * String Filters
+ * 
+ * In HTML Template Binding
+ * {{ filter_expression | filter : expression : comparator}}
+ * 
+ * In JavaScript
+ * $filter('filter')(array, expression, comparator)
+ * 
+ * https://docs.angularjs.org/api/ng/filter/filter
  */
 
-var app = angular.module('filters.string', []);
+var app = angular.module('app.filters.string', []);
 
-app.filter("formatParagraphsAsHtml", function () {
+app.filter("formatParagraphsAsHtml", ['$sce', function ($sce) {
     return function (value) {
         if (!value) {
             return value;
         }
-        return value.replace(/\n\r?/g, '<br /><br />');
+        return $sce.trustAs('html', value.replace(/\n\r?/g, '<br />'));
     };
-});
+}]);
 
 app.filter('wordCounter', function () {
     return function (value) {
