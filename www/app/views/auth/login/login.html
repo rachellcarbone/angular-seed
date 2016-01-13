@@ -1,23 +1,32 @@
 <div class="page auth login">
     
+<style type="text/css">
+  form input.ng-invalid.ng-touched {
+    background-color: #FA787E;
+  }
+
+  form input.ng-valid.ng-touched {
+    background-color: #78FA89;
+  }
+</style>
     <div class="row" ng-if="$state.is('auth.login')">
         <div class="col-sm-0 col-sm-2 col-md-3 col-lg-4"></div>
         <div class="col-sm-12 col-sm-8 col-md-6 col-lg-4">
 
-            <form>
+            <form name="form" novalidate>
                 
                 <div class="page-header">
                     <h1>Welcome Back</h1>
                 </div>
                 
                 <div class="form-group">
-                    <label for="userEmail">Email Address</label>
-                    <input type="email" class="form-control" id="userEmail" placeholder="Email">
+                    <label for="userEmail">Email Address <span ng-message="form.userEmail.$error.required">*</span></label>
+                    <input ng-model="credentials.email" maxlength="255" required type="email" class="form-control" id="userEmail" placeholder="Email">
                 </div>
                 
                 <div class="form-group">
-                    <label for="userPassword">Password</label>
-                    <input type="password" class="form-control" id="userPassword" placeholder="Password">
+                    <label for="userPassword">Password <span ng-message="form.userPassword.$error.required">*</span></label>
+                    <input ng-model="credentials.password" maxlength="255" required type="password" class="form-control" id="userPassword" placeholder="Password">
                 </div>
                 
                 <div class="row">
@@ -26,7 +35,7 @@
 
                         <div class="checkbox">
                             <label>
-                                <input type="checkbox"> Remember Me
+                                <input ng-model="credentials.remember" type="checkbox"> Remember Me
                             </label>
                         </div>
                         
@@ -41,7 +50,7 @@
                 <hr/>
                 
                 <div class="text-right">
-                    <button type="submit" class="btn btn-default">Login</button>
+                    <button ng-click="login()" type="submit" class="btn btn-default">Login</button>
                 </div>
                 
                 <p class="clearfix"><br/></p>
