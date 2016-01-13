@@ -9,7 +9,7 @@
  * all other events are in the rcAuth.constants AUTH_EVENTS constant.
  */
 
-angular.module('rcAuth.listeners', ['rcAuth.constants', 'rcAuth.service'])
+angular.module('rcAuth.listeners', [])
     .run(['$rootScope', '$state', 'AUTH_EVENTS', 'AuthService',
 
     function($rootScope, $state, AUTH_EVENTS, AuthService) {

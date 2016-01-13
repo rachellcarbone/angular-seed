@@ -9,7 +9,7 @@
  */
 
 
-var app = angular.module('rcAuth.interceptor', ['auth.constants']);
+var app = angular.module('rcAuth.interceptor', []);
 
 app.config(['$httpProvider', function($httpProvider){
     // Push the Auth Interceptor onto the $httpProvider.interceptors array

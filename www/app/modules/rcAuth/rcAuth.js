@@ -7,8 +7,10 @@
 
 angular.module('rcAuth', [
     'rcAuth.constants',
-    'rcAuth.session',
-    'rcAuth.service',
-    'rcAuth.listeners',
-    'rcAuth.interceptor'
+    'rcAuth.interceptor',
+    
+    'rcAuth.AuthService',
+    'rcAuth.UserSession',
+    'rcAuth.VisibilityService',
+    'rcAuth.listeners'
 ]);
