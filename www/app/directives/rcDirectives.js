@@ -8,7 +8,8 @@
 
 angular.module('rcDirectives', [
     'rc.placeholdBrokenImg',
-    'rc.stateRedirectTimeout'
+    'rc.stateRedirectTimeout',
+    'rcMessages'
 ])
 .constant('DIRECTIVES_URL', (function () {
     var scripts = document.getElementsByTagName("script");
