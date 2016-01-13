@@ -14,7 +14,7 @@ angular.module('api.v1', [
     var api = {};
     
     // API URL Base
-    api.apiUrl = '../api/v1/';
+    api.apiUrl = 'http://api.seed.dev/v1/';
     
     // Default Error Message 
     // Used when no other message is available.
