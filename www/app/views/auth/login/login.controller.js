@@ -11,6 +11,7 @@ angular.module('app.auth.login', [])
         function ($scope, $state, $log, AuthService) {
         
         $scope.$state = $state;
+        $scope.form = {};
 
         $scope.credentials = {
             'email' : '',
@@ -19,13 +20,18 @@ angular.module('app.auth.login', [])
         };
 
         $scope.login = function() {
-            
-            AuthService.login($scope.credentials).then(function(results) {
-                $log.debug(results);
-            }, function(error) {
-                $log.debug(error);
-            });
-            
+            $scope.$broadcast('show-errors-check-validity');
+  
+            if($scope.form.login.$valid) {
+                AuthService.login($scope.credentials).then(function(results) {
+                    $log.debug(results);
+                }, function(error) {
+                    $log.debug(error);
+                });
+            } else {
+                $scope.form.login.$setDirty();
+                console.log("Nope");
+            }
         };
         
     }]);
