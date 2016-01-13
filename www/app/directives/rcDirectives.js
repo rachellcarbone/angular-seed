@@ -6,7 +6,7 @@
  * A parent module for my custom directives.
  */
 
-angular.module('rc.directives', [
+angular.module('rcDirectives', [
     'rc.placeholdBrokenImg',
     'rc.stateRedirectTimeout'
 ]);

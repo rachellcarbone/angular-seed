@@ -10,7 +10,7 @@
 angular.module('theApp', [
     'ui.bootstrap',
     'ngMessages',
-    'rc.directives',
+    'rcDirectives',
     'rcCart',
     'app.config',
     'app.router',
