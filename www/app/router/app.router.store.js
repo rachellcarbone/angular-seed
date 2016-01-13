@@ -13,7 +13,7 @@
  */
 
 var app = angular.module('app.router.store', [
-    'rachels.auth.constants',
+    'rc.auth.constants',
     'app.public',
     'app.store'
 ]);
@@ -73,7 +73,7 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
             url: '/:category',
             views: {
                 'content@store': {
-                    templateUrl: 'app/views/store/item/item.html',
+                    templateUrl: 'app/views/store/category/category.html',
                     controller: 'StoreCategoryCtrl'
                 }
             }

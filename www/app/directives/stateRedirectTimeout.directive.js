@@ -17,7 +17,7 @@
  *      data-timeout-seconds="10"></span>
  */
 
-angular.module('rachels.stateRedirectTimeout', [])
+angular.module('rc.stateRedirectTimeout', [])
     .directive('stateRedirectTimeout', function($http) {
         
     return {

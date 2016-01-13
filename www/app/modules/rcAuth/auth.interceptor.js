@@ -9,7 +9,7 @@
  */
 
 
-var app = angular.module('rachels.auth.interceptor', ['auth.constants']);
+var app = angular.module('rc.auth.interceptor', ['auth.constants']);
 
 app.config(['$httpProvider', function($httpProvider){
     // Push the Auth Interceptor onto the $httpProvider.interceptors array

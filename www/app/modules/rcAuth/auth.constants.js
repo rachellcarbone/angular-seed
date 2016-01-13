@@ -6,7 +6,7 @@
  * Contstants used by the auth module.
  */
 
-var app = angular.module('rachels.auth.constants', []);
+var app = angular.module('rc.auth.constants', []);
 
 // Events that are triggered by different auth states
 app.constant('AUTH_EVENTS',  {

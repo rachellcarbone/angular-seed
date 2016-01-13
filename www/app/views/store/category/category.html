@@ -1,91 +1,35 @@
-<div class="shopping-cart">
+<div class="store category">
+
+
+    <div class="category-name page-header">
+        <h1>Accessories</h1>
+    </div>
     
-    <div class="breadcrumbBox text-center">
-        <ol class="breadcrumb">
-            <li><a href="#">Review</a></li>
-            <li class="active"><a href="#">Order</a></li>
-            <li><a href="#">Payment</a></li>
-        </ol>
-    </div>
-
-    <div class="row">
-
-        <div class="col-md-8 col-xs-12 text-left">
-
-            <div class="row">
-                <div class="col-xs-6">
-                    <h3>Shopping Cart</h3>
-                </div>
-                <div class="col-xs-2">
-                    <label>Price</label>
-                </div>
-                <div class="col-xs-2">
-                    <label>Qty</label>
-                </div>
-                <div class="col-xs-2">
-                    <label>Sub Total</label>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-xs-12">
-                    <hr/>
-                </div>
-            </div>
-
-            <div class="row" ng-repeat="item in cartItems">
-                <div class="col-xs-2">
-                    <img src="" 
-                         class="img-responsive img-thumbnail no-margin"
-                         data-img-height="100"
-                         data-img-width="100"
-                         data-placehold-broken-img/>
-                </div>
-                <div class="col-xs-4">
-                    <label>Product Name</label>
-                </div>
-                <div class="col-xs-2">
-                    <labe>$99.99</label>
-                </div>
-                <div class="col-xs-2">
-                    <input type="number" class="form-control qty-input" value="1" />
-                </div>
-                <div class="col-xs-2">
-                    <labe>$99.99</label>
-                </div>
-            </div>
-
+    <ol class="breadcrumb">
+        <li><a data-ui-sref="store.home">Store</a></li>
+        <li class="active">Category</li>
+    </ol>
+    
+    <div class="row" ng-repeat="item in cartItems">
+        <div class="col-xs-2">
+            <img src="" 
+                 class="img-responsive img-thumbnail no-margin"
+                 data-img-height="100"
+                 data-img-width="100"
+                 data-placehold-broken-img/>
         </div>
-
-        <div class="col-xs-12 visible-xs visible-sm">
-            <hr/>
+        <div class="col-xs-4">
+            <label>Product Name</label>
         </div>
-
-        <div class="col-md-4 col-xs-12 text-center">
-
-            <div class="well-lg hidden-xs hidden-sm no-padding-top">
-                <img src="/media/images/shopping_bag-128.png" />
-            </div>
-
-            <div class="well well-lg">
-
-                <h5>Sub Total (3 items): $299.97</h5>
-
-                <button ng-click="checkout()" type="button" class="btn btn-primary btn-block">Proceed to Checkout</button>
-
-                <hr/>
-
-                Or <a data-ui-sref="auth.login">Log In</a> to save your cart.
-            </div>
+        <div class="col-xs-2">
+            <label>$99.99</label>
         </div>
-
-    </div>
-
-    <!-- The popover content -->
-
-    <div id="popover" style="display: none">
-        <a href="#"><span class="glyphicon glyphicon-pencil"></span></a>
-        <a href="#"><span class="glyphicon glyphicon-remove"></span></a>
+        <div class="col-xs-2">
+            <input type="number" class="form-control qty-input" value="1" />
+        </div>
+        <div class="col-xs-2">
+            <label>$99.99</label>
+        </div>
     </div>
     
 </div>
