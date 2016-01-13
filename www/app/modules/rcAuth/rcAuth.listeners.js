@@ -6,10 +6,10 @@
  * Set up the variious event listeners for the auth module.
  * 
  * The module only listens to one Angular event, $stateChangeStart,
- * all other events are in the auth.constants AUTH_EVENTS constant.
+ * all other events are in the rcAuth.constants AUTH_EVENTS constant.
  */
 
-angular.module('rc.auth.listeners', ['auth.constants', 'auth.service'])
+angular.module('rcAuth.listeners', ['rcAuth.constants', 'rcAuth.service'])
     .run(['$rootScope', '$state', 'AUTH_EVENTS', 'AuthService',
 
     function($rootScope, $state, AUTH_EVENTS, AuthService) {
