@@ -9,6 +9,7 @@
 // Include modules, and run application.
 angular.module('theApp', [
     'ui.bootstrap',
+    'ui.bootstrap.showErrors',
     'api.v1',
     'ngMessages',
     'rcDirectives',
