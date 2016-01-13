@@ -27,7 +27,8 @@
     "jquery": "~2.1.0",
     "moment": "~2.10.6",
     "qtip2": "~2.2.1",
-    "angular-messages": "~1.4.8"
+    "angular-messages": "~1.4.8",
+    "angular-bootstrap-show-errors": "~2.3.0"
   },
   "resolutions": {
     "jquery": ">=1.6.0"
