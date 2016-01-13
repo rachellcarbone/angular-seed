@@ -5,7 +5,7 @@
  * Sets Nav, Session and Build as global page variables. 
  */
 
-angular.module('rachels.auth.service', ['rachels.auth.visibility'])
+angular.module('rc.auth.service', ['rc.auth.visibility'])
     .factory('AuthService', ['$rootScope', '$q', '$log', 'UserSession', 'AUTH_EVENTS', 'VisibilityService', 'APIV2Service', 
     function($rootScope, $q, $log, UserSession, AUTH_EVENTS, VisibilityService, API) {
         

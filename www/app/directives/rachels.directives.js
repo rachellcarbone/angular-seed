@@ -6,7 +6,7 @@
  * A parent module for my custom directives.
  */
 
-angular.module('rachels.directives', [
-    'rachels.placeholdBrokenImg',
-    'rachels.stateRedirectTimeout'
+angular.module('rc.directives', [
+    'rc.placeholdBrokenImg',
+    'rc.stateRedirectTimeout'
 ]);

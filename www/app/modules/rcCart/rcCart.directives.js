@@ -1,24 +1,8 @@
 'use strict';
 
-/* 
- * State Redirect Timeout
- * 
- * @author  Rachel L Carbone
- * 
- * @param toState string the name of a valid state
- * @param timeoutSeconds  int number of seconds to wait before changing state
- * 
- * Insert an inline <strong>#</strong> tag contianing the number of seconds
- * remaining until a state redirect.
- * 
- * <span 
- *      data-state-redirect-timeout 
- *      data-to-state="app.state" 
- *      data-timeout-seconds="10"></span>
- */
+app = angular.module('rcCart.directives', []);
 
-angular.module('rc.stateRedirectTimeout', [])
-    .directive('stateRedirectTimeout', function($http) {
+app.directive('rcAddToCart', function($http) {
         
     return {
         restrict: 'A',          // Must be a attributeon a html tag

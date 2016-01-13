@@ -1,0 +1,35 @@
+<div class="store category">
+
+
+    <div class="category-name page-header">
+        <h1>Accessories</h1>
+    </div>
+    
+    <ol class="breadcrumb">
+        <li><a data-ui-sref="store.home">Store</a></li>
+        <li class="active">Category</li>
+    </ol>
+    
+    <div class="row" ng-repeat="item in cartItems">
+        <div class="col-xs-2">
+            <img src="" 
+                 class="img-responsive img-thumbnail no-margin"
+                 data-img-height="100"
+                 data-img-width="100"
+                 data-placehold-broken-img/>
+        </div>
+        <div class="col-xs-4">
+            <label>Product Name</label>
+        </div>
+        <div class="col-xs-2">
+            <label>$99.99</label>
+        </div>
+        <div class="col-xs-2">
+            <input type="number" class="form-control qty-input" value="1" />
+        </div>
+        <div class="col-xs-2">
+            <label>$99.99</label>
+        </div>
+    </div>
+    
+</div>

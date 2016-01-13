@@ -23,7 +23,7 @@
  *      data-placehold-broken-img/>
  */
 
-angular.module('rachels.placeholdBrokenImg', [])
+angular.module('rc.placeholdBrokenImg', [])
     .directive('placeholdBrokenImg', function($http) {
         
     return {

@@ -11,13 +11,14 @@
 
 var app = angular.module('app.router', [
   'ui.router',
-  'rachels.auth.constants',
+  'rc.auth.constants',
   'app.maintenance',
   'app.error',
   'app.router.admin',
   'app.router.auth',
   'app.router.member',
-  'app.router.public'
+  'app.router.public',
+  'app.router.store'
 ]);
 app.config(['$stateProvider', '$urlRouterProvider', 'USER_ROLES', 
     function ($stateProvider, $urlRouterProvider, USER_ROLES) {
@@ -49,7 +50,7 @@ app.config(['$stateProvider', '$urlRouterProvider', 'USER_ROLES',
         
         $stateProvider.state('error.notauthorized', {
             title: 'User Not Authorized',
-            url: 'unauthorized',
+            url: '/unauthorized',
             views: {
                 'content@error': {
                     templateUrl: 'app/views/error/notAuthorized/notAuthorized.html',

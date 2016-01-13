@@ -1,0 +1,104 @@
+<div class="store item-details">
+    
+    <ol class="breadcrumb">
+        <li><a data-ui-sref="store.home">Store</a></li>
+        <li><a data-ui-sref="store.category({ category: 'accessories' })">Category</a></li>
+        <li class="active">Item</li>
+    </ol>
+
+    <div class="row">
+
+        <div class="col-xs-12 col-sm-4 text-center">
+            <img src="{{item.src}}" 
+                 class="img-responsive img-thumbnail no-margin"
+                 data-img-height="300"
+                 data-img-width="300"
+                 data-placehold-broken-img/>
+        </div>
+
+        <div class="col-xs-12 visible-xs visible-sm">
+            <hr/>
+        </div>
+
+        <div class="col-xs-12 col-sm-8">
+
+            <div class="item-name page-header">
+                <h1>{{item.name}}</h1>
+            </div>
+
+            <div ng-if="item.regularPrice" class="item-price">
+                <h3 class="price"><span class="regular-price">{{item.regularPrice | formatPrice}}</span> {{item.price | formatPrice}}</h3>
+            </div>
+            
+            <div ng-if="!item.regularPrice" class="item-price">
+                <h3 class="price">{{item.price | formatPrice}}</h3>
+            </div>
+
+            <div class="item-short-description" ng-bind-html="item.shortDesc | formatParagraphsAsHtml"></div>
+
+            <div class="well well-lg pull-right item-qty-subtotal">
+                
+                <label>Total</label>
+                
+                <label>{{item.total | formatPrice}}</label>
+
+                <form class="form-inline">
+                    
+                    <div class="form-group item-qty">
+                        <label>Qty:</label>
+                        <input ng-model="item.qty" ng-change="updateTotal()" class="form-control" type="number" min="1" max="99" />
+                    </div>
+                    
+                    <div class="form-group">
+                        <button ng-click="checkout()" type="button" class="btn btn-primary btn-block">Add to Cart</button>
+                    </div>
+                    
+                </form>
+                
+            </div>
+
+            <hr class="clear-both"/>
+
+            <uib-tabset>
+                
+                <uib-tab>
+                    <uib-tab-heading>
+                        Item Description
+                    </uib-tab-heading>
+
+                    <div class="row">
+
+                        <div class="col-xs-12">
+                            <div class="item-description" ng-bind-html="item.desc | formatParagraphsAsHtml"></div>
+                        </div>
+                    </div>
+
+                </uib-tab>
+                
+                <uib-tab>
+                    <uib-tab-heading>
+                        Item Description
+                    </uib-tab-heading>
+
+                    <div class="row">
+
+                        <div class="col-xs-12">
+                            <div class="item-description" ng-bind-html="item.desc | formatParagraphsAsHtml"></div>
+                        </div>
+                    </div>
+
+                </uib-tab>
+            </uib-tabset>
+            
+        </div>
+
+    </div>
+
+    <!-- The popover content -->
+
+    <div id="popover" style="display: none">
+        <a href="#"><span class="glyphicon glyphicon-pencil"></span></a>
+        <a href="#"><span class="glyphicon glyphicon-remove"></span></a>
+    </div>
+    
+</div>
