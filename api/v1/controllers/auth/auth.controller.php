@@ -22,29 +22,47 @@ class AuthController {
     }
     
     public static function login($app) {
-        $session = new AuthSession();
-        $session->clearLoginAttempts();
-        $attempts = $session->getFailedLoginAttempts($app->request->post('email'));
+        $AuthSession = new AuthSession();
+        $AuthSession->clearLoginAttempts();
+        $attempts = $AuthSession->getFailedLoginAttempts($app->request->post('email'));
         
         if(!v::key('email', v::email())->validate($app->request->post()) || !self::validatePassword($app->request->post())) {
+            // Validate input parameters
             return $app->render(401, array( 'msg' => 'Login failed. Check your parameters and try again.' ));
-        } else if($attempts >= 3) {
-            $attempts = $session->loginAttemptFailed($app->request->post('email'));
+        } else if(false && $attempts >= 3) {
+            // Validate number of attempts for this email
+            $attempts = $AuthSession->loginAttemptFailed($app->request->post('email'));
             return $app->render(401, array('attempts' => $attempts, 'maxattempts' => 3, 'msg' => 'You have attempted to login too many times with that email in a short period of time. Please try again later.' ));
         }
         
         $user = UserData::selectUserByEmail($app->request->post('email'));
         
         if(!$user) {
+            // Validate existing user
             return $app->render(401, array( 'msg' => 'Login failed. A user with that email could not be found.' ));
         } else if (!password_verify($app->request->post('password'), $user->password)) {
-            $attempts = $session->loginAttemptFailed($app->request->post('email'));
+            // Validate Password
+            $attempts = $AuthSession->loginAttemptFailed($app->request->post('email'));
             return $app->render(401, array('attempts' => $attempts, 'maxattempts' => 3, 'msg' => 'Login failed. Username and password combination did not match.' ));
         }
         
+        // Safty first
         unset($user->password);
         
-        return $user;
+        // Remember me
+        $remember = (v::key('remember', v::bool())->validate($app->request->post())) ? boolval($app->request->post('remember')) : false;
+        
+        // Congrats - you're logged in!
+        $newSession = $AuthSession->createLoggedInSession($user, $remember);
+        AuthData::insertAuthToken(array(
+            ':user_id' => $user->id,
+            ':identifier' => $newSession->identifier,
+            ':token' => $newSession->token,
+            ':expires' => $newSession->expires,
+        ));
+        
+        // Go now. Be free little brother.
+        return $app->render(200, array('session' => $newSession, 'user' => $user));
     }
     
     
