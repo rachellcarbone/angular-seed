@@ -21,6 +21,7 @@ angular.module('rcAuth.listeners', [])
                     AuthService.isAuthorized(toState.data.authorizedRoles).then(function(results) {
                         // Do nothing - they are authorized 
                     }, function(results) {
+                        event.preventDefault();
                         // Broadcast reason for failure
                         // https://docs.angularjs.org/api/ng/type/$rootScope.Scope#$broadcast
                         $rootScope.$broadcast(results);
