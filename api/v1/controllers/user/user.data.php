@@ -29,12 +29,24 @@ class UserData {
     
     public static function selectUserById($id) {
         $user = DBConn::selectOne("SELECT id, name_first as nameFirst, name_last as nameLast, email "
-                . "FROM " . DBConn::prefix() . "users WHERE id = :id LIMIT 1;", array('id' => $id));
+                . "FROM " . DBConn::prefix() . "users WHERE id = :id LIMIT 1;", array(':id' => $id));
         if($user) {
-            $user['displayName'] = $user['nameFirst'];
-            $user['roles'] = DBConn::select("SELECT gr.auth_role_id FROM " . DBConn::prefix() . "auth_lookup_user_group AS ug "
+            $user->displayName = $user->nameFirst;
+            $user->roles = DBConn::select("SELECT gr.auth_role_id FROM " . DBConn::prefix() . "auth_lookup_user_group AS ug "
                     . "JOIN " . DBConn::prefix() . "auth_lookup_group_role AS gr ON ug.auth_group_id = gr.auth_group_id "
-                    . "WHERE ug.user_id = :id;", array('id' => $id), \PDO::FETCH_COLUMN);
+                    . "WHERE ug.user_id = :id;", array(':id' => $id), \PDO::FETCH_COLUMN);
+        }
+        return $user;
+    }
+    
+    public static function selectUserByEmail($email) {
+        $user = DBConn::selectOne("SELECT id, name_first as nameFirst, name_last as nameLast, email, password "
+                . "FROM " . DBConn::prefix() . "users WHERE email = :email LIMIT 1;", array(':email' => $email));
+        if($user) {
+            $user->displayName = $user->nameFirst;
+            $user->roles = DBConn::select("SELECT gr.auth_role_id FROM " . DBConn::prefix() . "auth_lookup_user_group AS ug "
+                    . "JOIN " . DBConn::prefix() . "auth_lookup_group_role AS gr ON ug.auth_group_id = gr.auth_group_id "
+                    . "WHERE ug.user_id = :id;", array(':id' => $user->id), \PDO::FETCH_COLUMN);
         }
         return $user;
     }
