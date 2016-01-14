@@ -35,35 +35,6 @@ class AuthSession {
     public function __construct() {
         session_start();
     }
-
-    // Helpers 
-    
-    private function getTimeout($time, $measure = 'hour') {
-        $timeout = time();
-        switch ($measure) {
-            case 'min':
-                $timeout = $timeout + (60*$time);
-                break;
-            case 'day':
-                $timeout = $timeout + (60*60*24*$time);
-                break;
-            case 'hour':
-            default:
-                $timeout = $timeout + (60*60*$time);
-                break;
-        }
-        return $timeout;
-    }
-    
-    private function destroyCookie($name) {
-        setcookie($name, '', time()-3600);
-        unset($_COOKIE[$name]);
-        return true;
-    }
-    
-    private function makeToken($string) {
-        return hash('sha256', $string);
-    }
     
     // Login Attempts
     
@@ -86,21 +57,31 @@ class AuthSession {
     
     public function clearLoginAttempts() {
         return $this->destroyCookie($this->cookieLoginAttempts);
+    }    
+    
+    // User login
+    
+    public function getLoggedInSession() {
+        $tokens = $this->server_getTokenCookies();
+        $user = $this->server_getUserSession();
+        
+        if(!$tokens && !$user) {
+            return false;
+        } else if(!$tokens && $user) {
+            $this->server_removeUserSession();
+            return false;
+        } else {
+            return (object) array_merge($tokens, array('user' => $user));
+        }
     }
     
-    // Active user login
-    
     public function createLoggedInSession($user, $remember = false) {
-        $this->clearLoggedInSession();
-        
         $identifier = $this->makeToken(uniqid());
         $token = $this->makeToken(uniqid());
-        
         $timeout = ($remember) ? $this->getTimeout(4, 'hour') : $this->getTimeout(3, 'day');
         
-        setcookie($this->cookieAuthIdentifier, $identifier, $timeout);
-        setcookie($this->cookieAuthToken, $token, $timeout);
-        $_SESSION[$this->sessionActiveUser] = json_encode($user);
+        $this->server_saveTokenCookies($identifier, $token, $timeout);
+        $this->server_saveUserSession($user);
         
         return (object) array(
             'identifier' => $identifier,
@@ -110,54 +91,80 @@ class AuthSession {
     }
     
     public function clearLoggedInSession() {
-        $this->destroyCookie($this->cookieAuthIdentifier);
-        $this->destroyCookie($this->cookieAuthToken);
-        session_unset();
-        session_destroy();
+        $this->server_removeTokenCookies();
+        $this->server_removeUserSession();
         return true;
     }
     
+    // Cookie And Session Managment for Login
     
-    
-    
-    /*
-    private function setSession($username) {
-        $_SESSION[$this->sessionActiveUserId] = $username;
+    private function server_saveTokenCookies($identifier, $token, $timeout) {
+        setcookie($this->cookieAuthIdentifier, $identifier, $timeout);
+        setcookie($this->cookieAuthToken, $token, $timeout);
     }
     
-    private function destroySession() {
-        session_unset();
-        session_destroy();
+    private function server_saveUserSession($user) {
+        $_SESSION[$this->sessionActiveUser] = json_encode($user);
     }
     
-    private function getUserByEmailFromSession() {
-        if(isset($_SESSION[$this->sessionActiveUserId])) {
-            $user = AuthData::selectUserByEmail($_SESSION[$this->sessionActiveUserId]);
-            unset($user['password']);
-            return $user;
-        } else {
-            return false;
+    private function server_getTokenCookies() {
+        if (filter_input(INPUT_COOKIE, $this->cookieAuthIdentifier)) {
+            return array(
+                    'identifier' => filter_input(INPUT_COOKIE, $this->cookieAuthIdentifier),
+                    'token' => filter_input(INPUT_COOKIE, $this->cookieAuthToken)
+            );
         }
+        return false;
     }
     
-    private function destroyCookie() {
-        AuthData::deleteAuthToken(filter_input(INPUT_COOKIE, $this->cookieAuthToken));
-        if (filter_input(INPUT_COOKIE, $this->cookieAuthToken)) {
-            unset($_COOKIE[$this->cookieAuthToken]);
-            setcookie($this->cookieAuthToken, null, -1, '/');
+    private function server_getUserSession() {
+        if(isset($_SESSION[$this->sessionActiveUser])) {
+            return json_decode($_SESSION[$this->sessionActiveUser], true);
         }
-        if (filter_input(INPUT_COOKIE, $this->cookieUserEmail)) {
-            unset($_COOKIE[$this->cookieUserEmail]);
-            setcookie($this->cookieUserEmail, null, -1, '/');
-        }
+        return false;
     }
     
-    private function getUserByEmailFromCookie() {
-        if(filter_input(INPUT_COOKIE, $this->cookieAuthToken)) {
-            return AuthData::selectUserByToken(filter_input(INPUT_COOKIE, $this->cookieAuthToken));
-        } else {
-            return false;
-        }
+    private function server_removeTokenCookies() {
+        $this->destroyCookie($this->cookieAuthIdentifier);
+        $this->destroyCookie($this->cookieAuthToken);
+        return true;
     }
-    */
+    
+    private function server_removeUserSession() {
+        if(isset($_SESSION[$this->sessionActiveUser])) {
+            session_unset();
+            session_destroy();
+        }
+        return true;
+    }
+
+    // Helpers 
+    
+    private function getTimeout($time, $measure = 'hour') {
+        $timeout = time();
+        switch ($measure) {
+            case 'min':
+                $timeout = $timeout + (60*$time);
+                break;
+            case 'day':
+                $timeout = $timeout + (60*60*24*$time);
+                break;
+            case 'hour':
+            default:
+                $timeout = $timeout + (60*60*$time);
+                break;
+        }
+        return $timeout;
+    }
+    
+    private function destroyCookie($name) {
+        setcookie($name, null, time()-3600);
+        //setcookie($name, null, time()-3600, '/');
+        unset($_COOKIE[$name]);
+        return true;
+    }
+    
+    private function makeToken($string) {
+        return hash('sha256', $string);
+    }
 }
