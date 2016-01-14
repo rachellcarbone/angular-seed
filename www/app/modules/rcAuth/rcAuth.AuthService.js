@@ -15,13 +15,13 @@ angular.module('rcAuth.AuthService', [])
             return $q(function (resolve, reject) {
                     API.postLogin(credentials)
                     .then(function (data) {
-                        if (UserSession.create(data)) {
+                        if (UserSession.create(data.user)) {
                             $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
                             resolve(UserSession.get());
                         } else {
                             $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
                             $log.error(data);
-                            reject(AUTH_EVENTS.loginFailed);
+                            reject("Error: Could not log in user. Please try again later.");
                         }
                     }, function (error) {
                         $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
@@ -62,7 +62,7 @@ angular.module('rcAuth.AuthService', [])
                 if (!user) {
                         API.getAuthenticatedUser()
                         .then(function (data) {
-                            if (UserSession.create(data)) {
+                            if (UserSession.create(data.user)) {
                                 resolve(UserSession.get());
                             } else {
                                 $log.error('[isAuthenticated] Session Couldn\'t be Created', data);
@@ -90,7 +90,7 @@ angular.module('rcAuth.AuthService', [])
                     // Confirm that the user is logged in
                     factory.isAuthenticated().then(function(results) {
                         
-                        if (VisibilityService.isVisibleToUser(authorizedRole, UserSession.role())) {
+                        if (VisibilityService.isVisibleToUser(authorizedRole, UserSession.roles())) {
                             resolve(true);
                         } else {
                             reject(AUTH_EVENTS.notAuthorized);

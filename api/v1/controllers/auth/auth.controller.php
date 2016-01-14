@@ -7,70 +7,13 @@ use \Respect\Validation\Validator as v;
 
 class AuthController {
     
-    public static $maxattempts = 6;
+    static $maxattempts = 6;
     
-    public static $passwordRules = "Passwords must be at least 8 characters long, contain no whitespace, have at least one letter and one number and any of the following !@#$%^&*_+=-.";
+    static $passwordRules = "Passwords must be at least 8 characters long, contain no whitespace, have at least one letter and one number and any of the following !@#$%^&*_+=-.";
     
-    public static function testValidatePassword($app) {
-        return $app->render(200, array( 
-            'msg' => (self::validatePassword($app->request->post()))
-        ));
-    }
+    // Login Function
     
-    public static function validatePassword($post, $key = 'password') {
-        return (v::key($key, 
-                v::stringType()->length(8,255)->noWhitespace()->alnum('!@#$%^&*_+=-')->regex('/^(?=.*[a-zA-Z])(?=.*[0-9])/')
-                )->validate($post));
-    }
-    
-    private static function login_logoutExistingSession($AuthSession,$app) {
-        // Is user already logged in?
-        $session = $AuthSession->getLoggedInSession();
-        if($session && $session->identifier) {
-            // Log them out when someone else attempts to log in
-            $AuthSession->clearLoggedInSession();
-            AuthData::deleteAuthToken(array( ':identifier' => $session->identifier ));
-        }
-    }
-    
-    private static function login_validateParams($app) {
-        if(!v::key('email', v::email())->validate($app->request->post()) || 
-                !v::key('password', v::stringType())->validate($app->request->post())) {
-            // Validate input parameters
-            return $app->render(401, array( 'msg' => 'Login failed. Check your parameters and try again.' ));
-        } 
-        return true;
-    }
-    
-    private static function login_validateLoginAttempts($app, $AuthSession) {
-        $attempts = $AuthSession->getFailedLoginAttempts($app->request->post('email'));
-        if(false && $attempts >= self::$maxattempts) {
-            // Validate number of attempts for this email
-            $attempts = $AuthSession->loginAttemptFailed($app->request->post('email'));
-            return $app->render(401, array('attempts' => $attempts, 'maxattempts' => self::$maxattempts, 'msg' => 'You have attempted to login too many times with that email in a short period of time. Please try again later.' ));
-        }
-        return true;
-    }
-    
-    private static function login_validateFoundUser($app, $AuthSession) {
-        $user = UserData::selectUserByEmail($app->request->post('email'));
-        
-        if(!$user) {
-            // Validate existing user
-            return $app->render(401, array( 'msg' => 'Login failed. A user with that email could not be found.' ));
-        } else if (!password_verify($app->request->post('password'), $user->password)) {
-            // Validate Password
-            $attempts = $AuthSession->loginAttemptFailed($app->request->post('email'));
-            return $app->render(401, array('attempts' => $attempts, 'maxattempts' => self::$maxattempts, 'msg' => 'Login failed. Username and password combination did not match.' ));
-        }
-        
-        // Safty first
-        unset($user->password);
-        
-        return $user;
-    }
-    
-    public static function login($app) {
+    static function login($app) {
         $AuthSession = new AuthSession();
         
         // If anone is logged in currently, log them out
@@ -98,19 +41,67 @@ class AuthController {
             ':expires' => $newSession->expires
         ));
         
-        $session = $AuthSession->getLoggedInSession();
         // Go now. Be free little brother.
-        return $app->render(200, array('msg' => array('user' => $user)));
+        return $app->render(200, array('user' => $newSession));
     }
     
-    public static function logout($app) {
+    private static function login_logoutExistingSession($AuthSession,$app) {
+        // Is user already logged in?
+        $session = $AuthSession->getLoggedInSession();
+        if($session && isset($session->identifier)) {
+            // Log them out when someone else attempts to log in
+            $AuthSession->clearLoggedInSession();
+            AuthData::deleteAuthToken(array( ':identifier' => $session->identifier ));
+        }
+    }
+    
+    private static function login_validateParams($app) {
+        if(!v::key('email', v::email())->validate($app->request->post()) || 
+           !v::key('password', v::stringType())->validate($app->request->post())) {
+            // Validate input parameters
+            return $app->render(401, array('msg' => 'Login failed. Check your parameters and try again.'));
+        } 
+        return true;
+    }
+    
+    private static function login_validateLoginAttempts($app, $AuthSession) {
+        $attempts = $AuthSession->getFailedLoginAttempts($app->request->post('email'));
+        if(false && $attempts >= self::$maxattempts) {
+            // Validate number of attempts for this email
+            $attempts = $AuthSession->loginAttemptFailed($app->request->post('email'));
+            return $app->render(401, array('attempts' => $attempts, 'maxattempts' => self::$maxattempts, 'msg' => 'You have attempted to login too many times with that email in a short period of time. Please try again later.' ));
+        }
+        return true;
+    }
+    
+    private static function login_validateFoundUser($app, $AuthSession) {
+        $user = UserData::selectUserByEmail($app->request->post('email'));
+        
+        if(!$user) {
+            // Validate existing user
+            return $app->render(401, array('msg' => 'Login failed. A user with that email could not be found.'));
+        } else if (!password_verify($app->request->post('password'), $user->password)) {
+            // Validate Password
+            $attempts = $AuthSession->loginAttemptFailed($app->request->post('email'));
+            return $app->render(401, array('attempts' => $attempts, 'maxattempts' => self::$maxattempts, 'msg' => 'Login failed. Username and password combination did not match.' ));
+        }
+        
+        // Safty first
+        unset($user->password);
+        
+        return $user;
+    }
+    
+    // Logout Function
+    
+    static function logout($app) {
         $AuthSession = new AuthSession();
         
         $session = $AuthSession->getLoggedInSession();
         
         if(!$session) { 
             return $app->render(200, array('msg' => 'Log out successful.'));
-        } else if ($session->identifier) {
+        } else if (isset($session->identifier)) {
             AuthData::deleteAuthToken(array( ':identifier' => $session->identifier ));
         }
         
@@ -118,6 +109,52 @@ class AuthController {
         return $app->render(200, array('msg' => 'User successfully logged out.'));
     }
     
+    static function getLoggedInUser($app) {
+        $AuthSession = new AuthSession();
+        $session = $AuthSession->getLoggedInSession();
+        
+        if($session && isset($session->user)) {
+            return $app->render(200, array('user' => $session->user, '$session' => $session));
+        } else if($session && isset($session->identifier)) {
+            $loggedInUser = self::auth_validateFoundUser($app, $AuthSession, $session);
+            if($loggedInUser) {
+                $AuthSession->server_saveUserSession($loggedInUser);
+                return $app->render(200, array('user' => $loggedInUser));
+            }
+        }
+        return $app->render(401, array('msg' => 'Unauthenticated: Nope', '$session' => $session));
+    }
+    
+    // Test Password Route
+    
+    static function testValidatePassword($app) {
+        return $app->render(200, array( 
+            'valid' => (self::validatePassword($app->request->post()))
+        ));
+    }
+    
+    static function validatePassword($post, $key = 'password') {
+        return (v::key($key, v::stringType()->length(8,255)->noWhitespace()->alnum('!@#$%^&*_+=-')->regex('/^(?=.*[a-zA-Z])(?=.*[0-9])/'))->validate($post));
+    }
+    
+    
+    private static function auth_validateFoundUser($app, $AuthSession, $session) {
+        $user = UserData::selectUserByIdentifierToken($session->identifier);
+        
+        if(!$user) {
+            // Validate existing user
+            return $app->render(401, array('msg' => 'Unauthenticated: No User'));
+        } else if (!password_verify($session->token, $user->token)) {
+            // Validate Password
+            $AuthSession->clearLoggedInSession();
+            return $app->render(401, array('msg' => 'Unauthenticated: Invalid Cookie'));
+        }
+        
+        // Safty first
+        unset($user->identifier);
+        
+        return $user;
+    }
     
     
     
@@ -130,7 +167,7 @@ class AuthController {
     private static $routeChangePassword;
     private static $routeConfirmEmail;
     
-    public static function hmmm() {
+    static function hmmm() {
         parent::__construct();
         self::logger = new \API\Data\Logging();
         self::routeChangePassword = '#/change-password/';
@@ -157,7 +194,7 @@ class AuthController {
     }
 
     
-    public static function forgotPassword($app) {
+    static function forgotPassword($app) {
         if(!v::email()->validate($app->request->post('email'))) {
             $app->render(400, self::setResponse->fail('Invalid email address.'));
             return;
@@ -187,7 +224,7 @@ class AuthController {
         }
     }
 
-    public static function validateResetToken($app) {
+    static function validateResetToken($app) {
         $token = urldecode($app->request->post('token'));
         
         if(v::stringType()->length(32)->validate($token)) {
@@ -198,7 +235,7 @@ class AuthController {
         }        
     }
 
-    public static function changePassword($app) {
+    static function changePassword($app) {
         $token = ($app->request->post('token')) ? urldecode($app->request->post('token')) : false;
         
         if(!self::validatePassword($app->request->post('password'))) {
@@ -231,7 +268,7 @@ class AuthController {
         $app->render(500, self::setResponse->fail('Error saving password. Please refresh the page and try again.'));
     }
 
-    public static function userChagePassword($app, $userId) {
+    static function userChagePassword($app, $userId) {
         $newPassword = ($app->request->post('newPassword')) ? trim($app->request->post('newPassword')) : false;
         if(!self::validatePassword($newPassword)) {
             $app->render(400, self::setResponse->fail("Error saving password. Passwords must be at least 8 characters "

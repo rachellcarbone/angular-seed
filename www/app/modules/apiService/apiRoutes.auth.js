@@ -61,7 +61,7 @@ angular.module('apiRoutes.auth', [])
     };
 
     api.getAuthenticatedUser = function() {
-        return API.get('auth/authenticated/', '[isAuthenticated] Error, User Not Authenticated.');
+        return API.post('auth/authenticated/', '[isAuthenticated] Error, User Not Authenticated.');
     };
 
     return api;

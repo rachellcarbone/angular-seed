@@ -32,13 +32,15 @@ class AuthSession {
      */
     private $sessionActiveUser = '_rcsessAU';
     
-    public function __construct() {
+    private $cookieDomain = 'http://www.seed.dev/';
+            
+    function __construct() {
         session_start();
     }
     
     // Login Attempts
     
-    public function getFailedLoginAttempts($email) {
+    function getFailedLoginAttempts($email) {
         $cookie = array();
         if (filter_input(INPUT_COOKIE, $this->cookieLoginAttempts)) {
             $cookie = json_decode(filter_input(INPUT_COOKIE, $this->cookieLoginAttempts), true);
@@ -47,24 +49,26 @@ class AuthSession {
         return $attempts;
     }
     
-    public function loginAttemptFailed($email) {
+    function loginAttemptFailed($email) {
         $attempts = $this->getFailedLoginAttempts($email);
         $attempts = $attempts + 1;
         $cookie = array($email => $attempts);
-        setcookie($this->cookieLoginAttempts, json_encode($cookie), $this->getTimeout(5, 'min'));
+        setcookie($this->cookieLoginAttempts, json_encode($cookie), $this->getTimeout(5, 'min'), $this->cookieDomain);
         return $attempts;
     }
     
-    public function clearLoginAttempts() {
+    function clearLoginAttempts() {
         return $this->destroyCookie($this->cookieLoginAttempts);
     }    
     
     // User login
     
-    public function getLoggedInSession() {
+    function getLoggedInSession() {
         $tokens = $this->server_getTokenCookies();
         $user = $this->server_getUserSession();
         
+            return (object) array_merge(array('$tokens' => $tokens), array('user' => $user));
+            
         if(!$tokens && !$user) {
             return false;
         } else if(!$tokens && $user) {
@@ -75,7 +79,7 @@ class AuthSession {
         }
     }
     
-    public function createLoggedInSession($user, $remember = false) {
+    function createLoggedInSession($user, $remember = false) {
         $identifier = $this->makeToken(uniqid());
         $token = $this->makeToken(uniqid());
         $timeout = ($remember) ? $this->getTimeout(4, 'hour') : $this->getTimeout(3, 'day');
@@ -90,7 +94,7 @@ class AuthSession {
         );
     }
     
-    public function clearLoggedInSession() {
+    function clearLoggedInSession() {
         $this->server_removeTokenCookies();
         $this->server_removeUserSession();
         return true;
@@ -98,16 +102,16 @@ class AuthSession {
     
     // Cookie And Session Managment for Login
     
-    private function server_saveTokenCookies($identifier, $token, $timeout) {
-        setcookie($this->cookieAuthIdentifier, $identifier, $timeout);
-        setcookie($this->cookieAuthToken, $token, $timeout);
+    function server_saveTokenCookies($identifier, $token, $timeout) {
+        setcookie($this->cookieAuthIdentifier, $identifier, $timeout, $this->cookieDomain);
+        setcookie($this->cookieAuthToken, $token, $timeout, $this->cookieDomain);
     }
     
-    private function server_saveUserSession($user) {
+    function server_saveUserSession($user) {
         $_SESSION[$this->sessionActiveUser] = json_encode($user);
     }
     
-    private function server_getTokenCookies() {
+    function server_getTokenCookies() {
         if (filter_input(INPUT_COOKIE, $this->cookieAuthIdentifier)) {
             return array(
                     'identifier' => filter_input(INPUT_COOKIE, $this->cookieAuthIdentifier),
@@ -117,23 +121,24 @@ class AuthSession {
         return false;
     }
     
-    private function server_getUserSession() {
+    function server_getUserSession() {
         if(isset($_SESSION[$this->sessionActiveUser])) {
             return json_decode($_SESSION[$this->sessionActiveUser], true);
         }
         return false;
     }
     
-    private function server_removeTokenCookies() {
+    function server_removeTokenCookies() {
         $this->destroyCookie($this->cookieAuthIdentifier);
         $this->destroyCookie($this->cookieAuthToken);
         return true;
     }
     
-    private function server_removeUserSession() {
+    function server_removeUserSession() {
         if(isset($_SESSION[$this->sessionActiveUser])) {
             session_unset();
             session_destroy();
+            session_start();
         }
         return true;
     }
@@ -158,9 +163,11 @@ class AuthSession {
     }
     
     private function destroyCookie($name) {
-        setcookie($name, null, time()-3600);
-        //setcookie($name, null, time()-3600, '/');
+        setcookie($name, '', time()-3600, $this->cookieDomain);
+        //setcookie($name, null, time()-3600, $this->cookieDomain);
         unset($_COOKIE[$name]);
+        session_write_close();
+        session_start();
         return true;
     }
     
