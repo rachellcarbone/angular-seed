@@ -25,23 +25,23 @@ class UserRoutes {
          * @apiSuccess {String} msg.user.email The users primary email.
          * @apiSuccess {int} msg.user.roleId User role id.
          */
-        $app->get("/users", function () use ($app) {
+        $app->get("/users/", function () use ($app) {
             UserController::getUsers($app);
         });
         
-        $app->get("/user/:userId", function ($userId) use ($app) {
+        $app->get("/user/:userId/", function ($userId) use ($app) {
             UserController::getUser($app, $userId);
         });
         
-        $app->post("/user", function () use ($app) {
+        $app->post("/user/", function () use ($app) {
             UserController::addUser($app);
         });
         
-        $app->post("/user/:userId", function ($userId) use ($app) {
+        $app->post("/user/:userId/", function ($userId) use ($app) {
             UserController::saveUser($app, $userId);
         });
         
-        $app->delete("/delete/user/:userId", function ($userId) use ($app) {
+        $app->delete("/delete/user/:userId/", function ($userId) use ($app) {
             UserController::deleteUser($app, $userId);
         });
     }
