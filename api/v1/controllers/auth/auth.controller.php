@@ -29,53 +29,6 @@ class AuthController {
         }
     }
 
-    private static function setSession($username) {
-        $_SESSION['auth_active'] = $username;
-    }
-
-    private static function destroySession() {
-        session_unset();
-        session_destroy();
-    }
-
-    private static function getUserByEmailFromSession() {
-        if (isset($_SESSION['auth_active'])) {
-            $user = AuthData::selectUserByEmail($_SESSION['auth_active']);
-            unset($user['password']);
-            return $user;
-        } else {
-            return false;
-        }
-    }
-
-    private static function setRememberMeCookie($user) {
-        $token = password_hash(uniqid(), PASSWORD_DEFAULT);
-        if (AuthData::updateAuthToken($user['id'], $token)) {
-            setcookie('auth_token', $token, time() + (86400 * 7), '/'); // Seven Days
-            setcookie('email', $user['email'], time() + (86400 * 7), '/'); // Seven Days
-        }
-    }
-
-    private static function destroyCookie() {
-        AuthData::deleteAuthToken(filter_input(INPUT_COOKIE, 'auth_token'));
-        if (filter_input(INPUT_COOKIE, 'auth_token')) {
-            unset($_COOKIE['auth_token']);
-            setcookie('auth_token', null, -1, '/');
-        }
-        if (filter_input(INPUT_COOKIE, 'email')) {
-            unset($_COOKIE['email']);
-            setcookie('email', null, -1, '/');
-        }
-    }
-
-    private static function getUserByEmailFromCookie() {
-        if (filter_input(INPUT_COOKIE, 'auth_token')) {
-            return AuthData::selectUserByToken(filter_input(INPUT_COOKIE, 'auth_token'));
-        } else {
-            return false;
-        }
-    }
-
     private static function isTokenValid($token) {
         $found = AuthData::selectResetToken($token);
         if ($found && date('Y-m-d H:i:s', strtotime('NOW')) <= date('Y-m-d H:i:s', strtotime($found['expires']))) {
