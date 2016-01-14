@@ -4,9 +4,8 @@
 class UserData {
     
     public static function selectUsers() {
-        $qUsers = DBConn::preparedQuery("SELECT id, name_first, name_last, email, email_verified, password, created, last_updated "
+        $qUsers = DBConn::executeQuery("SELECT id, name_first, name_last, email, email_verified, password, created, last_updated "
                 . "FROM " . DBConn::prefix() . "users;");
-        $qUsers->execute();
         
         $qGroups = DBConn::preparedQuery("SELECT grp.id, grp.group, grp.desc "
                 . "FROM " . DBConn::prefix() . "auth_groups AS grp "
@@ -57,10 +56,10 @@ class UserData {
     }
     
     public static function updateUser($validUser) {
-        return DBConn::preparedQuery("UPDATE " . DBConn::prefix() . "users SET name_first=:name_first, name_last=:name_last, email=:email WHERE id = :id;", $validUser);
+        return DBConn::executeQuery("UPDATE " . DBConn::prefix() . "users SET name_first=:name_first, name_last=:name_last, email=:email WHERE id = :id;", $validUser);
     }
     
     public static function deleteUser($id) {
-        return DBConn::preparedQuery("DELETE FROM " . DBConn::prefix() . "users WHERE id = :id LIMIT 1;", array('id' => $id));
+        return DBConn::executeQuery("DELETE FROM " . DBConn::prefix() . "users WHERE id = :id LIMIT 1;", array('id' => $id));
     }
 }
