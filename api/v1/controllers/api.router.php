@@ -15,7 +15,7 @@ class ApiRouter {
     
     private static function addDefaultRoutes($app) {
         $app->get('/',  function () use ($app) {
-            $app->render(200, array("msg" => "Congratulations, you have reached the Slim PHP API v1!"));
+            $app->render(418, array("msg" => "Congratulations, you have reached the Slim PHP API v1!"));
         });
     }
     
