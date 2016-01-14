@@ -56,38 +56,12 @@ class V1Controller {
         
         return $app;
     }
-    
-    /* API Response Formatting Middleware
-     *
-     * @param  \Psr\Http\Message\ServerRequestInterface $request  PSR7 request
-     * @param  \Psr\Http\Message\ResponseInterface      $response PSR7 response
-     * @param  callable                                 $next     Next middleware
-     *
-     * @return \Psr\Http\Message\ResponseInterface
-     */
-    private static function apiResponseFormattingMiddleware($request, $response, $next) {
-        $response->getBody()->write('BEFORE');
-        $response = $next($request, $response);
-        $response->getBody()->write('AFTER');
-
-        return $response;
-    }
 
     // http://www.slimframework.com/docs/concepts/middleware.html
     private static function addMiddleware($app) {
         
-        /*
-        $app->add(function ($request, $response, $next) {
-            $response->getBody()->write('BEFORE');
-            $response = $next($request, $response);
-            $response->getBody()->write('AFTER');
-
-            return $response;
-        });
-        */
-        
         /* Slim-jsonAPI */
-        $app->view(new \JsonApiView());
+        $app->view(new \JsonApiView('data', 'meta'));
         $app->add(new \JsonApiMiddleware());
 
         /* Authentication */
