@@ -3,6 +3,13 @@
 
 class AuthData {
     
+    public static function insertAuthToken($validToken) {
+        return DBConn::insertQuery('INSERT INTO as_tokens_auth(identifier, token, user_id, expires) '
+                . 'VALUES (:identifier, :token, :user_id, :expires);', $validToken);
+    }
+    
+    
+    
     private function selectUserById($id) {
         return DBConn::selectOne("SELECT id, email FROM " . DBConn::prefix() . "users WHERE id = '{$id}' Limit 1;");
     }
