@@ -26,12 +26,12 @@ class UserController {
         }
     }
 
-    public static function addUser($app) {                    
+    public static function addUser($app) {
         if(!v::key('first', v::string()->length(1,255))->validate($app->request->post()) ||
-            !v::key('last', v::string()->length(0,255), false)->validate($app->request->post()) || 
-            !v::key('email', v::string()->length(6,255))->validate($app->request->post())) {
+            !v::key('last', v::string()->length(1,255), false)->validate($app->request->post()) || 
+            !v::key('email', v::email())->validate($app->request->post())) {
             return $app->render(400, array( 'msg' => 'Invalid user. Check your parameters and try again.' ));
-        } else if(!AuthController::validatePassword($app->request->post('password'))) {
+        } else if(!AuthController::validatePassword($app->request->post())) {
             return $app->render(400, array( 'msg' => "Passwords must be at least 8 characters "
                     . "long, contain no whitespace, have at least one letter and one number. "
                     . "Check your parameters and try again."));
@@ -54,10 +54,10 @@ class UserController {
         }
     }
 
-    public static function saveUser($app, $userId) {                   
+    public static function saveUser($app, $userId) {
         if(!v::key('first', v::string()->length(1,255))->validate($app->request->post()) ||
-            !v::key('last', v::string()->length(0,255), false)->validate($app->request->post()) || 
-            !v::key('email', v::string()->length(6,255))->validate($app->request->post())) {
+            !v::key('last', v::string()->length(1,255), false)->validate($app->request->post()) || 
+            !v::key('email', v::email())->validate($app->request->post())) {
             return $app->render(400, array( 'msg' => 'Invalid user. Check your parameters and try again.' ));
         } 
         
