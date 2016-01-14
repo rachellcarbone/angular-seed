@@ -51,12 +51,12 @@ angular.module('api.v1', [
             $http.get(api.apiUrl + api.trimPath(path))
             .success(function (data) {
                 // If its successful, resolve the promise
-                resolve(data.msg);
+                resolve(data.data);
             }).error(function(data) {
                 // If there eas an error log it
-                $log.error((data.msg) ? data.msg : err);
+                $log.error((data.data.msg) ? data.data.msg : err);
                 // Reject the promise
-                reject((data.msg) ? data.msg : err); 
+                reject((data.data.msg) ? data.data.msg : err); 
             });
             
         });
@@ -80,12 +80,12 @@ angular.module('api.v1', [
                 headers: {'Content-Type': undefined}
             }).success(function (data) {
                 // If its successful, resolve the promise
-                resolve(data.msg);
+                resolve(data.data);
             }).error(function(data) {
                 // If there eas an error log it
-                $log.error((data.msg) ? data.msg : err);
+                $log.error((data.data.msg) ? data.data.msg : err);
                 // Reject the promise
-                reject((data.msg) ? data.msg : err); 
+                reject((data.data.msg) ? data.data.msg : err); 
             });
             
         });
@@ -111,13 +111,13 @@ angular.module('api.v1', [
             })
             .success(function (data) {
                     // If its successful, resolve the promise
-                    resolve(data.msg);
+                    resolve(data.data);
                 })
                 .error(function(data) {
                     // If there eas an error log it
-                    $log.error((data.msg) ? data.msg : err);
+                    $log.error((data.data.msg) ? data.data.msg : err);
                     // Reject the promise
-                    reject((data.msg) ? data.msg : err); 
+                    reject((data.data.msg) ? data.data.msg : err); 
             });            
         });
     };
@@ -135,13 +135,13 @@ angular.module('api.v1', [
             $http.delete(api.apiUrl + api.trimPath(path))
             .success(function (data) {
                     // If its successful, resolve the promise
-                    resolve(data.msg);
+                    resolve(data.data);
                 })
                 .error(function(data) {
                     // If there eas an error log it
-                    $log.error((data.msg) ? data.msg : err);
+                    $log.error((data.data.msg) ? data.data.msg : err);
                     // Reject the promise
-                    reject((data.msg) ? data.msg : err); 
+                    reject((data.data.msg) ? data.data.msg : err); 
             });
         });
     };
