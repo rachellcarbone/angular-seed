@@ -7,7 +7,10 @@
  */
 
 angular.module('app.public.header', [])
-        .controller('PublicHeaderCtrl', ['$scope', function ($scope) {
+        .controller('PublicHeaderCtrl', ['$scope', 'UserSession', function ($scope, UserSession) {
         
+        $scope.user = UserSession.get();
+
         $scope.userIsLoggedIn = false;
+
     }]);

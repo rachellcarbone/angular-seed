@@ -7,6 +7,7 @@
  */
 
 angular.module('app.admin.header', [])
-        .controller('AdminHeaderCtrl', ['$scope', function ($scope) {
+        .controller('AdminHeaderCtrl', ['$scope', 'UserSession', function ($scope, UserSession) {
         
+        $scope.user = UserSession.get();
     }]);

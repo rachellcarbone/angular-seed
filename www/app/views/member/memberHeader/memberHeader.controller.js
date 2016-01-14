@@ -7,6 +7,7 @@
  */
 
 angular.module('app.member.header', [])
-        .controller('MemberHeaderCtrl', ['$scope', function ($scope) {
+        .controller('MemberHeaderCtrl', ['$scope', 'UserSession', function ($scope, UserSession) {
         
+        $scope.user = UserSession.get();
     }]);
