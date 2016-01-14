@@ -13,6 +13,13 @@ angular.module('rcAuth.VisibilityService', [])
         
         var service = {};
         
+        // Helper to check for items of an array in another array
+        var containsAny  = function (haystack, arr) {
+            return arr.some(function (v) {
+                return haystack.indexOf(v) >= 0;
+            });
+        };
+        
         /* 
          * Is Role Accissable Unauthenticated 
          * 
@@ -20,11 +27,15 @@ angular.module('rcAuth.VisibilityService', [])
          * a page or menu item etc) to see if it is publicly accessable to everyone
          * including unauthenticated (not logged in) users.
          * 
-         * @param {Object} authorizedRole Role to be checked
+         * @param {Array|String} authorized Role to be checked
          * @return {Boolean} Returns true if the role is for unauthenticated  traffic
          */
-        service.isAccessUnauthenticated = function(authorizedRole) {
-            return true;//(authorizedRole === USER_ROLES.guest);
+        service.isAccessUnauthenticated = function(access) {
+            var guest = (angular.isArray(USER_ROLES.guest)) ? USER_ROLES.guest : [USER_ROLES.guest];
+            var authorized = (angular.isArray(access)) ? access : [access];
+            
+            // If the roles are in an array
+            return (containsAny(authorized, guest));
         };
         
         /* 
@@ -37,8 +48,12 @@ angular.module('rcAuth.VisibilityService', [])
          * @param {Object} userRole Role associated with a user, possibly guest/unauthenticated
          * @return {Boolean} Returns true if the userRole has access to the authorizedRole
          */
-        service.isVisibleToUser = function(authorizedRole, userRole) {
-            return (authorizedRole <= userRole);
+        service.isVisibleToUser = function(access, userRoles) {
+            var user = (angular.isArray(userRoles)) ? userRoles : [userRoles];
+            var authorized = (angular.isArray(access)) ? access : [access];
+            
+            // If the roles are in an array
+            return (containsAny(authorized, user));
         };
         
         return service;

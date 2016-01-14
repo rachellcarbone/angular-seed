@@ -21,9 +21,7 @@ app.constant('AUTH_EVENTS',  {
 // Roles used for authorization and to determin
 // page access when navigating the website.
 app.constant('USER_ROLES', {
-    guest: 1,
-    expired: 2,
-    user: 3,
-    admin: 4,
-    super: 5
+    guest: "1",
+    admin: "2",
+    user: "3"
 });
