@@ -148,7 +148,8 @@ class DBConn {
         $pdo = self::connect();
         try {
             $q = $pdo->prepare($query);
-            return $q->execute($data);
+            $q->execute($data);
+            return $q;
         } catch (\PDOException $e) {
             self::logPDOError($pdo);
             return false;
