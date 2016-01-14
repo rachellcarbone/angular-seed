@@ -20,6 +20,10 @@ class AuthRoutes {
             AuthController::testValidatePassword($app);
         });
         
+        $app->post("/auth/authenticated/", function () use ($app) {
+            AuthController::getLoggedInUser($app);
+        });
+        
         // Email Managment
         
         $app->post("/auth/send-email/validate-new-email/", function () use ($app) {
