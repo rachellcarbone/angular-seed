@@ -21,8 +21,7 @@ angular.module('rcAuth.UserSession', [])
                 typeof(opt.id) !== 'undefined' &&
                 typeof(opt.displayName) !== 'undefined' &&
                 typeof(opt.email) !== 'undefined' &&
-                typeof(opt.role) !== 'undefined' &&
-                typeof(opt.apiHash) !== 'undefined');
+                typeof(opt.roles) !== 'undefined');
     };
     
     // Create a user session
@@ -30,14 +29,8 @@ angular.module('rcAuth.UserSession', [])
         // Validate that the sent object is a valid user
         if(self.validateUser(opt)) {
             // Set the user session
-            self.user = {
-                id: opt.id,
-                displayName: opt.displayName,
-                email: opt.email,
-                role: opt.role,
-                apiHash: opt.apiHash
-            };
-            return true;
+            self.user = opt;
+            return self.user;
         } else {
             return false;
         }
@@ -52,7 +45,7 @@ angular.module('rcAuth.UserSession', [])
     // Return a copy of the user object
     // If no user is logged in this will return false
     self.get = function() {
-        return angular.copy(self.user);
+        return self.user;
     };
     
     // Safly return the User Id
@@ -71,13 +64,8 @@ angular.module('rcAuth.UserSession', [])
     };
     
     // Safly return the User Role Object
-    self.role = function() {
-        return angular.copy(self.user.role);
-    };
-    
-    // Safly return the User API Hash (unique key)
-    self.apiHash = function() {
-        return angular.copy(self.user.apiHash);
+    self.roles = function() {
+        return angular.copy(self.user.roles);
     };
     
     // Return public methods
@@ -87,8 +75,7 @@ angular.module('rcAuth.UserSession', [])
             get : self.get,
             id : self.id,
             displayName : self.displayName,
-            role : self.role,
-            apiHash : self.apiHash
+            roles : self.roles
         };
         
     }]);
