@@ -8,31 +8,31 @@ use \Respect\Validation\Validator as v;
 class UserController {
 
     
-    public static function getUsers($app) {
+    static function getUsers($app) {
         $users = UserData::selectUsers();
         if($users) {
-            return $app->render(200, array( 'users' => $users ));
+            return $app->render(200, array('users' => $users));
         } else {
-            return $app->render(400, array( 'msg' => 'Could not select users.' ));
+            return $app->render(400,  array('msg' => 'Could not select users.'));
         }
     }
 
-    public static function getUser($app, $userId) {
+    static function getUser($app, $userId) {
         $user = UserData::selectUserById($userId);
         if($user) {
-            return $app->render(200, array( 'user' => $user ));
+            return $app->render(200, array('user' => $user ));
         } else {
-            return $app->render(400, array( 'msg' => 'User could not be found. Check your parameters and try again.' ));
+            return $app->render(400,  array('msg' => 'User could not be found. Check your parameters and try again.'));
         }
     }
 
-    public static function addUser($app) {
+    static function addUser($app) {
         if(!v::key('first', v::stringType()->length(1,255))->validate($app->request->post()) ||
             !v::key('last', v::stringType()->length(1,255), false)->validate($app->request->post()) || 
             !v::key('email', v::email())->validate($app->request->post())) {
-            return $app->render(400, array( 'msg' => 'Invalid user. Check your parameters and try again.' ));
+            return $app->render(400,  array('msg' => 'Invalid user. Check your parameters and try again.'));
         } else if(!AuthController::validatePassword($app->request->post())) {
-            return $app->render(400, array( 'msg' => "Passwords must be at least 8 characters "
+            return $app->render(400,  array('msg' => "Passwords must be at least 8 characters "
                     . "long, contain no whitespace, have at least one letter and one number. "
                     . "Check your parameters and try again."));
         } 
@@ -40,7 +40,7 @@ class UserController {
         $found = UserData::selectOtherUsersWithEmail($app->request->post('email'));
         
         if ($found && count($found) > 0) {
-            return $app->render(400, array( 'msg' => 'An account with that email already exists. No two users may have the same email address.' ));
+            return $app->render(400,  array('msg' => 'An account with that email already exists. No two users may have the same email address.'));
         } else {
             $data = array(
                 ':name_first' => $app->request->post('first'),
@@ -50,21 +50,21 @@ class UserController {
             );
             $userId = UserData::insertUser($data);
             $user = UserData::selectUserById($userId);
-            return $app->render(200, array( 'user' => $user ));
+            return $app->render(200, array('user' => $user ));
         }
     }
 
-    public static function saveUser($app, $userId) {
+    static function saveUser($app, $userId) {
         if(!v::key('first', v::stringType()->length(1,255))->validate($app->request->post()) ||
             !v::key('last', v::stringType()->length(1,255), false)->validate($app->request->post()) || 
             !v::key('email', v::email())->validate($app->request->post())) {
-            return $app->render(400, array( 'msg' => 'Invalid user. Check your parameters and try again.' ));
+            return $app->render(400,  array('msg' => 'Invalid user. Check your parameters and try again.'));
         } 
         
         $found = UserData::selectOtherUsersWithEmail($app->request->post('email'), $userId);
         
         if ($found && count($found) > 0) {
-            return $app->render(400, array( 'msg' => 'An account with that email already exists. No two users may have the same email address.' ));
+            return $app->render(400,  array('msg' => 'An account with that email already exists. No two users may have the same email address.'));
         } else {
             $data = array(
                 ':id' => $userId,
@@ -74,15 +74,15 @@ class UserController {
             );
             UserData::updateUser($data);
             $user = UserData::selectUserById($userId);
-            return $app->render(200, array( 'user' => $user ));
+            return $app->render(200, array('user' => $user));
         }
     }
 
-    public static function deleteUser($app, $userId) {
+    static function deleteUser($app, $userId) {
         if(UserData::deleteUser($userId)) {
-            return $app->render(200, array( 'msg' => 'User has been deleted.' ));
+            return $app->render(200,  array('msg' => 'User has been deleted.'));
         } else {
-            return $app->render(400, array( 'msg' => 'Could not delete user. Check your parameters and try again.' ));
+            return $app->render(400,  array('msg' => 'Could not delete user. Check your parameters and try again.'));
         }
     }
 }
