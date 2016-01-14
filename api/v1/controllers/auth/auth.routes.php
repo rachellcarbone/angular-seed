@@ -6,6 +6,8 @@ class AuthRoutes {
     static function addRoutes() {
         $app = \Slim\Slim::getInstance();
         
+        // Authentication
+        
         $app->post("/auth/login", function () use ($app) {
             AuthController::authenticate($app);
         });
@@ -14,7 +16,19 @@ class AuthRoutes {
             AuthController::logout($app);
         });
         
-        $app->post("/auth/reset-password-email", function () use ($app) {
+        // Email Managment
+        
+        $app->post("/auth/send-email/validate-new-email", function () use ($app) {
+            AuthController::sendPasswordResetEmail($app);
+        });
+        
+        $app->post("/auth/validate-new-email-token", function () use ($app) {
+            AuthController::validateResetToken($app);
+        });
+        
+        // Forgot Password        
+        
+        $app->post("/auth/send-email/reset-password", function () use ($app) {
             AuthController::sendPasswordResetEmail($app);
         });
         
