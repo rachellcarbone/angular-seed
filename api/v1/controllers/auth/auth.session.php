@@ -2,24 +2,54 @@
 require_once dirname(__FILE__) . '/auth.data.php';
 
 class AuthSession {
+    /*
+     * Cookie: Login Attempts
+     * Holds a json object representing login attempts for various emails.
+     * 
+     * Example: {
+     *      'joe@bob.com' : 1,
+     *      'jaoe@bob.com' : 2,
+     * }
+     */
+    private $cookieLoginAttempts = '_rcsessLIA';
     
-    private $cookieUserEmail = '_rcsessUE';
+    /*
+     * Cookie: Auth Identifier
+     * Used to look up the hashed token in the database.
+     */
+    private $cookieAuthIdentifier = '_rcsessAI';
+    
+    /*
+     * Vookie: Auth Token
+     * Holds a SHA256 Hash Token that is used together with the 
+     * encrypted user email to validate a logged in user.
+     */
     private $cookieAuthToken = '_rcsessAT';
-    private $cookieLoginAttempts = '_rcsessLA';
-    private $sessionActiveUserId = '_rcsessAUI';
+    
+    /*
+     * Session: User Id
+     * Holds the user id in a session object for faster lookup.
+     */
+    private $sessionActiveUser = '_rcsessAU';
+    
+    public function __construct() {
+        session_start();
+    }
 
+    // Helpers 
+    
     private function getTimeout($time, $measure = 'hour') {
         $timeout = time();
         switch ($measure) {
             case 'min':
-                $timeout = $timeout * (60*$time);
+                $timeout = $timeout + (60*$time);
                 break;
             case 'day':
-                $timeout = $timeout * (60*60*24*$time);
+                $timeout = $timeout + (60*60*24*$time);
                 break;
             case 'hour':
             default:
-                $timeout = $timeout * (60*60*$time);
+                $timeout = $timeout + (60*60*$time);
                 break;
         }
         return $timeout;
@@ -30,6 +60,12 @@ class AuthSession {
         unset($_COOKIE[$name]);
         return true;
     }
+    
+    private function makeToken($string) {
+        return hash('sha256', $string);
+    }
+    
+    // Login Attempts
     
     public function getFailedLoginAttempts($email) {
         $cookie = array();
@@ -52,27 +88,39 @@ class AuthSession {
         return $this->destroyCookie($this->cookieLoginAttempts);
     }
     
+    // Active user login
     
+    public function createLoggedInSession($user, $remember = false) {
+        $this->clearLoggedInSession();
+        
+        $identifier = $this->makeToken(uniqid());
+        $token = $this->makeToken(uniqid());
+        
+        $timeout = ($remember) ? $this->getTimeout(4, 'hour') : $this->getTimeout(3, 'day');
+        
+        setcookie($this->cookieAuthIdentifier, $identifier, $timeout);
+        setcookie($this->cookieAuthToken, $token, $timeout);
+        $_SESSION[$this->sessionActiveUser] = json_encode($user);
+        
+        return (object) array(
+            'identifier' => $identifier,
+            'token' => password_hash($token, PASSWORD_DEFAULT),
+            'expires' => date('Y-m-d H:i:s', $timeout)
+        );
+    }
     
-    
-    
-    
-    
-    /*
-    
-    private function setRememberMeCookie($user) {
-        $token = password_hash(uniqid(), PASSWORD_DEFAULT);
-        if(AuthData::updateAuthToken($user['id'], $token)) {
-            setcookie($this->cookieAuthToken, $token, time() + (86400 * 7), '/'); // Seven Days
-            setcookie($this->cookieUserEmail, $user[$this->cookieUserEmail], time() + (86400 * 7), '/'); // Seven Days
-        }
+    public function clearLoggedInSession() {
+        $this->destroyCookie($this->cookieAuthIdentifier);
+        $this->destroyCookie($this->cookieAuthToken);
+        session_unset();
+        session_destroy();
+        return true;
     }
     
     
     
     
-    
-    
+    /*
     private function setSession($username) {
         $_SESSION[$this->sessionActiveUserId] = $username;
     }
