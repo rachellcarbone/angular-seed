@@ -1,9 +1,60 @@
 <?php namespace API;
+require_once dirname(dirname(__FILE__)) . '/user/user.data.php';
+require_once dirname(__FILE__) . '/auth.session.php';
 require_once dirname(__FILE__) . '/auth.data.php';
 
 use \Respect\Validation\Validator as v;
 
 class AuthController {
+    public static $passwordRules = "Passwords must be at least 8 characters long, contain no whitespace, have at least one letter and one number and any of the following !@#$%^&*_+=-.";
+    
+    public static function testValidatePassword($app) {
+        return $app->render(200, array( 
+            'password' => $app->request->post('password'),
+            'valid' => (self::validatePassword($app->request->post()))
+        ));
+    }
+    
+    public static function validatePassword($post, $key = 'password') {
+        return (v::key($key, 
+                v::string()->length(8,255)->noWhitespace()->alnum('!@#$%^&*_+=-')->regex('/^(?=.*[a-zA-Z])(?=.*[0-9])/')
+                )->validate($post));
+    }
+    
+    public static function login($app) {
+        $session = new AuthSession();
+        $session->clearLoginAttempts();
+        $attempts = $session->getFailedLoginAttempts($app->request->post('email'));
+        
+        if(!v::key('email', v::email())->validate($app->request->post()) || !self::validatePassword($app->request->post())) {
+            return $app->render(401, array( 'msg' => 'Login failed. Check your parameters and try again.' ));
+        } else if($attempts >= 3) {
+            $attempts = $session->loginAttemptFailed($app->request->post('email'));
+            return $app->render(401, array('attempts' => $attempts, 'maxattempts' => 3, 'msg' => 'You have attempted to login too many times with that email in a short period of time. Please try again later.' ));
+        }
+        
+        $user = UserData::selectUserByEmail($app->request->post('email'));
+        
+        if(!$user) {
+            return $app->render(401, array( 'msg' => 'Login failed. A user with that email could not be found.' ));
+        } else if (!password_verify($app->request->post('password'), $user->password)) {
+            $attempts = $session->loginAttemptFailed($app->request->post('email'));
+            return $app->render(401, array('attempts' => $attempts, 'maxattempts' => 3, 'msg' => 'Login failed. Username and password combination did not match.' ));
+        }
+        
+        unset($user->password);
+        
+        return $user;
+    }
+    
+    
+    
+    
+    
+    
+    /*
+    
+    
     private static $logger;
     private static $routeChangePassword;
     private static $routeConfirmEmail;
@@ -16,18 +67,6 @@ class AuthController {
         session_start();
     }
     
-    
-    private static function authenticate($username, $password) {
-        $user = AuthData::selectUserByEmail($username);
-        if (!$user) {
-            return false;
-        } else if (isset($user['password']) && password_verify($password, $user['password'])) {
-            unset($user['password']);
-            return $user;
-        } else {
-            return false;
-        }
-    }
 
     private static function isTokenValid($token) {
         $found = AuthData::selectResetToken($token);
@@ -42,16 +81,8 @@ class AuthController {
     private static function hashForgotLinkToken() {
         /* Note incase this is modified: 
          * The fact that this hash is exactly 32 characters long 
-         * is validated in validateResetToken() below. */
+         * is validated in validateResetToken() below. 
         return md5(uniqid(rand(),1));
-    }
-    
-    public static function validatePassword($password) {
-        return (v::string()
-                ->length(8,55)
-                ->alnum('!@#$%^&*_+=-')
-                ->noWhitespace()
-                ->validate($password));
     }
 
     
@@ -162,4 +193,5 @@ class AuthController {
 
         $app->render(400, $this->setResponse->fail('Error saving password. Please check your parameters and try again.'));
     }
+    */
 }

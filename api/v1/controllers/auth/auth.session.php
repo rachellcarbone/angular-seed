@@ -5,8 +5,76 @@ class AuthSession {
     
     private $cookieUserEmail = '_rcsessUE';
     private $cookieAuthToken = '_rcsessAT';
+    private $cookieLoginAttempts = '_rcsessLA';
     private $sessionActiveUserId = '_rcsessAUI';
 
+    private function getTimeout($time, $measure = 'hour') {
+        $timeout = time();
+        switch ($measure) {
+            case 'min':
+                $timeout = $timeout * (60*$time);
+                break;
+            case 'day':
+                $timeout = $timeout * (60*60*24*$time);
+                break;
+            case 'hour':
+            default:
+                $timeout = $timeout * (60*60*$time);
+                break;
+        }
+        return $timeout;
+    }
+    
+    private function destroyCookie($name) {
+        unset($_COOKIE[$name]);
+        setcookie($name, null, -1, '/');
+        return true;
+    }
+    
+    public function getFailedLoginAttempts($email) {
+        $cookie = array();
+        if (filter_input(INPUT_COOKIE, $this->cookieLoginAttempts)) {
+            $cookie = json_decode(filter_input(INPUT_COOKIE, $this->cookieLoginAttempts), true);
+        }
+        $attempts = (isset($cookie[$email])) ? intval($cookie[$email]) : 0;
+        return $attempts;
+    }
+    
+    public function loginAttemptFailed($email) {
+        $attempts = $this->getFailedLoginAttempts($email);
+        $attempts = $attempts + 1;
+        $cookie = array($email => $attempts);
+        setcookie($this->cookieLoginAttempts, json_encode($cookie), $this->getTimeout(5, 'min'));
+        return $attempts;
+    }
+    
+    public function clearLoginAttempts() {
+        setcookie($this->cookieLoginAttempts, '', time()-3600);
+        unset($_COOKIE[$this->cookieLoginAttempts]);
+        return true;
+    }
+    
+    
+    
+    
+    
+    
+    
+    /*
+    
+    private function setRememberMeCookie($user) {
+        $token = password_hash(uniqid(), PASSWORD_DEFAULT);
+        if(AuthData::updateAuthToken($user['id'], $token)) {
+            setcookie($this->cookieAuthToken, $token, time() + (86400 * 7), '/'); // Seven Days
+            setcookie($this->cookieUserEmail, $user[$this->cookieUserEmail], time() + (86400 * 7), '/'); // Seven Days
+        }
+    }
+    
+    
+    
+    
+    
+    
     private function setSession($username) {
         $_SESSION[$this->sessionActiveUserId] = $username;
     }
@@ -23,14 +91,6 @@ class AuthSession {
             return $user;
         } else {
             return false;
-        }
-    }
-    
-    private function setRememberMeCookie($user) {
-        $token = password_hash(uniqid(), PASSWORD_DEFAULT);
-        if(AuthData::updateAuthToken($user['id'], $token)) {
-            setcookie($this->cookieAuthToken, $token, time() + (86400 * 7), '/'); // Seven Days
-            setcookie($this->cookieUserEmail, $user[$this->cookieUserEmail], time() + (86400 * 7), '/'); // Seven Days
         }
     }
     
@@ -53,5 +113,5 @@ class AuthSession {
             return false;
         }
     }
-    
+    */
 }
