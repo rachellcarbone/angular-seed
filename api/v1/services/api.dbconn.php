@@ -88,44 +88,40 @@ class DBConn {
         return "LIMIT {$offset}, {$l}";
     }
     
-    public static function select($query, $data = false) {
+    
+    
+    public static function select($query, $data = array(), $style = \PDO::FETCH_OBJ) {
         $pdo = self::connect();
         
-        try {
-            $q = $pdo->query($query);
-            return $q->fetchAll(\PDO::FETCH_ASSOC);
-            
+        try {            
             if ($data) {
                 $q = $pdo->prepare($query);
                 $q->execute($data);
-                return $q->fetch(\PDO::FETCH_ASSOC);
             } else {
                 $q = $pdo->query($query);
-                return $q->fetch(\PDO::FETCH_ASSOC);
             }
+            return $q->fetchAll($style);
         } catch (\PDOException $e) {
             self::logPDOError($pdo);
             return false;
         }
     }
     
-    public static function selectOne($query, $data = false) {
+    public static function selectOne($query, $data = array(), $style = \PDO::FETCH_OBJ) {
         $pdo = self::connect();
         
         try {
             if($data) {
                 $q = $pdo->prepare($query);
                 $q->execute($data);
-                return $q->fetch(\PDO::FETCH_ASSOC);
             } else {
                 $q = $pdo->query($query);
-                return $q->fetch(\PDO::FETCH_ASSOC);
             }
+            return $q->fetch($style);
         } catch (\PDOException $e) {
             self::logPDOError($pdo);
             return false;
         }
-        
     }
     
     public static function query($query) {
@@ -138,11 +134,10 @@ class DBConn {
         }
     }
 
-    public static function preparedQuery($query, $data) {
+    public static function preparedQuery($query, $data = array()) {
         $pdo = self::connect();
         try {
-            $q = $pdo->prepare($query);
-            return $q->execute($data);
+            return $pdo->prepare($query);
         } catch (\PDOException $e) {
             self::logPDOError($pdo);
             return false;
@@ -164,14 +159,5 @@ class DBConn {
             self::logPDOError($pdo);
             return false;
         }
-    }
-    
-    public function rowCount() {
-        //return $this->stmt->rowCount();
-    }
-    
-    public function lastInsertId(){
-        $pdo = self::connect();
-        return $pdo->lastInsertId();
     }
 }
