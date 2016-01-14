@@ -70,7 +70,7 @@ class UserController {
                 ':id' => $userId,
                 ':name_first' => $app->request->post('first'),
                 ':name_last' => $app->request->post('last'),
-                ':email' => $app->request->post('email'),
+                ':email' => $app->request->post('email')
             );
             UserData::updateUser($data);
             $user = UserData::selectUserById($userId);
