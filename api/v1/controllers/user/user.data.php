@@ -49,6 +49,20 @@ class UserData {
         }
         return $user;
     }
+    
+    static function selectUserByIdentifierToken($identifier) {
+        $user = DBConn::selectOne("SELECT u.id, name_first as nameFirst, name_last as nameLast, email, token "
+                . "FROM " . DBConn::prefix() . "tokens_auth AS t "
+                . "JOIN " . DBConn::prefix() . "users AS u ON u.id = t.user_id "
+                . "WHERE identifier = :identifier AND u.blocked = 0;", array(':identifier' => $identifier));
+        if($user) {
+            $user->displayName = $user->nameFirst;
+            $user->roles = DBConn::select("SELECT gr.auth_role_id FROM " . DBConn::prefix() . "auth_lookup_user_group AS ug "
+                    . "JOIN " . DBConn::prefix() . "auth_lookup_group_role AS gr ON ug.auth_group_id = gr.auth_group_id "
+                    . "WHERE ug.user_id = :id;", array(':id' => $user->id), \PDO::FETCH_COLUMN);
+        }
+        return $user;
+    }
   
     public static function insertUser($validUser) {
         return DBConn::insertQuery("INSERT INTO " . DBConn::prefix() . "users(name_first, name_last, email, password) "
