@@ -134,10 +134,21 @@ class DBConn {
         }
     }
 
-    public static function preparedQuery($query, $data = array()) {
+    public static function preparedQuery($query) {
         $pdo = self::connect();
         try {
             return $pdo->prepare($query);
+        } catch (\PDOException $e) {
+            self::logPDOError($pdo);
+            return false;
+        }
+    }
+
+    public static function executeQuery($query, $data = array()) {
+        $pdo = self::connect();
+        try {
+            $q = $pdo->prepare($query);
+            return $q->execute($data);
         } catch (\PDOException $e) {
             self::logPDOError($pdo);
             return false;
