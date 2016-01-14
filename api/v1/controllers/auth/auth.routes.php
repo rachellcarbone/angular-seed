@@ -9,11 +9,15 @@ class AuthRoutes {
         // Authentication
         
         $app->post("/auth/login", function () use ($app) {
-            AuthController::authenticate($app);
+            AuthController::login($app);
         });
         
         $app->post("/auth/logout", function () use ($app) {
             AuthController::logout($app);
+        });
+        
+        $app->post("/auth/validate-password", function () use ($app) {
+            AuthController::testValidatePassword($app);
         });
         
         // Email Managment
