@@ -4,11 +4,16 @@
 class AuthData {
     
     public static function insertAuthToken($validToken) {
-        return DBConn::insertQuery('INSERT INTO as_tokens_auth(identifier, token, user_id, expires) '
+        return DBConn::insertQuery('INSERT INTO ' . DBConn::prefix() . 'tokens_auth(identifier, token, user_id, expires) '
                 . 'VALUES (:identifier, :token, :user_id, :expires);', $validToken);
     }
     
+    public static function deleteAuthToken($identifier) {
+        return DBConn::executeQuery('DELETE FROM ' . DBConn::prefix() . 'tokens_auth WHERE identifier = :identifier;', $identifier);
+    }
     
+    
+    /*
     
     private function selectUserById($id) {
         return DBConn::selectOne("SELECT id, email FROM " . DBConn::prefix() . "users WHERE id = '{$id}' Limit 1;");
@@ -56,4 +61,5 @@ class AuthData {
                 . 'VALUES (:token, :id, :expires);', $resetToken);
         }
     }
+     */
 }
