@@ -11,7 +11,7 @@
 
 var app = angular.module('app.router', [
   'ui.router',
-  'rc.auth.constants',
+  'rcAuth.constants',
   'app.maintenance',
   'app.error',
   'app.router.admin',

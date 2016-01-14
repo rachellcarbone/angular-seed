@@ -1,3 +1,6 @@
+### Allow Cross Domain Ajax Requests ###
+Header set Access-Control-Allow-Origin "*"
+
 ### Redirect to new domain ###
 # RewriteEngine on
 # RewriteRule ^(.*)$ http://www.angular-seed.dev/$1 [R=301,L]

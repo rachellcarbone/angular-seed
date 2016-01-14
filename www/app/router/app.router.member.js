@@ -13,7 +13,7 @@
  */
 
 var app = angular.module('app.router.member', [
-    'rc.auth.constants',
+    'rcAuth.constants',
     'app.member'
 ]);
 app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES) {

@@ -4,26 +4,62 @@
 class UserData {
     
     public static function selectUsers() {
-        return DBConn::select('SELECT * FROM users ORDER BY name_last ASC;');
+        $qUsers = DBConn::executeQuery("SELECT id, name_first, name_last, email, email_verified, password, created, last_updated "
+                . "FROM " . DBConn::prefix() . "users;");
+        
+        $qGroups = DBConn::preparedQuery("SELECT grp.id, grp.group, grp.desc "
+                . "FROM " . DBConn::prefix() . "auth_groups AS grp "
+                . "JOIN " . DBConn::prefix() . "auth_lookup_user_group AS look ON grp.id = look.auth_group_id "
+                . "WHERE look.user_id = :id ORDER BY grp.group;");
+
+        $users = Array();
+        while($user = $qUsers->fetch(\PDO::FETCH_OBJ)) {
+            $qGroups->execute(array(':id' => $user->id));
+            $user->groups = $qGroups->fetchAll(\PDO::FETCH_OBJ);        
+            array_push($users, $user);
+        }
+        return $users;
+    }
+    
+    public static function selectOtherUsersWithEmail($email, $id = 0) {
+        return DBConn::select("SELECT id FROM " . DBConn::prefix() . "users WHERE email = :email AND id != :id;", 
+                    array(':email' => $email, ':id' => $id), \PDO::FETCH_COLUMN);
     }
     
     public static function selectUserById($id) {
-        return DBConn::selectOne("SELECT id, name_first as nameFirst, name_last as nameLast, email, role_id as roleId "
-                . "FROM users WHERE id = :id LIMIT 1;", array('id' => $id));
+        $user = DBConn::selectOne("SELECT id, name_first as nameFirst, name_last as nameLast, email "
+                . "FROM " . DBConn::prefix() . "users WHERE id = :id LIMIT 1;", array(':id' => $id));
+        if($user) {
+            $user->displayName = $user->nameFirst;
+            $user->roles = DBConn::select("SELECT gr.auth_role_id FROM " . DBConn::prefix() . "auth_lookup_user_group AS ug "
+                    . "JOIN " . DBConn::prefix() . "auth_lookup_group_role AS gr ON ug.auth_group_id = gr.auth_group_id "
+                    . "WHERE ug.user_id = :id;", array(':id' => $id), \PDO::FETCH_COLUMN);
+        }
+        return $user;
+    }
+    
+    public static function selectUserByEmail($email) {
+        $user = DBConn::selectOne("SELECT id, name_first as nameFirst, name_last as nameLast, email, password "
+                . "FROM " . DBConn::prefix() . "users WHERE email = :email LIMIT 1;", array(':email' => $email));
+        if($user) {
+            $user->displayName = $user->nameFirst;
+            $user->roles = DBConn::select("SELECT gr.auth_role_id FROM " . DBConn::prefix() . "auth_lookup_user_group AS ug "
+                    . "JOIN " . DBConn::prefix() . "auth_lookup_group_role AS gr ON ug.auth_group_id = gr.auth_group_id "
+                    . "WHERE ug.user_id = :id;", array(':id' => $user->id), \PDO::FETCH_COLUMN);
+        }
+        return $user;
     }
   
     public static function insertUser($validUser) {
-        return DBConn::preparedQuery("INSERT INTO users(name_first, name_last, email, password, role_id, plan_id) "
-                . "VALUES (:name_first, :name_last, :email, :password, :role_id, :plan_id);", $validUser);
+        return DBConn::insertQuery("INSERT INTO " . DBConn::prefix() . "users(name_first, name_last, email, password) "
+                . "VALUES (:name_first, :name_last, :email, :password);", $validUser);
     }
     
     public static function updateUser($validUser) {
-        return DBConn::preparedQuery("UPDATE users SET name_first=:name_first, name_last=:name_last, "
-                . "email=:email, password=:password, role_id=:role_id, plan_id=:plan_id "
-                . "WHERE id = :id;", $validUser);
+        return DBConn::executeQuery("UPDATE " . DBConn::prefix() . "users SET name_first=:name_first, name_last=:name_last, email=:email WHERE id = :id;", $validUser);
     }
     
     public static function deleteUser($id) {
-        return DBConn::preparedQuery("DELETE FROM users WHERE id = :id LIMIT 1;", array('id' => $id));
+        return DBConn::executeQuery("DELETE FROM " . DBConn::prefix() . "users WHERE id = :id LIMIT 1;", array('id' => $id));
     }
 }

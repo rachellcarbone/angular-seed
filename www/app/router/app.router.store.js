@@ -13,7 +13,7 @@
  */
 
 var app = angular.module('app.router.store', [
-    'rc.auth.constants',
+    'rcAuth.constants',
     'app.public',
     'app.store'
 ]);

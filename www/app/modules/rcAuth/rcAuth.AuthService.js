@@ -5,19 +5,15 @@
  * Sets Nav, Session and Build as global page variables. 
  */
 
-angular.module('rc.auth.service', ['rc.auth.visibility'])
-    .factory('AuthService', ['$rootScope', '$q', '$log', 'UserSession', 'AUTH_EVENTS', 'VisibilityService', 'APIV2Service', 
+angular.module('rcAuth.AuthService', [])
+    .factory('AuthService', ['$rootScope', '$q', '$log', 'UserSession', 'AUTH_EVENTS', 'VisibilityService', 'ApiRoutesAuth', 
     function($rootScope, $q, $log, UserSession, AUTH_EVENTS, VisibilityService, API) {
         
-        var api = {};
+        var factory = {};
         
-        api.login = function(credentials) {
+        factory.login = function(credentials) {
             return $q(function (resolve, reject) {
-                var fd = new FormData();
-                fd.append('email', credentials.email);
-                fd.append('password', credentials.password);
-
-                API.post('auth/login/', fd, 'System unable to login.')
+                    API.postLogin(credentials)
                     .then(function (data) {
                         if (UserSession.create(data)) {
                             $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
@@ -34,9 +30,9 @@ angular.module('rc.auth.service', ['rc.auth.visibility'])
             });
         };
 
-        api.logout = function() {                
+        factory.logout = function() {                
             return $q(function (resolve, reject) {
-                API.post('auth/logout/', new FormData(), 'System unable to logout.')
+                    API.postLogout()
                     .then(function (data) {
                         UserSession.destroy();
                         $rootScope.$broadcast(AUTH_EVENTS.logoutSuccess);
@@ -48,44 +44,23 @@ angular.module('rc.auth.service', ['rc.auth.visibility'])
             });
         };
 
-        api.forgotPasswordEmail = function(email) {
-            var fd = new FormData();
-            fd.append('email', email);
-
-            return API.post('auth/password-reset/', fd, 'Error sending password reset email.');
+        factory.forgotPasswordEmail = function(email) {
+            return API.postForgotPasswordEmail(email);
         };
         
-        api.validatePasswordResetToken = function(token) {
-            if(!token) {
-                return API.reject('Invalid password reset token.');
-            }
-
-            var fd = new FormData();
-            fd.append('token', token);
-
-            return API.post('auth/validate-token/', fd, 'Error validating token.');
+        factory.validatePasswordResetToken = function(token) {
+            return API.postValidatePasswordResetToken(token);
         };
 
-        api.changePassword = function(user) {
-            if(!user.id || !user.email || !user.token || 
-                    !user.password || user.password <= 0) {
-                return API.reject('Invalid credentials please verify your information and try again.');
-            }
-
-            var fd = new FormData();
-            fd.append('id', user.id);
-            fd.append('email', user.email);
-            fd.append('password', user.password);
-            fd.append('token', user.token);
-
-            return API.post('auth/change-password/', fd, 'Error changing password.');
+        factory.changePassword = function(user) {
+            return API.updatePassword(user);
         };
 
-        api.isAuthenticated = function() {
+        factory.isAuthenticated = function() {
             return $q(function (resolve, reject) {
                 var user = UserSession.get();
                 if (!user) {
-                    API.get('auth/authenticated/', '[isAuthenticated] Error, User Not Authenticated.')
+                        API.getAuthenticatedUser()
                         .then(function (data) {
                             if (UserSession.create(data)) {
                                 resolve(UserSession.get());
@@ -102,7 +77,7 @@ angular.module('rc.auth.service', ['rc.auth.visibility'])
             });
         };
 
-        api.isAuthorized = function(authorizedRole) {
+        factory.isAuthorized = function(authorizedRole) {
             return $q(function (resolve, reject) {
                 
                 // Checks a role (presumably for $state access or to see if a user can view
@@ -113,7 +88,7 @@ angular.module('rc.auth.service', ['rc.auth.visibility'])
                     resolve(true);
                 } else {
                     // Confirm that the user is logged in
-                    api.isAuthenticated().then(function(results) {
+                    factory.isAuthenticated().then(function(results) {
                         
                         if (VisibilityService.isVisibleToUser(authorizedRole, UserSession.role())) {
                             resolve(true);
@@ -129,6 +104,6 @@ angular.module('rc.auth.service', ['rc.auth.visibility'])
             });
         };
         
-        return api;
+        return factory;
         
     }]);

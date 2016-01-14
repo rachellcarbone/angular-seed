@@ -1,3 +1,6 @@
+### Allow Cross Domain Ajax Requests ###
+Header set Access-Control-Allow-Origin "*"
+
 ## Redirect all requests to the index.php ###
 RewriteEngine on
 # Don't rewrite files
