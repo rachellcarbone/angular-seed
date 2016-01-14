@@ -26,8 +26,8 @@ class AuthSession {
     }
     
     private function destroyCookie($name) {
+        setcookie($name, '', time()-3600);
         unset($_COOKIE[$name]);
-        setcookie($name, null, -1, '/');
         return true;
     }
     
@@ -49,9 +49,7 @@ class AuthSession {
     }
     
     public function clearLoginAttempts() {
-        setcookie($this->cookieLoginAttempts, '', time()-3600);
-        unset($_COOKIE[$this->cookieLoginAttempts]);
-        return true;
+        return $this->destroyCookie($this->cookieLoginAttempts);
     }
     
     
