@@ -27,8 +27,7 @@ app.factory('AuthInterceptor',
                 $rootScope.$broadcast({
                     401: AUTH_EVENTS.notAuthenticated,
                     403: AUTH_EVENTS.notAuthorized,
-                    419: AUTH_EVENTS.sessionTimeout,
-                    440: AUTH_EVENTS.sessionTimeout
+                    419: AUTH_EVENTS.sessionTimeout
                 }[response.status], response);
 
                 // Reject the response as normal
