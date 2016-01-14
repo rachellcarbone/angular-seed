@@ -1,12 +1,14 @@
 <?php namespace API;
 require_once dirname(__FILE__) . '/auth.data.php';
 
+use \Respect\Validation\Validator as v;
+
 class AuthController {
-    private $logger;
-    private $routeChangePassword;
-    private $routeConfirmEmail;
+    private static $logger;
+    private static $routeChangePassword;
+    private static $routeConfirmEmail;
     
-    public function __construct() {
+    public static function hmmm() {
         parent::__construct();
         $this->logger = new \API\Data\Logging();
         $this->routeChangePassword = '#/change-password/';
@@ -15,7 +17,7 @@ class AuthController {
     }
     
     
-    private function authenticate($username, $password) {
+    private static function authenticate($username, $password) {
         $user = AuthData::selectUserByEmail($username);
         if (!$user) {
             return false;
@@ -27,16 +29,16 @@ class AuthController {
         }
     }
 
-    private function setSession($username) {
+    private static function setSession($username) {
         $_SESSION['auth_active'] = $username;
     }
 
-    private function destroySession() {
+    private static function destroySession() {
         session_unset();
         session_destroy();
     }
 
-    private function getUserByEmailFromSession() {
+    private static function getUserByEmailFromSession() {
         if (isset($_SESSION['auth_active'])) {
             $user = AuthData::selectUserByEmail($_SESSION['auth_active']);
             unset($user['password']);
@@ -46,7 +48,7 @@ class AuthController {
         }
     }
 
-    private function setRememberMeCookie($user) {
+    private static function setRememberMeCookie($user) {
         $token = password_hash(uniqid(), PASSWORD_DEFAULT);
         if (AuthData::updateAuthToken($user['id'], $token)) {
             setcookie('auth_token', $token, time() + (86400 * 7), '/'); // Seven Days
@@ -54,7 +56,7 @@ class AuthController {
         }
     }
 
-    private function destroyCookie() {
+    private static function destroyCookie() {
         AuthData::deleteAuthToken(filter_input(INPUT_COOKIE, 'auth_token'));
         if (filter_input(INPUT_COOKIE, 'auth_token')) {
             unset($_COOKIE['auth_token']);
@@ -66,7 +68,7 @@ class AuthController {
         }
     }
 
-    private function getUserByEmailFromCookie() {
+    private static function getUserByEmailFromCookie() {
         if (filter_input(INPUT_COOKIE, 'auth_token')) {
             return AuthData::selectUserByToken(filter_input(INPUT_COOKIE, 'auth_token'));
         } else {
@@ -74,7 +76,7 @@ class AuthController {
         }
     }
 
-    private function isTokenValid($token) {
+    private static function isTokenValid($token) {
         $found = AuthData::selectResetToken($token);
         if ($found && date('Y-m-d H:i:s', strtotime('NOW')) <= date('Y-m-d H:i:s', strtotime($found['expires']))) {
             return AuthData::selectUserById($found['analyst_id']);
@@ -84,14 +86,14 @@ class AuthController {
         return false;
     }
     
-    private function hashForgotLinkToken() {
+    private static function hashForgotLinkToken() {
         /* Note incase this is modified: 
          * The fact that this hash is exactly 32 characters long 
          * is validated in validateResetToken() below. */
         return md5(uniqid(rand(),1));
     }
     
-    private function validatePassword($password) {
+    public static function validatePassword($password) {
         return (v::string()
                 ->length(8,55)
                 ->alnum('!@#$%^&*_+=-')
@@ -100,7 +102,7 @@ class AuthController {
     }
 
     
-    public function forgotPassword($app) {
+    public static function forgotPassword($app) {
         if(!v::email()->validate($app->request->post('email'))) {
             $app->render(400, $this->setResponse->fail('Invalid email address.'));
             return;
@@ -130,7 +132,7 @@ class AuthController {
         }
     }
 
-    public function validateResetToken($app) {
+    public static function validateResetToken($app) {
         $token = urldecode($app->request->post('token'));
         
         if(v::string()->length(32)->validate($token)) {
@@ -141,7 +143,7 @@ class AuthController {
         }        
     }
 
-    public function changePassword($app) {
+    public static function changePassword($app) {
         $token = ($app->request->post('token')) ? urldecode($app->request->post('token')) : false;
         
         if(!$this->validatePassword($app->request->post('password'))) {
@@ -174,7 +176,7 @@ class AuthController {
         $app->render(500, $this->setResponse->fail('Error saving password. Please refresh the page and try again.'));
     }
 
-    public function userChagePassword($app, $userId) {
+    public static function userChagePassword($app, $userId) {
         $newPassword = ($app->request->post('newPassword')) ? trim($app->request->post('newPassword')) : false;
         if(!$this->validatePassword($newPassword)) {
             $app->render(400, $this->setResponse->fail("Error saving password. Passwords must be at least 8 characters "
