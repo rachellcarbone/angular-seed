@@ -22,7 +22,7 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
         $stateProvider.state('admin', {
             url: '/admin',
             abstract: true,
-            data: {authorizedRoles: USER_ROLES.guest},
+            data: {authorizedRoles: USER_ROLES.admin},
             views: {
                 'header@admin': {
                     templateUrl: 'app/views/admin/adminHeader/adminHeader.html',
