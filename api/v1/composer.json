@@ -1,15 +1,9 @@
 {
     "name": "angular-seed/api-v1",
     "require": {
-        "slim/slim": "^2.6",
-        "entomb/slim-json-api": "^1.1",
-        "respect/validation": "^0.9.1",
-        "phpmailer/phpmailer": "^5.2"
-    },
-    "require-dev": {
-        "slim/slim": "^2.6",
-        "entomb/slim-json-api": "^1.1",
-        "respect/validation": "^0.9.1",
-        "phpmailer/phpmailer": "^5.2"
+        "slim/slim": "^2.6.2",
+        "entomb/slim-json-api": "^1.2",
+        "respect/validation": "^1.0.3",
+        "phpmailer/phpmailer": "^5.2.14"
     }
 }

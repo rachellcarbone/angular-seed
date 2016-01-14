@@ -76,6 +76,7 @@ class V1Controller {
     // http://www.slimframework.com/docs/concepts/middleware.html
     private static function addMiddleware($app) {
         
+        /*
         $app->add(function ($request, $response, $next) {
             $response->getBody()->write('BEFORE');
             $response = $next($request, $response);
@@ -83,6 +84,7 @@ class V1Controller {
 
             return $response;
         });
+        */
         
         /* Slim-jsonAPI */
         $app->view(new \JsonApiView());

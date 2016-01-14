@@ -27,8 +27,8 @@ class UserController {
     }
 
     public static function addUser($app) {
-        if(!v::key('first', v::string()->length(1,255))->validate($app->request->post()) ||
-            !v::key('last', v::string()->length(1,255), false)->validate($app->request->post()) || 
+        if(!v::key('first', v::stringType()->length(1,255))->validate($app->request->post()) ||
+            !v::key('last', v::stringType()->length(1,255), false)->validate($app->request->post()) || 
             !v::key('email', v::email())->validate($app->request->post())) {
             return $app->render(400, array( 'msg' => 'Invalid user. Check your parameters and try again.' ));
         } else if(!AuthController::validatePassword($app->request->post())) {
@@ -55,8 +55,8 @@ class UserController {
     }
 
     public static function saveUser($app, $userId) {
-        if(!v::key('first', v::string()->length(1,255))->validate($app->request->post()) ||
-            !v::key('last', v::string()->length(1,255), false)->validate($app->request->post()) || 
+        if(!v::key('first', v::stringType()->length(1,255))->validate($app->request->post()) ||
+            !v::key('last', v::stringType()->length(1,255), false)->validate($app->request->post()) || 
             !v::key('email', v::email())->validate($app->request->post())) {
             return $app->render(400, array( 'msg' => 'Invalid user. Check your parameters and try again.' ));
         } 

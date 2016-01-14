@@ -19,7 +19,7 @@ class AuthController {
     
     public static function validatePassword($post, $key = 'password') {
         return (v::key($key, 
-                v::string()->length(8,255)->noWhitespace()->alnum('!@#$%^&*_+=-')->regex('/^(?=.*[a-zA-Z])(?=.*[0-9])/')
+                v::stringType()->length(8,255)->noWhitespace()->alnum('!@#$%^&*_+=-')->regex('/^(?=.*[a-zA-Z])(?=.*[0-9])/')
                 )->validate($post));
     }
     
@@ -35,7 +35,7 @@ class AuthController {
     
     private static function login_validateParams($app) {
         if(!v::key('email', v::email())->validate($app->request->post()) || 
-                !v::key('password', v::string())->validate($app->request->post())) {
+                !v::key('password', v::stringType())->validate($app->request->post())) {
             // Validate input parameters
             return $app->render(401, array( 'msg' => 'Login failed. Check your parameters and try again.' ));
         } 
@@ -87,7 +87,7 @@ class AuthController {
         if(!$user) { return; }
         
         // Remember me
-        $remember = (v::key('remember', v::bool())->validate($app->request->post())) ? boolval($app->request->post('remember')) : false;
+        $remember = (v::key('remember', v::boolType())->validate($app->request->post())) ? boolval($app->request->post('remember')) : false;
         
         // Congrats - you're logged in!
         $newSession = $AuthSession->createLoggedInSession($user, $remember);
@@ -190,7 +190,7 @@ class AuthController {
     public static function validateResetToken($app) {
         $token = urldecode($app->request->post('token'));
         
-        if(v::string()->length(32)->validate($token)) {
+        if(v::stringType()->length(32)->validate($token)) {
             $user = self::isTokenValid($token);
             $app->render(200, self::setResponse->success(array('user' => $user)));
         } else {
@@ -207,7 +207,7 @@ class AuthController {
                     return;
         } 
         
-        if(!v::string()->length(32)->validate($token)) {
+        if(!v::stringType()->length(32)->validate($token)) {
             $app->render(400, self::setResponse->fail('Invalid token. Request another forgot password link from the login page.'));
         }
         
@@ -242,7 +242,7 @@ class AuthController {
         } 
         
         if(v::int()->length(1,11)->validate($userId) &&
-           v::string()->notEmpty()->validate($app->request->post('password'))) {
+           v::stringType()->notEmpty()->validate($app->request->post('password'))) {
             
             $user = AuthData::selectUserPasswordById($userId);
 
