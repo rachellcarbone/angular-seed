@@ -11,7 +11,7 @@ class AuthSession {
      *      'jaoe@bob.com' : 2,
      * }
      */
-    private $cookieLoginAttempts = '_rcsessLIA';
+    private $cookieLoginAttemptLog = '_rcsessLIA';
     
     /*
      * Cookie: Auth Identifier
@@ -32,33 +32,50 @@ class AuthSession {
      */
     private $sessionActiveUser = '_rcsessAU';
     
-    private $cookieDomain = 'http://www.seed.dev/';
+    private $cookiePath = '/';
+    
+    private $cookieDomain = 'api.seed.dev';
+    
+    private $cookie;
             
     function __construct() {
-        session_start();
+        $this->cookie = new \CodeZero\Cookie\VanillaCookie();
     }
     
     // Login Attempts
     
     function getFailedLoginAttempts($email) {
-        $cookie = array();
-        if (filter_input(INPUT_COOKIE, $this->cookieLoginAttempts)) {
-            $cookie = json_decode(filter_input(INPUT_COOKIE, $this->cookieLoginAttempts), true);
+        $attemptLog = $this->cookie->get($this->cookieLoginAttemptLog);
+        $attempts = 0;
+        if($attemptLog) {
+            $log = json_decode(stripslashes($attemptLog), true);
+            foreach ($log as $value) {
+                if($value['eml'] === $email) {
+                    $attempts = intval($value['atm']);
+                }
+            }
         }
-        $attempts = (isset($cookie[$email])) ? intval($cookie[$email]) : 0;
         return $attempts;
     }
     
     function loginAttemptFailed($email) {
         $attempts = $this->getFailedLoginAttempts($email);
         $attempts = $attempts + 1;
-        $cookie = array($email => $attempts);
-        setcookie($this->cookieLoginAttempts, json_encode($cookie), $this->getTimeout(5, 'min'), $this->cookieDomain);
+        
+        $minutes = 5;
+        
+        $log = json_encode(array(array('eml' => $email, 'atm' => $attempts)));
+        
+        // Dev: http://php.net/manual/en/function.setcookie.php
+        $this->cookie->store($this->cookieLoginAttemptLog, $log, $minutes, $this->cookiePath, $this->cookieDomain, false, false);
+        // Production: TEST on SSH.
+        //$this->cookie->store($this->cookieLoginAttemptLog, $log, $minutes, '/v1/', $this->cookieDomain, true, true);
+        
         return $attempts;
     }
     
     function clearLoginAttempts() {
-        return $this->destroyCookie($this->cookieLoginAttempts);
+        return $this->cookie->delete($this->cookieLoginAttemptLog);
     }    
     
     // User login
@@ -66,8 +83,6 @@ class AuthSession {
     function getLoggedInSession() {
         $tokens = $this->server_getTokenCookies();
         $user = $this->server_getUserSession();
-        
-            return (object) array_merge(array('$tokens' => $tokens), array('user' => $user));
             
         if(!$tokens && !$user) {
             return false;
@@ -80,17 +95,17 @@ class AuthSession {
     }
     
     function createLoggedInSession($user, $remember = false) {
-        $identifier = $this->makeToken(uniqid());
-        $token = $this->makeToken(uniqid());
-        $timeout = ($remember) ? $this->getTimeout(4, 'hour') : $this->getTimeout(3, 'day');
+        $identifier = hash('sha256', uniqid());
+        $token = hash('sha256', uniqid());
+        $hours = ($remember) ? 1 : 3 * 24; // 1 Hours or 3 days if remember was checked
         
-        $this->server_saveTokenCookies($identifier, $token, $timeout);
+        $this->server_saveTokenCookies($identifier, $token, $hours);
         $this->server_saveUserSession($user);
         
         return (object) array(
             'identifier' => $identifier,
             'token' => password_hash($token, PASSWORD_DEFAULT),
-            'expires' => date('Y-m-d H:i:s', $timeout)
+            'expires' => date('Y-m-d H:i:s', time() + ($hours * 60 * 60))
         );
     }
     
@@ -102,9 +117,14 @@ class AuthSession {
     
     // Cookie And Session Managment for Login
     
-    function server_saveTokenCookies($identifier, $token, $timeout) {
-        setcookie($this->cookieAuthIdentifier, $identifier, $timeout, $this->cookieDomain);
-        setcookie($this->cookieAuthToken, $token, $timeout, $this->cookieDomain);
+    function server_saveTokenCookies($identifier, $token, $hours = 6) {
+        $minutes = $hours * 30;
+        
+        // Dev: http://php.net/manual/en/function.setcookie.php
+        $this->cookie->store($this->cookieAuthIdentifier, $identifier, $minutes, $this->cookiePath, $this->cookieDomain, false, false);
+        $this->cookie->store($this->cookieAuthToken, $token, $minutes, $this->cookiePath, $this->cookieDomain, false, false);
+        // Production: TEST on SSH.
+        //$this->cookie->store($this->cookieAuthToken, json_encode(array('e' => $email, 'a' => $attempts)), $minutes, '/v1/', $this->cookieDomain, true, true);
     }
     
     function server_saveUserSession($user) {
@@ -112,13 +132,11 @@ class AuthSession {
     }
     
     function server_getTokenCookies() {
-        if (filter_input(INPUT_COOKIE, $this->cookieAuthIdentifier)) {
-            return array(
-                    'identifier' => filter_input(INPUT_COOKIE, $this->cookieAuthIdentifier),
-                    'token' => filter_input(INPUT_COOKIE, $this->cookieAuthToken)
-            );
-        }
-        return false;
+        $savedCredentials = array(
+            'identifier' => $this->cookie->delete($this->cookieAuthIdentifier),
+            'token' => $this->cookie->delete($this->cookieAuthToken)
+        );
+        return ($savedCredentials->identifier) ? $savedCredentials : false;
     }
     
     function server_getUserSession() {
@@ -129,8 +147,8 @@ class AuthSession {
     }
     
     function server_removeTokenCookies() {
-        $this->destroyCookie($this->cookieAuthIdentifier);
-        $this->destroyCookie($this->cookieAuthToken);
+        $this->cookie->delete($this->cookieAuthIdentifier);
+        $this->cookie->delete($this->cookieAuthToken);
         return true;
     }
     
@@ -141,37 +159,5 @@ class AuthSession {
             session_start();
         }
         return true;
-    }
-
-    // Helpers 
-    
-    private function getTimeout($time, $measure = 'hour') {
-        $timeout = time();
-        switch ($measure) {
-            case 'min':
-                $timeout = $timeout + (60*$time);
-                break;
-            case 'day':
-                $timeout = $timeout + (60*60*24*$time);
-                break;
-            case 'hour':
-            default:
-                $timeout = $timeout + (60*60*$time);
-                break;
-        }
-        return $timeout;
-    }
-    
-    private function destroyCookie($name) {
-        setcookie($name, '', time()-3600, $this->cookieDomain);
-        //setcookie($name, null, time()-3600, $this->cookieDomain);
-        unset($_COOKIE[$name]);
-        session_write_close();
-        session_start();
-        return true;
-    }
-    
-    private function makeToken($string) {
-        return hash('sha256', $string);
     }
 }

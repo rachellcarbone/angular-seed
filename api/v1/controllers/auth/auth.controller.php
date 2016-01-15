@@ -17,7 +17,7 @@ class AuthController {
         $AuthSession = new AuthSession();
         
         // If anone is logged in currently, log them out
-        self::login_logoutExistingSession($AuthSession, $app);
+        $session = self::login_logoutExistingSession($AuthSession);
         
         // Validate input parameters
         if(!self::login_validateParams($app)) { return; }
@@ -42,17 +42,19 @@ class AuthController {
         ));
         
         // Go now. Be free little brother.
-        return $app->render(200, array('user' => $newSession));
+        return $app->render(200, array('user' => $user, 'session' => $session));
     }
     
-    private static function login_logoutExistingSession($AuthSession,$app) {
+    private static function login_logoutExistingSession($AuthSession) {
         // Is user already logged in?
         $session = $AuthSession->getLoggedInSession();
-        if($session && isset($session->identifier)) {
+        $result = false;
+        if($session && property_exists($session, 'identifier')) {
             // Log them out when someone else attempts to log in
             $AuthSession->clearLoggedInSession();
-            AuthData::deleteAuthToken(array( ':identifier' => $session->identifier ));
+            $result = AuthData::deleteAuthToken(array(':identifier' => $session->identifier));
         }
+        return array('existing' => $session, 'deleted' => $result);
     }
     
     private static function login_validateParams($app) {
@@ -101,7 +103,7 @@ class AuthController {
         
         if(!$session) { 
             return $app->render(200, array('msg' => 'Log out successful.'));
-        } else if (isset($session->identifier)) {
+        } else if (property_exists($session, 'identifier')) {
             AuthData::deleteAuthToken(array( ':identifier' => $session->identifier ));
         }
         
@@ -113,9 +115,9 @@ class AuthController {
         $AuthSession = new AuthSession();
         $session = $AuthSession->getLoggedInSession();
         
-        if($session && isset($session->user)) {
+        if($session && property_exists($session, 'user')) {
             return $app->render(200, array('user' => $session->user, '$session' => $session));
-        } else if($session && isset($session->identifier)) {
+        } else if($session && property_exists($session, 'identifier')) {
             $loggedInUser = self::auth_validateFoundUser($app, $AuthSession, $session);
             if($loggedInUser) {
                 $AuthSession->server_saveUserSession($loggedInUser);
@@ -127,9 +129,14 @@ class AuthController {
     
     // Test Password Route
     
-    static function testValidatePassword($app) {
+    static function testValidatePassword($app) {        
+        $AuthSession = new AuthSession();
+        $attempts = $AuthSession->loginAttemptFailed('rachel');
+        
+        
         return $app->render(200, array( 
-            'valid' => (self::validatePassword($app->request->post()))
+            'valid' => (self::validatePassword($app->request->post())),
+            'attempts' => $attempts
         ));
     }
     
