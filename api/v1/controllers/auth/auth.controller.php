@@ -129,14 +129,9 @@ class AuthController {
     
     // Test Password Route
     
-    static function testValidatePassword($app) {        
-        $AuthSession = new AuthSession();
-        $attempts = $AuthSession->loginAttemptFailed('rachel');
-        
-        
+    static function testValidatePassword($app) {
         return $app->render(200, array( 
-            'valid' => (self::validatePassword($app->request->post())),
-            'attempts' => $attempts
+            'valid' => (self::validatePassword($app->request->post()))
         ));
     }
     
