@@ -20,6 +20,21 @@ angular.module('api.v1', [
     // Used when no other message is available.
     api.defaultErr = 'An error occured communicating with the API.';
     
+    
+    // Trim the backslash "/" from the beginning of the path if it exists
+    var getApiPath = function(path) {
+        // If the first character is a backslash remove it
+        // and return the trimmed path
+        var trimmed = (path.charAt(0) === "/") ? path.substr(1) : path;
+        return api.apiUrl + trimmed;
+    };
+    
+    var getErrorMessage = function(message, defaultMessage) {
+        defaultMessage = defaultMessage | api.defaultErr;
+        // If no error message was sent use the default error message
+        return (message) ? message : defaultMessage;
+    };
+    
     /* Shortcut to create a promise that fails with a provided error message.
      * @param {string} err Error message.
      * @return {Object} Returns a promise. */
@@ -29,34 +44,24 @@ angular.module('api.v1', [
         });
     };
     
-    // Trim the backslash "/" from the beginning of the path if it exists
-    api.trimPath = function(path) {
-        // If the first character is a backslash remove it
-        // and return the trimmed path
-        return (path.charAt(0) === "/") ? path.substr(1) : path;
-    };
-    
     /* Make a GET request to the API.
      * @param {string} path Path to api request.
      * @param {string} err Error message.
      * @return {Object} Returns a promise. */
-    api.get = function(path, err, requested) {
-        // If no error message was sent use the default error message
-        err = (typeof(err) === 'undefined') ? api.defaultErr : err;
-        
+    api.get = function(path, err) {
         // Return a promise
         return $q(function (resolve, reject) {
             
             // Make the GET request to the api and clean path
-            $http.get(api.apiUrl + api.trimPath(path))
+            $http.get(getApiPath(path))
             .success(function (data) {
                 // If its successful, resolve the promise
                 resolve(data.data);
             }).error(function(data) {
                 // If there eas an error log it
-                $log.error((data.data.msg) ? data.data.msg : err);
+                $log.error(getErrorMessage(data.data.msg));
                 // Reject the promise
-                reject((data.data.msg) ? data.data.msg : err); 
+                reject(getErrorMessage(data.data.msg)); 
             });
             
         });
@@ -68,24 +73,23 @@ angular.module('api.v1', [
      * @param {string} err Error message.
      * @return {Object} Returns a promise. */
     api.post = function(path, fd, err) {
-        // If no error message was sent use the default error message
-        err = (typeof(err) === 'undefined') ? api.defaultErr : err;
-        
         // Return a promise
         return $q(function (resolve, reject) {
             
             // Make the POST request to the api and clean path
-            $http.post(api.apiUrl + api.trimPath(path), fd, {
+            $http.post(getApiPath(path), fd, {
                 transformRequest: angular.identity,
                 headers: {'Content-Type': undefined}
-            }).success(function (data) {
-                // If its successful, resolve the promise
-                resolve(data.data);
-            }).error(function(data) {
-                // If there eas an error log it
-                $log.error((data.data.msg) ? data.data.msg : err);
-                // Reject the promise
-                reject((data.data.msg) ? data.data.msg : err); 
+            })
+            .success(function (data) {
+                    // If its successful, resolve the promise
+                    resolve(data.data);
+                })
+                .error(function(data) {
+                    // If there eas an error log it
+                    $log.error(getErrorMessage(data.data.msg));
+                    // Reject the promise
+                    reject(getErrorMessage(data.data.msg)); 
             });
             
         });
@@ -97,15 +101,12 @@ angular.module('api.v1', [
      * @param {string} err Error message.
      * @return {Object} Returns a promise. */
     api.postJson = function(path, data, err) {
-        // If no error message was sent use the default error message
-        err = (typeof(err) === 'undefined') ? api.defaultErr : err;
-        
         // Return a promise
         return $q(function (resolve, reject) {
             
             $http({
                 method: 'POST',
-                url: api.apiUrl + api.trimPath(path),
+                url: getApiPath(path),
                 data: $.param(data),
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             })
@@ -115,9 +116,9 @@ angular.module('api.v1', [
                 })
                 .error(function(data) {
                     // If there eas an error log it
-                    $log.error((data.data.msg) ? data.data.msg : err);
+                    $log.error(getErrorMessage(data.data.msg));
                     // Reject the promise
-                    reject((data.data.msg) ? data.data.msg : err); 
+                    reject(getErrorMessage(data.data.msg)); 
             });            
         });
     };
@@ -127,21 +128,18 @@ angular.module('api.v1', [
      * @param {string} err Error message.
      * @return {Object} Returns a promise. */
     api.delete = function(path, err) {
-        // If no error message was sent use the default error message
-        err = (typeof(err) === 'undefined') ? api.defaultErr : err;
-        
         // Return a promise
         return $q(function (resolve, reject) {            
-            $http.delete(api.apiUrl + api.trimPath(path))
+            $http.delete(getApiPath(path))
             .success(function (data) {
                     // If its successful, resolve the promise
                     resolve(data.data);
                 })
                 .error(function(data) {
                     // If there eas an error log it
-                    $log.error((data.data.msg) ? data.data.msg : err);
+                    $log.error(getErrorMessage(data.data.msg));
                     // Reject the promise
-                    reject((data.data.msg) ? data.data.msg : err); 
+                    reject(getErrorMessage(data.data.msg)); 
             });
         });
     };
