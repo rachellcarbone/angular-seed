@@ -149,7 +149,7 @@ class DBConn {
         try {
             $q = $pdo->prepare($query);
             $q->execute($data);
-            return $q;
+            return $q->rowCount();
         } catch (\PDOException $e) {
             self::logPDOError($pdo);
             return false;
