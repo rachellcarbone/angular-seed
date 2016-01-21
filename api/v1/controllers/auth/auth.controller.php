@@ -23,12 +23,14 @@ class AuthController {
         $user = self::login_validateFoundUser($app);
         if(!$user) { return; }
         
+        $session = self::login_createSession($app);
+        
         // Congrats - you're logged in!
         AuthData::insertAuthToken(array(
             ':user_id' => $user->id,
-            ':identifier' => $newSession->identifier,
-            ':token' => $newSession->token,
-            ':expires' => $newSession->expires
+            ':identifier' => $session->identifier,
+            ':token' => $session->token,
+            ':expires' => $session->expires
         ));
         
         // Go now. Be free little brother.
@@ -47,24 +49,41 @@ class AuthController {
             // Validate input parameters
             return $app->render(401, array('msg' => 'Login failed. Check your parameters and try again.'));
         }
+        return true;
     }
     
-    private static function login_validateFoundUser($app, $AuthSession) {
+    private static function login_validateFoundUser($app) {
         $user = UserData::selectUserByEmail($app->request->post('email'));
         
         if(!$user) {
             // Validate existing user
-            return $app->render(401, array('msg' => 'Login failed. A user with that email could not be found.'));
+            return $app->render(401, array('maxattempts' => self::$maxattempts, 'msg' => 'Login failed. A user with that email could not be found.'));
         } else if (!password_verify($app->request->post('password'), $user->password)) {
             // Validate Password
-            $attempts = $AuthSession->loginAttemptFailed($app->request->post('email'));
-            return $app->render(401, array('attempts' => $attempts, 'maxattempts' => self::$maxattempts, 'msg' => 'Login failed. Username and password combination did not match.' ));
+            return $app->render(401, array('maxattempts' => self::$maxattempts, 'msg' => 'Login failed. Username and password combination did not match.' ));
         }
         
         // Safty first
         unset($user->password);
         
         return $user;
+    }
+    
+    private static function login_createSession($app) {
+        $remember = (v::key('remember', v::boolType())->validate($app->request->post())) ? 
+                boolval($app->request->post('remember')) : false;
+        
+        $identifier = hash('sha256', uniqid());
+        $token = hash('sha256', uniqid());
+        
+        /* TO DO Change this to use config var */
+        $hours = ($remember) ? 1 : 3 * 24; // 1 Hours or 3 days if remember was checked
+        
+        return (object) array(
+            'identifier' => $identifier,
+            'token' => password_hash($token, PASSWORD_DEFAULT),
+            'expires' => date('Y-m-d H:i:s', time() + ($hours * 60 * 60))
+        );
     }
     
     // Logout Function
