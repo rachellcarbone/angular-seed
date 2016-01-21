@@ -14,9 +14,9 @@ angular.module('app.auth.login', [])
         $scope.form = {};
 
         $scope.credentials = {
-            'email' : '',
-            'password' : '',
-            'remember' : true
+            'email' : 'rachellcarbone@gmail.com',
+            'password' : 'password1',
+            'remember' : false
         };
 
         $scope.login = function() {
