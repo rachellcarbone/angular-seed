@@ -1,2 +1,4 @@
 ### Allow Cross Domain Ajax Requests ###
 Header set Access-Control-Allow-Origin "*"
+
+##Header set Access-Control-Allow-Headers "Content-Type, origin, authorization, accept, client-security-token"

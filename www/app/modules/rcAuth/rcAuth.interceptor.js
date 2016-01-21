@@ -18,21 +18,32 @@ app.config(['$httpProvider', function($httpProvider){
 
 app.factory('AuthInterceptor',
     function($rootScope, $q, AUTH_EVENTS) {
-        return {
-            // Interceptor gets called when a previous interceptor 
-            // threw an error or resolved with a rejection.
-            responseError: function(response) {
-                // If the http request returns a 401, 403 or 419 
-                // then broadcast the apropriate auth event. 
-                $rootScope.$broadcast({
-                    401: AUTH_EVENTS.notAuthenticated,
-                    403: AUTH_EVENTS.notAuthorized,
-                    419: AUTH_EVENTS.sessionTimeout
-                }[response.status], response);
-
-                // Reject the response as normal
-                return $q.reject(response);
+        var apiRequests = this;
+        
+        apiRequests.request = function(config) {
+            var currentUser = UserSession.get(),
+            apiAccessToken = currentUser ? currentUser.apiAccessToken : null;
+            if (apiAccessToken) {
+                ////////////////////////////////config.headers.Authorization = apiAccessToken;
             }
-        };
+            return config;
+          };
+          
+          
+        // Interceptor gets called when a previous interceptor 
+        // threw an error or resolved with a rejection.
+        apiRequests.responseError = function(response) {
+            // If the http request returns a 401, 403 or 419 
+            // then broadcast the apropriate auth event. 
+            $rootScope.$broadcast({
+                401: AUTH_EVENTS.notAuthenticated,
+                403: AUTH_EVENTS.notAuthorized,
+                419: AUTH_EVENTS.sessionTimeout
+            }[response.status], response);
 
+            // Reject the response as normal
+            return $q.reject(response);
+        };
+            
+        return apiRequests;
     });
