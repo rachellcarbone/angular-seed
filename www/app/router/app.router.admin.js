@@ -16,7 +16,8 @@ var app = angular.module('app.router.admin', [
     'rcAuth.constants',
     'app.admin'
 ]);
-app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES) {
+app.config(['$stateProvider', '$urlRouterProvider', 'USER_ROLES', 
+    function ($stateProvider, $urlRouterProvider, USER_ROLES) {
 
         /*  Abstract Admin Route */
         $stateProvider.state('admin', {
@@ -71,5 +72,8 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
                 }
             }
         });
+        
+        // For any unmatched url, redirect to /
+        $urlRouterProvider.when('/admin', '/admin/dashboard');
         
     }]);
