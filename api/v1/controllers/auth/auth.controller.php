@@ -14,26 +14,16 @@ class AuthController {
     // Login Function
     
     static function login($app) {
-        $AuthSession = new AuthSession();
-        
         // If anone is logged in currently, log them out
-        $session = self::login_logoutExistingSession($AuthSession);
+        self::login_logoutCurrentAccount($app);
         
         // Validate input parameters
         if(!self::login_validateParams($app)) { return; }
         
-        // Validate number of attempts for this email
-        if(!self::login_validateLoginAttempts($app, $AuthSession)) { return; }
-        
-        $user = self::login_validateFoundUser($app, $AuthSession);
-        
+        $user = self::login_validateFoundUser($app);
         if(!$user) { return; }
         
-        // Remember me
-        $remember = (v::key('remember', v::boolType())->validate($app->request->post())) ? boolval($app->request->post('remember')) : false;
-        
         // Congrats - you're logged in!
-        $newSession = $AuthSession->createLoggedInSession($user, $remember);
         AuthData::insertAuthToken(array(
             ':user_id' => $user->id,
             ':identifier' => $newSession->identifier,
@@ -45,16 +35,10 @@ class AuthController {
         return $app->render(200, array('user' => $user, 'session' => $session));
     }
     
-    private static function login_logoutExistingSession($AuthSession) {
-        // Is user already logged in?
-        $session = $AuthSession->getLoggedInSession();
-        $result = false;
-        if($session && property_exists($session, 'identifier')) {
-            // Log them out when someone else attempts to log in
-            $AuthSession->clearLoggedInSession();
-            $result = AuthData::deleteAuthToken(array(':identifier' => $session->identifier));
+    private static function login_logoutCurrentAccount($app) {
+        if(v::key('logout', v::stringType())->validate($app->request->post())) {
+            AuthData::deleteAuthToken(array(':identifier' => $app->request->post('logout')));
         }
-        return array('existing' => $session, 'deleted' => $result);
     }
     
     private static function login_validateParams($app) {
@@ -62,18 +46,7 @@ class AuthController {
            !v::key('password', v::stringType())->validate($app->request->post())) {
             // Validate input parameters
             return $app->render(401, array('msg' => 'Login failed. Check your parameters and try again.'));
-        } 
-        return true;
-    }
-    
-    private static function login_validateLoginAttempts($app, $AuthSession) {
-        $attempts = $AuthSession->getFailedLoginAttempts($app->request->post('email'));
-        if(false && $attempts >= self::$maxattempts) {
-            // Validate number of attempts for this email
-            $attempts = $AuthSession->loginAttemptFailed($app->request->post('email'));
-            return $app->render(401, array('attempts' => $attempts, 'maxattempts' => self::$maxattempts, 'msg' => 'You have attempted to login too many times with that email in a short period of time. Please try again later.' ));
         }
-        return true;
     }
     
     private static function login_validateFoundUser($app, $AuthSession) {
