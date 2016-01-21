@@ -16,12 +16,12 @@ class AuthRoutes {
             AuthController::logout($app);
         });
         
-        $app->post("/auth/validate-password/", function () use ($app) {
-            AuthController::testValidatePassword($app);
+        $app->post("/auth/authenticate/", function () use ($app) {
+            AuthController::authorizeCookieToken($app);
         });
         
-        $app->post("/auth/authenticated/", function () use ($app) {
-            AuthController::getLoggedInUser($app);
+        $app->post("/auth/validate-password/", function () use ($app) {
+            AuthController::testValidatePassword($app);
         });
         
         // Email Managment
