@@ -24,22 +24,30 @@ angular.module('rcAuth.listeners', [])
                         event.preventDefault();
                         // Broadcast reason for failure
                         // https://docs.angularjs.org/api/ng/type/$rootScope.Scope#$broadcast
-                        $rootScope.$broadcast(results);
+                        $rootScope.$broadcast(results, { 'state' : toState.name, 'params' : toParams });
                     });
                 });
 
         // On: Login Success
-        $rootScope.$on(AUTH_EVENTS.loginSuccess, function() {
+        $rootScope.$on(AUTH_EVENTS.loginSuccess, function(event, args) {
             // Evaluate asynchronously
             // https://docs.angularjs.org/api/ng/type/$rootScope.Scope#$evalAsync
             $rootScope.$evalAsync(function () {
-                // Go to the loged in user dashboard
-                $state.go('member.dashboard');
+                // If the state was saved during a previous auth event
+                if(angular.isDefined($rootScope.redirectPlaceholder)) {
+                    // Go to that state after login
+                    $state.go($rootScope.redirectPlaceholder.state, $rootScope.redirectPlaceholder.params);
+                    // And get rid of the evidence 
+                    delete $rootScope.redirectPlaceholder;
+                } else {
+                    // Go to the loged in user dashboard
+                    $state.go('member.dashboard');
+                }
             });
         });
 
         // On: Login Failure
-        $rootScope.$on(AUTH_EVENTS.loginFailed, function() {
+        $rootScope.$on(AUTH_EVENTS.loginFailed, function(event, args) {
             $rootScope.$evalAsync(function () {
                 // Go to the login state
                 $state.go('auth.login');
@@ -47,7 +55,7 @@ angular.module('rcAuth.listeners', [])
         });
 
         // On: Logout Success
-        $rootScope.$on(AUTH_EVENTS.logoutSuccess, function() {
+        $rootScope.$on(AUTH_EVENTS.logoutSuccess, function(event, args) {
             $rootScope.$evalAsync(function () {
                 // Go to the login state
                 $state.go('auth.login');
@@ -55,23 +63,33 @@ angular.module('rcAuth.listeners', [])
         });
 
         // On: Session Timeout
-        $rootScope.$on(AUTH_EVENTS.sessionTimeout, function() {
+        $rootScope.$on(AUTH_EVENTS.sessionTimeout, function(event, args) {
             $rootScope.$evalAsync(function () {
+                // If the sent the state we were going to
+                if(angular.isDefined(args.state)) {
+                    // Save it for rediredt after login
+                    $rootScope.redirectPlaceholder = args;
+                }
                 // Go to the login state
                 $state.go('auth.login');
             });
         });
 
         // On: User Not Authenticated
-        $rootScope.$on(AUTH_EVENTS.notAuthenticated, function() {
+        $rootScope.$on(AUTH_EVENTS.notAuthenticated, function(event, args) {
             $rootScope.$evalAsync(function () {
+                // If the sent the state we were going to
+                if(angular.isDefined(args.state)) {
+                    // Save it for rediredt after login
+                    $rootScope.redirectPlaceholder = args;
+                }
                 // Go to the login state
                 $state.go('auth.login');
             });
         });
 
         // On: User Not Authorized
-        $rootScope.$on(AUTH_EVENTS.notAuthorized, function() {
+        $rootScope.$on(AUTH_EVENTS.notAuthorized, function(event, args) {
             $rootScope.$evalAsync(function () {
                 // Go to the user not authorized error page
                 $state.go('app.error.notauthorized');
