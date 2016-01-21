@@ -16,22 +16,22 @@ angular.module('rcAuth.UserSession', [])
     self.user = false;
     
     // Validate that an object is a valid user object
-    self.validateUser = function(opt) {
-        return (typeof(opt) !== 'undefined' &&
-                typeof(opt.id) !== 'undefined' &&
-                typeof(opt.displayName) !== 'undefined' &&
-                typeof(opt.email) !== 'undefined' && 
-                typeof(opt.roles) !== 'undefined' &&
-                typeof(opt.apiKey) !== 'undefined' &&
-                typeof(opt.apiToken) !== 'undefined');
+    self.validateUser = function(user, session) {
+        return (typeof(user) !== 'undefined' &&
+                typeof(user.id) !== 'undefined' &&
+                typeof(user.displayName) !== 'undefined' &&
+                typeof(user.email) !== 'undefined' && 
+                typeof(user.roles) !== 'undefined' &&
+                typeof(user.apiKey) !== 'undefined' &&
+                typeof(user.apiToken) !== 'undefined');
     };
     
     // Create a user session
-    self.create = function(opt) {
+    self.create = function(user) {
         // Validate that the sent object is a valid user
-        if(self.validateUser(opt)) {
+        if(self.validateUser(user)) {
             // Set the user session
-            self.user = opt;
+            self.user = user;
             return self.user;
         } else {
             return false;
