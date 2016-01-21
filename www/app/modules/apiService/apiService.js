@@ -74,7 +74,6 @@ angular.module('api.v1', [
      * @return {Object} Returns a promise. */
     api.post = function(path, fd, err) {
         
-        api.postJson(path, fd, err);
         // Return a promise
         return $q(function (resolve, reject) {
             
