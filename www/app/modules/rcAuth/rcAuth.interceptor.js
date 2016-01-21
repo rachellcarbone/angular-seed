@@ -1,4 +1,7 @@
-'use strict';
+
+    
+    
+    'use strict';
 
 /* 
  * Authentication Interceptor
@@ -17,7 +20,8 @@ app.config(['$httpProvider', function($httpProvider){
 }]);
 
 app.factory('AuthInterceptor',
-    function($rootScope, $q, AUTH_EVENTS) {
+    function($rootScope, $q, AUTH_EVENTS, UserSession) {
+        
         var apiRequests = this;
         
         apiRequests.request = function(config) {
@@ -28,7 +32,6 @@ app.factory('AuthInterceptor',
             }
             return config;
           };
-          
           
         // Interceptor gets called when a previous interceptor 
         // threw an error or resolved with a rejection.
@@ -41,9 +44,15 @@ app.factory('AuthInterceptor',
                 419: AUTH_EVENTS.sessionTimeout
             }[response.status], response);
 
+                // May need this here, still testing
+                // Redirect ohhh.... but I dont have the state.... hmmm...
+                // Maybe I dont want this interceptor...
+                // , { 'state' : toState.name, 'params' : toParams }
+
             // Reject the response as normal
             return $q.reject(response);
         };
             
         return apiRequests;
+        
     });
