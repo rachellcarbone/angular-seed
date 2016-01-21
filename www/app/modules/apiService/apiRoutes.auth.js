@@ -60,8 +60,16 @@ angular.module('apiRoutes.auth', [])
         return API.post('auth/change-password/', fd, 'Error changing password.');
     };
 
-    api.getAuthenticatedUser = function() {
-        return API.post('auth/authenticated/', '[isAuthenticated] Error, User Not Authenticated.');
+    api.getAuthenticatedUser = function(credentials) {
+        if(!credentials.key || !credentials.token) {
+            return API.reject('Invalid credentials please verify your information and try again.');
+        }
+        
+        var fd = new FormData();
+        fd.append('key', credentials.key);
+        fd.append('token', credentials.token);
+
+        return API.post('auth/authenticate/', fd, 'Error, User Not Authenticated.');
     };
 
     return api;

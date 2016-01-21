@@ -51,7 +51,7 @@ class UserData {
     }
     
     static function selectUserByIdentifierToken($identifier) {
-        $user = DBConn::selectOne("SELECT u.id, name_first as nameFirst, name_last as nameLast, email, token "
+        $user = DBConn::selectOne("SELECT u.id, name_first AS nameFirst, name_last AS nameLast, email, token AS apiToken, identifier AS apiKey "
                 . "FROM " . DBConn::prefix() . "tokens_auth AS t "
                 . "JOIN " . DBConn::prefix() . "users AS u ON u.id = t.user_id "
                 . "WHERE identifier = :identifier AND u.blocked = 0;", array(':identifier' => $identifier));
