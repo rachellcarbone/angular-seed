@@ -6,17 +6,34 @@
  */
 
 angular.module('rcAuth.AuthService', [])
-    .factory('AuthService', ['$rootScope', '$q', '$log', 'UserSession', 'AUTH_EVENTS', 'VisibilityService', 'ApiRoutesAuth', 
-    function($rootScope, $q, $log, UserSession, AUTH_EVENTS, VisibilityService, API) {
+    .factory('AuthService', ['$rootScope', '$cookies', '$q', '$log', 'UserSession', 'AUTH_EVENTS', 'AUTH_COOKIES', 'VisibilityService', 'ApiRoutesAuth', 
+    function($rootScope, $cookies, $q, $log, UserSession, AUTH_EVENTS, AUTH_COOKIES, VisibilityService, API) {
         
         var factory = {};
         
         factory.login = function(credentials) {
+            $cookies.remove(AUTH_COOKIES.userEmail);
+            $cookies.remove(AUTH_COOKIES.userKey);
+            $cookies.remove(AUTH_COOKIES.userToken);
+            
             return $q(function (resolve, reject) {
                     API.postLogin(credentials)
                     .then(function (data) {
                         if (UserSession.create(data.user)) {
                             $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
+                    
+                            var date = new Date();
+                            var time = date.getTime();
+                            var hours = parseInt(data['timeout']) || 1;
+                            date.setTime(time + (hours * 60 * 60 * 1000));
+
+                            console.log("Cookie Expires at: " + $filter('date')(date, 'medium') + ", currently: " + $filter('date')(new Date(), 'medium'));
+
+                            //put valid login creds in a cookie
+                            $cookies.put(AUTH_COOKIES.userEmail, data.user.email, {expires: date});
+                            $cookies.put(AUTH_COOKIES.userKey, data.user.apiKey, {expires: date});
+                            $cookies.put(AUTH_COOKIES.userToken, data.user.apiToken, {expires: date});
+                        
                             resolve(UserSession.get());
                         } else {
                             $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
@@ -30,7 +47,11 @@ angular.module('rcAuth.AuthService', [])
             });
         };
 
-        factory.logout = function() {                
+        factory.logout = function() {
+            $cookies.remove(AUTH_COOKIES.userEmail);
+            $cookies.remove(AUTH_COOKIES.userKey);
+            $cookies.remove(AUTH_COOKIES.userToken);
+            
             return $q(function (resolve, reject) {
                     API.postLogout()
                     .then(function (data) {
