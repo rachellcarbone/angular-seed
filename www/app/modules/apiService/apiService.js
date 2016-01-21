@@ -59,9 +59,9 @@ angular.module('api.v1', [
                 resolve(data.data);
             }).error(function(data) {
                 // If there eas an error log it
-                $log.error(getErrorMessage(data.data.msg));
+                $log.error(getErrorMessage(data.data.msg, err));
                 // Reject the promise
-                reject(getErrorMessage(data.data.msg)); 
+                reject(getErrorMessage(data.data.msg, err)); 
             });
             
         });
@@ -73,6 +73,8 @@ angular.module('api.v1', [
      * @param {string} err Error message.
      * @return {Object} Returns a promise. */
     api.post = function(path, fd, err) {
+        
+        api.postJson(path, fd, err);
         // Return a promise
         return $q(function (resolve, reject) {
             
@@ -87,9 +89,9 @@ angular.module('api.v1', [
                 })
                 .error(function(data) {
                     // If there eas an error log it
-                    $log.error(getErrorMessage(data.data.msg));
+                    $log.error(getErrorMessage(data.data.msg, err));
                     // Reject the promise
-                    reject(getErrorMessage(data.data.msg)); 
+                    reject(getErrorMessage(data.data.msg, err)); 
             });
             
         });
@@ -116,9 +118,9 @@ angular.module('api.v1', [
                 })
                 .error(function(data) {
                     // If there eas an error log it
-                    $log.error(getErrorMessage(data.data.msg));
+                    $log.error(getErrorMessage(data.data.msg, err));
                     // Reject the promise
-                    reject(getErrorMessage(data.data.msg)); 
+                    reject(getErrorMessage(data.data.msg, err)); 
             });            
         });
     };
@@ -137,9 +139,9 @@ angular.module('api.v1', [
                 })
                 .error(function(data) {
                     // If there eas an error log it
-                    $log.error(getErrorMessage(data.data.msg));
+                    $log.error(getErrorMessage(data.data.msg, err));
                     // Reject the promise
-                    reject(getErrorMessage(data.data.msg)); 
+                    reject(getErrorMessage(data.data.msg, err)); 
             });
         });
     };
