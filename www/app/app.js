@@ -10,8 +10,9 @@
 angular.module('theApp', [
     'ui.bootstrap',
     'ui.bootstrap.showErrors',
-    'api.v1',
+    'ngCookies',
     'ngMessages',
+    'api.v1',
     'rcDirectives',
     'rcAuth',
     'rcCart',
