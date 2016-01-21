@@ -20,8 +20,10 @@ angular.module('rcAuth.UserSession', [])
         return (typeof(opt) !== 'undefined' &&
                 typeof(opt.id) !== 'undefined' &&
                 typeof(opt.displayName) !== 'undefined' &&
-                typeof(opt.email) !== 'undefined' &&
-                typeof(opt.roles) !== 'undefined');
+                typeof(opt.email) !== 'undefined' && 
+                typeof(opt.roles) !== 'undefined' &&
+                typeof(opt.apiKey) !== 'undefined' &&
+                typeof(opt.apiToken) !== 'undefined');
     };
     
     // Create a user session
@@ -45,27 +47,27 @@ angular.module('rcAuth.UserSession', [])
     // Return a copy of the user object
     // If no user is logged in this will return false
     self.get = function() {
-        return self.user;
+        return (!self.user) ? false : angular.copy(self.user);
     };
     
     // Safly return the User Id
     self.id = function() {
-        return angular.copy(self.user.id);
+        return (!self.user.id) ? false : angular.copy(self.user.id);
     };
     
     // Safly return the User Display Name
     self.displayName = function() {
-        return angular.copy(self.user.displayName);
+        return (!self.user.displayName) ? false : angular.copy(self.user.displayName);
     };
     
     // Safly return the User Email
     self.email = function() {
-        return angular.copy(self.user.email);
+        return (!self.user.email) ? false : angular.copy(self.user.email);
     };
     
     // Safly return the User Role Object
     self.roles = function() {
-        return angular.copy(self.user.roles);
+        return (!self.user.roles) ? false : angular.copy(self.user.roles);
     };
     
     // Return public methods
@@ -75,6 +77,7 @@ angular.module('rcAuth.UserSession', [])
             get : self.get,
             id : self.id,
             displayName : self.displayName,
+            email : self.email,
             roles : self.roles
         };
         
