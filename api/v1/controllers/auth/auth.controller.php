@@ -23,24 +23,31 @@ class AuthController {
         $user = self::login_validateFoundUser($app);
         if(!$user) { return; }
         
-        $session = self::login_createSession($app);
+        $session = self::login_createSession();
+        
+        $hours = self::login_getSessionExpirationInHours($app);
         
         // Congrats - you're logged in!
         AuthData::insertAuthToken(array(
             ':user_id' => $user->id,
             ':identifier' => $session->identifier,
-            ':token' => $session->token,
-            ':expires' => $session->expires
+            ':token' => password_hash($session->token, PASSWORD_DEFAULT),
+            ':expires' => date('Y-m-d H:i:s', time() + ($hours * 60 * 60))
         ));
         
-        // Go now. Be free little brother.
-        return $app->render(200, array('user' => $user, 'session' => $session));
+        $user->apiKey = $session->identifier;
+        $user->apiToken = $session->token;
+        
+        // Send the session life back (in hours) for the cookies
+        return $app->render(200, array('user' => $user, 'sessionLifeHours' => $hours));
     }
     
     private static function login_logoutCurrentAccount($app) {
         if(v::key('logout', v::stringType())->validate($app->request->post())) {
             AuthData::deleteAuthToken(array(':identifier' => $app->request->post('logout')));
+            return true;
         }
+        return false;
     }
     
     private static function login_validateParams($app) {
@@ -69,54 +76,48 @@ class AuthController {
         return $user;
     }
     
-    private static function login_createSession($app) {
+    private static function login_createSession() {
+        return (object) array(
+            'identifier' => hash('sha256', uniqid()),
+            'token' => hash('sha256', uniqid())
+        );
+    }
+    
+    private static function login_getSessionExpirationInHours($app) {
         $remember = (v::key('remember', v::boolType())->validate($app->request->post())) ? 
                 boolval($app->request->post('remember')) : false;
         
-        $identifier = hash('sha256', uniqid());
-        $token = hash('sha256', uniqid());
-        
         /* TO DO Change this to use config var */
-        $hours = ($remember) ? 1 : 3 * 24; // 1 Hours or 3 days if remember was checked
-        
-        return (object) array(
-            'identifier' => $identifier,
-            'token' => password_hash($token, PASSWORD_DEFAULT),
-            'expires' => date('Y-m-d H:i:s', time() + ($hours * 60 * 60))
-        );
+        return (!$remember) ? 1 : 3 * 24; // 1 Hours or 3 days if remember was checked
     }
     
     // Logout Function
     
     static function logout($app) {
-        $AuthSession = new AuthSession();
-        
-        $session = $AuthSession->getLoggedInSession();
-        
-        if(!$session) { 
-            return $app->render(200, array('msg' => 'Log out successful.'));
-        } else if (property_exists($session, 'identifier')) {
-            AuthData::deleteAuthToken(array( ':identifier' => $session->identifier ));
+        if(self::login_logoutCurrentAccount($app)) { 
+            return $app->render(200, array('msg' => 'User successfully logged out.'));
         }
-        
-        $AuthSession->clearLoggedInSession();
-        return $app->render(200, array('msg' => 'User successfully logged out.'));
+        return $app->render(400, array('msg' => 'Could not log out user.'));
     }
     
-    static function getLoggedInUser($app) {
-        $AuthSession = new AuthSession();
-        $session = $AuthSession->getLoggedInSession();
-        
-        if($session && property_exists($session, 'user')) {
-            return $app->render(200, array('user' => $session->user, '$session' => $session));
-        } else if($session && property_exists($session, 'identifier')) {
-            $loggedInUser = self::auth_validateFoundUser($app, $AuthSession, $session);
-            if($loggedInUser) {
-                $AuthSession->server_saveUserSession($loggedInUser);
-                return $app->render(200, array('user' => $loggedInUser));
-            }
+    static function authorizeCookieToken($app) {
+        if(!v::key('key', v::stringType())->validate($app->request->post()) || 
+           !v::key('token', v::stringType())->validate($app->request->post())) {
+            return $app->render(400, array('msg' => 'Unauthenticated: Invalid request. Check your parameters and try again.'));
         }
-        return $app->render(401, array('msg' => 'Unauthenticated: Nope', '$session' => $session));
+        
+        $user = UserData::selectUserByIdentifierToken($app->request->post('key'));
+        
+        if(!$user) {
+            // Validate existing user
+            return $app->render(401, array('msg' => 'Unauthenticated: No User'));
+        } else if (!password_verify($app->request->post('token'), $user->apiToken)) {
+            // Validate Password
+            return $app->render(401, array('msg' => 'Unauthenticated: Invalid Cookie'));
+        }
+        
+        // Go now. Be free little brother.
+        return $app->render(200, array('user' => $user));
     }
     
     // Test Password Route
@@ -130,25 +131,7 @@ class AuthController {
     static function validatePassword($post, $key = 'password') {
         return (v::key($key, v::stringType()->length(8,255)->noWhitespace()->alnum('!@#$%^&*_+=-')->regex('/^(?=.*[a-zA-Z])(?=.*[0-9])/'))->validate($post));
     }
-    
-    
-    private static function auth_validateFoundUser($app, $AuthSession, $session) {
-        $user = UserData::selectUserByIdentifierToken($session->identifier);
         
-        if(!$user) {
-            // Validate existing user
-            return $app->render(401, array('msg' => 'Unauthenticated: No User'));
-        } else if (!password_verify($session->token, $user->token)) {
-            // Validate Password
-            $AuthSession->clearLoggedInSession();
-            return $app->render(401, array('msg' => 'Unauthenticated: Invalid Cookie'));
-        }
-        
-        // Safty first
-        unset($user->identifier);
-        
-        return $user;
-    }
     
     
     

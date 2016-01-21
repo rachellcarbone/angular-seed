@@ -6,12 +6,14 @@
  */
 
 angular.module('rcAuth.AuthService', [])
-    .factory('AuthService', ['$rootScope', '$cookies', '$q', '$log', 'UserSession', 'AUTH_EVENTS', 'AUTH_COOKIES', 'VisibilityService', 'ApiRoutesAuth', 
-    function($rootScope, $cookies, $q, $log, UserSession, AUTH_EVENTS, AUTH_COOKIES, VisibilityService, API) {
+    .factory('AuthService', ['$rootScope', '$cookies', '$q', '$log', '$filter', 'UserSession', 'AUTH_EVENTS', 'AUTH_COOKIES', 'VisibilityService', 'ApiRoutesAuth', 
+    function($rootScope, $cookies, $q, $log, $filter, UserSession, AUTH_EVENTS, AUTH_COOKIES, VisibilityService, API) {
         
         var factory = {};
         
         factory.login = function(credentials) {
+            credentials.logout = $cookies.get(AUTH_COOKIES.userKey);
+            
             $cookies.remove(AUTH_COOKIES.userEmail);
             $cookies.remove(AUTH_COOKIES.userKey);
             $cookies.remove(AUTH_COOKIES.userToken);
@@ -19,12 +21,11 @@ angular.module('rcAuth.AuthService', [])
             return $q(function (resolve, reject) {
                     API.postLogin(credentials)
                     .then(function (data) {
+                        
                         if (UserSession.create(data.user)) {
-                            $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
-                    
                             var date = new Date();
                             var time = date.getTime();
-                            var hours = parseInt(data['timeout']) || 1;
+                            var hours = parseInt(data.sessionLifeHours) || 1;
                             date.setTime(time + (hours * 60 * 60 * 1000));
 
                             console.log("Cookie Expires at: " + $filter('date')(date, 'medium') + ", currently: " + $filter('date')(new Date(), 'medium'));
@@ -35,14 +36,15 @@ angular.module('rcAuth.AuthService', [])
                             $cookies.put(AUTH_COOKIES.userToken, data.user.apiToken, {expires: date});
                         
                             resolve(UserSession.get());
+                            $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
                         } else {
+                            reject("Error: Could not log in user. Please try again later.");
                             $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
                             $log.error(data);
-                            reject("Error: Could not log in user. Please try again later.");
                         }
                     }, function (error) {
-                        $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
                         reject(AUTH_EVENTS.loginFailed);
+                        $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
                     });
             });
         };
@@ -80,20 +82,29 @@ angular.module('rcAuth.AuthService', [])
         factory.isAuthenticated = function() {
             return $q(function (resolve, reject) {
                 var user = UserSession.get();
-                if (!user) {
-                        API.getAuthenticatedUser()
+                if (user) {
+                    return resolve(user);
+                }
+                
+                var credentials = {
+                    'key' : $cookies.get(AUTH_COOKIES.userKey),
+                    'token' : $cookies.get(AUTH_COOKIES.userToken)
+                };
+            
+                if (credentials.key && credentials.token) {
+                        API.getAuthenticatedUser(credentials)
                         .then(function (data) {
                             if (UserSession.create(data.user)) {
-                                resolve(UserSession.get());
+                                return resolve(UserSession.get());
                             } else {
                                 $log.error('[isAuthenticated] Session Couldn\'t be Created', data);
-                                reject(AUTH_EVENTS.notAuthenticated);
+                                return reject(AUTH_EVENTS.notAuthenticated);
                             }
                         }, function (error) {
-                            reject(AUTH_EVENTS.notAuthenticated);
+                            return reject(AUTH_EVENTS.notAuthenticated);
                         });
                 } else {
-                    resolve(user);
+                    return reject(AUTH_EVENTS.notAuthenticated);
                 }
             });
         };
