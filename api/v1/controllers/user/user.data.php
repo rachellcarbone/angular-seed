@@ -22,7 +22,7 @@ class UserData {
     }
     
     public static function selectOtherUsersWithEmail($email, $id = 0) {
-        return DBConn::select("SELECT id FROM " . DBConn::prefix() . "users WHERE email = :email AND id != :id;", 
+        return DBConn::selectAll("SELECT id FROM " . DBConn::prefix() . "users WHERE email = :email AND id != :id;", 
                     array(':email' => $email, ':id' => $id), \PDO::FETCH_COLUMN);
     }
     
@@ -31,7 +31,7 @@ class UserData {
                 . "FROM " . DBConn::prefix() . "users WHERE id = :id LIMIT 1;", array(':id' => $id));
         if($user) {
             $user->displayName = $user->nameFirst;
-            $user->roles = DBConn::select("SELECT gr.auth_role_id FROM " . DBConn::prefix() . "auth_lookup_user_group AS ug "
+            $user->roles = DBConn::selectAll("SELECT gr.auth_role_id FROM " . DBConn::prefix() . "auth_lookup_user_group AS ug "
                     . "JOIN " . DBConn::prefix() . "auth_lookup_group_role AS gr ON ug.auth_group_id = gr.auth_group_id "
                     . "WHERE ug.user_id = :id;", array(':id' => $id), \PDO::FETCH_COLUMN);
         }
@@ -43,7 +43,7 @@ class UserData {
                 . "FROM " . DBConn::prefix() . "users WHERE email = :email LIMIT 1;", array(':email' => $email));
         if($user) {
             $user->displayName = $user->nameFirst;
-            $user->roles = DBConn::select("SELECT gr.auth_role_id FROM " . DBConn::prefix() . "auth_lookup_user_group AS ug "
+            $user->roles = DBConn::selectAll("SELECT gr.auth_role_id FROM " . DBConn::prefix() . "auth_lookup_user_group AS ug "
                     . "JOIN " . DBConn::prefix() . "auth_lookup_group_role AS gr ON ug.auth_group_id = gr.auth_group_id "
                     . "WHERE ug.user_id = :id;", array(':id' => $user->id), \PDO::FETCH_COLUMN);
         }
@@ -57,7 +57,7 @@ class UserData {
                 . "WHERE identifier = :identifier AND u.blocked = 0;", array(':identifier' => $identifier));
         if($user) {
             $user->displayName = $user->nameFirst;
-            $user->roles = DBConn::select("SELECT gr.auth_role_id FROM " . DBConn::prefix() . "auth_lookup_user_group AS ug "
+            $user->roles = DBConn::selectAll("SELECT gr.auth_role_id FROM " . DBConn::prefix() . "auth_lookup_user_group AS ug "
                     . "JOIN " . DBConn::prefix() . "auth_lookup_group_role AS gr ON ug.auth_group_id = gr.auth_group_id "
                     . "WHERE ug.user_id = :id;", array(':id' => $user->id), \PDO::FETCH_COLUMN);
         }
@@ -65,15 +65,15 @@ class UserData {
     }
   
     public static function insertUser($validUser) {
-        return DBConn::insertQuery("INSERT INTO " . DBConn::prefix() . "users(name_first, name_last, email, password) "
+        return DBConn::insert("INSERT INTO " . DBConn::prefix() . "users(name_first, name_last, email, password) "
                 . "VALUES (:name_first, :name_last, :email, :password);", $validUser);
     }
     
     public static function updateUser($validUser) {
-        return DBConn::executeQuery("UPDATE " . DBConn::prefix() . "users SET name_first=:name_first, name_last=:name_last, email=:email WHERE id = :id;", $validUser);
+        return DBConn::update("UPDATE " . DBConn::prefix() . "users SET name_first=:name_first, name_last=:name_last, email=:email WHERE id = :id;", $validUser);
     }
     
     public static function deleteUser($id) {
-        return DBConn::executeQuery("DELETE FROM " . DBConn::prefix() . "users WHERE id = :id LIMIT 1;", array('id' => $id));
+        return DBConn::delete("DELETE FROM " . DBConn::prefix() . "users WHERE id = :id LIMIT 1;", array('id' => $id));
     }
 }
