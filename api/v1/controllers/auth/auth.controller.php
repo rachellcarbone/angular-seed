@@ -1,6 +1,5 @@
 <?php namespace API;
 require_once dirname(dirname(__FILE__)) . '/user/user.data.php';
-require_once dirname(__FILE__) . '/auth.session.php';
 require_once dirname(__FILE__) . '/auth.data.php';
 
 use \Respect\Validation\Validator as v;
