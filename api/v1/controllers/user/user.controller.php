@@ -7,17 +7,7 @@ use \Respect\Validation\Validator as v;
 
 class UserController {
 
-    
-    static function getUsers($app) {
-        $users = UserData::selectUsers();
-        if($users) {
-            return $app->render(200, array('users' => $users));
-        } else {
-            return $app->render(400,  array('msg' => 'Could not select users.'));
-        }
-    }
-
-    static function getUser($app, $userId) {
+    static function selectUser($app, $userId) {
         $user = UserData::selectUserById($userId);
         if($user) {
             return $app->render(200, array('user' => $user ));
@@ -26,7 +16,7 @@ class UserController {
         }
     }
 
-    static function addUser($app) {
+    static function insertUser($app) {
         if(!v::key('first', v::stringType()->length(1,255))->validate($app->request->post()) ||
             !v::key('last', v::stringType()->length(1,255), false)->validate($app->request->post()) || 
             !v::key('email', v::email())->validate($app->request->post())) {
@@ -54,7 +44,7 @@ class UserController {
         }
     }
 
-    static function saveUser($app, $userId) {
+    static function updateUser($app, $userId) {
         if(!v::key('first', v::stringType()->length(1,255))->validate($app->request->post()) ||
             !v::key('last', v::stringType()->length(1,255), false)->validate($app->request->post()) || 
             !v::key('email', v::email())->validate($app->request->post())) {

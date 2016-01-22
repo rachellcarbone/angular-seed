@@ -1,15 +1,19 @@
 <?php namespace API;
 require_once dirname(dirname(__FILE__)) . '/services/logging.php';  // Logging Service
-require_once dirname(__FILE__) . '/user/user.routes.php';
 require_once dirname(__FILE__) . '/auth/auth.routes.php';
+require_once dirname(__FILE__) . '/datatables/datatables.routes.php';
+//require_once dirname(__FILE__) . '/groups/groups.routes.php';
+//require_once dirname(__FILE__) . '/roles/roles.routes.php';
+require_once dirname(__FILE__) . '/user/user.routes.php';
 
 class ApiRouter {
     
     public static function addRoutes($app, $debugEnabled) {
         self::addDefaultRoutes($app);
         self::addErrorRoutes($app, $debugEnabled);
-        UserRoutes::addRoutes();
         AuthRoutes::addRoutes();
+        DatatableRoutes::addRoutes();
+        UserRoutes::addRoutes();
     }
     
     
