@@ -72,6 +72,17 @@ app.config(['$stateProvider', '$urlRouterProvider', 'USER_ROLES',
                 }
             }
         });
+
+        $stateProvider.state('admin.config', {
+            title: 'System Configuration Variables',
+            url: '/system-variables',
+            views: {
+                'content@admin': {
+                    templateUrl: 'app/views/admin/configVariables/configVariables.html',
+                    controller: 'AdminConfigVariablesCtrl'
+                }
+            }
+        });
         
         // For any unmatched url, redirect to /
         $urlRouterProvider.when('/admin', '/admin/dashboard');
