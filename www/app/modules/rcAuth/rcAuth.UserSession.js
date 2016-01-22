@@ -50,6 +50,13 @@ angular.module('rcAuth.UserSession', [])
         return (!self.user) ? false : angular.copy(self.user);
     };
     
+    self.getAuthCredentials = function() {
+        return (!self.user) ? false : {
+            'apiKey' : angular.copy(self.apiKey),
+            'apiToken' : angular.copy(self.apiToken)
+        }
+    }
+    
     // Safly return the User Id
     self.id = function() {
         return (!self.user.id) ? false : angular.copy(self.user.id);
@@ -75,6 +82,7 @@ angular.module('rcAuth.UserSession', [])
             create : self.create,
             destroy : self.destroy,
             get : self.get,
+            getAuthCredentials: self.getAuthCredentials,
             id : self.id,
             displayName : self.displayName,
             email : self.email,

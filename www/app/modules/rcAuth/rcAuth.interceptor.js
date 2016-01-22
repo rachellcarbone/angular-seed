@@ -25,10 +25,9 @@ app.factory('AuthInterceptor',
         var apiRequests = this;
         
         apiRequests.request = function(config) {
-            var currentUser = UserSession.get(),
-            apiAccessToken = currentUser ? currentUser.apiAccessToken : null;
-            if (apiAccessToken) {
-                ////////////////////////////////config.headers.Authorization = apiAccessToken;
+            var credentials = UserSession.getAuthCredentials();
+            if (credentials) {
+                config.data = $.extend({}, config.data, credentials);
             }
             return config;
           };
