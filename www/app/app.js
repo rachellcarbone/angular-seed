@@ -10,6 +10,7 @@
 angular.module('theApp', [
     'ui.bootstrap',
     'ui.bootstrap.showErrors',
+    'datatables',
     'ngCookies',
     'ngMessages',
     'api.v1',
