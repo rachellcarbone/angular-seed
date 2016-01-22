@@ -15,8 +15,10 @@ angular.module('app.admin.configVariables', [])
             $scope.list = {};
 
             // DataTable Setup
-            $scope.dtInstance = {};
-            $scope.dtOptions = DTOptionsBuilder.fromFnPromise(ApiRoutesDatatables.adminConfigList())
+            $scope.dtSystemVars = {};
+            $scope.dtSystemVars.instance = {};
+            $scope.dtSystemVars.options = DTOptionsBuilder.fromFnPromise(ApiRoutesDatatables.adminConfigList())
+                .withBootstrap()
                 .withDOM('<"row"<"col-sm-12 col-md-12"fr><"col-sm-12 col-md-12 add-space"t><"col-sm-4 col-md-4"l><"col-sm-4 col-md-4"i><"col-sm-4 col-md-4"p>>')
                 .withPaginationType('full_numbers')
                 .withOption('createdRow', function (row, data, dataIndex) {
@@ -25,12 +27,18 @@ angular.module('app.admin.configVariables', [])
                     // Add this row to the variable list for editing
                     $scope.list[data.id] = data;
                 });
-            $scope.dtColumns = [
+            $scope.dtSystemVars.columns = [
                 DTColumnBuilder.newColumn('id').withTitle('ID'),
                 DTColumnBuilder.newColumn('name').withTitle('Name'),
                 DTColumnBuilder.newColumn('value').withTitle('Value'),
-                DTColumnBuilder.newColumn('last_updated_by').withTitle('Last Update'),
-                DTColumnBuilder.newColumn('last_updated_ts').withTitle('Updated On'),
+                DTColumnBuilder.newColumn('createdBy').withTitle('Created By'),
+                DTColumnBuilder.newColumn('created').withTitle('Created').renderWith(function (data, type, full, meta) {
+                    return moment(data, 'YYYY-MM-DD HH:mm:ss').format('M/D/YYYY h:mm a');
+                }),
+                DTColumnBuilder.newColumn('updatedBy').withTitle('Last Update'),
+                DTColumnBuilder.newColumn('lastUpdated').withTitle('Updated On').renderWith(function (data, type, full, meta) {
+                    return moment(data, 'YYYY-MM-DD HH:mm:ss').format('M/D/YYYY h:mm a');
+                }),
                 DTColumnBuilder.newColumn(null).withTitle('Edit').renderWith(function (data, type, full, meta) {
                     return '<button type="button" ng-click="openEditModal(\'' + data.id + '\')" class="btn btn-default btn-xs pull-right">Edit</button>';
                 }).notSortable()

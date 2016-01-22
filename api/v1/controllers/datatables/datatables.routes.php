@@ -18,7 +18,7 @@ class DatatableRoutes {
             DatatablesController::getGroupRoles($app);
         });
         
-        $app->post("/datatable/admin/config-variables", function () use ($app) {
+        $app->post("/datatable/admin/system-variables", function () use ($app) {
             DatatablesController::getConfigVariables($app);
         });
     }

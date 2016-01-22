@@ -7,7 +7,8 @@
  */
 
 angular.module('api.v1', [
-    'apiRoutes.auth'
+    'apiRoutes.auth',
+    'apiRoutes.datatables'
 ])
 .factory('ApiService', ['$http', '$q', '$log', function($http, $q, $log) {
 

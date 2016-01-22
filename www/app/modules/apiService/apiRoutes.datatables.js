@@ -13,7 +13,7 @@ angular.module('apiRoutes.datatables', [])
     
     var getPromise = function(path) {
         return $q(function (resolve, reject) {
-            API.post('/datatable/admin/users').then(
+            API.post(path).then(
                 function(success) {
                     return resolve(success.table);
                 }, function(error) {
@@ -36,7 +36,7 @@ angular.module('apiRoutes.datatables', [])
     };
     
     api.adminConfigList = function() { 
-        return getPromise('/datatable/admin/config-variables');
+        return getPromise('/datatable/admin/system-variables');
     };
     
     return api;
