@@ -11,6 +11,7 @@ angular.module('theApp', [
     'ui.bootstrap',
     'ui.bootstrap.showErrors',
     'datatables',
+    'datatables.bootstrap',
     'ngCookies',
     'ngMessages',
     'api.v1',
