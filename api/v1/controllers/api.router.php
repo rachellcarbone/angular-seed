@@ -2,8 +2,9 @@
 require_once dirname(dirname(__FILE__)) . '/services/logging.php';  // Logging Service
 require_once dirname(__FILE__) . '/auth/auth.routes.php';
 require_once dirname(__FILE__) . '/datatables/datatables.routes.php';
-//require_once dirname(__FILE__) . '/groups/groups.routes.php';
-//require_once dirname(__FILE__) . '/roles/roles.routes.php';
+require_once dirname(__FILE__) . '/groups/groups.routes.php';
+require_once dirname(__FILE__) . '/roles/roles.routes.php';
+require_once dirname(__FILE__) . '/system-variables/config.routes.php';
 require_once dirname(__FILE__) . '/user/user.routes.php';
 
 class ApiRouter {
@@ -12,7 +13,10 @@ class ApiRouter {
         self::addDefaultRoutes($app);
         self::addErrorRoutes($app, $debugEnabled);
         AuthRoutes::addRoutes();
+        ConfigRoutes::addRoutes();
         DatatableRoutes::addRoutes();
+        GroupRoutes::addRoutes();
+        RoleRoutes::addRoutes();
         UserRoutes::addRoutes();
     }
     
