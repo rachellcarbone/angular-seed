@@ -54,8 +54,8 @@ angular.module('rcAuth.UserSession', [])
         return (!self.user) ? false : {
             'apiKey' : angular.copy(self.apiKey),
             'apiToken' : angular.copy(self.apiToken)
-        }
-    }
+        };
+    };
     
     // Safly return the User Id
     self.id = function() {
