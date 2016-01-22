@@ -12,11 +12,13 @@
     <ul class="nav navbar-nav">
         <li><a data-ui-sref="admin.dashboard">Home</a></li>
         <li><a data-ui-sref="admin.users">Users</a></li>
+        <li><a data-ui-sref="admin.groups">Groups</a></li>
         <li><a data-ui-sref="admin.roles">Roles</a></li>
+        <li><a data-ui-sref="admin.visibility">Field Visibility</a></li>
         <li><a data-ui-sref="admin.config">System Variables</a></li>
     </ul>
     <ul class="nav navbar-nav navbar-right">
-        <li ng-if="user"><a data-data-ui-sref="member.profile">Hi {{user.displayName}}</a></li>
-        <li ng-if="user"><a data-data-ui-sref="auth.logout">Logout</a></li>
+        <li><a data-data-ui-sref="member.profile">Hi {{user.displayName}}</a></li>
+        <li><a data-data-ui-sref="auth.logout">Logout</a></li>
     </ul>
 </div>

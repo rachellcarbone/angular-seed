@@ -25,55 +25,57 @@ class DatatablesData {
     }
     
     public static function selectUserGroups() {
-        $query = 'SELECT id, group, desc, created_by, created_ts, last_updated_by, last_updated_ts '
-                . 'FROM auth-group '
-                . 'ORDER BY group;';
-        $sthGroups = ExecuteSQLGetResultSet($query, array());
-        $sthGroups->setFetchMode(PDO::FETCH_OBJ);
+        $qGroups = DBConn::executeQuery("SELECT g.id, group, desc, g.created, g.last_updated, "
+                . "CONCAT(u1.name_first, ' ', u1.name_last) AS createdBy, "
+                . "CONCAT(u2.name_first, ' ', u2.name_last) AS updatedBy "
+                . "FROM " . DBConn::prefix() . "auth_groups AS g "
+                . "JOIN " . DBConn::prefix() . "users AS u1 ON u1.id = g.created_user_id "
+                . "JOIN " . DBConn::prefix() . "users AS u2 ON u2.id = g.last_updated_by ORDER BY g.group;");
 
-        $sthRoles = PrepareSQL('SELECT role.id, role.role, role.desc '
-                . 'FROM auth-role AS role JOIN auth-lookup-group-role AS look '
-                . 'ON role.id = look.auth_role_id '
-                . 'WHERE look.auth_group_id = ? ORDER BY role.role;');
+        $qRoles = DBConn::preparedQuery("SELECT role.id, role.role, role.desc "
+                . "FROM " . DBConn::prefix() . "auth_roles AS role "
+                . "JOIN " . DBConn::prefix() . "auth_lookup_group_role AS look ON role.id = look.auth_role_id "
+                . "WHERE look.auth_group_id = :id ORDER BY role.role;");
 
         $groups = Array();
 
-        while($group = $sthGroups->fetch()) {
-            $sthRoles->execute(array($group->id));
-            $group->roles = $sthRoles->fetchAll(PDO::FETCH_OBJ);        
+        while($group = $qGroups->fetch(\PDO::FETCH_OBJ)) {
+            $qRoles->execute(array(':id' => $group->id));
+            $group->roles = $qRoles->fetchAll(\PDO::FETCH_OBJ);        
             array_push($groups, $group);
         }
         
-        return Array();
+        return $groups;
     }
     
     public static function selectGroupRoles() {
-        $query = 'SELECT id, role, desc, created_by, created_ts, last_updated_by, last_updated_ts '
-                . 'FROM auth-role '
-                . 'ORDER BY role;';
-        $sthRoles = ExecuteSQLGetResultSet($query, array());
-        $sthRoles->setFetchMode(PDO::FETCH_OBJ);
+        $qRoles = DBConn::executeQuery("SELECT id, role, desc, created_by, created_ts, last_updated_by, last_updated_ts "
+                . "FROM auth-role "
+                . "ORDER BY role;");
 
-        $sthElements = PrepareSQL('SELECT elm.id, elm.identifier, elm.desc '
-                . 'FROM auth-element AS elm JOIN auth-lookup-role-element AS look '
-                . 'ON elm.id = look.auth_element_id '
-                . 'WHERE look.auth_role_id = ? ORDER BY elm.identifier;');
-        $sthGroups = PrepareSQL('SELECT gr.id, gr.group, gr.desc '
-                    . 'FROM auth-group AS gr JOIN auth-lookup-group-role AS look '
-                    . 'ON gr.id = look.auth_group_id '
-                    . 'WHERE look.auth_role_id = ? ORDER BY group;');
+        $qElements = DBConn::preparedQuery("SELECT elm.id, elm.identifier, elm.desc "
+                . "FROM auth-element AS elm JOIN auth-lookup-role-element AS look "
+                . "ON elm.id = look.auth_element_id "
+                . "WHERE look.auth_role_id = ? ORDER BY elm.identifier;");
+        
+        $qGroups = DBConn::preparedQuery("SELECT gr.id, gr.group, gr.desc "
+                    . "FROM auth-group AS gr JOIN auth-lookup-group-role AS look "
+                    . "ON gr.id = look.auth_group_id "
+                    . "WHERE look.auth_role_id = ? ORDER BY group;");
 
         $roles = Array();
 
-        while($role = $sthRoles->fetch()) {
-            $sthGroups->execute(array($role->id));
-            $role->groups = $sthGroups->fetchAll(PDO::FETCH_OBJ);   
-            $sthElements->execute(array($role->id));  
-            $role->elements = $sthElements->fetchAll(PDO::FETCH_OBJ);        
+        while($role = $qRoles->fetch()) {
+            $qGroups->execute(array($role->id));
+            $role->groups = $qGroups->fetchAll(\PDO::FETCH_OBJ);
+            
+            $qElements->execute(array($role->id));  
+            $role->elements = $qElements->fetchAll(\PDO::FETCH_OBJ);
+            
             array_push($roles, $role);
         }
-        return Array();
-    
+        
+        return $roles;
     }
     
     public static function selectConfigVariables() {

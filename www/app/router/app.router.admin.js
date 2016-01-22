@@ -52,12 +52,23 @@ app.config(['$stateProvider', '$urlRouterProvider', 'USER_ROLES',
         });
 
         $stateProvider.state('admin.roles', {
-            title: 'System Roles',
-            url: '/roles',
+            title: 'Group Roles',
+            url: '/groups-roles',
             views: {
                 'content@admin': {
                     templateUrl: 'app/views/admin/roles/roles.html',
                     controller: 'AdminRolesCtrl'
+                }
+            }
+        });
+
+        $stateProvider.state('admin.groups', {
+            title: 'User Groups',
+            url: '/user-groups',
+            views: {
+                'content@admin': {
+                    templateUrl: 'app/views/admin/groups/groups.html',
+                    controller: 'AdminGroupsCtrl'
                 }
             }
         });
