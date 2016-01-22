@@ -20,12 +20,16 @@ angular.module('apiRoutes.auth', [])
         fd.append('email', credentials.email);
         fd.append('password', credentials.password);
         fd.append('remember', credentials.remember || false);
+        if(credentials.logout) { fd.append('logout', credentials.logout); };
 
         return API.post('auth/login/', fd, 'System unable to login.');
     };
 
-    api.postLogout = function() {                
-        return API.post('auth/logout/', new FormData(), 'System unable to logout.');
+    api.postLogout = function(logout) {
+        var fd = new FormData();
+        fd.append('logout', logout);
+        
+        return API.post('auth/logout/', fd, 'System unable to logout.');
     };
 
     api.postForgotPasswordEmail = function(email) {
