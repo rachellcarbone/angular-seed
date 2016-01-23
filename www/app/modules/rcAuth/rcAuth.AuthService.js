@@ -12,7 +12,33 @@ angular.module('rcAuth.AuthService', [])
         var factory = {};
         
         factory.init = function() {
-            return factory.isAuthenticated();
+            /* Returns promise that always resolves true */ 
+            return $q(function (resolve, reject) {
+                if (UserSession.get()) {
+                    return resolve(true);
+                }
+                
+                var credentials = {
+                    'key' : $cookies.get(AUTH_COOKIES.userKey),
+                    'token' : $cookies.get(AUTH_COOKIES.userToken)
+                };
+            
+                if (credentials.key && credentials.token) {
+                    
+                        API.getAuthenticatedUser(credentials)
+                        .then(function (data) {
+                            if (!UserSession.create(data.user)) {
+                                $log.error('[authInit] Credentials found but session Couldn\'t be Created', data);
+                            }
+                            return resolve(true);
+                        }, function (error) {
+                            $log.info('[authInit] No Credentials Found', error);
+                            return resolve(true);
+                        });
+                        
+                }
+                return resolve(true);
+            });
         };
         
         factory.login = function(credentials) {
