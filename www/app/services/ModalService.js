@@ -124,11 +124,17 @@ angular.module('ModalService', [
      * 
      * @return uibModalInstance
      */
-    api.openEditUser = function(options, resolve) {
+    api.openEditUser = function(userId) {
         return api.openModal({
             templateUrl: templatePath + 'admin/editUser/editUser.html',
-            controller: 'EditUserModalCtrl'
-        }, options, resolve);
+            controller: 'EditUserModalCtrl',
+            resolve: {
+                ApiRoutesUsers: 'ApiRoutesUsers',
+                editing: function(ApiRoutesUsers) {
+                    return (userId) ? ApiRoutesUsers.getUser(userId) : {};
+                }
+            }
+        });
     };
     
     /*

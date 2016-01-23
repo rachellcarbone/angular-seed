@@ -17,8 +17,8 @@ class UserController {
     }
 
     static function insertUser($app) {
-        if(!v::key('first', v::stringType()->length(1,255))->validate($app->request->post()) ||
-            !v::key('last', v::stringType()->length(1,255), false)->validate($app->request->post()) || 
+        if(!v::key('nameFirst', v::stringType()->length(1,255))->validate($app->request->post()) ||
+            !v::key('nameLast', v::stringType()->length(1,255), false)->validate($app->request->post()) || 
             !v::key('email', v::email())->validate($app->request->post())) {
             return $app->render(400,  array('msg' => 'Invalid user. Check your parameters and try again.'));
         } else if(!AuthController::validatePassword($app->request->post())) {
@@ -33,8 +33,8 @@ class UserController {
             return $app->render(400,  array('msg' => 'An account with that email already exists. No two users may have the same email address.'));
         } else {
             $data = array(
-                ':name_first' => $app->request->post('first'),
-                ':name_last' => $app->request->post('last'),
+                ':name_first' => $app->request->post('nameFirst'),
+                ':name_last' => $app->request->post('nameLast'),
                 ':email' => $app->request->post('email'),
                 ':password' => password_hash($app->request->post('password'), PASSWORD_DEFAULT)
             );
@@ -45,8 +45,8 @@ class UserController {
     }
 
     static function updateUser($app, $userId) {
-        if(!v::key('first', v::stringType()->length(1,255))->validate($app->request->post()) ||
-            !v::key('last', v::stringType()->length(1,255), false)->validate($app->request->post()) || 
+        if(!v::key('nameFirst', v::stringType()->length(1,255))->validate($app->request->post()) ||
+            !v::key('nameLast', v::stringType()->length(1,255), false)->validate($app->request->post()) || 
             !v::key('email', v::email())->validate($app->request->post())) {
             return $app->render(400,  array('msg' => 'Invalid user. Check your parameters and try again.'));
         } 
@@ -58,8 +58,8 @@ class UserController {
         } else {
             $data = array(
                 ':id' => $userId,
-                ':name_first' => $app->request->post('first'),
-                ':name_last' => $app->request->post('last'),
+                ':name_first' => $app->request->post('nameFirst'),
+                ':name_last' => $app->request->post('nameLast'),
                 ':email' => $app->request->post('email')
             );
             UserData::updateUser($data);
