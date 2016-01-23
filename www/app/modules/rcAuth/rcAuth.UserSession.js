@@ -52,8 +52,8 @@ angular.module('rcAuth.UserSession', [])
     
     self.getAuthCredentials = function() {
         return (!self.user) ? false : {
-            'apiKey' : self.apiKey,
-            'apiToken' : self.apiToken
+            'apiKey' : self.user.apiKey,
+            'apiToken' : self.user.apiToken
         };
     };
     
