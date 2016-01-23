@@ -85,8 +85,13 @@ angular.module('app.admin.users', [])
             DTColumnBuilder.newColumn('firstName').withTitle('First Name'),
             DTColumnBuilder.newColumn('lastName').withTitle('Last Name'),
             DTColumnBuilder.newColumn('email').withTitle('Email (username)'),
+            DTColumnBuilder.newColumn('created').withTitle('Created').renderWith(function (data, type, full, meta) {
+                return moment(data, 'YYYY-MM-DD HH:mm:ss').format('M/D/YYYY h:mm a');
+            }),
             DTColumnBuilder.newColumn('updatedBy').withTitle('Last Update'),
-            DTColumnBuilder.newColumn('lastUpdated').withTitle('Updated On'),
+            DTColumnBuilder.newColumn('lastUpdated').withTitle('Updated On').renderWith(function (data, type, full, meta) {
+                return moment(data, 'YYYY-MM-DD HH:mm:ss').format('M/D/YYYY h:mm a');
+            }),
             DTColumnBuilder.newColumn(null).withTitle('View').renderWith(function(data, type, full, meta) {
                 return '<button type="button" class="btn btn-default btn-xs pull-right">View</button>';
             }).notSortable(),

@@ -65,17 +65,21 @@ angular.module('app.admin.roles', [])
                 }
             });
             
-        $scope.dtRoles.dtGroupRoles = [
+        $scope.dtGroupRoles.columns = [
             DTColumnBuilder.newColumn(null).withTitle('Groups').renderWith(function(data, type, full, meta) {
                 return '<small>(' + data.groups.length +' Groups)</small>';
             }).withClass('responsive-control').notSortable(),
             DTColumnBuilder.newColumn('id').withTitle('ID'),
             DTColumnBuilder.newColumn('role').withTitle('Role'),
             DTColumnBuilder.newColumn('desc').withTitle('Description'),
-            DTColumnBuilder.newColumn('created_by').withTitle('Created By'),
-            DTColumnBuilder.newColumn('created_ts').withTitle('Created On'),
-            DTColumnBuilder.newColumn('last_updated_by').withTitle('Last Update'),
-            DTColumnBuilder.newColumn('last_updated_ts').withTitle('Updated On'),
+            DTColumnBuilder.newColumn('createdBy').withTitle('Created By'),
+            DTColumnBuilder.newColumn('created').withTitle('Created').renderWith(function (data, type, full, meta) {
+                return moment(data, 'YYYY-MM-DD HH:mm:ss').format('M/D/YYYY h:mm a');
+            }),
+            DTColumnBuilder.newColumn('updatedBy').withTitle('Last Update'),
+            DTColumnBuilder.newColumn('lastUpdated').withTitle('Updated On').renderWith(function (data, type, full, meta) {
+                return moment(data, 'YYYY-MM-DD HH:mm:ss').format('M/D/YYYY h:mm a');
+            }),
             DTColumnBuilder.newColumn(null).withTitle('Edit').renderWith(function(data, type, full, meta) {
             return '<button type="button" ng-click="openEditModal(\'' + data.id + '\')" class="btn btn-default btn-xs pull-right">Edit</button>';
             }).notSortable(),

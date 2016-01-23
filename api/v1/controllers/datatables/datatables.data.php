@@ -25,17 +25,17 @@ class DatatablesData {
     }
     
     public static function selectUserGroups() {
-        $qGroups = DBConn::executeQuery("SELECT g.id, group, desc, g.created, g.last_updated, "
+        $qGroups = DBConn::executeQuery("SELECT g.id, g.group, g.desc, g.created, g.last_updated AS lastUpdated, "
                 . "CONCAT(u1.name_first, ' ', u1.name_last) AS createdBy, "
                 . "CONCAT(u2.name_first, ' ', u2.name_last) AS updatedBy "
                 . "FROM " . DBConn::prefix() . "auth_groups AS g "
                 . "JOIN " . DBConn::prefix() . "users AS u1 ON u1.id = g.created_user_id "
                 . "JOIN " . DBConn::prefix() . "users AS u2 ON u2.id = g.last_updated_by ORDER BY g.group;");
 
-        $qRoles = DBConn::preparedQuery("SELECT role.id, role.role, role.desc "
-                . "FROM " . DBConn::prefix() . "auth_roles AS role "
-                . "JOIN " . DBConn::prefix() . "auth_lookup_group_role AS look ON role.id = look.auth_role_id "
-                . "WHERE look.auth_group_id = :id ORDER BY role.role;");
+        $qRoles = DBConn::preparedQuery("SELECT r.id, r.role, r.desc "
+                . "FROM " . DBConn::prefix() . "auth_roles AS r "
+                . "JOIN " . DBConn::prefix() . "auth_lookup_group_role AS look ON r.id = look.auth_role_id "
+                . "WHERE look.auth_group_id = :id ORDER BY r.role;");
 
         $groups = Array();
 
@@ -49,27 +49,30 @@ class DatatablesData {
     }
     
     public static function selectGroupRoles() {
-        $qRoles = DBConn::executeQuery("SELECT id, role, desc, created_by, created_ts, last_updated_by, last_updated_ts "
-                . "FROM auth-role "
-                . "ORDER BY role;");
+        $qRoles = DBConn::executeQuery("SELECT r.id, r.role, r.desc, r.created, r.last_updated AS lastUpdated, "
+                . "CONCAT(u1.name_first, ' ', u1.name_last) AS createdBy, "
+                . "CONCAT(u2.name_first, ' ', u2.name_last) AS updatedBy "
+                . "FROM " . DBConn::prefix() . "auth_roles AS r "
+                . "JOIN " . DBConn::prefix() . "users AS u1 ON u1.id = r.created_user_id "
+                . "JOIN " . DBConn::prefix() . "users AS u2 ON u2.id = r.last_updated_by ORDER BY r.role;");
 
-        $qElements = DBConn::preparedQuery("SELECT elm.id, elm.identifier, elm.desc "
-                . "FROM auth-element AS elm JOIN auth-lookup-role-element AS look "
-                . "ON elm.id = look.auth_element_id "
-                . "WHERE look.auth_role_id = ? ORDER BY elm.identifier;");
+        $qElements = DBConn::preparedQuery("SELECT e.id, e.identifier, e.desc "
+                . "FROM " . DBConn::prefix() . "auth_elements AS e "
+                . "JOIN " . DBConn::prefix() . "auth_lookup_role_element AS look ON e.id = look.auth_element_id "
+                . "WHERE look.auth_role_id = :id ORDER BY e.identifier;");
         
-        $qGroups = DBConn::preparedQuery("SELECT gr.id, gr.group, gr.desc "
-                    . "FROM auth-group AS gr JOIN auth-lookup-group-role AS look "
-                    . "ON gr.id = look.auth_group_id "
-                    . "WHERE look.auth_role_id = ? ORDER BY group;");
-
+        $qGroups = DBConn::preparedQuery("SELECT g.id, g.group, g.desc "
+                . "FROM " . DBConn::prefix() . "auth_groups AS g "
+                . "JOIN " . DBConn::prefix() . "auth_lookup_group_role AS look ON g.id = look.auth_group_id "
+                . "WHERE look.auth_role_id = :id ORDER BY g.group;");
+        
         $roles = Array();
 
-        while($role = $qRoles->fetch()) {
-            $qGroups->execute(array($role->id));
+        while($role = $qRoles->fetch(\PDO::FETCH_OBJ)) {
+            $qGroups->execute(array(':id' => $role->id));
             $role->groups = $qGroups->fetchAll(\PDO::FETCH_OBJ);
             
-            $qElements->execute(array($role->id));  
+            $qElements->execute(array(':id' => $role->id));
             $role->elements = $qElements->fetchAll(\PDO::FETCH_OBJ);
             
             array_push($roles, $role);

@@ -13,5 +13,6 @@ angular.module('app.admin', [
     'app.admin.configVariables',
     'app.admin.dashboard',
     'app.admin.roles',
+    'app.admin.groups',
     'app.admin.users'
 ]);
