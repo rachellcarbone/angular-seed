@@ -7,7 +7,13 @@
  */
 
 angular.module('app.admin.header', [])
-        .controller('AdminHeaderCtrl', ['$scope', 'UserSession', function ($scope, UserSession) {
+        .controller('AdminHeaderCtrl', ['$scope', 'UserSession', 'AuthService', 
+        function ($scope, UserSession, AuthService) {
         
-        $scope.user = UserSession.get();
+        /* User display name for logged in indicator */
+        $scope.userDisplayName = UserSession.displayName();
+
+        /* Logout function in the auth service */
+        $scope.logout = AuthService.logout;
+        
     }]);

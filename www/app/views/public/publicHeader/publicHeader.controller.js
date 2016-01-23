@@ -7,10 +7,13 @@
  */
 
 angular.module('app.public.header', [])
-        .controller('PublicHeaderCtrl', ['$scope', 'UserSession', function ($scope, UserSession) {
+        .controller('PublicHeaderCtrl', ['$scope', 'UserSession', 'AuthService', 
+        function ($scope, UserSession, AuthService) {
         
-        $scope.user = UserSession.get();
+        /* User display name for logged in indicator */
+        $scope.userDisplayName = UserSession.displayName();
 
-        $scope.userIsLoggedIn = false;
+        /* Logout function in the auth service */
+        $scope.logout = AuthService.logout;
 
     }]);

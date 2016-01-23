@@ -17,10 +17,11 @@
         <li><a data-ui-sref="public.contact">Contact</a></li>
     </ul>
     <ul class="nav navbar-nav navbar-right">
-        <li ng-if="user"><a data-ui-sref="member.profile">Hi {{user.displayName}}</a></li>
-        <li ng-if="user"><a data-ui-sref="auth.logout">Logout</a></li>
-        <li ng-if="!user"><a data-ui-sref="auth.login">Login</a></li>
-        <li ng-if="!user"><a data-ui-sref="auth.signup">Sign Up</a></li>
+        <li ng-if="userDisplayName"><a data-ui-sref="member.dashboard">Members Area</a></li>
+        <li ng-if="userDisplayName"><a data-ui-sref="member.profile">Hi {{userDisplayName}}</a></li>
+        <li ng-if="userDisplayName"><a ng-click="logout()">Logout</a></li>
+        <li ng-if="!userDisplayName"><a data-ui-sref="auth.login">Login</a></li>
+        <li ng-if="!userDisplayName"><a data-ui-sref="auth.signup">Sign Up</a></li>
         <li><a data-ui-sref="store.cart">View Cart</a></li>
     </ul>
 </div>
