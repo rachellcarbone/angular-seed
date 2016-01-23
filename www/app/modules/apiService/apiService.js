@@ -50,6 +50,9 @@ angular.module('api.v1', [
      * @param {string} err Error message.
      * @return {Object} Returns a promise. */
     api.get = function(path, err) {
+        api.post(path, {}, err);
+        /*
+         Temporary until I can get the Authentication header to not 404 my api....
         // Return a promise
         return $q(function (resolve, reject) {
             
@@ -66,6 +69,7 @@ angular.module('api.v1', [
             });
             
         });
+        */
     };
    
     /* Make a POST request to the API.
@@ -100,6 +104,8 @@ angular.module('api.v1', [
      * @param {string} err Error message.
      * @return {Object} Returns a promise. */
     api.delete = function(path, err) {
+        api.post(path, {}, err);
+        /*
         // Return a promise
         return $q(function (resolve, reject) {            
             $http.delete(getApiPath(path))
@@ -114,6 +120,7 @@ angular.module('api.v1', [
                     reject(getErrorMessage(data.data.msg, err)); 
             });
         });
+        */
     };
     
     return api;
