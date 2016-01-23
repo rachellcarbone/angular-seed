@@ -23,16 +23,6 @@ app.factory('AuthInterceptor',
     function($rootScope, $q, AUTH_EVENTS, UserSession) {
         
         var apiRequests = this;
-        
-        apiRequests.request = function(config) {
-            if(config.method === "POST") {
-                var credentials = UserSession.getAuthCredentials();
-                if (credentials) {
-                    config.data = $.extend({}, config.data, credentials);
-                }
-            }
-            return config;
-          };
           
         // Interceptor gets called when a previous interceptor 
         // threw an error or resolved with a rejection.

@@ -8,9 +8,11 @@
 
 angular.module('api.v1', [
     'apiRoutes.auth',
-    'apiRoutes.datatables'
+    'apiRoutes.datatables',
+    'apiRoutes.users'
 ])
-.factory('ApiService', ['$http', '$q', '$log', function($http, $q, $log) {
+.factory('ApiService', ['$http', '$httpParamSerializerJQLike', '$q', '$log', 'UserSession',
+    function($http, $httpParamSerializerJQLike, $q, $log, UserSession) {
 
     var api = {};
     
@@ -50,7 +52,7 @@ angular.module('api.v1', [
      * @param {string} err Error message.
      * @return {Object} Returns a promise. */
     api.get = function(path, err) {
-        api.post(path, {}, err);
+        return api.post(path, {}, err);
         /*
          Temporary until I can get the Authentication header to not 404 my api....
         // Return a promise
@@ -78,12 +80,16 @@ angular.module('api.v1', [
      * @param {string} err Error message.
      * @return {Object} Returns a promise. */
     api.post = function(path, data, err) {
+        var credentials = UserSession.getAuthCredentials();
+        if (credentials) {
+            data = $.extend({}, data, credentials);
+        }
         // Return a promise
         return $q(function (resolve, reject) {
             $http({
                 method: 'POST',
                 url: getApiPath(path),
-                data: $.param(data),
+                data: $httpParamSerializerJQLike(data),
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             })
             .success(function (data) {
