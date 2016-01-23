@@ -47,34 +47,34 @@ angular.module('rcAuth.UserSession', [])
     // Return a copy of the user object
     // If no user is logged in this will return false
     self.get = function() {
-        return (!self.user) ? false : angular.copy(self.user);
+        return (!self.user) ? false : self.user;
     };
     
     self.getAuthCredentials = function() {
         return (!self.user) ? false : {
-            'apiKey' : angular.copy(self.apiKey),
-            'apiToken' : angular.copy(self.apiToken)
+            'apiKey' : self.apiKey,
+            'apiToken' : self.apiToken
         };
     };
     
     // Safly return the User Id
     self.id = function() {
-        return (!self.user.id) ? false : angular.copy(self.user.id);
+        return (!self.user.id) ? false : self.user.id;
     };
     
     // Safly return the User Display Name
     self.displayName = function() {
-        return (!self.user.displayName) ? false : angular.copy(self.user.displayName);
+        return (!self.user.displayName) ? false : self.user.displayName;
     };
     
     // Safly return the User Email
     self.email = function() {
-        return (!self.user.email) ? false : angular.copy(self.user.email);
+        return (!self.user.email) ? false : self.user.email;
     };
     
     // Safly return the User Role Object
     self.roles = function() {
-        return (!self.user.roles) ? false : angular.copy(self.user.roles);
+        return (!self.user.roles) ? false : self.user.roles;
     };
     
     // Return public methods

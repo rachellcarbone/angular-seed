@@ -12,7 +12,9 @@ angular.module('rcAuth.AuthService', [])
         var factory = {};
         
         factory.login = function(credentials) {
-            credentials.logout = $cookies.get(AUTH_COOKIES.userKey);
+            if($cookies.get(AUTH_COOKIES.userKey)) { 
+                credentials.logout = $cookies.get(AUTH_COOKIES.userKey); 
+            }
             
             $cookies.remove(AUTH_COOKIES.userEmail);
             $cookies.remove(AUTH_COOKIES.userKey);
@@ -50,20 +52,22 @@ angular.module('rcAuth.AuthService', [])
         };
 
         factory.logout = function() {
-            $cookies.remove(AUTH_COOKIES.userEmail);
-            $cookies.remove(AUTH_COOKIES.userKey);
-            $cookies.remove(AUTH_COOKIES.userToken);
+            var logout = ($cookies.get(AUTH_COOKIES.userKey)) ? 
+                $cookies.get(AUTH_COOKIES.userKey) : false;
             
             return $q(function (resolve, reject) {
-                    API.postLogout()
-                    .then(function (data) {
-                        UserSession.destroy();
-                        $rootScope.$broadcast(AUTH_EVENTS.logoutSuccess);
-                        resolve(AUTH_EVENTS.logoutSuccess);
-                    }, function (error) {
-                        $rootScope.$broadcast(AUTH_EVENTS.logoutFailed);
-                        reject(AUTH_EVENTS.logoutFailed);
-                    });
+                if (logout) {
+                    API.postLogout(logout);
+                }
+                $cookies.remove(AUTH_COOKIES.userEmail);
+                $cookies.remove(AUTH_COOKIES.userKey);
+                $cookies.remove(AUTH_COOKIES.userToken);
+                UserSession.destroy();
+
+                /* Logout success event */
+                $rootScope.$broadcast(AUTH_EVENTS.logoutSuccess);
+                
+                return resolve(AUTH_EVENTS.logoutSuccess);
             });
         };
 

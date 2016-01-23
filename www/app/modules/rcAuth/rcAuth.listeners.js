@@ -58,7 +58,7 @@ angular.module('rcAuth.listeners', [])
         $rootScope.$on(AUTH_EVENTS.logoutSuccess, function(event, args) {
             $rootScope.$evalAsync(function () {
                 // Go to the login state
-                $state.go('auth.login');
+                $state.go('public.landing');
             });
         });
 
