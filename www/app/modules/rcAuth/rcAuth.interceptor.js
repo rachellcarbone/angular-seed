@@ -25,9 +25,11 @@ app.factory('AuthInterceptor',
         var apiRequests = this;
         
         apiRequests.request = function(config) {
-            var credentials = UserSession.getAuthCredentials();
-            if (credentials) {
-                config.data = $.extend({}, config.data, credentials);
+            if(config.method === "POST") {
+                var credentials = UserSession.getAuthCredentials();
+                if (credentials) {
+                    config.data = $.extend({}, config.data, credentials);
+                }
             }
             return config;
           };
