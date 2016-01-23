@@ -34,9 +34,9 @@ angular.module('rcAuth.AuthService', [])
                             $log.info('[authInit] No Credentials Found', error);
                             return resolve(true);
                         });
-                        
+                } else {
+                    return resolve(true);
                 }
-                return resolve(true);
             });
         };
         
