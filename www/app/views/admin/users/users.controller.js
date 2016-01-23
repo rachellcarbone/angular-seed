@@ -45,19 +45,13 @@ angular.module('app.admin.users', [])
 
                     var body = '';
                     $.each(data, function(index, value) {
-                        body += '<tr>' +
-                            '<td>' + value['id'] + '</td> ' +
-                            '<td>' + value['group'] + '</td> ' +
-                            '<td>' + value['desc'] + '</td> ' +
-                            '</tr>';
+                        body += '<tr><td>' + value.id + '</td><td>' + value.group + '</td><td>' + value.desc + '</td></tr>\n';
                     });
 
                     // Create angular table element
                     body = (body) ? body : '<tr><td colspan="3"><p>This user has not been assigned to any groups.</p></td></tr>';
 
-                    var html = header + body + '</tbody></table>';
-
-                    var table = angular.element(html);
+                    var table = angular.element(header + body + '</tbody></table>');
 
                     // compile the table to keep the directives (ngClick)
                     $compile(table.contents())($scope);
