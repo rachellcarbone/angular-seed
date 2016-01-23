@@ -18,7 +18,7 @@ class RoleRoutes {
             RoleController::saveRole($app, $roleId);
         });
         
-        $app->delete("/admin/delete/role/:roleId/", function ($roleId) use ($app) {
+        $app->post("/admin/delete/role/:roleId/", function ($roleId) use ($app) {
             RoleController::deleteRole($app, $roleId);
         });
     }

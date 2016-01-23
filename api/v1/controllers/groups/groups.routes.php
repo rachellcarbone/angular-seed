@@ -18,7 +18,7 @@ class GroupRoutes {
             GroupController::saveGroup($app, $groupId);
         });
         
-        $app->delete("/admin/delete/group/:groupId/", function ($groupId) use ($app) {
+        $app->post("/admin/delete/group/:groupId/", function ($groupId) use ($app) {
             GroupController::deleteGroup($app, $groupId);
         });
     }
