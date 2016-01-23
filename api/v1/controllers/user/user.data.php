@@ -54,7 +54,7 @@ class UserData {
         $user = DBConn::selectOne("SELECT u.id, name_first AS nameFirst, name_last AS nameLast, email, token AS apiToken, identifier AS apiKey "
                 . "FROM " . DBConn::prefix() . "tokens_auth AS t "
                 . "JOIN " . DBConn::prefix() . "users AS u ON u.id = t.user_id "
-                . "WHERE identifier = :identifier AND u.blocked = 0;", array(':identifier' => $identifier));
+                . "WHERE identifier = :identifier AND u.disabled IS NULL;", array(':identifier' => $identifier));
         if($user) {
             $user->displayName = $user->nameFirst;
             $user->roles = DBConn::selectAll("SELECT gr.auth_role_id FROM " . DBConn::prefix() . "auth_lookup_user_group AS ug "

@@ -24,7 +24,6 @@ angular.module('rcAuth.AuthService', [])
                 };
             
                 if (credentials.key && credentials.token) {
-                    
                         API.getAuthenticatedUser(credentials)
                         .then(function (data) {
                             if (!UserSession.create(data.user)) {

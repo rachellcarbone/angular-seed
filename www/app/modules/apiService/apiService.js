@@ -62,12 +62,12 @@ angular.module('api.v1', [
             $http.get(getApiPath(path))
             .success(function (data) {
                 // If its successful, resolve the promise
-                resolve(data.data);
+                return resolve(data.data);
             }).error(function(data) {
                 // If there eas an error log it
                 $log.error(getErrorMessage(data.data.msg, err));
                 // Reject the promise
-                reject(getErrorMessage(data.data.msg, err)); 
+                return reject(getErrorMessage(data.data.msg, err)); 
             });
             
         });
@@ -94,13 +94,13 @@ angular.module('api.v1', [
             })
             .success(function (data) {
                     // If its successful, resolve the promise
-                    resolve(data.data);
+                    return resolve(data.data);
                 })
                 .error(function(data) {
                     // If there eas an error log it
                     $log.error(getErrorMessage(data.data.msg, err));
                     // Reject the promise
-                    reject(getErrorMessage(data.data.msg, err)); 
+                    return reject(getErrorMessage(data.data.msg, err)); 
             });            
         });
     };
@@ -110,20 +110,20 @@ angular.module('api.v1', [
      * @param {string} err Error message.
      * @return {Object} Returns a promise. */
     api.delete = function(path, err) {
-        api.post(path, {}, err);
+        return api.post(path, {}, err);
         /*
         // Return a promise
         return $q(function (resolve, reject) {            
             $http.delete(getApiPath(path))
             .success(function (data) {
                     // If its successful, resolve the promise
-                    resolve(data.data);
+                    return resolve(data.data);
                 })
                 .error(function(data) {
                     // If there eas an error log it
                     $log.error(getErrorMessage(data.data.msg, err));
                     // Reject the promise
-                    reject(getErrorMessage(data.data.msg, err)); 
+                    return reject(getErrorMessage(data.data.msg, err)); 
             });
         });
         */
