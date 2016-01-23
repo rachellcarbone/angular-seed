@@ -7,8 +7,13 @@
  */
 
 angular.module('app.public.footer', ['angularMoment'])
-        .controller('PublicFooterCtrl', ['$scope', function ($scope) {
+        .controller('PublicFooterCtrl', ['$scope', 'siteConfigVariables', 
+        function ($scope, siteConfigVariables) {
+            
+        //* Get site configuration variables
+        $scope.siteOptions = siteConfigVariables;
         
+        //* Year for copyright display
         $scope.currentYear = moment().year();
         
     }]);

@@ -7,8 +7,13 @@
  */
 
 angular.module('app.auth.footer', [])
-        .controller('AuthFooterCtrl', ['$scope', function ($scope) {
+    .controller('AuthFooterCtrl', ['$scope', 'siteConfigVariables', 
+        function ($scope, siteConfigVariables) {
+            
+        //* Get site configuration variables
+        $scope.siteOptions = siteConfigVariables;
         
-                $scope.currentYear = moment().year();
+        //* Year for copyright display
+        $scope.currentYear = moment().year();
         
     }]);

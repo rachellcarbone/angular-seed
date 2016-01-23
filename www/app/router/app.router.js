@@ -30,6 +30,13 @@ app.config(['$stateProvider', '$urlRouterProvider', 'USER_ROLES',
                 AuthService: 'AuthService',
                 initUser: function(AuthService) {
                     return AuthService.init();
+                },
+                siteConfigVariables: function() {
+                    return {
+                        siteTitle : 'Angular Seed',
+                        siteUrl : 'angular-seed.com',
+                        siteCopywrite : 'All rights reserved.'
+                    };
                 }
             }
         });
