@@ -88,7 +88,7 @@ angular.module('ModalService', [
      * 
      * @return uibModalInstance
      */
-    api.openConfigVariableUser = function(options, resolve) {
+    api.openConfigVariable = function(options, resolve) {
         return api.openModal({
             templateUrl: templatePath + 'admin/editConfigVariable/editConfigVariable.html',
             controller: 'EditConfigVariableModalCtrl'
