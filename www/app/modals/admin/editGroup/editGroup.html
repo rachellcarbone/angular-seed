@@ -1,0 +1,32 @@
+<div class="modal-header">
+    <h3 ng-if="inNewMode" class="modal-title">New Category</h3>
+    <h3 ng-if="!inNewMode" class="modal-title">Edit Category</h3>
+</div>
+
+<div class="modal-body">       
+    
+    <form name="form.modalForm" class="form-horizontal" role="form" novalidate>
+        
+        <div class="form-group">
+
+            <div class="col-sm-12 col-md-12">
+                <label>Category Name</label>
+                <input name="category" ng-model="category.category" type="text" maxlength="255" required />
+            </div>
+
+        </div>
+
+    </form>
+
+</div>
+
+<div class="modal-footer">
+    
+    <div data-rc-alert-bar="modalForm"></div>
+    
+    <button class="btn btn-danger pull-left" ng-if="!inNewMode" ng-click="buttonDelete()">Delete</button>
+    
+    <button class="btn btn-info" ng-click="buttonCancel()">Cancel</button>
+    <button class="btn btn-primary" ng-if="inNewMode" ng-click="buttonNew()">Add</button>
+    <button class="btn btn-primary" ng-if="!inNewMode" ng-click="buttonSave()">Save</button>
+</div>
