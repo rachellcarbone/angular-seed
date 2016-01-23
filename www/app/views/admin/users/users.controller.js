@@ -7,12 +7,15 @@
  */
 
 angular.module('app.admin.users', [])
-    .controller('AdminUsersCtrl', ['$scope', '$compile', 'DTOptionsBuilder', 'DTColumnBuilder', 'DataTableHelper', 
-        function($scope, $compile, DTOptionsBuilder, DTColumnBuilder, DataTableHelper) {
+    .controller('AdminUsersCtrl', ['$scope', '$compile', 'DTOptionsBuilder', 'DTColumnBuilder', 'DataTableHelper', 'ModalService', 
+        function($scope, $compile, DTOptionsBuilder, DTColumnBuilder, DataTableHelper, ModalService) {
 
-        // Init Variables
-        $scope.userList = {};
-        $scope.groupList = {};
+        /* Modal triggers */
+        $scope.openNewUserModal = function() {
+            ModalService.openEditUser(false);
+        };
+        $scope.openEditUserModal = ModalService.openEditUser;
+        $scope.openEditUserGroupsModal = ModalService.openEditUser;
 
         // DataTable Setup
         $scope.dtUserGroups = {};
@@ -35,7 +38,7 @@ angular.module('app.admin.users', [])
                         }
                     });
 
-                    var addButton = '<button ng-click="modalEditUserGroups(' + id + ')" class="btn btn-default btn-xs pull-right" type="button"><i class="fa fa-plus"></i> Group</button>';
+                    var addButton = '<button ng-click="openEditUserGroupsModal(' + id + ')" class="btn btn-default btn-xs pull-right" type="button"><i class="fa fa-plus"></i> Group</button>';
                     var header = '<table datatable="" dt-options="dtUserGroups.options" class="table table-hover sub-table">\n\
                         <thead><tr>\n\
                         <td>ID</td>\n\
@@ -87,7 +90,7 @@ angular.module('app.admin.users', [])
                 return moment(data, 'YYYY-MM-DD HH:mm:ss').format('M/D/YYYY h:mm a');
             }),
             DTColumnBuilder.newColumn(null).withTitle('View').renderWith(function(data, type, full, meta) {
-                return '<button type="button" class="btn btn-default btn-xs pull-right">View</button>';
+                return '<button ng-click="openEditUserModal(' + data.id + ')" type="button" class="btn btn-default btn-xs pull-right">View</button>';
             }).notSortable(),
             DTColumnBuilder.newColumn('groups').withTitle('User Groups').withClass('none').notSortable()
         ];

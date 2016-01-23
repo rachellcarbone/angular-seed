@@ -7,9 +7,16 @@
  */
 
 angular.module('app.admin.tagVisibility', [])
-    .controller('AdminTagVisibilityCtrl', ['$scope', '$compile', 'DataTableHelper', 'DTOptionsBuilder', 'DTColumnBuilder',
-        function($scope, $compile, DataTableHelper, DTOptionsBuilder, DTColumnBuilder) {
+    .controller('AdminTagVisibilityCtrl', ['$scope', '$compile', 'DataTableHelper', 'DTOptionsBuilder', 'DTColumnBuilder', 'ModalService',
+        function($scope, $compile, DataTableHelper, DTOptionsBuilder, DTColumnBuilder, ModalService) {
 
+            /* Modal triggers */
+            $scope.openNewElementModal = function () {
+                ModalService.openEditVisibilityElement(false);
+            };
+            $scope.openEditElementModal = ModalService.openEditVisibilityElement;
+            $scope.openEditRoleModal = ModalService.openEditRole;
+                
             // Init variables
             $scope.editing = false;
 
@@ -29,7 +36,7 @@ angular.module('app.admin.tagVisibility', [])
                             }
                         });
 
-                        var addButton = '<button ng-click="openAddRoleModal(' + data.id + ')" class="btn btn-default btn-xs pull-right" type="button"><i class="fa fa-plus"></i> Role</button>';
+                        var addButton = '<button ng-click="openEditRoleModal(' + data.id + ')" class="btn btn-default btn-xs pull-right" type="button"><i class="fa fa-plus"></i> Role</button>';
                         var header = '<table datatable="" dt-options="dtFieldRoles.options" class="table table-hover sub-table">\n\
                             <thead><tr>\n\
                             <td>ID</td>\n\
@@ -83,7 +90,7 @@ angular.module('app.admin.tagVisibility', [])
                     return moment(data, 'YYYY-MM-DD HH:mm:ss').format('M/D/YYYY h:mm a');
                 }),
                 DTColumnBuilder.newColumn(null).withTitle('Edit').renderWith(function (data, type, full, meta) {
-                    return '<button type="button" ng-click="openEditModal(\'' + data.id + '\')" class="btn btn-default btn-xs pull-right">Edit</button>';
+                    return '<button type="button" ng-click="openEditElementModal(\'' + data.id + '\')" class="btn btn-default btn-xs pull-right">Edit</button>';
                 }).notSortable(),
                 DTColumnBuilder.newColumn(null).withTitle('getData').withClass('none').notSortable()
             ];

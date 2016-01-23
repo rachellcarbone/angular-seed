@@ -7,9 +7,15 @@
  */
 
 angular.module('app.admin.configVariables', [])
-    .controller('AdminConfigVariablesCtrl', ['$scope', 'DataTableHelper', 'DTColumnBuilder',
-        function($scope, DataTableHelper, DTColumnBuilder) {
+    .controller('AdminConfigVariablesCtrl', ['$scope', 'DataTableHelper', 'DTColumnBuilder', 'ModalService',
+        function($scope, DataTableHelper, DTColumnBuilder, ModalService) {
 
+            /* Modal triggers */
+            $scope.openNewVariableModal = function () {
+                ModalService.openConfigVariable(false);
+            };
+            $scope.openEditVariableModal = ModalService.openConfigVariable;
+        
             // Init variables
             $scope.editing = false;
 
@@ -28,7 +34,7 @@ angular.module('app.admin.configVariables', [])
                     return moment(data, 'YYYY-MM-DD HH:mm:ss').format('M/D/YYYY h:mm a');
                 }),
                 DTColumnBuilder.newColumn(null).withTitle('Edit').renderWith(function (data, type, full, meta) {
-                    return '<button type="button" ng-click="openEditModal(\'' + data.id + '\')" class="btn btn-default btn-xs pull-right">Edit</button>';
+                    return '<button type="button" ng-click="openEditVariableModal(\'' + data.id + '\')" class="btn btn-default btn-xs pull-right">Edit</button>';
                 }).notSortable()
             ];
         

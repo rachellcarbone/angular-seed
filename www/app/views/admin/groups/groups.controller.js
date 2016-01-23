@@ -7,9 +7,16 @@
  */
 
 angular.module('app.admin.groups', [])
-    .controller('AdminGroupsCtrl', ['$scope', '$compile', 'DataTableHelper', 'DTColumnBuilder', 
-        function($scope, $compile, DataTableHelper, DTColumnBuilder) {
+    .controller('AdminGroupsCtrl', ['$scope', '$compile', 'DataTableHelper', 'DTColumnBuilder', 'ModalService',
+        function($scope, $compile, DataTableHelper, DTColumnBuilder, ModalService) {
 
+        /* Modal triggers */
+        $scope.openNewGroupModal = function () {
+            ModalService.openEditGroup(false);
+        };
+        $scope.openEditGroupModal = ModalService.openEditGroup;
+        $scope.openEditRoleModal = ModalService.openEditRole;
+        
         // Init variables
         $scope.editing = false;
         $scope.groupList = {};
@@ -31,7 +38,7 @@ angular.module('app.admin.groups', [])
                             }
                         });
 
-                        var addButton = '<button ng-click="openAddRoleModal(' + id + ')" class="btn btn-default btn-xs pull-right" type="button"><i class="fa fa-plus"></i> Role</button>';
+                        var addButton = '<button ng-click="openEditRoleModal(' + id + ')" class="btn btn-default btn-xs pull-right" type="button"><i class="fa fa-plus"></i> Role</button>';
                         var header = '<table datatable="" dt-options="dtGroupRoles.options" class="table table-hover sub-table">\n\
                             <thead><tr>\n\
                             <td>ID</td>\n\
@@ -79,7 +86,7 @@ angular.module('app.admin.groups', [])
                 return moment(data, 'YYYY-MM-DD HH:mm:ss').format('M/D/YYYY h:mm a');
             }),
             DTColumnBuilder.newColumn(null).withTitle('Edit').renderWith(function(data, type, full, meta) {
-                return '<button type="button" ng-click="openEditModal(\'' + data.id + '\')" class="btn btn-default btn-xs pull-right">Edit</button>';
+                return '<button type="button" ng-click="openEditGroupModal(\'' + data.id + '\')" class="btn btn-default btn-xs pull-right">Edit</button>';
             }).notSortable(),
             DTColumnBuilder.newColumn('roles').withTitle('Group Roles').withClass('none').notSortable()
         ];
