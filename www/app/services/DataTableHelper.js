@@ -33,7 +33,7 @@ angular.module('DataTableHelper', [])
             });
             
         return dt;
-    }
+    };
 
     return helper;
 }]);
