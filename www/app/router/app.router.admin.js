@@ -94,6 +94,17 @@ app.config(['$stateProvider', '$urlRouterProvider', 'USER_ROLES',
                 }
             }
         });
+
+        $stateProvider.state('app.admin.visibility', {
+            title: 'Define Tag Visibility',
+            url: '/tag-visibility',
+            views: {
+                'content@app.admin': {
+                    templateUrl: 'app/views/admin/tagVisibility/tagVisibility.html',
+                    controller: 'AdminTagVisibilityCtrl'
+                }
+            }
+        });
         
         // For any unmatched url, redirect to /
         $urlRouterProvider.when('/admin', '/admin/dashboard');

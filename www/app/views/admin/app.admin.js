@@ -12,7 +12,8 @@ angular.module('app.admin', [
     'app.admin.footer',
     'app.admin.configVariables',
     'app.admin.dashboard',
-    'app.admin.roles',
     'app.admin.groups',
+    'app.admin.roles',
+    'app.admin.tagVisibility',
     'app.admin.users'
 ]);

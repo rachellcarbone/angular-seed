@@ -89,4 +89,28 @@ class DatatablesData {
                 . "JOIN " . DBConn::prefix() . "users AS u1 ON u1.id = c.created_user_id "
                 . "JOIN " . DBConn::prefix() . "users AS u2 ON u2.id = c.last_updated_by ORDER BY c.name;");
     }
+    
+    public static function selectVisibilityElements() {
+        $qTags = DBConn::executeQuery("SELECT e.id, e.identifier, e.type, e.desc, e.initialized, e.created, e.last_updated AS lastUpdated, "
+                . "CONCAT(u1.name_first, ' ', u1.name_last) AS createdBy, CONCAT(u2.name_first, ' ', u2.name_last) AS updatedBy "
+                . "FROM " . DBConn::prefix() . "auth_elements AS e "
+                . "JOIN " . DBConn::prefix() . "users AS u1 ON u1.id = e.created_user_id "
+                . "JOIN " . DBConn::prefix() . "users AS u2 ON u2.id = e.last_updated_by ORDER BY e.identifier;");
+
+        $qRoles = DBConn::preparedQuery("SELECT r.id, r.role, r.desc "
+                . "FROM " . DBConn::prefix() . "auth_roles AS r "
+                . "JOIN " . DBConn::prefix() . "auth_lookup_role_element AS look ON r.id = look.auth_role_id "
+                . "WHERE look.auth_element_id = :id ORDER BY r.role;");
+        
+        $elements = Array();
+
+        while($tag = $qTags->fetch(\PDO::FETCH_OBJ)) {            
+            $qRoles->execute(array(':id' => $tag->id));
+            $tag->roles = $qRoles->fetchAll(\PDO::FETCH_OBJ);
+            
+            array_push($elements, $tag);
+        }
+        
+        return $elements;
+    }
 }
