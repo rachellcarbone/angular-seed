@@ -19,12 +19,12 @@ var app = angular.module('app.router.auth', [
 app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES) {
 
         /*  Abstract Auth Route */
-        $stateProvider.state('auth', {
+        $stateProvider.state('app.auth', {
             url: '',
             abstract: true,
             data: {authorizedRoles: USER_ROLES.guest},
             views: {
-                'header@auth': {
+                'header@app.auth': {
                     templateUrl: 'app/views/auth/authHeader/authHeader.html',
                     controller: 'AuthHeaderCtrl'
                 },
@@ -32,7 +32,7 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
                     templateUrl: 'app/views/auth/authLayout/authLayout.html',
                     controller: 'AuthLayoutCtrl'
                 },
-                'footer@auth': {
+                'footer@app.auth': {
                     templateUrl: 'app/views/auth/authFooter/authFooter.html',
                     controller: 'AuthFooterCtrl'
                 }
@@ -41,54 +41,54 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
 
         /* Login / Authentication Related States */
 
-        $stateProvider.state('auth.signup', {
+        $stateProvider.state('app.auth.signup', {
             title: 'Sign Up',
             url: '/signup',
             views: {
-                'content@auth': {
+                'content@app.auth': {
                     templateUrl: 'app/views/auth/signup/signup.html',
                     controller: 'AuthSignupCtrl'
                 }
             }
         });
 
-        $stateProvider.state('auth.signup.confirmEmail', {
+        $stateProvider.state('app.auth.signup.confirmEmail', {
             title: 'Please Confirm Your Email',
             url: '/please-confirm-email'
         });
         
-        $stateProvider.state('auth.signup.success', {
+        $stateProvider.state('app.auth.signup.success', {
             title: 'Success! Your Email is Confirmed',
             url: '/success'
         });
         
-        $stateProvider.state('auth.login', {
+        $stateProvider.state('app.auth.login', {
             title: 'Login',
             url: '/login',
             views: {
-                'content@auth': {
+                'content@app.auth': {
                     templateUrl: 'app/views/auth/login/login.html',
                     controller: 'AuthLoginCtrl'
                 }
             }
         });
         
-        $stateProvider.state('auth.login.locked', {
+        $stateProvider.state('app.auth.login.locked', {
             title: 'Account Locked',
             url: '/account-locked'
         });
         
-        $stateProvider.state('auth.login.forgotPassword', {
+        $stateProvider.state('app.auth.login.forgotPassword', {
             title: 'Forgot Password',
             url: '/forgot-password'
         });
         
-        $stateProvider.state('auth.login.forgotPassword.resetEmailSent', {
+        $stateProvider.state('app.auth.login.forgotPassword.resetEmailSent', {
             title: 'Reset Instructions Have Been Sent',
             url: '/reset-instructions-sent'
         });
         
-        $stateProvider.state('auth.login.forgotPassword.changePassword', {
+        $stateProvider.state('app.auth.login.forgotPassword.changePassword', {
             title: 'Change Your Password',
             url: '/change-password'
         });
@@ -96,7 +96,7 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
         // This should catch incoming requests, 
         // Trigger the logout method and then redirect
         // to public.
-        $stateProvider.state('auth.logout', {
+        $stateProvider.state('app.auth.logout', {
             url: '/logout'
         });
 

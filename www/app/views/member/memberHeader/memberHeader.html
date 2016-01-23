@@ -5,18 +5,18 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
     </button>
-    <a class="navbar-brand" ui-sref="member.dashboard">Angular Seed</a>
+    <a class="navbar-brand" data-ui-sref="app.member.dashboard">Angular Seed</a>
 </div>
 
 <div id="navbar" class="collapse navbar-collapse">
     <ul class="nav navbar-nav">
-        <li><a ui-sref="member.dashboard">Dashboard</a></li>
-        <li><a ui-sref="member.profile">Profile</a></li>
-        <li><a ui-sref="member.settings">Settings</a></li>
+        <li><a data-ui-sref="app.member.dashboard">Dashboard</a></li>
+        <li><a data-ui-sref="app.member.profile">Profile</a></li>
+        <li><a data-ui-sref="app.member.settings">Settings</a></li>
     </ul>
     <ul class="nav navbar-nav navbar-right">
-        <li><a data-ui-sref="member.profile">Hi {{userDisplayName}}</a></li>
+        <li><a data-data-ui-sref="app.member.profile">Hi {{userDisplayName}}</a></li>
         <li><a ng-click="logout()">Logout</a></li>
-        <li><a data-ui-sref="store.cart">View Cart</a></li>
+        <li><a data-data-ui-sref="app.store.cart">View Cart</a></li>
     </ul>
 </div>

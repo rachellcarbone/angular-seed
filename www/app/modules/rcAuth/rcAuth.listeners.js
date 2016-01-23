@@ -41,7 +41,7 @@ angular.module('rcAuth.listeners', [])
                     delete $rootScope.redirectPlaceholder;
                 } else {
                     // Go to the loged in user dashboard
-                    $state.go('member.dashboard');
+                    $state.go('app.member.dashboard');
                 }
             });
         });
@@ -50,7 +50,7 @@ angular.module('rcAuth.listeners', [])
         $rootScope.$on(AUTH_EVENTS.loginFailed, function(event, args) {
             $rootScope.$evalAsync(function () {
                 // Go to the login state
-                $state.go('auth.login');
+                $state.go('app.auth.login');
             });
         });
 
@@ -58,7 +58,7 @@ angular.module('rcAuth.listeners', [])
         $rootScope.$on(AUTH_EVENTS.logoutSuccess, function(event, args) {
             $rootScope.$evalAsync(function () {
                 // Go to the login state
-                $state.go('public.landing');
+                $state.go('app.public.landing');
             });
         });
 
@@ -71,7 +71,7 @@ angular.module('rcAuth.listeners', [])
                     $rootScope.redirectPlaceholder = args;
                 }
                 // Go to the login state
-                $state.go('auth.login');
+                $state.go('app.auth.login');
             });
         });
 
@@ -84,7 +84,7 @@ angular.module('rcAuth.listeners', [])
                     $rootScope.redirectPlaceholder = args;
                 }
                 // Go to the login state
-                $state.go('auth.login');
+                $state.go('app.auth.login');
             });
         });
 
@@ -92,7 +92,7 @@ angular.module('rcAuth.listeners', [])
         $rootScope.$on(AUTH_EVENTS.notAuthorized, function(event, args) {
             $rootScope.$evalAsync(function () {
                 // Go to the user not authorized error page
-                $state.go('app.error.notauthorized');
+                $state.go('app.app.error.notauthorized');
             });
         });
         

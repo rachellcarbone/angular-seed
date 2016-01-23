@@ -13,7 +13,7 @@
             <p>A message has been sent to {{userEmail}} with a link
             to confirm your email address.</p>
             
-            <p>You will be redirected to the <a data-ui-sref="public.landing">home page</a> in <span data-state-redirect-timeout data-to-state="public.landing" data-timeout-seconds="10"></span> seconds.</p>
+            <p>You will be redirected to the <a data-ui-sref="app.public.landing">home page</a> in <span data-state-redirect-timeout data-to-state="public.landing" data-timeout-seconds="10"></span> seconds.</p>
         
         </div>
         <div class="col-sm-0 col-md-3"></div>
@@ -30,7 +30,7 @@
             <p class="lead">Your account has been confirmed.</p>
 
             <p>In {{seconds}} you will be redirected to the 
-                <a ui-sref="auth.login">Login Page</a> in <span data-state-redirect-timeout data-to-state="auth.login" data-timeout-seconds="6"></span>
+                <a ui-sref="app.auth.login">Login Page</a> in <span data-state-redirect-timeout data-to-state="auth.login" data-timeout-seconds="6"></span>
                 seconds to login with your new username and password.</p>
         
         </div>
@@ -88,7 +88,7 @@
                 <hr/>
                 
                 <div class="form-group text-right">
-                    <button type="button" class="btn btn-default btn-lg" data-ui-sref="public.landing">Cancel</button>
+                    <button type="button" class="btn btn-default btn-lg" data-ui-sref="app.public.landing">Cancel</button>
                     <button type="submit" class="btn btn-default btn-lg">Sign Up</button>
                 </div>
                 

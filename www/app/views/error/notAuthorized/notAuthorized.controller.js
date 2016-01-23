@@ -25,7 +25,7 @@ angular.module('app.error.notAuthorized', [])
         })();
         
         $scope.goToDashboard = function() {
-            $state.go('member.dashboard');
+            $state.go('app.member.dashboard');
         };
         
         $scope.isActiveState = function(state) {

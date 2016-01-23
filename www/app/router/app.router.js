@@ -23,8 +23,19 @@ var app = angular.module('app.router', [
 app.config(['$stateProvider', '$urlRouterProvider', 'USER_ROLES', 
     function ($stateProvider, $urlRouterProvider, USER_ROLES) {
 
+        /*  Abstract App */
+        $stateProvider.state('app', {
+            abstract: true,
+            resolve: {
+                AuthService: 'AuthService',
+                initUser: function(AuthService) {
+                    return AuthService.init();
+                }
+            }
+        });
+
         /*  Abstract Error Route */
-        $stateProvider.state('error', {
+        $stateProvider.state('app.error', {
             url: '/error',
             abstract: true,
             data: {authorizedRoles: USER_ROLES.guest},
@@ -37,22 +48,22 @@ app.config(['$stateProvider', '$urlRouterProvider', 'USER_ROLES',
         });
 
         /* Error Pages */
-        $stateProvider.state('error.notfound', {
+        $stateProvider.state('app.error.notfound', {
             title: 'Page Not Found',
             url: '/404',
             views: {
-                'content@error': {
+                'content@app.error': {
                     templateUrl: 'app/views/error/notFound/notFound.html',
                     controller: 'ErrorNotFoundCtrl'
                 }
             }
         });
         
-        $stateProvider.state('error.notauthorized', {
+        $stateProvider.state('app.error.notauthorized', {
             title: 'User Not Authorized',
             url: '/unauthorized',
             views: {
-                'content@error': {
+                'content@app.error': {
                     templateUrl: 'app/views/error/notAuthorized/notAuthorized.html',
                     controller: 'ErrorNotAuthorizedCtrl'
                 }
@@ -60,7 +71,7 @@ app.config(['$stateProvider', '$urlRouterProvider', 'USER_ROLES',
         });
         
         /* Maintenance Page */
-        $stateProvider.state('maintenance', {
+        $stateProvider.state('app.maintenance', {
             title: 'Maintenance Mode',
             url: '/maintenance',
             views: {

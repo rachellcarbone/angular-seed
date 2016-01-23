@@ -22,16 +22,16 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
         /* Store Pages */
 
         /*  Abstract Store Route */
-        $stateProvider.state('store', {
+        $stateProvider.state('app.store', {
             url: '/store',
             abstract: true,
             data: {authorizedRoles: USER_ROLES.guest},
             views: {
-                'header@store': {
+                'header@app.store': {
                     templateUrl: 'app/views/public/publicHeader/publicHeader.html',
                     controller: 'PublicHeaderCtrl'
                 },
-                'subheader@store': {
+                'subheader@app.store': {
                     templateUrl: 'app/views/store/storeSubHeader/storeSubHeader.html',
                     controller: 'StoreSubHeaderCtrl'
                 },
@@ -39,51 +39,51 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
                     templateUrl: 'app/views/store/storeLayout/storeLayout.html',
                     controller: 'StoreLayoutCtrl'
                 },
-                'footer@store': {
+                'footer@app.store': {
                     templateUrl: 'app/views/public/publicFooter/publicFooter.html',
                     controller: 'PublicFooterCtrl'
                 }
             }
         });
         
-        $stateProvider.state('store.home', {
+        $stateProvider.state('app.store.home', {
             title: 'Store Home',
             url: '',
             views: {
-                'content@store': {
+                'content@app.store': {
                     templateUrl: 'app/views/store/storeHome/storeHome.html',
                     controller: 'StoreHomeCtrl'
                 }
             }
         });
         
-        $stateProvider.state('store.cart', {
+        $stateProvider.state('app.store.cart', {
             title: 'Shopping Cart',
             url: '/cart',
             views: {
-                'content@store': {
+                'content@app.store': {
                     templateUrl: 'app/views/store/cart/cart.html',
                     controller: 'CartCtrl'
                 }
             }
         });
         
-        $stateProvider.state('store.category', {
+        $stateProvider.state('app.store.category', {
             title: 'Store Category',
             url: '/:category',
             views: {
-                'content@store': {
+                'content@app.store': {
                     templateUrl: 'app/views/store/category/category.html',
                     controller: 'StoreCategoryCtrl'
                 }
             }
         });
         
-        $stateProvider.state('store.item', {
+        $stateProvider.state('app.store.item', {
             title: 'Store Item Details',
             url: '/:category/:itemId',
             views: {
-                'content@store': {
+                'content@app.store': {
                     templateUrl: 'app/views/store/item/item.html',
                     controller: 'ItemDetailCtrl'
                 }

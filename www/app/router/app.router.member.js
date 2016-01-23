@@ -19,12 +19,12 @@ var app = angular.module('app.router.member', [
 app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES) {
 
         /*  Abstract Member (Authenticated) Route */
-        $stateProvider.state('member', {
+        $stateProvider.state('app.member', {
             url: '',
             abstract: true,
             data: {authorizedRoles: USER_ROLES.user},
             views: {
-                'header@member': {
+                'header@app.member': {
                     templateUrl: 'app/views/member/memberHeader/memberHeader.html',
                     controller: 'MemberHeaderCtrl'
                 },
@@ -32,40 +32,40 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
                     templateUrl: 'app/views/member/memberLayout/memberLayout.html',
                     controller: 'MemberLayoutCtrl'
                 },
-                'footer@member': {
+                'footer@app.member': {
                     templateUrl: 'app/views/member/memberFooter/memberFooter.html',
                     controller: 'MemberFooterCtrl'
                 }
             }
         });
 
-        $stateProvider.state('member.dashboard', {
+        $stateProvider.state('app.member.dashboard', {
             title: 'Member Dashboard',
             url: '/dashboard',
             views: {
-                'content@member': {
+                'content@app.member': {
                     templateUrl: 'app/views/member/dashboard/dashboard.html',
                     controller: 'MemberDashboardCtrl'
                 }
             }
         });
 
-        $stateProvider.state('member.profile', {
+        $stateProvider.state('app.member.profile', {
             title: 'User Profile',
             url: '/profile',
             views: {
-                'content@member': {
+                'content@app.member': {
                     templateUrl: 'app/views/member/profile/profile.html',
                     controller: 'MemberProfileCtrl'
                 }
             }
         });
 
-        $stateProvider.state('member.settings', {
+        $stateProvider.state('app.member.settings', {
             title: 'User Settings',
             url: '/settings',
             views: {
-                'content@member': {
+                'content@app.member': {
                     templateUrl: 'app/views/member/settings/settings.html',
                     controller: 'MemberSettingsCtrl'
                 }

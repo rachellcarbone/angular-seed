@@ -13,7 +13,7 @@ angular.module('apiRoutes.datatables', [])
     
     var getPromise = function(path) {
         return $q(function (resolve, reject) {
-            API.post(path).then(
+            API.post(path, {}).then(
                 function(success) {
                     return resolve(success.table);
                 }, function(error) {

@@ -20,12 +20,12 @@ app.config(['$stateProvider', '$urlRouterProvider', 'USER_ROLES',
     function ($stateProvider, $urlRouterProvider, USER_ROLES) {
 
         /*  Abstract Admin Route */
-        $stateProvider.state('admin', {
+        $stateProvider.state('app.admin', {
             url: '/admin',
             abstract: true,
             data: {authorizedRoles: USER_ROLES.admin},
             views: {
-                'header@admin': {
+                'header@app.admin': {
                     templateUrl: 'app/views/admin/adminHeader/adminHeader.html',
                     controller: 'AdminHeaderCtrl'
                 },
@@ -33,62 +33,62 @@ app.config(['$stateProvider', '$urlRouterProvider', 'USER_ROLES',
                     templateUrl: 'app/views/admin/adminLayout/adminLayout.html',
                     controller: 'AdminLayoutCtrl'
                 },
-                'footer@admin': {
+                'footer@app.admin': {
                     templateUrl: 'app/views/admin/adminFooter/adminFooter.html',
                     controller: 'AdminFooterCtrl'
                 }
             }
         });
 
-        $stateProvider.state('admin.dashboard', {
+        $stateProvider.state('app.admin.dashboard', {
             title: 'Admin Dashboard',
             url: '/dashboard',
             views: {
-                'content@admin': {
+                'content@app.admin': {
                     templateUrl: 'app/views/admin/dashboard/dashboard.html',
                     controller: 'AdminDashboardCtrl'
                 }
             }
         });
 
-        $stateProvider.state('admin.roles', {
+        $stateProvider.state('app.admin.roles', {
             title: 'Group Roles',
             url: '/groups-roles',
             views: {
-                'content@admin': {
+                'content@app.admin': {
                     templateUrl: 'app/views/admin/roles/roles.html',
                     controller: 'AdminRolesCtrl'
                 }
             }
         });
 
-        $stateProvider.state('admin.groups', {
+        $stateProvider.state('app.admin.groups', {
             title: 'User Groups',
             url: '/user-groups',
             views: {
-                'content@admin': {
+                'content@app.admin': {
                     templateUrl: 'app/views/admin/groups/groups.html',
                     controller: 'AdminGroupsCtrl'
                 }
             }
         });
 
-        $stateProvider.state('admin.users', {
+        $stateProvider.state('app.admin.users', {
             title: 'System Users',
             url: '/users',
             views: {
-                'content@admin': {
+                'content@app.admin': {
                     templateUrl: 'app/views/admin/users/users.html',
                     controller: 'AdminUsersCtrl'
                 }
             }
         });
 
-        $stateProvider.state('admin.config', {
+        $stateProvider.state('app.admin.config', {
             title: 'System Configuration Variables',
             url: '/system-variables',
             views: {
-                'content@admin': {
+                'content@app.admin': {
                     templateUrl: 'app/views/admin/configVariables/configVariables.html',
                     controller: 'AdminConfigVariablesCtrl'
                 }

@@ -19,12 +19,12 @@ var app = angular.module('app.router.public', [
 app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES) {
 
         /*  Abstract Public (Un Authenticated) Route */
-        $stateProvider.state('public', {
+        $stateProvider.state('app.public', {
             url: '',
             abstract: true,
             data: {authorizedRoles: USER_ROLES.guest},
             views: {
-                'header@public': {
+                'header@app.public': {
                     templateUrl: 'app/views/public/publicHeader/publicHeader.html',
                     controller: 'PublicHeaderCtrl'
                 },
@@ -32,68 +32,68 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
                     templateUrl: 'app/views/public/publicLayout/publicLayout.html',
                     controller: 'PublicLayoutCtrl'
                 },
-                'footer@public': {
+                'footer@app.public': {
                     templateUrl: 'app/views/public/publicFooter/publicFooter.html',
                     controller: 'PublicFooterCtrl'
                 }
             }
         });
 
-        $stateProvider.state('public.landing', {
+        $stateProvider.state('app.public.landing', {
             title: 'Welcome',
             url: '/',
             views: {
-                'content@public': {
+                'content@app.public': {
                     templateUrl: 'app/views/public/landing/landing.html',
                     controller: 'PublicLandingCtrl'
                 }
             }
         });
 
-        $stateProvider.state('public.about', {
+        $stateProvider.state('app.public.about', {
             title: 'About Us',
             url: '/about',
             views: {
-                'content@public': {
+                'content@app.public': {
                     templateUrl: 'app/views/public/about/about.html',
                     controller: 'PublicAboutCtrl'
                 }
             }
         });
 
-        $stateProvider.state('public.tour', {
+        $stateProvider.state('app.public.tour', {
             title: 'Tour',
             url: '/tour',
             views: {
-                'content@public': {
+                'content@app.public': {
                     templateUrl: 'app/views/public/tour/tour.html',
                     controller: 'PublicTourCtrl'
                 }
             }
         });
 
-        $stateProvider.state('public.contact', {
+        $stateProvider.state('app.public.contact', {
             title: 'Contact Us',
             url: '/contact',
             views: {
-                'content@public': {
+                'content@app.public': {
                     templateUrl: 'app/views/public/contact/contact.html',
                     controller: 'PublicContactCtrl'
                 }
             }
         });
 
-        $stateProvider.state('public.contact.confirmation', {
+        $stateProvider.state('app.public.contact.confirmation', {
             title: 'Message Sent',
             url: '/message-sent'
         });
         
         /* Site Map */
-        $stateProvider.state('public.sitemap', {
+        $stateProvider.state('app.public.sitemap', {
             title: 'Site Map',
             url: '/sitemap',
             views: {
-                'content@public': {
+                'content@app.public': {
                     templateUrl: 'app/views/public/sitemap/sitemap.html'
                 }
             }

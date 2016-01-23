@@ -11,6 +11,10 @@ angular.module('rcAuth.AuthService', [])
         
         var factory = {};
         
+        factory.init = function() {
+            return factory.isAuthenticated();
+        };
+        
         factory.login = function(credentials) {
             if($cookies.get(AUTH_COOKIES.userKey)) { 
                 credentials.logout = $cookies.get(AUTH_COOKIES.userKey); 
@@ -19,6 +23,7 @@ angular.module('rcAuth.AuthService', [])
             $cookies.remove(AUTH_COOKIES.userEmail);
             $cookies.remove(AUTH_COOKIES.userKey);
             $cookies.remove(AUTH_COOKIES.userToken);
+            UserSession.destroy();
             
             return $q(function (resolve, reject) {
                     API.postLogin(credentials)

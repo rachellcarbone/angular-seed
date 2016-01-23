@@ -5,23 +5,23 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
     </button>
-    <a class="navbar-brand" data-ui-sref="public.landing">Angular Seed</a>
+    <a class="navbar-brand" data-ui-sref="app.public.landing">Angular Seed</a>
 </div>
 
 <div id="navbar" class="collapse navbar-collapse">
     <ul class="nav navbar-nav">
-        <li><a data-ui-sref="public.landing">Home</a></li>
-        <li><a data-ui-sref="public.about">About</a></li>
-        <li><a data-ui-sref="public.tour">Tour</a></li>
-        <li><a data-ui-sref="store.home">Store</a></li>
-        <li><a data-ui-sref="public.contact">Contact</a></li>
+        <li><a data-ui-sref="app.public.landing">Home</a></li>
+        <li><a data-ui-sref="app.public.about">About</a></li>
+        <li><a data-ui-sref="app.public.tour">Tour</a></li>
+        <li><a data-ui-sref="app.store.home">Store</a></li>
+        <li><a data-ui-sref="app.public.contact">Contact</a></li>
     </ul>
     <ul class="nav navbar-nav navbar-right">
-        <li ng-if="userDisplayName"><a data-ui-sref="member.dashboard">Members Area</a></li>
-        <li ng-if="userDisplayName"><a data-ui-sref="member.profile">Hi {{userDisplayName}}</a></li>
+        <li ng-if="userDisplayName"><a data-ui-sref="app.member.dashboard">Members Area</a></li>
+        <li ng-if="userDisplayName"><a data-ui-sref="app.member.profile">Hi {{userDisplayName}}</a></li>
         <li ng-if="userDisplayName"><a ng-click="logout()">Logout</a></li>
-        <li ng-if="!userDisplayName"><a data-ui-sref="auth.login">Login</a></li>
-        <li ng-if="!userDisplayName"><a data-ui-sref="auth.signup">Sign Up</a></li>
-        <li><a data-ui-sref="store.cart">View Cart</a></li>
+        <li ng-if="!userDisplayName"><a data-ui-sref="app.auth.login">Login</a></li>
+        <li ng-if="!userDisplayName"><a data-ui-sref="app.auth.signup">Sign Up</a></li>
+        <li><a data-ui-sref="app.store.cart">View Cart</a></li>
     </ul>
 </div>
