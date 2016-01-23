@@ -22,5 +22,6 @@ angular.module('theApp', [
     'app.router',
     'app.run',
     'app.run.dev',
-    'app.filters'
+    'app.filters',
+    'app.services'
 ]);
