@@ -6,11 +6,10 @@
  */
 
 angular.module('rcAuth', [
-    'rcAuth.constants',
-    'rcAuth.interceptor',
-    
     'rcAuth.AuthService',
     'rcAuth.UserSession',
     'rcAuth.VisibilityService',
+    'rcAuth.constants',
+    'rcAuth.interceptor',
     'rcAuth.listeners'
 ]);
