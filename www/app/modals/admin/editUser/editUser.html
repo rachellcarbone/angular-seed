@@ -1,19 +1,79 @@
 <div class="modal-header">
-    <h3 ng-if="inNewMode" class="modal-title">New Category</h3>
-    <h3 ng-if="!inNewMode" class="modal-title">Edit Category</h3>
+    <h3 ng-if="!savedUser.id" class="modal-title">Add New User</h3>
+    <h3 ng-if="savedUser.id && editMode" class="modal-title">Edit User: {{savedUser.nameFirst}} {{savedUser.nameLast}}</h3>
+    <h3 ng-if="savedUser.id && !editMode" class="modal-title">User: {{savedUser.nameFirst}} {{savedUser.nameLast}}</h3>
 </div>
 
 <div class="modal-body">       
     
-    <form name="form.modalForm" class="form-horizontal" role="form" novalidate>
+    <div ng-if="!editMode">
         
-        <div class="form-group">
+        <div class="row">
+            <div class="col-xs-6">
+                <div class="form-group">
+                    <label for="nameFirst">First Name</label>
+                    <p>{{user.nameFirst}}</p>
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="form-group">
+                    <label for="nameLast">Last Name</label>
+                    <p>{{user.nameLast}}</p>
+                </div>
+            </div>
+        </div>
 
-            <div class="col-sm-12 col-md-12">
-                <label>Category Name</label>
-                <input name="category" ng-model="category.category" type="text" maxlength="255" required />
+        <div class="row">
+            <div class="col-xs-6">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <p>{{user.email}}</p>
+                </div>
             </div>
 
+            <div class="col-xs-6">
+                <div class="form-group">
+                    <label for="verified">Email Verified</label>
+                    <p ng-if="!user.verified"><span class="label label-danger">Not Verified</span></p>
+                    <p ng-if="user.verified"><span class="label label-success">Verified</span></p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    
+    <form ng-if="editMode" name="form.modalForm" role="form" novalidate>
+        
+        <div class="row">
+            <div class="col-xs-6">
+                <div class="form-group">
+                    <label for="nameFirst">First Name</label>
+                    <input class="form-control" name="nameFirst" ng-model="user.nameFirst" type="text" maxlength="100" required />
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="form-group">
+                    <label for="nameLast">Last Name</label>
+                    <input class="form-control" name="nameLast" ng-model="user.nameLast" type="text" maxlength="100" required />
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-6">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input class="form-control" name="email" ng-model="user.email" type="email" maxlength="255" required />
+                </div>
+            </div>
+
+            <div class="col-xs-6">
+                <div class="form-group">
+                    <label for="verified">Email Verified</label>
+                    <p ng-if="!user.verified"><span class="label label-default">New</span></p>
+                    <p ng-if="user.verified"><span class="label label-default">New</span></p>
+                </div>
+            </div>
         </div>
 
     </form>
@@ -22,7 +82,6 @@
 
 <div class="modal-footer">
     
-    <div data-rc-alert-bar="modalForm"></div>
     
     <button class="btn btn-danger pull-left" ng-if="!inNewMode" ng-click="buttonDelete()">Delete</button>
     

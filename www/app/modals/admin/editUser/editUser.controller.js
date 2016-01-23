@@ -3,78 +3,64 @@
 /* @author  Rachel Carbone */
 
 angular.module('app.modal.editUser', [])
-    .controller('EditUserModalCtrl',
-    function($rootScope, $scope, $modalInstance, CategoryService, modalSettings, notifications, CommonMethods) {
-    $scope.restrictTo = "categoryModal";
+    .controller('EditUserModalCtrl', ['$scope', '$uibModalInstance', '$log', 'AlertConfirmService', 'editing', 'ApiRoutesUsers',
+    function($scope, $uibModalInstance, $log, AlertConfirmService, editing, ApiRoutesUsers) {
         
+    /* Used to restrict alert bars */
+    $scope.restrictTo = "edit-user-modal";
+    
+    /* Holds the add / edit form on the modal */
     $scope.form = {};
-    $scope.category = (modalSettings.category) ? modalSettings.category : {};
-    $scope.categories = (modalSettings.categories) ? modalSettings.categories : [];
-    $scope.inNewMode = (typeof($scope.category.id) === 'undefined');
     
+    /* Is the modal in edit mode? Shows / Hides form */
+    $scope.editMode = Boolean(editing.user);
+    
+    /* Save the user for resetting purposes */
+    $scope.savedUser = (editing.user) ? angular.copy(editing.user) : {};
+    
+    /* User to display and edit */
+    $scope.user = (editing.user) ? angular.copy(editing.user) : {};
+    
+    /* Click event for the Add / New button */
     $scope.buttonNew = function() {
-        var found = angular.copy(CommonMethods.findAllInArray($scope.categories, 'category', $scope.category.category));
-        
-        if(found.length > 0) {
-            $scope.category.category = '';
-            $rootScope.$broadcast('alertbar-add', { 'sender' : $scope.restrictTo, 'message': 'A category with that name already exists.', 'type' : 'danger' });
-        } else if ($scope.forms.categoryForm.$valid) {
-            
-            CategoryService.insertCategory($scope.category)
-                .then(function(result) {
-                    notifications.showSuccess(result);
-                    $modalInstance.close(true);
-                }, function(error) {
-                    $rootScope.$broadcast('alertbar-add', { 'sender' : $scope.restrictTo, 'message': error, 'type' : 'danger' });
-                    $scope.$broadcast('form-validate');
-                });
-                
-        } else {
-            $rootScope.$broadcast('alertbar-add', { 'sender' : $scope.restrictTo, 'message': 'Please fill in all required fields.', 'type' : 'danger' });
-            $scope.$broadcast('form-validate');
-        }
+        ApiRoutesUsers.addUser($scope.user).then(
+            function (result) {
+                $scope.editMode = false;
+            }, function (error) {
+                $log.info(error);
+            });
     };
     
+    /* Click event for the Save button */
     $scope.buttonSave = function() {
-        var found = angular.copy(CommonMethods.findAllInArray($scope.categories, 'category', $scope.category.category));
-        
-        if(found.length > 1) {
-            $scope.category.category = '';
-            $rootScope.$broadcast('alertbar-add', { 'sender' : $scope.restrictTo, 'message': 'A category with that name already exists.', 'type' : 'danger' });
-        } else if ($scope.forms.categoryForm.$valid) {
-            
-            CategoryService.saveCategory($scope.category, $scope.category.id)
-                .then(function(result) {
-                    notifications.showSuccess(result);
-                    $modalInstance.close(true);
-                }, function(error) {
-                    $rootScope.$broadcast('alertbar-add', { 'sender' : $scope.restrictTo, 'message': error, 'type' : 'danger' });
-                    $scope.$broadcast('form-validate');
-                });
-                
-        } else {
-            $rootScope.$broadcast('alertbar-add', { 'sender' : $scope.restrictTo, 'message': 'Please fill in all required fields.', 'type' : 'danger' });
-            $scope.$broadcast('form-validate');
-        }
+        AlertConfirmService.confirm('Are you sure you want to manually override this user?')
+            .result.then(function () {
+                ApiRoutesUsers.saveUser($scope.user).then(
+                    function (result) {
+                        $scope.editMode = false;
+                    }, function (error) {
+                        $log.info(error);
+                    });
+            }, function () {
+                $log.info(error);
+            });
     };
     
+    /* Click event for the Delete button */
     $scope.buttonDelete = function() {
-        if (confirm('Are you sure you want to permanently delete this category? This action cannot be undone.')) {
-            
-            CategoryService.deleteCategory($scope.category.id)
-                .then(function(result) {
-                    notifications.showSuccess(result);
-                    $modalInstance.close(true);
-                }, function(error) {
-                    $rootScope.$broadcast('alertbar-add', { 'sender' : $scope.restrictTo, 'message': error, 'type' : 'danger' });
-                });
-                
-        } else {
-            $scope.modalInEditMode(false);
-        }
+        AlertConfirmService.confirm('Are you sure you want to disable this user? They will no longer be able to log in.')
+            .result.then(function () {
+                ApiRoutesUsers.deleteUser($scope.user.id).then(
+                    function (result) {
+                        $scope.editMode = false;
+                    }, function (error) {
+                        $log.info(error);
+                    });
+            });
     };
         
+    /* Click event for the Cancel button */
     $scope.buttonCancel = function() {
-        $modalInstance.dismiss(false);
+        $uibModalInstance.dismiss(false);
     };
-});
+}]);
