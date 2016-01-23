@@ -83,7 +83,7 @@ class AuthController {
     }
     
     private static function login_getSessionExpirationInHours($app) {
-        $remember = (v::key('remember', v::boolType())->validate($app->request->post())) ? 
+        $remember = (v::key('remember', v::stringType())->validate($app->request->post())) ? 
                 boolval($app->request->post('remember')) : false;
         
         /* TO DO Change this to use config var */
