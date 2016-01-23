@@ -7,27 +7,16 @@
  */
 
 angular.module('app.admin.groups', [])
-    .controller('AdminGroupsCtrl', ['$scope', '$compile', 'DTOptionsBuilder', 'DTColumnBuilder', 'ApiRoutesDatatables', 
-        function($scope, $compile, DTOptionsBuilder, DTColumnBuilder, ApiRoutesDatatables) {
+    .controller('AdminGroupsCtrl', ['$scope', '$compile', 'DataTableHelper', 'DTColumnBuilder', 
+        function($scope, $compile, DataTableHelper, DTColumnBuilder) {
 
         // Init variables
         $scope.editing = false;
         $scope.groupList = {};
 
         // DataTable Setup
-        $scope.dtUserGroups = {};
-        $scope.dtUserGroups.instance = {};
-        $scope.dtUserGroups.options = DTOptionsBuilder.fromFnPromise(ApiRoutesDatatables.adminGroupsList())
-        .withDOM('<"row"<"col-sm-12 col-md-12"fr><"col-sm-12 col-md-12 add-space"t><"col-sm-4 col-md-4"l><"col-sm-4 col-md-4"i><"col-sm-4 col-md-4"p>>')
-        .withOption('order', [2, 'asc' ])
-        .withPaginationType('full_numbers')
-        .withOption('createdRow', function(row, data, dataIndex) {
-            // Recompiling so we can bind Angular directive to the DT
-            $compile(angular.element(row).contents())($scope);
-            // Add this row to the group list for validation
-            $scope.groupList[data.id] = data;
-        })
-        .withOption('responsive', {
+        $scope.dtUserGroups = DataTableHelper.getDTStructure($scope, 'adminGroupsList');
+        $scope.dtUserGroups.options.withOption('responsive', {
                 details: {
                     type: 'column',
                     renderer: function(api, rowIdx, columns) {

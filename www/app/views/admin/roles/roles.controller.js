@@ -7,27 +7,16 @@
  */
 
 angular.module('app.admin.roles', [])
-    .controller('AdminRolesCtrl', ['$scope', '$compile', 'DTOptionsBuilder', 'DTColumnBuilder', 'ApiRoutesDatatables', 
-        function($scope, $compile, DTOptionsBuilder, DTColumnBuilder, ApiRoutesDatatables) {
+    .controller('AdminRolesCtrl', ['$scope', '$compile', 'DataTableHelper', 'DTColumnBuilder', 
+        function($scope, $compile, DataTableHelper, DTColumnBuilder) {
 
         // Init variables
         $scope.editing = false;
         $scope.list = {};
 
         // DataTable Setup
-        $scope.dtGroupRoles = {};
-        $scope.dtGroupRoles.instance = {};
-        $scope.dtGroupRoles.options = DTOptionsBuilder.fromFnPromise(ApiRoutesDatatables.adminRolesList())
-        .withDOM('<"row"<"col-sm-12 col-md-12"fr><"col-sm-12 col-md-12 add-space"t><"col-sm-4 col-md-4"l><"col-sm-4 col-md-4"i><"col-sm-4 col-md-4"p>>')
-        .withOption('order', [2, 'asc' ])
-        .withPaginationType('full_numbers')
-        .withOption('createdRow', function(row, data, dataIndex) {
-            // Recompiling so we can bind Angular directive to the DT
-            $compile(angular.element(row).contents())($scope);
-            // Add this row to the user list for editing
-            $scope.list[data.id] = data;
-        })
-        .withOption('responsive', {
+        $scope.dtGroupRoles = DataTableHelper.getDTStructure($scope, 'adminRolesList');
+        $scope.dtGroupRoles.options.withOption('responsive', {
                 details: {
                     type: 'column',
                     renderer: function(api, rowIdx, columns) {

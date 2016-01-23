@@ -7,8 +7,8 @@
  */
 
 angular.module('app.admin.users', [])
-    .controller('AdminUsersCtrl', ['$scope', '$compile', 'DTOptionsBuilder', 'DTColumnBuilder', 'ApiRoutesDatatables', 
-        function($scope, $compile, DTOptionsBuilder, DTColumnBuilder, ApiRoutesDatatables) {
+    .controller('AdminUsersCtrl', ['$scope', '$compile', 'DTOptionsBuilder', 'DTColumnBuilder', 'DataTableHelper', 
+        function($scope, $compile, DTOptionsBuilder, DTColumnBuilder, DataTableHelper) {
 
         // Init Variables
         $scope.userList = {};
@@ -18,17 +18,8 @@ angular.module('app.admin.users', [])
         $scope.dtUserGroups = {};
         $scope.dtUserGroups.options = DTOptionsBuilder.newOptions();
 
-        $scope.dtUsers = {};
-        $scope.dtUsers.instance = {};
-        $scope.dtUsers.options = DTOptionsBuilder.fromFnPromise(ApiRoutesDatatables.adminUsersList())
-        .withDOM('<"row"<"col-sm-12 col-md-12"fr><"col-sm-12 col-md-12 add-space"t><"col-sm-4 col-md-4"l><"col-sm-4 col-md-4"i><"col-sm-4 col-md-4"p>>')
-        .withOption('createdRow', function(row, data, dataIndex) {
-            // Recompiling so we can bind Angular directive to the DT
-            $compile(angular.element(row).contents())($scope);
-            // Add this row to the user list for editing
-            $scope.userList[data.id] = data;
-        })
-        .withOption('responsive', {
+        $scope.dtUsers = DataTableHelper.getDTStructure($scope, 'adminUsersList');
+        $scope.dtUsers.options.withOption('responsive', {
             details: {
                 type: 'column',
                 renderer: function(api, rowIdx, columns) {
