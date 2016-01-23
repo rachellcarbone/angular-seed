@@ -1,3 +1,4 @@
+/* CSS crunched with Crunch - http://crunchapp.net/ */
 /*
  * Main Constructor Less File
  * 
@@ -142,6 +143,18 @@
  * 
  * General typography and text elements style overrides.
  */
+.align-right,
+.text-right {
+  text-align: right;
+}
+.align-center,
+.text-center {
+  text-align: center;
+}
+.align-left,
+.text-left {
+  text-align: left;
+}
 /*
  * Form Styles
  * 
