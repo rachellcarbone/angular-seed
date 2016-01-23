@@ -29,18 +29,34 @@ angular.module('ModalService', [
         backdrop: 'static'
     };
     
+    api.openModal = function(apiOptions, passedOptions, passedResolve) {
+        /* Get value of resolve */
+        var apiResolve = apiOptions.resolve || {};
+        var defaultResolve = defaultOptions.resolve || {};
+        passedResolve = passedResolve || {};
+        var combineResolve = angular.extend({}, defaultResolve, apiResolve, passedResolve);
+        
+        /* Combine options */
+        var config = angular.extend({}, defaultOptions, apiOptions, passedOptions);
+        
+        /* Set resolve to the combine resolve */
+        config.resolve = combineResolve;
+        
+        /* Return the uibModalInstance */
+        return $uibModal.open(config);
+    };
+    
     /*
      * Open Edit Assign Element Roles Modal
      * 
      * @return uibModalInstance
      */
-    api.openAssignElementRolesUser = function (options) {
-        options = options || {};
-        var config = angular.extend({}, defaultOptions, options, {
+    api.openAssignElementRolesUser = function (options, resolve) {
+        return api.openModal({
             templateUrl: templatePath + 'admin/assignElementRoles/assignElementRoles.html',
             controller: 'EditAssignElementRolesModalCtrl'
-        })
-        return $uibModal.open(config);
+        }, options, resolve);
+        
     };
     
     /*
@@ -48,13 +64,11 @@ angular.module('ModalService', [
      * 
      * @return uibModalInstance
      */
-    api.openAssignGroupRolesUser = function (options) {
-        options = options || {};
-        var config = angular.extend({}, defaultOptions, options, {
+    api.openAssignGroupRolesUser = function(options, resolve) {
+        return api.openModal({
             templateUrl: templatePath + 'admin/assignGroupRoles/assignGroupRoles.html',
             controller: 'EditAssignGroupRolesModalCtrl'
-        })
-        return $uibModal.open(config);
+        }, options, resolve);
     };
     
     /*
@@ -62,13 +76,11 @@ angular.module('ModalService', [
      * 
      * @return uibModalInstance
      */
-    api.openAssignUserGroups = function (options) {
-        options = options || {};
-        var config = angular.extend({}, defaultOptions, options, {
+    api.openAssignUserGroups = function(options, resolve) {
+        return api.openModal({
             templateUrl: templatePath + 'admin/assignUserGroups/assignUserGroups.html',
             controller: 'EditAssignUserGroupsModalCtrl'
-        })
-        return $uibModal.open(config);
+        }, options, resolve);
     };
     
     /*
@@ -76,13 +88,11 @@ angular.module('ModalService', [
      * 
      * @return uibModalInstance
      */
-    api.openConfigVariableUser = function (options) {
-        options = options || {};
-        var config = angular.extend({}, defaultOptions, options, {
+    api.openConfigVariableUser = function(options, resolve) {
+        return api.openModal({
             templateUrl: templatePath + 'admin/editConfigVariable/editConfigVariable.html',
             controller: 'EditConfigVariableModalCtrl'
-        })
-        return $uibModal.open(config);
+        }, options, resolve);
     };
     
     /*
@@ -90,13 +100,11 @@ angular.module('ModalService', [
      * 
      * @return uibModalInstance
      */
-    api.openEditGroup = function (options) {
-        options = options || {};
-        var config = angular.extend({}, defaultOptions, options, {
+    api.openEditGroup = function(options, resolve) {
+        return api.openModal({
             templateUrl: templatePath + 'admin/editGroup/editGroup.html',
             controller: 'EditGroupModalCtrl'
-        })
-        return $uibModal.open(config);
+        }, options, resolve);
     };
     
     /*
@@ -104,13 +112,11 @@ angular.module('ModalService', [
      * 
      * @return uibModalInstance
      */
-    api.openEditRole = function (options) {
-        options = options || {};
-        var config = angular.extend({}, defaultOptions, options, {
+    api.openEditRole = function(options, resolve) {
+        return api.openModal({
             templateUrl: templatePath + 'admin/editRole/editRole.html',
             controller: 'EditRoleModalCtrl'
-        })
-        return $uibModal.open(config);
+        }, options, resolve);
     };
     
     /*
@@ -118,13 +124,11 @@ angular.module('ModalService', [
      * 
      * @return uibModalInstance
      */
-    api.openEditUser = function (options) {
-        options = options || {};
-        var config = angular.extend({}, defaultOptions, options, {
+    api.openEditUser = function(options, resolve) {
+        return api.openModal({
             templateUrl: templatePath + 'admin/editUser/editUser.html',
             controller: 'EditUserModalCtrl'
-        })
-        return $uibModal.open(config);
+        }, options, resolve);
     };
     
     /*
@@ -132,13 +136,11 @@ angular.module('ModalService', [
      * 
      * @return uibModalInstance
      */
-    api.openEditVisibilityElement = function (options) {
-        options = options || {};
-        var config = angular.extend({}, defaultOptions, options, {
+    api.openEditVisibilityElement = function(options, resolve) {
+        return api.openModal({
             templateUrl: templatePath + 'admin/editVisibilityElement/editVisibilityElement.html',
             controller: 'EditVisibilityElementModalCtrl'
-        })
-        return $uibModal.open(config);
+        }, options, resolve);
     };
 
     return api;
