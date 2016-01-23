@@ -1,13 +1,13 @@
 'use strict';
 
 /* 
- * UI Bootstrap Modals
+ * Service to Load UI Bootstrap Modals
  * 
  * Includes modal controllers and provides and api to launch the modal.
  * https://angular-ui.github.io/bootstrap/#/modal
  */
 
-angular.module('app.modals', [
+angular.module('ModalService', [
     'app.modal.assignElementRoles',
     'app.modal.assignGroupRoles',
     'app.modal.assignUserGroups',
