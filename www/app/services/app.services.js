@@ -7,5 +7,6 @@
 // Include modules, and run application.
 angular.module('app.services', [
     'DataTableHelper',
+    'AlertConfirmService',
     'ModalService'
 ]);
