@@ -7,11 +7,11 @@
  */
 
 angular.module('app.member.footer', [])
-        .controller('MemberFooterCtrl', ['$scope', 'siteConfigVariables', 
-        function ($scope, siteConfigVariables) {
+        .controller('MemberFooterCtrl', ['$scope', 'siteSystemVariables', 
+        function ($scope, siteSystemVariables) {
             
         //* Get site configuration variables
-        $scope.siteOptions = siteConfigVariables;
+        $scope.siteOptions = siteSystemVariables;
         
         //* Year for copyright display
         $scope.currentYear = moment().year();

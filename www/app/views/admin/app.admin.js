@@ -10,7 +10,7 @@ angular.module('app.admin', [
     'app.admin.layout',
     'app.admin.header',
     'app.admin.footer',
-    'app.admin.configVariables',
+    'app.admin.systemVariables',
     'app.admin.dashboard',
     'app.admin.groups',
     'app.admin.roles',

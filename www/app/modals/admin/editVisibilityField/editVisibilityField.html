@@ -1,0 +1,59 @@
+<div class="modal-header">
+    <h3 ng-if="!savedUser.id" class="modal-title">Add New User</h3>
+    <h3 ng-if="savedUser.id && editMode" class="modal-title">Edit User: {{savedUser.nameFirst}} {{savedUser.nameLast}}</h3>
+    <h3 ng-if="savedUser.id && !editMode" class="modal-title">User: {{savedUser.nameFirst}} {{savedUser.nameLast}}</h3>
+</div>
+
+<div class="modal-body">     
+    
+    <div class="alert alert-danger well-sm" role="alert" ng-if="!field.initialized">
+        <strong>Not Initialized!</strong> This field has not been initialized.
+    </div>
+    
+    <div ng-if="!editMode">
+        
+        <div class="row">
+            <div class="col-xs-6">
+                <div class="form-group">
+                    <label for="name">Field Name</label>
+                    <p>{{field.name}}</p>
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="form-group">
+                    <label for="value">Field Value</label>
+                    <p class="form-control-static">{{field.value}}</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    
+    <form ng-if="editMode" name="form.modalForm" role="form" novalidate>
+        
+        <div class="row">
+            <div class="col-xs-6">
+                <div class="form-group">
+                    <label for="name">Field Name</label>
+                    <input class="form-control" name="name" ng-model="field.name" type="text" maxlength="255" required />
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="form-group">
+                    <label for="value">Field Value</label>
+                    <input class="form-control" name="value" ng-model="field.value" type="text" maxlength="1000" required />
+                </div>
+            </div>
+        </div>
+
+    </form>
+
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-danger pull-left" ng-if="!inNewMode" ng-click="buttonDelete()">Delete</button>
+    
+    <button class="btn btn-info" ng-click="buttonCancel()">Cancel</button>
+    <button class="btn btn-primary" ng-if="inNewMode" ng-click="buttonNew()">Add</button>
+    <button class="btn btn-primary" ng-if="!inNewMode" ng-click="buttonSave()">Save</button>
+</div>

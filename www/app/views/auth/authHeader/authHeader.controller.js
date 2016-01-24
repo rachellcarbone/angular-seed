@@ -7,10 +7,10 @@
  */
 
 angular.module('app.auth.header', [])
-        .controller('AuthHeaderCtrl', ['$scope', 'siteConfigVariables',  
-        function ($scope, siteConfigVariables) {
+        .controller('AuthHeaderCtrl', ['$scope', 'siteSystemVariables',  
+        function ($scope, siteSystemVariables) {
         
         //* Site configuration variables pre loaded by the resolve
-        $scope.siteOptions = siteConfigVariables;
+        $scope.siteOptions = siteSystemVariables;
         
     }]);

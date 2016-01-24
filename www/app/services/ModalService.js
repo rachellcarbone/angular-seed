@@ -88,10 +88,10 @@ angular.module('ModalService', [
      * 
      * @return uibModalInstance
      */
-    api.openConfigVariable = function(options, resolve) {
+    api.openSystemVariable = function(options, resolve) {
         return api.openModal({
-            templateUrl: templatePath + 'admin/editConfigVariable/editConfigVariable.html',
-            controller: 'EditConfigVariableModalCtrl'
+            templateUrl: templatePath + 'admin/editSystemVariable/editSystemVariable.html',
+            controller: 'EditSystemVariableModalCtrl'
         }, options, resolve);
     };
     

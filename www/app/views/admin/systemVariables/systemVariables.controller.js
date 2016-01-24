@@ -6,15 +6,15 @@
  * Controller for the admin users page where system users can be viewed and mofified.
  */
 
-angular.module('app.admin.configVariables', [])
-    .controller('AdminConfigVariablesCtrl', ['$scope', 'DataTableHelper', 'DTColumnBuilder', 'ModalService',
+angular.module('app.admin.systemVariables', [])
+    .controller('AdminSystemVariablesCtrl', ['$scope', 'DataTableHelper', 'DTColumnBuilder', 'ModalService',
         function($scope, DataTableHelper, DTColumnBuilder, ModalService) {
 
             /* Modal triggers */
             $scope.openNewVariableModal = function () {
-                ModalService.openConfigVariable(false);
+                ModalService.openSystemVariable(false);
             };
-            $scope.openEditVariableModal = ModalService.openConfigVariable;
+            $scope.openEditVariableModal = ModalService.openSystemVariable;
         
             // Init variables
             $scope.editing = false;

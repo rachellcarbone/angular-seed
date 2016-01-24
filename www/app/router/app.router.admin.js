@@ -89,8 +89,8 @@ app.config(['$stateProvider', '$urlRouterProvider', 'USER_ROLES',
             url: '/system-variables',
             views: {
                 'content@app.admin': {
-                    templateUrl: 'app/views/admin/configVariables/configVariables.html',
-                    controller: 'AdminConfigVariablesCtrl'
+                    templateUrl: 'app/views/admin/systemVariables/systemVariables.html',
+                    controller: 'AdminSystemVariablesCtrl'
                 }
             }
         });

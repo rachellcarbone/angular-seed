@@ -7,11 +7,11 @@
  */
 
 angular.module('app.admin.header', [])
-        .controller('AdminHeaderCtrl', ['$scope', 'UserSession', 'AuthService', 'siteConfigVariables', 
-        function ($scope, UserSession, AuthService, siteConfigVariables) {
+        .controller('AdminHeaderCtrl', ['$scope', 'UserSession', 'AuthService', 'siteSystemVariables', 
+        function ($scope, UserSession, AuthService, siteSystemVariables) {
         
         //* Site configuration variables pre loaded by the resolve
-        $scope.siteOptions = siteConfigVariables;
+        $scope.siteOptions = siteSystemVariables;
         
         //* User display name for logged in indicator
         $scope.userDisplayName = UserSession.displayName();

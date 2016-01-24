@@ -7,11 +7,11 @@
  */
 
 angular.module('app.admin.footer', [])
-        .controller('AdminFooterCtrl', ['$scope', 'siteConfigVariables', 
-        function ($scope, siteConfigVariables) {
+        .controller('AdminFooterCtrl', ['$scope', 'siteSystemVariables', 
+        function ($scope, siteSystemVariables) {
             
         //* Get site configuration variables
-        $scope.siteOptions = siteConfigVariables;
+        $scope.siteOptions = siteSystemVariables;
         
         //* Year for copyright display
         $scope.currentYear = moment().year();
