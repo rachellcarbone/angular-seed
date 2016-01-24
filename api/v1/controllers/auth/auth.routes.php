@@ -17,7 +17,7 @@ class AuthRoutes {
         });
         
         $app->post("/auth/authenticate/", function () use ($app) {
-            AuthController::authorizeCookieToken($app);
+            AuthController::isAuthenticated($app);
         });
         
         $app->post("/auth/validate-password/", function () use ($app) {

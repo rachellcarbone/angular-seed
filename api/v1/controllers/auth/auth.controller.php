@@ -99,7 +99,20 @@ class AuthController {
         return $app->render(400, array('msg' => 'Could not log out user.'));
     }
     
-    static function authorizeCookieToken($app) {
+    static function authorizeApiToken($app) {
+        if(!v::key('userKey', v::stringType())->validate($app->request->post()) || 
+           !v::key('userToken', v::stringType())->validate($app->request->post())) {
+            return false;
+        }
+        $user = UserData::selectUserByIdentifierToken($app->request->post('userKey'));
+        if(!$user || !password_verify($app->request->post('userToken'), $user->apiToken)) {
+            return false;
+        }
+        // Go now. Be free little brother.
+        return $user->id;
+    }
+    
+    static function isAuthenticated($app) {
         if(!v::key('key', v::stringType())->validate($app->request->post()) || 
            !v::key('token', v::stringType())->validate($app->request->post())) {
             return $app->render(400, array('msg' => 'Unauthenticated: Invalid request. Check your parameters and try again.'));
