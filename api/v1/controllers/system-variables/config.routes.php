@@ -6,20 +6,16 @@ class ConfigRoutes {
     static function addRoutes() {
         $app = \Slim\Slim::getInstance();
         
-        $app->map("/config/:configId/", function ($configId) use ($app) {
-            ConfigController::getConfig($app, $configId);
-        })->via('GET', 'POST');
-        
         $app->post("/admin/add/config/", function () use ($app) {
-            ConfigController::addConfig($app);
+            ConfigController::addVariable($app);
         });
         
-        $app->post("/admin/save/config/:configId/", function ($configId) use ($app) {
-            ConfigController::saveConfig($app, $configId);
+        $app->post("/admin/save/config/:variableId/", function ($variableId) use ($app) {
+            ConfigController::saveVariable($app, $variableId);
         });
         
-        $app->map("/admin/delete/config/:configId/", function ($configId) use ($app) {
-            ConfigController::deleteConfig($app, $configId);
+        $app->map("/admin/delete/config/:variableId/", function ($variableId) use ($app) {
+            ConfigController::deleteVariable($app, $variableId);
         })->via('GET', 'POST');
     }
 }
