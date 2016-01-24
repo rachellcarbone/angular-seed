@@ -6,15 +6,15 @@
  * Controller for the admin users page where system users can be viewed and mofified.
  */
 
-angular.module('app.admin.tagVisibility', [])
-    .controller('AdminTagVisibilityCtrl', ['$scope', '$compile', 'DataTableHelper', 'DTOptionsBuilder', 'DTColumnBuilder', 'ModalService',
+angular.module('app.admin.fieldVisibility', [])
+    .controller('AdminFieldVisibilityCtrl', ['$scope', '$compile', 'DataTableHelper', 'DTOptionsBuilder', 'DTColumnBuilder', 'ModalService',
         function($scope, $compile, DataTableHelper, DTOptionsBuilder, DTColumnBuilder, ModalService) {
 
             /* Modal triggers */
             $scope.openNewElementModal = function () {
-                ModalService.openEditVisibilityElement(false);
+                ModalService.openEditVisibilityField(false);
             };
-            $scope.openEditElementModal = ModalService.openEditVisibilityElement;
+            $scope.openEditElementModal = ModalService.openEditVisibilityField;
             $scope.openEditRoleModal = ModalService.openEditRole;
                 
             // Init variables

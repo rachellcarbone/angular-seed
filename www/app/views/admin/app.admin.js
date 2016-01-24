@@ -14,6 +14,6 @@ angular.module('app.admin', [
     'app.admin.dashboard',
     'app.admin.groups',
     'app.admin.roles',
-    'app.admin.tagVisibility',
+    'app.admin.fieldVisibility',
     'app.admin.users'
 ]);

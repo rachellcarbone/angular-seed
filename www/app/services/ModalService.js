@@ -11,12 +11,12 @@ angular.module('ModalService', [
     'app.modal.assignElementRoles',
     'app.modal.assignGroupRoles',
     'app.modal.assignUserGroups',
-    'app.modal.editConfigVariable',
+    'app.modal.editSystemVariable',
     'app.modal.editGroup',
     'app.modal.editRole',
     'app.modal.editRole',
     'app.modal.editUser',
-    'app.modal.editVisibilityElement'
+    'app.modal.editVisibilityField'
 ])
 .factory('ModalService', ['$uibModal', function($uibModal) {
         
@@ -142,11 +142,17 @@ angular.module('ModalService', [
      * 
      * @return uibModalInstance
      */
-    api.openEditVisibilityElement = function(options, resolve) {
+    api.openEditVisibilityField = function(fieldId) {
         return api.openModal({
-            templateUrl: templatePath + 'admin/editVisibilityElement/editVisibilityElement.html',
-            controller: 'EditVisibilityElementModalCtrl'
-        }, options, resolve);
+            templateUrl: templatePath + 'admin/editVisibilityElement/editVisibilityField.html',
+            controller: 'EditVisibilityFieldModalCtrl',
+            resolve: {
+                ApiRoutesUsers: 'ApiRoutesFields',
+                editing: function(ApiRoutesFields) {
+                    return (fieldId) ? ApiRoutesFields.getField(fieldId) : {};
+                }
+            }
+        });
     };
 
     return api;

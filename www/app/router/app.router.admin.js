@@ -100,8 +100,8 @@ app.config(['$stateProvider', '$urlRouterProvider', 'USER_ROLES',
             url: '/tag-visibility',
             views: {
                 'content@app.admin': {
-                    templateUrl: 'app/views/admin/tagVisibility/tagVisibility.html',
-                    controller: 'AdminTagVisibilityCtrl'
+                    templateUrl: 'app/views/admin/fieldVisibility/tagVisibility.html',
+                    controller: 'AdminFieldVisibilityCtrl'
                 }
             }
         });
