@@ -16,7 +16,8 @@ var app = angular.module('app.router.auth', [
     'rcAuth.constants',
     'app.auth'
 ]);
-app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES) {
+app.config(['$stateProvider', 'USER_ROLES', 
+    function ($stateProvider, USER_ROLES) {
 
         /*  Abstract Auth Route */
         $stateProvider.state('app.auth', {
@@ -49,6 +50,23 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
                     templateUrl: 'app/views/auth/signup/signup.html',
                     controller: 'AuthSignupCtrl'
                 }
+            },
+            resolve: {
+                $q: '$q',
+                $rootScope: '$rootScope',
+                $state: '$state',
+                alreadyLoggedIn: function($rootScope, $state, $q, initUser) {
+                    return $q(function(resolve, reject) {  
+                        if(initUser) {
+                            $rootScope.$evalAsync(function () {
+                                $state.go('app.member.dashboard');
+                            });
+                            reject(false);
+                        } else {
+                            resolve(true);
+                        }
+                    });
+                }
             }
         });
 
@@ -69,6 +87,23 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
                 'content@app.auth': {
                     templateUrl: 'app/views/auth/login/login.html',
                     controller: 'AuthLoginCtrl'
+                }
+            },
+            resolve: {
+                $q: '$q',
+                $rootScope: '$rootScope',
+                $state: '$state',
+                alreadyLoggedIn: function($rootScope, $state, $q, initUser) {
+                    return $q(function(resolve, reject) {  
+                        if(initUser) {
+                            $rootScope.$evalAsync(function () {
+                                $state.go('app.member.dashboard');
+                            });
+                            reject(false);
+                        } else {
+                            resolve(true);
+                        }
+                    });
                 }
             }
         });

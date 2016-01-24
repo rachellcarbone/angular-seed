@@ -72,6 +72,7 @@ app.config(['$stateProvider', '$urlRouterProvider', 'USER_ROLES',
         /*  Abstract App */
         $stateProvider.state('app', {
             abstract: true,
+            data: {authorizedRoles: USER_ROLES.guest},
             resolve: {
                 AuthService: 'AuthService',
                 initUser: function(AuthService) {
@@ -127,6 +128,7 @@ app.config(['$stateProvider', '$urlRouterProvider', 'USER_ROLES',
         $stateProvider.state('app.maintenance', {
             title: 'Maintenance Mode',
             url: '/maintenance',
+            data: {authorizedRoles: USER_ROLES.guest},
             views: {
                 'layout@': {
                     templateUrl: 'app/views/maintenance/maintenance.html',
