@@ -26,8 +26,8 @@ class DatatablesController {
         return $app->render(200, array('table' => $table ));
     }
     
-    static function getVisibilityElements($app) {
-        $data = DatatablesData::selectVisibilityElements();
+    static function getVisibilityFields($app) {
+        $data = DatatablesData::selectVisibilityFields();
         $table = ($data) ? $data : array();
         return $app->render(200, array('table' => $table ));
     }

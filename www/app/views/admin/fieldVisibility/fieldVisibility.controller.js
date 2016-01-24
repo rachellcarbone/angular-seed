@@ -24,8 +24,8 @@ angular.module('app.admin.fieldVisibility', [])
             $scope.dtFieldRoles = {};
             $scope.dtFieldRoles.options = DTOptionsBuilder.newOptions();
                     
-            $scope.dtTags = DataTableHelper.getDTStructure($scope, 'adminTagElementsList');
-            $scope.dtTags.options.withOption('responsive', {
+            $scope.dtFields = DataTableHelper.getDTStructure($scope, 'adminVisibilityFieldList');
+            $scope.dtFields.options.withOption('responsive', {
                 details: {
                     type: 'column',
                     renderer: function(api, rowIdx, columns) {
@@ -68,7 +68,7 @@ angular.module('app.admin.fieldVisibility', [])
                 }
             });
             
-            $scope.dtTags.columns = [
+            $scope.dtFields.columns = [
                 DTColumnBuilder.newColumn(null).withTitle('Roles').renderWith(function(data, type, full, meta) {
                     return '<small>(' + data.roles.length +' Roles)</small>';
                 }).withClass('responsive-control').notSortable(),

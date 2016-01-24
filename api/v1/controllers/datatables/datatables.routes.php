@@ -22,8 +22,8 @@ class DatatableRoutes {
             DatatablesController::getConfigVariables($app);
         });
         
-        $app->post("/datatable/admin/visibility-elements", function () use ($app) {
-            DatatablesController::getVisibilityElements($app);
+        $app->post("/datatable/admin/visibility-fields", function () use ($app) {
+            DatatablesController::getVisibilityFields($app);
         });
     }
 }

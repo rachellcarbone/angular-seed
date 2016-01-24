@@ -39,8 +39,8 @@ angular.module('apiRoutes.datatables', [])
         return getPromise('/datatable/admin/system-variables');
     };
     
-    api.adminTagElementsList = function() { 
-        return getPromise('/datatable/admin/visibility-elements');
+    api.adminVisibilityFieldList = function() { 
+        return getPromise('/datatable/admin/visibility-fields');
     };
     
     return api;

@@ -96,11 +96,11 @@ app.config(['$stateProvider', '$urlRouterProvider', 'USER_ROLES',
         });
 
         $stateProvider.state('app.admin.visibility', {
-            title: 'Define Tag Visibility',
-            url: '/tag-visibility',
+            title: 'Define Field Visibility',
+            url: '/field-visibility',
             views: {
                 'content@app.admin': {
-                    templateUrl: 'app/views/admin/fieldVisibility/tagVisibility.html',
+                    templateUrl: 'app/views/admin/fieldVisibility/fieldVisibility.html',
                     controller: 'AdminFieldVisibilityCtrl'
                 }
             }
