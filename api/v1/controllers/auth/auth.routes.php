@@ -4,9 +4,9 @@
 class AuthRoutes {
     
     static function addRoutes($app, $authenticateForRole) {
-        $app = \Slim\Slim::getInstance();
         
-        //* /field/ routes
+        //* /auth/ routes - publicly accessable
+        
         $app->group('/auth', $authenticateForRole('public'), function () use ($app) {
 
             // Authentication

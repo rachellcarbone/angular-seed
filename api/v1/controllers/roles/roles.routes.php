@@ -5,7 +5,8 @@ class RoleRoutes {
     
     static function addRoutes($app, $authenticateForRole) {
             
-        //* /role/ routes
+        //* /role/ routes - admin users only
+        
         $app->group('/role', $authenticateForRole('admin'), function () use ($app) {
             
             $app->map("/:roleId/", function ($roleId) use ($app) {

@@ -4,9 +4,9 @@
 class DatatableRoutes {
     
     static function addRoutes($app, $authenticateForRole) {
-        $app = \Slim\Slim::getInstance();
         
-        //* /field/ routes
+        //* /datatable/admin/ routes - admin users only
+        
         $app->group('/datatable/admin', $authenticateForRole('admin'), function () use ($app) {
 
             $app->post("/users", function () use ($app) {

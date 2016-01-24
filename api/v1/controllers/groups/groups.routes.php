@@ -3,8 +3,10 @@
 
 class GroupRoutes {
     
-    static function addRoutes($app, $authenticateForRole) {            
-        //* /group/ routes
+    static function addRoutes($app, $authenticateForRole) { 
+        
+        //* /group/ routes - admin users only
+        
         $app->group('/group', $authenticateForRole('admin'), function () use ($app) {
             
             $app->map("/:groupId/", function ($groupId) use ($app) {

@@ -5,7 +5,8 @@ class ConfigRoutes {
     
     static function addRoutes($app, $authenticateForRole) {
         
-        //* /config/ routes
+        //* /config/ routes - admin users only
+        
         $app->group('/config', $authenticateForRole('admin'), function () use ($app) {
 
             $app->map("/:variableId/", function ($variableId) use ($app) {

@@ -4,16 +4,16 @@
 class FieldRoutes {
     
     static function addRoutes($app, $authenticateForRole) {
-        $app = \Slim\Slim::getInstance();
         
-        //* /field/ routes
+        //* /field/ routes - admin users only
+        
         $app->group('/field', $authenticateForRole('admin'), function () use ($app) {
             
             $app->post("/:fieldId/", function ($fieldId) use ($app) {
                 FieldController::getField($app, $fieldId);
             });
 
-            $app->post("/add/", function () use ($app) {
+            $app->post("/insert/", function () use ($app) {
                 FieldController::addField($app);
             });
 

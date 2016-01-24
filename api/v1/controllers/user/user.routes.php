@@ -11,7 +11,7 @@ class UserRoutes {
             UserController::selectUser($app, $userId);
         })->via('GET', 'POST');
             
-        //* /user/ routes - admin only
+        //* /user/ routes - admin users only
 
         $app->group('/user', $authenticateForRole('admin'), function () use ($app) {
 
