@@ -92,7 +92,7 @@ angular.module('rcAuth.listeners', [])
         $rootScope.$on(AUTH_EVENTS.notAuthorized, function(event, args) {
             $rootScope.$evalAsync(function () {
                 // Go to the user not authorized error page
-                $state.go('app.app.error.notauthorized');
+                $state.go('app.error.notauthorized');
             });
         });
         
