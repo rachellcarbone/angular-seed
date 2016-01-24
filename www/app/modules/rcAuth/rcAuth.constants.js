@@ -21,8 +21,8 @@ app.constant('AUTH_EVENTS',  {
 // Events that are triggered by different auth states
 app.constant('AUTH_COOKIES',  {
     userEmail: '_as_ue_2180',
-    userKey: '_as_uk_2332',
-    userToken: '_as_ut_7942'
+    apiKey: '_as_uk_2332',
+    apiToken: '_as_ut_7942'
 });
 
 // Roles used for authorization and to determin

@@ -113,16 +113,16 @@ class AuthController {
     }
     
     static function isAuthenticated($app) {
-        if(!v::key('key', v::stringType())->validate($app->request->post()) || 
-           !v::key('token', v::stringType())->validate($app->request->post())) {
+        if(!v::key('apiKey', v::stringType())->validate($app->request->post()) || 
+           !v::key('apiToken', v::stringType())->validate($app->request->post())) {
             return $app->render(400, array('msg' => 'Unauthenticated: Invalid request. Check your parameters and try again.'));
         }
-        $user = UserData::selectUserByIdentifierToken($app->request->post('key'));
+        $user = UserData::selectUserByIdentifierToken($app->request->post('apiKey'));
         
         if(!$user) {
             // Validate existing user
             return $app->render(401, array('msg' => 'Unauthenticated: No User'));
-        } else if (!password_verify($app->request->post('token'), $user->apiToken)) {
+        } else if (!password_verify($app->request->post('apiToken'), $user->apiToken)) {
             // Validate Password
             return $app->render(401, array('msg' => 'Unauthenticated: Invalid Cookie'));
         }

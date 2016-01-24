@@ -19,11 +19,11 @@ angular.module('rcAuth.AuthService', [])
                 }
                 
                 var credentials = {
-                    'key' : $cookies.get(AUTH_COOKIES.userKey),
-                    'token' : $cookies.get(AUTH_COOKIES.userToken)
+                    'apiKey' : $cookies.get(AUTH_COOKIES.apiKey),
+                    'apiToken' : $cookies.get(AUTH_COOKIES.apiToken)
                 };
             
-                if (credentials.key && credentials.token) {
+                if (credentials.apiKey && credentials.apiToken) {
                         API.getAuthenticatedUser(credentials)
                         .then(function (data) {
                             if (!UserSession.create(data.user)) {
@@ -41,13 +41,13 @@ angular.module('rcAuth.AuthService', [])
         };
         
         factory.login = function(credentials) {
-            if($cookies.get(AUTH_COOKIES.userKey)) { 
-                credentials.logout = $cookies.get(AUTH_COOKIES.userKey); 
+            if($cookies.get(AUTH_COOKIES.apiKey)) { 
+                credentials.logout = $cookies.get(AUTH_COOKIES.apiKey); 
             }
             
             $cookies.remove(AUTH_COOKIES.userEmail);
-            $cookies.remove(AUTH_COOKIES.userKey);
-            $cookies.remove(AUTH_COOKIES.userToken);
+            $cookies.remove(AUTH_COOKIES.apiKey);
+            $cookies.remove(AUTH_COOKIES.apiToken);
             UserSession.destroy();
             
             return $q(function (resolve, reject) {
@@ -64,8 +64,8 @@ angular.module('rcAuth.AuthService', [])
 
                             //put valid login creds in a cookie
                             $cookies.put(AUTH_COOKIES.userEmail, data.user.email, {expires: date});
-                            $cookies.put(AUTH_COOKIES.userKey, data.user.apiKey, {expires: date});
-                            $cookies.put(AUTH_COOKIES.userToken, data.user.apiToken, {expires: date});
+                            $cookies.put(AUTH_COOKIES.apiKey, data.user.apiKey, {expires: date});
+                            $cookies.put(AUTH_COOKIES.apiToken, data.user.apiToken, {expires: date});
                         
                             resolve(UserSession.get());
                             $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
@@ -82,16 +82,16 @@ angular.module('rcAuth.AuthService', [])
         };
 
         factory.logout = function() {
-            var logout = ($cookies.get(AUTH_COOKIES.userKey)) ? 
-                $cookies.get(AUTH_COOKIES.userKey) : false;
+            var logout = ($cookies.get(AUTH_COOKIES.apiKey)) ? 
+                $cookies.get(AUTH_COOKIES.apiKey) : false;
             
             return $q(function (resolve, reject) {
                 if (logout) {
                     API.postLogout(logout);
                 }
                 $cookies.remove(AUTH_COOKIES.userEmail);
-                $cookies.remove(AUTH_COOKIES.userKey);
-                $cookies.remove(AUTH_COOKIES.userToken);
+                $cookies.remove(AUTH_COOKIES.apiKey);
+                $cookies.remove(AUTH_COOKIES.apiToken);
                 UserSession.destroy();
 
                 /* Logout success event */
@@ -121,11 +121,11 @@ angular.module('rcAuth.AuthService', [])
                 }
                 
                 var credentials = {
-                    'key' : $cookies.get(AUTH_COOKIES.userKey),
-                    'token' : $cookies.get(AUTH_COOKIES.userToken)
+                    'apiKey' : $cookies.get(AUTH_COOKIES.apiKey),
+                    'apiToken' : $cookies.get(AUTH_COOKIES.apiToken)
                 };
             
-                if (credentials.key && credentials.token) {
+                if (credentials.apiKey && credentials.apiToken) {
                         API.getAuthenticatedUser(credentials)
                         .then(function (data) {
                             if (UserSession.create(data.user)) {

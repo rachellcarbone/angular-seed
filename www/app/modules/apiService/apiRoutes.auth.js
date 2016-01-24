@@ -52,7 +52,7 @@ angular.module('apiRoutes.auth', [])
     };
 
     api.getAuthenticatedUser = function(credentials) {
-        if(!credentials.key || !credentials.token) {
+        if(!credentials.apiKey || !credentials.apiToken) {
             return API.reject('Invalid credentials please verify your information and try again.');
         }
 
