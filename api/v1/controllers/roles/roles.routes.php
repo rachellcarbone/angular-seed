@@ -3,23 +3,27 @@
 
 class RoleRoutes {
     
-    static function addRoutes() {
-        $app = \Slim\Slim::getInstance();
-        
-        $app->post("/role/:roleId/", function ($roleId) use ($app) {
-            RoleController::getRole($app, $roleId);
-        });
-        
-        $app->post("/admin/add/role/", function () use ($app) {
-            RoleController::addRole($app);
-        });
-        
-        $app->post("/admin/update/role/:roleId/", function ($roleId) use ($app) {
-            RoleController::saveRole($app, $roleId);
-        });
-        
-        $app->post("/admin/delete/role/:roleId/", function ($roleId) use ($app) {
-            RoleController::deleteRole($app, $roleId);
+    static function addRoutes($app, $authenticateForRole) {
+            
+        //* /role/ routes
+        $app->group('/role', $authenticateForRole('admin'), function () use ($app) {
+            
+            $app->map("/:roleId/", function ($roleId) use ($app) {
+                RoleController::getRole($app, $roleId);
+            })->via('GET', 'POST');
+
+            $app->post("/insert/", function () use ($app) {
+                RoleController::addRole($app);
+            });
+
+            $app->post("/update/:roleId/", function ($roleId) use ($app) {
+                RoleController::saveRole($app, $roleId);
+            });
+
+            $app->map("/delete/:roleId/", function ($roleId) use ($app) {
+                RoleController::deleteRole($app, $roleId);
+            })->via('DELETE', 'POST');
+            
         });
     }
 }

@@ -3,19 +3,28 @@
 
 class ConfigRoutes {
     
-    static function addRoutes() {
-        $app = \Slim\Slim::getInstance();
+    static function addRoutes($app, $authenticateForRole) {
         
-        $app->post("/admin/add/config/", function () use ($app) {
-            ConfigController::addVariable($app);
+        //* /config/ routes
+        $app->group('/config', $authenticateForRole('admin'), function () use ($app) {
+
+            $app->map("/:variableId/", function ($variableId) use ($app) {
+                ConfigController::getVariable($app, $variableId);
+            })->via('GET', 'POST');
+        
+            $app->post("/insert/", function () use ($app) {
+                ConfigController::addVariable($app);
+            });
+
+            $app->post("/update/:variableId/", function ($variableId) use ($app) {
+                ConfigController::saveVariable($app, $variableId);
+            });
+
+            $app->map("/delete/:variableId/", function ($variableId) use ($app) {
+                ConfigController::deleteVariable($app, $variableId);
+            })->via('DELETE', 'POST');
+            
         });
         
-        $app->post("/admin/save/config/:variableId/", function ($variableId) use ($app) {
-            ConfigController::saveVariable($app, $variableId);
-        });
-        
-        $app->map("/admin/delete/config/:variableId/", function ($variableId) use ($app) {
-            ConfigController::deleteVariable($app, $variableId);
-        })->via('GET', 'POST');
     }
 }

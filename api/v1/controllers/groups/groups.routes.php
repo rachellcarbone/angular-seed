@@ -3,23 +3,26 @@
 
 class GroupRoutes {
     
-    static function addRoutes() {
-        $app = \Slim\Slim::getInstance();
-        
-        $app->post("/group/:groupId/", function ($groupId) use ($app) {
-            GroupController::getGroup($app, $groupId);
-        });
-        
-        $app->post("/admin/add/group/", function () use ($app) {
-            GroupController::addGroup($app);
-        });
-        
-        $app->post("/admin/update/group/:groupId/", function ($groupId) use ($app) {
-            GroupController::saveGroup($app, $groupId);
-        });
-        
-        $app->post("/admin/delete/group/:groupId/", function ($groupId) use ($app) {
-            GroupController::deleteGroup($app, $groupId);
+    static function addRoutes($app, $authenticateForRole) {            
+        //* /group/ routes
+        $app->group('/group', $authenticateForRole('admin'), function () use ($app) {
+            
+            $app->map("/:groupId/", function ($groupId) use ($app) {
+                GroupController::getGroup($app, $groupId);
+            })->via('GET', 'POST');
+
+            $app->post("/insert/", function () use ($app) {
+                GroupController::addGroup($app);
+            });
+
+            $app->post("/update/:groupId/", function ($groupId) use ($app) {
+                GroupController::saveGroup($app, $groupId);
+            });
+
+            $app->map("/delete/:groupId/", function ($groupId) use ($app) {
+                GroupController::deleteGroup($app, $groupId);
+            })->via('DELETE', 'POST');
+            
         });
     }
 }

@@ -3,23 +3,30 @@
 
 class UserRoutes {
     
-    static function addRoutes() {
-        $app = \Slim\Slim::getInstance();
+    static function addRoutes($app, $authenticateForRole) {
         
-        $app->map("/user/:userId/", function ($userId) use ($app) {
+        //* /user/id - members can get their own profile
+        
+        $app->map("/user/:userId/", $authenticateForRole('member'), function ($userId) use ($app) {
             UserController::selectUser($app, $userId);
         })->via('GET', 'POST');
-        
-        $app->post("/user/add/", function () use ($app) {
-            UserController::insertUser($app);
+            
+        //* /user/ routes - admin only
+
+        $app->group('/user', $authenticateForRole('admin'), function () use ($app) {
+
+            $app->post("/insert/", function () use ($app) {
+                UserController::insertUser($app);
+            });
+
+            $app->post("/update/:userId/", function ($userId) use ($app) {
+                UserController::updateUser($app, $userId);
+            });
+
+            $app->map("/delete/:userId/", function ($userId) use ($app) {
+                UserController::deleteUser($app, $userId);
+            })->via('DELETE', 'POST');
+            
         });
-        
-        $app->post("/user/save/:userId/", function ($userId) use ($app) {
-            UserController::updateUser($app, $userId);
-        });
-        
-        $app->delete("/user/delete/:userId/", function ($userId) use ($app) {
-            UserController::deleteUser($app, $userId);
-        })->via('GET', 'POST');
     }
 }
