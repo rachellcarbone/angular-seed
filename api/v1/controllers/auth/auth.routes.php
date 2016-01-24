@@ -5,8 +5,14 @@ class AuthRoutes {
     
     static function addRoutes($app, $authenticateForRole) {
         
-        //* /auth/ routes - publicly accessable
         
+        $app->map("/admin/auth/delete/expired-tokens/", $authenticateForRole('admin'), function () use ($app) {
+            AuthController::deleteExpiredAuthTokens($app);
+        })->via(['DELETE', 'POST']);
+        
+        
+        //* /auth/ routes - publicly accessable        
+            
         $app->group('/auth', $authenticateForRole('public'), function () use ($app) {
 
             // Authentication

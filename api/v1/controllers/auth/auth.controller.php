@@ -138,11 +138,17 @@ class AuthController {
             'valid' => (self::validatePassword($app->request->post()))
         ));
     }
+    
     static function validatePassword($post, $key = 'password') {
         return (v::key($key, v::stringType()->length(8,255)->noWhitespace()->alnum('!@#$%^&*_+=-')->regex('/^(?=.*[a-zA-Z])(?=.*[0-9])/'))->validate($post));
     }
         
+    // Delete Expired Auth Tokens
     
+    public static function deleteExpiredAuthTokens($app) {
+        AuthData::deleteExpiredAuthTokens();
+        return $app->render(200, array('msg' => "Deleted expired auth tokens." ));
+    }
     
     
     
