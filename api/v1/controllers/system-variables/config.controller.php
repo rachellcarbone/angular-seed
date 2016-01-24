@@ -8,6 +8,9 @@ use \Respect\Validation\Validator as v;
 class ConfigController {
     
     static function getVariable($app, $variableId) {
+        if(!v::intVal()->validate($variableId)) {
+            return $app->render(400,  array('msg' => 'Could not select system config variable.'));
+        }
         $variable = ConfigData::getVariableById($variableId);
         return $app->render(200, array('variable' => $variable));
     }
@@ -108,6 +111,10 @@ class ConfigController {
     }
     
     static function deleteVariable($app, $variableId) {
+        if(!v::intVal()->validate($variableId)) {
+            return $app->render(400,  array('msg' => 'Could not find system config variable.'));
+        }
+        
         $savedConfig = ConfigData::getVariableById($variableId);
         if($savedConfig && ($savedConfig->locked || $savedConfig->indestructable)) {
             return $app->render(401, array('msg' => 'This config variable is locked or indestructable and deleted without special permissions.'));
