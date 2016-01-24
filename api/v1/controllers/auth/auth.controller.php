@@ -117,7 +117,6 @@ class AuthController {
            !v::key('token', v::stringType())->validate($app->request->post())) {
             return $app->render(400, array('msg' => 'Unauthenticated: Invalid request. Check your parameters and try again.'));
         }
-        
         $user = UserData::selectUserByIdentifierToken($app->request->post('key'));
         
         if(!$user) {
@@ -139,7 +138,6 @@ class AuthController {
             'valid' => (self::validatePassword($app->request->post()))
         ));
     }
-    
     static function validatePassword($post, $key = 'password') {
         return (v::key($key, v::stringType()->length(8,255)->noWhitespace()->alnum('!@#$%^&*_+=-')->regex('/^(?=.*[a-zA-Z])(?=.*[0-9])/'))->validate($post));
     }

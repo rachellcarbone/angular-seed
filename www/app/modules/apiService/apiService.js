@@ -67,7 +67,7 @@ angular.module('api.v1', [
                 // If there eas an error log it
                 $log.error(getErrorMessage(data.data.msg, err));
                 // Reject the promise
-                return reject(getErrorMessage(data.data.msg, err)); 
+                return reject(getErrorMessage(data.data.msg, err));
             });
             
         });
@@ -100,7 +100,7 @@ angular.module('api.v1', [
                     // If there eas an error log it
                     $log.error(getErrorMessage(data.data.msg, err));
                     // Reject the promise
-                    return reject(getErrorMessage(data.data.msg, err)); 
+                    return reject(getErrorMessage(data.data.msg, err));
             });            
         });
     };
@@ -123,7 +123,7 @@ angular.module('api.v1', [
                     // If there eas an error log it
                     $log.error(getErrorMessage(data.data.msg, err));
                     // Reject the promise
-                    return reject(getErrorMessage(data.data.msg, err)); 
+                    return reject(getErrorMessage(data.data.msg, err));
             });
         });
         */

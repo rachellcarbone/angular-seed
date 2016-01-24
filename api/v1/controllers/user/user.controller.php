@@ -15,7 +15,7 @@ class UserController {
             return $app->render(400,  array('msg' => 'User could not be found. Check your parameters and try again.'));
         }
     }
-
+    
     static function insertUser($app) {
         if(!v::key('nameFirst', v::stringType()->length(1,255))->validate($app->request->post()) ||
             !v::key('nameLast', v::stringType()->length(1,255), false)->validate($app->request->post()) || 

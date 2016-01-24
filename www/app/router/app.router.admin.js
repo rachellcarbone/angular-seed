@@ -107,6 +107,7 @@ app.config(['$stateProvider', '$urlRouterProvider', 'USER_ROLES',
         });
         
         // For any unmatched url, redirect to /
+        $urlRouterProvider.when('/admin/', '/admin/dashboard');
         $urlRouterProvider.when('/admin', '/admin/dashboard');
         
     }]);

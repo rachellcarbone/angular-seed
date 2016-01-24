@@ -60,7 +60,7 @@ class V1Controller {
 
     // http://docs.slimframework.com/middleware/overview/
     private static function addMiddleware($app) {
-
+        
         /* Slim-jsonAPI */
         $app->view(new \JsonApiView('data', 'meta'));
         $app->add(new \JsonApiMiddleware());
