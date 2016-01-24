@@ -10,17 +10,17 @@ require_once dirname(__FILE__) . '/user/user.routes.php';
 
 class ApiRouter {
     
-    public static function addRoutes($app, $debugEnabled, $isAuthorized) {
+    public static function addRoutes($app, $debugEnabled, $authenticateForRole) {
         self::addDefaultRoutes();
         //self::addErrorRoutes($app, $debugEnabled);
         
-        AuthRoutes::addRoutes();
-        DatatableRoutes::addRoutes();
-        FieldRoutes::addRoutes($isAuthorized);
-        GroupRoutes::addRoutes();
-        RoleRoutes::addRoutes();
-        ConfigRoutes::addRoutes();
-        UserRoutes::addRoutes();
+        AuthRoutes::addRoutes($app, $authenticateForRole);
+        DatatableRoutes::addRoutes($app, $authenticateForRole);
+        FieldRoutes::addRoutes($app, $authenticateForRole);
+        GroupRoutes::addRoutes($app, $authenticateForRole);
+        RoleRoutes::addRoutes($app, $authenticateForRole);
+        ConfigRoutes::addRoutes($app, $authenticateForRole);
+        UserRoutes::addRoutes($app, $authenticateForRole);
     }
     
     
