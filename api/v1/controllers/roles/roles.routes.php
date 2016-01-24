@@ -9,7 +9,7 @@ class RoleRoutes {
         
         $app->group('/role', $authenticateForRole('admin'), function () use ($app) {
             
-            $app->map("/:roleId/", function ($roleId) use ($app) {
+            $app->map("/get/:roleId/", function ($roleId) use ($app) {
                 RoleController::getRole($app, $roleId);
             })->via('GET', 'POST');
 

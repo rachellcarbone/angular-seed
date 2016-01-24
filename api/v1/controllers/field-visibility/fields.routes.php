@@ -9,9 +9,9 @@ class FieldRoutes {
         
         $app->group('/field', $authenticateForRole('admin'), function () use ($app) {
             
-            $app->post("/:fieldId/", function ($fieldId) use ($app) {
+            $app->map("/get/:fieldId/", function ($fieldId) use ($app) {
                 FieldController::getField($app, $fieldId);
-            });
+            })->via('GET', 'POST');
 
             $app->post("/insert/", function () use ($app) {
                 FieldController::addField($app);

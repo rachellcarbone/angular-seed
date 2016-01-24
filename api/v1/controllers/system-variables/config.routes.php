@@ -9,7 +9,7 @@ class ConfigRoutes {
         
         $app->group('/config', $authenticateForRole('admin'), function () use ($app) {
 
-            $app->map("/:variableId/", function ($variableId) use ($app) {
+            $app->map("/get/:variableId/", function ($variableId) use ($app) {
                 ConfigController::getVariable($app, $variableId);
             })->via('GET', 'POST');
         

@@ -6,6 +6,10 @@ use \Respect\Validation\Validator as v;
 
 class ConfigController {
     
+    static function getVariable($app, $variableId) {
+        
+    }
+    
     static function addVariable($app) {
         if(!v::key('name', v::stringType())->validate($app->request->post()) || 
            !v::key('value', v::stringType())->validate($app->request->post())) {
@@ -29,16 +33,6 @@ class ConfigController {
         } else {
             return $app->render(400,  array('msg' => 'Could not select config.'));
         }
-    }
-    
-    
-    private static function login_validateParams($app) {
-        if(!v::key('email', v::email())->validate($app->request->post()) || 
-           !v::key('password', v::stringType())->validate($app->request->post())) {
-            // Validate input parameters
-            return $app->render(401, array('msg' => 'Login failed. Check your parameters and try again.'));
-        }
-        return true;
     }
     
     static function saveVariable($app) {
