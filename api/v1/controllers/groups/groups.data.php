@@ -3,15 +3,37 @@
 
 class GroupData {
     
+    public static function getGroup($id) {        
+        $group = DBConn::selectOne("SELECT g.id, g.group, g.desc, g.created, g.last_updated AS lastUpdated, "
+                        . "CONCAT(u1.name_first, ' ', u1.name_last) AS createdBy, "
+                        . "CONCAT(u2.name_first, ' ', u2.name_last) AS updatedBy "
+                        . "FROM as_auth_groups AS g "
+                        . "JOIN as_users AS u1 ON u1.id = g.created_user_id "
+                        . "JOIN as_users AS u2 ON u2.id = g.last_updated_by WHERE g.id = :id;", array(':id' => $id));
+        if($group) {
+            $group->roles = DBConn::selectAll("SELECT r.id, r.role, r.desc "
+                        . "FROM as_auth_roles AS r "
+                        . "JOIN as_auth_lookup_group_role AS look ON r.id = look.auth_role_id "
+                        . "WHERE look.auth_group_id = :id ORDER BY r.role;", array(':id' => $id));
+        }
+        return $group;
+    }
+    
     public static function insertGroup($validGroup) {
-        return false;
+        return DBConn::insert("INSERT INTO as_auth_groups(group, desc, created_user_id, last_updated_by) 
+            VALUES (:group, :desc, :created_user_id, :last_updated_by);", $validGroup);
     }
     
     public static function updateGroup($validGroup) {
-        return false;
+        return DBConn::update("UPDATE " . DBConn::prefix() . "auth_groups SET group=:group, desc=:desc, "
+                . "last_updated_by=:last_updated_by;", $validGroup);
     }
     
     public static function deleteGroup($id) {
-        return false;
+        $users = DBConn::delete("DELETE FROM " . DBConn::prefix() . "auth_lookup_user_group WHERE auth_group_id = :id;", array('id' => $id));
+        $roles = DBConn::delete("DELETE FROM " . DBConn::prefix() . "auth_lookup_group_role WHERE auth_group_id = :id;", array('id' => $id));
+        
+        return (!$users || !$roles)  ? false :
+            DBConn::delete("DELETE FROM " . DBConn::prefix() . "auth_groups WHERE id = :id LIMIT 1;", array('id' => $id));
     }
 }
