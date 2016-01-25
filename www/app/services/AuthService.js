@@ -6,11 +6,11 @@
  */
 
 angular.module('AuthService', [
-    'rcAuth.UserSession',
     'rcAuth.constants',
     'rcAuth.cookies',
     'rcAuth.facebook',
     'rcAuth.interceptors',
+    'rcAuth.user',
     'rcAuth.visibility'
 ]).factory('AuthService', ['$rootScope', '$q', '$log', 'UserSession', 'AUTH_EVENTS', 'VisibilityService', 'ApiRoutesAuth', 'FacebookAuthService', 'CookieService',
     function($rootScope, $q, $log, UserSession, AUTH_EVENTS, VisibilityService, API, FacebookAuthService, CookieService) {

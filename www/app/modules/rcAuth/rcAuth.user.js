@@ -5,7 +5,7 @@
  * Sets Nav, Session and Build as global page variables. 
  */
 
-angular.module('rcAuth.UserSession', [])
+angular.module('rcAuth.user', [])
     .service('UserSession', [function() {
     
     // Create a copy of this session object
