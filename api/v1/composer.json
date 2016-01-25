@@ -5,6 +5,7 @@
         "entomb/slim-json-api": "^1.2",
         "respect/validation": "^1.0.3",
         "phpmailer/phpmailer": "^5.2.14",
-        "codezero/cookie": "^1.0"
+        "codezero/cookie": "^1.0",
+        "facebook/php-sdk-v4": "^5.1"
     }
 }

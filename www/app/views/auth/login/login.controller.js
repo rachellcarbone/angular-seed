@@ -7,31 +7,46 @@
  */
 
 angular.module('app.auth.login', [])
-        .controller('AuthLoginCtrl', ['$scope', '$state', '$log', 'AuthService', 
-        function ($scope, $state, $log, AuthService) {
-        
-        $scope.$state = $state;
-        $scope.form = {};
+    .controller('AuthLoginCtrl', ['$rootScope', '$scope', '$state', '$log', 'AuthService',
+    function ($rootScope, $scope, $state, $log, AuthService) {
 
-        $scope.credentials = {
-            'email' : 'rachellcarbone@gmail.com',
-            'password' : 'password1',
-            'remember' : false
-        };
+    $scope.results = [];
+    $rootScope.$on("fb.init", function () {
+        console.log("SDK Ready");
+    });
 
-        $scope.login = function() {
-            $scope.$broadcast('show-errors-check-validity');
-  
-            if($scope.form.login.$valid) {
-                AuthService.login($scope.credentials).then(function(results) {
-                    $log.debug(results);
-                }, function(error) {
-                    $log.debug(error);
-                });
-            } else {
-                $scope.form.login.$setDirty();
-                console.log("Nope");
-            }
-        };
-        
-    }]);
+    $scope.$state = $state;
+    $scope.form = {};
+
+    $scope.credentials = {
+        'email' : 'rachellcarbone@gmail.com',
+        'password' : 'password1',
+        'remember' : false
+    };
+
+    $scope.login = function() {
+        $scope.$broadcast('show-errors-check-validity');
+
+        if($scope.form.login.$valid) {
+            AuthService.login($scope.credentials).then(function(results) {
+                $log.debug(results);
+            }, function(error) {
+                $log.debug(error);
+            });
+        } else {
+            $scope.form.login.$setDirty();
+            console.log("Nope");
+        }
+    };
+
+    $scope.FacebookLogin = function() {
+        AuthService.facebookLogin().then(function (resp) {
+            console.log("Auth response");
+            console.log(resp);
+
+        }, function (err) {
+            console.log(err);
+        });
+    };
+
+}]);

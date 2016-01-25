@@ -9,7 +9,7 @@
 
 var app = angular.module('rcAuth.facebook', ['ng-facebook-api']);
 
-app.config(['FacebookProvider', 'FACEBOOK_CONFIG', function (facebookProvider, FACEBOOK_CONFIG) {
+app.config(['facebookProvider', 'FACEBOOK_CONFIG', function (facebookProvider, FACEBOOK_CONFIG) {
     /**
      * Here the list of params used to configure the provider
      * @param appId
@@ -18,33 +18,55 @@ app.config(['FacebookProvider', 'FACEBOOK_CONFIG', function (facebookProvider, F
      * @param cookie
      * @param api-version
      */
-    facebookProvider.setInitParams(FACEBOOK_CONFIG.appId, true, true, true, 'v2.5'); 
-    
-    //if your app use extra permissions set it
-    facebookProvider.setPermissions(['email', 'public_profile']);
+    facebookProvider.setInitParams(FACEBOOK_CONFIG.appId, true, true, true, 'v2.5');
+    facebookProvider.setPermissions(['public_profile','email']);
 }]);
 
-app.factory('FacebookAuthService', ['facebook', 
-    function(facebook) {
+app.factory('FacebookAuthService', ['facebook', function(facebook) {
         
-        var api = {};
-        
-        api.login = function() {
-            facebook.login().then(function (resp) {
-                console.log("Auth response");
-                console.log(resp);
+    var api = {};
 
-            }, function (err) {
-                console.log(err);
-            });
-        };
+    /*
+     * Success: {
+     *      accessToken: "CAAMrxxxxxwZDZD",
+     *      expiresIn: 7028,
+     *      signedRequest: "6ylgvxxxxxzNCJ9",
+     *      userID: "129319070782734",
+     * }
+     * https://github.com/jberta93/ng-facebook-api/wiki/login
+     * https://developers.facebook.com/docs/reference/javascript/FB.login/v2.5
+     */
+    api.login = function() {
+        return facebook.login();
+    };
 
-        api.logout = function() {
-        };
+    api.getUser = function() {
+        return facebook.getUser();
+    };
 
-        api.isAuthenticated = function() {
-        };
-        
-        return api;
-        
-    }]);
+    /*
+     * https://developers.facebook.com/docs/reference/javascript/FB.logout
+     */
+    api.logout = function() {
+        return facebook.logout();
+    };
+    
+    /*
+    {
+        status: 'connected',
+        authResponse: {
+            accessToken: '...',
+            expiresIn:'...',
+            signedRequest:'...',
+            userID:'...'
+        }
+    }
+     * https://developers.facebook.com/docs/reference/javascript/FB.getLoginStatus
+     */
+    api.isAuthenticated = function() {
+        return facebook.checkLoginStatus();
+    };
+
+    return api;
+
+}]);

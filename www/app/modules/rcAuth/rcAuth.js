@@ -10,5 +10,6 @@ angular.module('rcAuth', [
     'rcAuth.UserSession',
     'rcAuth.VisibilityService',
     'rcAuth.constants',
+    'rcAuth.facebook',
     'rcAuth.interceptors'
 ]);
