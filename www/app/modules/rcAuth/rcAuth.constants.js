@@ -32,3 +32,10 @@ app.constant('USER_ROLES', {
     admin: "2",
     user: "3"
 });
+
+app.constant('FACEBOOK_CONFIG', {
+    appId: '892044264250192', // Dev
+    //appId: '1538616896450172', //Triv
+    
+    comma: 'placeholder'
+});
