@@ -8,7 +8,7 @@
  * permissions to view that element.
  */
 
-angular.module('rcAuth.VisibilityService', [])
+angular.module('rcAuth.visibility', [])
     .factory('VisibilityService', ['USER_ROLES', function(USER_ROLES) {
         
         var service = {};

@@ -7,7 +7,7 @@
 
 angular.module('AuthService', [
     'rcAuth.UserSession',
-    'rcAuth.VisibilityService',
+    'rcAuth.visibility',
     'rcAuth.constants',
     'rcAuth.facebook',
     'rcAuth.interceptors'
