@@ -7,13 +7,10 @@
  */
 
 angular.module('app.auth.login', [])
-    .controller('AuthLoginCtrl', ['$rootScope', '$scope', '$state', '$log', 'AuthService',
-    function ($rootScope, $scope, $state, $log, AuthService) {
+    .controller('AuthLoginCtrl', ['$scope', '$state', '$log', 'AuthService',
+    function ($scope, $state, $log, AuthService) {
 
     $scope.results = [];
-    $rootScope.$on("fb.init", function () {
-        console.log("SDK Ready");
-    });
 
     $scope.$state = $state;
     $scope.form = {};
