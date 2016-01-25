@@ -5,8 +5,13 @@
  * Sets Nav, Session and Build as global page variables. 
  */
 
-angular.module('rcAuth.AuthService', [])
-    .factory('AuthService', ['$rootScope', '$cookies', '$q', '$log', '$filter', 'UserSession', 'AUTH_EVENTS', 'AUTH_COOKIES', 'VisibilityService', 'ApiRoutesAuth', 'FacebookAuthService',
+angular.module('AuthService', [
+    'rcAuth.UserSession',
+    'rcAuth.VisibilityService',
+    'rcAuth.constants',
+    'rcAuth.facebook',
+    'rcAuth.interceptors'
+]).factory('AuthService', ['$rootScope', '$cookies', '$q', '$log', '$filter', 'UserSession', 'AUTH_EVENTS', 'AUTH_COOKIES', 'VisibilityService', 'ApiRoutesAuth', 'FacebookAuthService',
     function($rootScope, $cookies, $q, $log, $filter, UserSession, AUTH_EVENTS, AUTH_COOKIES, VisibilityService, API, FacebookAuthService) {
         
         var factory = {};

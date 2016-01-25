@@ -16,7 +16,6 @@ angular.module('theApp', [
     'ngMessages',
     'api.v1',
     'rcDirectives',
-    'rcAuth',
     'rcCart',
     'app.config',
     'app.router',
