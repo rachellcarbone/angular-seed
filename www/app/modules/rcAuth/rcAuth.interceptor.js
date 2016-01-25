@@ -1,7 +1,4 @@
-
-    
-    
-    'use strict';
+'use strict';
 
 /* 
  * Authentication Interceptor
@@ -10,7 +7,6 @@
  * server response http headers for authentication statuses.
  * https://docs.angularjs.org/api/ng/service/$http
  */
-
 
 var app = angular.module('rcAuth.interceptor', []);
 
