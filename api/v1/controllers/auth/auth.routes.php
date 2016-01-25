@@ -21,6 +21,10 @@ class AuthRoutes {
                 AuthController::login($app);
             });
 
+            $app->post("/facebook-login/", function () use ($app) {
+                AuthController::isFacebookAuthenticated($app);
+            });
+
             $app->post("/logout/", function () use ($app) {
                 AuthController::logout($app);
             });
