@@ -15,31 +15,25 @@ app.config(['$httpProvider', function($httpProvider){
     $httpProvider.interceptors.push('AuthInterceptor');
 }]);
 
-app.factory('AuthInterceptor',
-    function($rootScope, $q, AUTH_EVENTS, UserSession) {
-        
-        var apiRequests = this;
-          
-        // Interceptor gets called when a previous interceptor 
-        // threw an error or resolved with a rejection.
-        apiRequests.responseError = function(response) {
-            // If the http request returns a 401, 403 or 419 
-            // then broadcast the apropriate auth event. 
-            $rootScope.$broadcast({
-                401: AUTH_EVENTS.notAuthenticated,
-                403: AUTH_EVENTS.notAuthorized,
-                419: AUTH_EVENTS.sessionTimeout
-            }[response.status], response);
+app.factory('AuthInterceptor', function($rootScope, $q, AUTH_EVENTS) {
 
-                // May need this here, still testing
-                // Redirect ohhh.... but I dont have the state.... hmmm...
-                // Maybe I dont want this interceptor...
-                // , { 'state' : toState.name, 'params' : toParams }
+    var apiRequests = this;
 
-            // Reject the response as normal
-            return $q.reject(response);
-        };
-            
-        return apiRequests;
-        
-    });
+    // Interceptor gets called when a previous interceptor 
+    // threw an error or resolved with a rejection.
+    apiRequests.responseError = function(response) {
+        // If the http request returns a 401, 403 or 419 
+        // then broadcast the apropriate auth event. 
+        $rootScope.$broadcast({
+            401: AUTH_EVENTS.notAuthenticated,
+            403: AUTH_EVENTS.notAuthorized,
+            419: AUTH_EVENTS.sessionTimeout
+        }[response.status], response);
+
+        // Reject the response as normal
+        return $q.reject(response);
+    };
+
+    return apiRequests;
+
+});
