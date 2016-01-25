@@ -8,7 +8,7 @@
  * https://docs.angularjs.org/api/ng/service/$http
  */
 
-var app = angular.module('rcAuth.interceptor', []);
+var app = angular.module('rcAuth.interceptors', []);
 
 app.config(['$httpProvider', function($httpProvider){
     // Push the Auth Interceptor onto the $httpProvider.interceptors array

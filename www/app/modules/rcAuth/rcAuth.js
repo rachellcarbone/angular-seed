@@ -10,6 +10,5 @@ angular.module('rcAuth', [
     'rcAuth.UserSession',
     'rcAuth.VisibilityService',
     'rcAuth.constants',
-    'rcAuth.interceptor',
-    'rcAuth.listeners'
+    'rcAuth.interceptors'
 ]);
