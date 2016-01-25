@@ -8,7 +8,7 @@
 
 angular.module('app.auth.signup', [])
         .controller('AuthSignupCtrl', ['$scope', '$state', '$log', 'AuthService', 
-        function ($scope, $log, $state, AuthService) {
+        function ($scope, $state, $log, AuthService) {
         
         $scope.$state = $state;
         $scope.form = {};
