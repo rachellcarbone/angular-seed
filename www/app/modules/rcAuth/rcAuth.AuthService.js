@@ -6,8 +6,8 @@
  */
 
 angular.module('rcAuth.AuthService', [])
-    .factory('AuthService', ['$rootScope', '$cookies', '$q', '$log', '$filter', 'UserSession', 'AUTH_EVENTS', 'AUTH_COOKIES', 'VisibilityService', 'ApiRoutesAuth', 
-    function($rootScope, $cookies, $q, $log, $filter, UserSession, AUTH_EVENTS, AUTH_COOKIES, VisibilityService, API) {
+    .factory('AuthService', ['$rootScope', '$cookies', '$q', '$log', '$filter', 'UserSession', 'AUTH_EVENTS', 'AUTH_COOKIES', 'VisibilityService', 'ApiRoutesAuth', 'FacebookAuthService',
+    function($rootScope, $cookies, $q, $log, $filter, UserSession, AUTH_EVENTS, AUTH_COOKIES, VisibilityService, API, FacebookAuthService) {
         
         var factory = {};
         
@@ -26,6 +26,8 @@ angular.module('rcAuth.AuthService', [])
                 if (credentials.apiKey && credentials.apiToken) {
                         API.getAuthenticatedUser(credentials)
                         .then(function (data) {
+                            data.user.apiKey = credentials.apiKey;
+                            data.user.apiToken = credentials.apiToken;
                             if (!UserSession.create(data.user)) {
                                 $log.error('[authInit] Credentials found but session Couldn\'t be Created', data);
                             }
@@ -128,6 +130,8 @@ angular.module('rcAuth.AuthService', [])
                 if (credentials.apiKey && credentials.apiToken) {
                         API.getAuthenticatedUser(credentials)
                         .then(function (data) {
+                            data.user.apiKey = credentials.apiKey;
+                            data.user.apiToken = credentials.apiToken;
                             if (UserSession.create(data.user)) {
                                 return resolve(UserSession.get());
                             } else {
@@ -167,6 +171,14 @@ angular.module('rcAuth.AuthService', [])
                         reject(AUTH_EVENTS.notAuthenticated);
                     });
                 }
+            });
+        };
+        
+        factory.facebookLogin = function() {
+            return FacebookAuthService.login().then(function(data) {
+                console.log('Auth Service ', data);
+            }, function(error) {
+                
             });
         };
         

@@ -29,13 +29,10 @@ class AuthController {
         // Congrats - you're logged in!
         AuthData::insertAuthToken(array(
             ':user_id' => $user->id,
-            ':identifier' => $session->identifier,
-            ':token' => password_hash($session->token, PASSWORD_DEFAULT),
+            ':identifier' => $user->apiKey,
+            ':token' => password_hash($user->apiToken, PASSWORD_DEFAULT),
             ':expires' => date('Y-m-d H:i:s', time() + ($hours * 60 * 60))
         ));
-        
-        $user->apiKey = $session->identifier;
-        $user->apiToken = $session->token;
         
         // Send the session life back (in hours) for the cookies
         return $app->render(200, array('user' => $user, 'sessionLifeHours' => $hours));
@@ -75,13 +72,6 @@ class AuthController {
         return $user;
     }
     
-    private static function login_createSession() {
-        return (object) array(
-            'identifier' => hash('sha256', uniqid()),
-            'token' => hash('sha256', uniqid())
-        );
-    }
-    
     private static function login_getSessionExpirationInHours($app) {
         $remember = (v::key('remember', v::stringType())->validate($app->request->post())) ? 
                 boolval($app->request->post('remember')) : false;
@@ -100,13 +90,16 @@ class AuthController {
     }
     
     static function authorizeApiToken($app) {
-        if(!v::key('userKey', v::stringType())->validate($app->request->post()) || 
-           !v::key('userToken', v::stringType())->validate($app->request->post())) {
+        if(!v::key('apiKey', v::stringType())->validate($app->request->post()) || 
+           !v::key('apiToken', v::stringType())->validate($app->request->post())) {
             return false;
         }
-        $user = UserData::selectUserByIdentifierToken($app->request->post('userKey'));
-        if(!$user || !password_verify($app->request->post('userToken'), $user->apiToken)) {
-            return false;
+        $user = UserData::selectUserByIdentifierToken($app->request->post('apiKey'));
+        if(!$user) {
+            return "user";
+        }
+        if(!password_verify($app->request->post('apiToken'), $user->apiToken)) {
+            return "password";
         }
         // Go now. Be free little brother.
         return $user->id;
@@ -128,6 +121,8 @@ class AuthController {
         }
         
         // Go now. Be free little brother.
+        unset($user->apiKey);
+        unset($user->apiToken);
         return $app->render(200, array('user' => $user));
     }
     
