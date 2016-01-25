@@ -38,28 +38,28 @@
     </div>
     
     <div class="row" ng-if="$state.is('app.auth.signup')">
-        <div class="col-sm-0 col-md-3"></div>
-        <div class="col-sm-12 col-md-6">
-
-            <form>
+        <div class="col-xs-0 col-sm-3"></div>
+        <div class="col-xs-12 col-sm-6">
                 
-                <div class="page-header">
-                    <h1>Sign Up</h1>
+            <div class="page-header">
+                <h1>Sign Up</h1>
+            </div>
+            
+            <form name="form.signup" role="form" novalidate>                
+                
+                <div class="form-group">
+                    <label for="nameFirst">First Name</label>
+                    <input ng-model="newUser.nameFirst" type="text" class="form-control" name="nameFirst">
                 </div>
                 
                 <div class="form-group">
-                    <label for="userFirst">First Name</label>
-                    <input type="text" class="form-control" id="userFirst" placeholder="First">
+                    <label for="nameLast">Last Name</label>
+                    <input ng-model="newUser.nameLast" type="text" class="form-control" name="nameLast">
                 </div>
                 
                 <div class="form-group">
-                    <label for="userLast">Last Name</label>
-                    <input type="text" class="form-control" id="userLast" placeholder="First">
-                </div>
-                
-                <div class="form-group">
-                    <label for="userEmail">Best Email</label>
-                    <input type="email" class="form-control" id="userEmail" placeholder="Email">
+                    <label for="email">Best Email</label>
+                    <input ng-model="newUser.email" type="email" class="form-control" name="email">
                 </div>
                 
                 <div class="alert alert-info" role="alert">
@@ -71,31 +71,53 @@
                 </div>
             
                 <div class="form-group">
-                    <label for="userPassword">Password</label>
-                    <input type="password" class="form-control" id="userPassword" placeholder="Password">
+                    <label for="password">Password</label>
+                    <input ng-model="newUser.email" type="password" class="form-control" name="password">
                 </div>
                 
                 <div class="form-group">
-                    <label for="userConfirmPassword">Confirm Password</label>
-                    <input type="password" class="form-control" id="userConfirmPassword" placeholder="Password">
+                    <label for="passwordB">Confirm Password</label>
+                    <input ng-model="newUser.passwordB" type="password" class="form-control" name="passwordB">
                 </div>
                 
                 <div class="form-group">
-                    <label for="userReferredFrom">How did you hear about us?</label>
-                    <input type="text" class="form-control" id="userReferredFrom" placeholder="Google, Facebook Ad, Email...">
+                    <label for="referer">How did you hear about us? <small>(Google, Facebook, Email...)</small></label>
+                    <input ng-model="newUser.referer" type="text" class="form-control" name="referer">
                 </div>
                 
                 <hr/>
                 
-                <div class="form-group text-right">
-                    <button type="button" class="btn btn-default btn-lg" data-ui-sref="app.public.landing">Cancel</button>
-                    <button type="submit" class="btn btn-default btn-lg">Sign Up</button>
+                <div class="row">
+                    
+                    <div class="col-md-6">
+                        <p class="align-left">Already have an account? <a data-ui-sref="app.auth.login">Login</a>.</p>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="form-group text-right">
+                            <button type="button" class="btn btn-default" data-ui-sref="app.public.landing">Cancel</button>
+                            <button type="submit" class="btn btn-primary" ng-click="signUp()">Sign Up</button>
+                        </div>
+                    </div>
+                    
                 </div>
                 
+                
             </form>
+
+            
+            
+            <hr />
+            
+            <h4>Already have a social media account?</h4>
+
+            <a ng-click="facebookSignUp()" class="btn btn-block btn-social btn-lg btn-facebook">
+                <span class="fa fa-facebook"></span>
+                Sign up with Facebook
+            </a>
             
         </div>
-        <div class="col-sm-0 col-md-3"></div>
+        <div class="col-sm-0 col-sm-3"></div>
     </div>
 
 </div>
