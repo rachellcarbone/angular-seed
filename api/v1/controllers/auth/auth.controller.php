@@ -8,7 +8,6 @@ use \Respect\Validation\Validator as v;
 class AuthController {
     
     static $maxattempts = 6;
-    
     static $passwordRules = "Passwords must be at least 8 characters long, contain no whitespace, have at least one letter and one number and any of the following !@#$%^&*_+=-.";
     
     // Login Function
@@ -22,8 +21,8 @@ class AuthController {
         
         $user = self::login_validateFoundUser($app);
         if(!$user) { return; }
-        
-        $session = self::login_createSession();
+        $user->apiKey = hash('sha512', uniqid());
+        $user->apiToken = hash('sha512', uniqid());
         
         $hours = self::login_getSessionExpirationInHours($app);
         
@@ -141,154 +140,16 @@ class AuthController {
         
     // Delete Expired Auth Tokens
     
-    public static function deleteExpiredAuthTokens($app) {
+    static function deleteExpiredAuthTokens($app) {
         AuthData::deleteExpiredAuthTokens();
         return $app->render(200, array('msg' => "Deleted expired auth tokens." ));
     }
     
-    
-    
-    
-    /*
-    
-    
-    private static $logger;
-    private static $routeChangePassword;
-    private static $routeConfirmEmail;
-    
-    static function hmmm() {
-        parent::__construct();
-        self::logger = new \API\Data\Logging();
-        self::routeChangePassword = '#/change-password/';
-        self::routeConfirmEmail = '#/confirm-email/';
-        session_start();
-    }
-    
-
-    private static function isTokenValid($token) {
-        $found = AuthData::selectResetToken($token);
-        if ($found && date('Y-m-d H:i:s', strtotime('NOW')) <= date('Y-m-d H:i:s', strtotime($found['expires']))) {
-            return AuthData::selectUserById($found['analyst_id']);
-        } else if ($found) {
-            AuthData::deleteResetToken($found['id']);
-        }
-        return false;
-    }
-    
-    private static function hashForgotLinkToken() {
-        /* Note incase this is modified: 
-         * The fact that this hash is exactly 32 characters long 
-         * is validated in validateResetToken() below. 
-        return md5(uniqid(rand(),1));
-    }
-
-    
-    static function forgotPassword($app) {
-        if(!v::email()->validate($app->request->post('email'))) {
-            $app->render(400, self::setResponse->fail('Invalid email address.'));
-            return;
-        }
-        
-        $user = AuthData::selectUserByEmail($app->request->post('email'));
-        
-        if (!$user) {
-            $app->render(400, self::setResponse->fail('A user for that email could not be found. Password reset instructions were not sent.'));
-        }
-        
-        $timestamp = date('Y-m-d H:i:s', strtotime('+6 hours'));
-        $token = self::hashForgotLinkToken();
-
-        if(!AuthData::updatePasswordResetToken($user['id'], $token, $timestamp)) {
-            $app->render(500, self::setResponse->fail('Password reset failed. Please try again later.'));
-        }
-        
-        $mail = new \API\Data\EmailManager();
-        $route = self::routeChangePassword . urlencode($token);
-        $sent = $mail->emailForgotPassword($user, $route, '6 hours');
-
-        if ($sent) {
-            $app->render(200, self::setResponse->success('Password reset instructions have been sent. Please check your email.'));
-        } else {
-            $app->render(500, self::setResponse->fail('Sending password reset email failed. Please try again later.'));
-        }
-    }
-
-    static function validateResetToken($app) {
-        $token = urldecode($app->request->post('token'));
-        
-        if(v::stringType()->length(32)->validate($token)) {
-            $user = self::isTokenValid($token);
-            $app->render(200, self::setResponse->success(array('user' => $user)));
-        } else {
-            $app->render(400, self::setResponse->fail('Token Invalid'));
-        }        
-    }
-
-    static function changePassword($app) {
-        $token = ($app->request->post('token')) ? urldecode($app->request->post('token')) : false;
-        
-        if(!self::validatePassword($app->request->post('password'))) {
-            $app->render(400, self::setResponse->fail("Error saving password. Passwords must be at least 8 characters "
-                    . "long, contain no whitespace, have at least one letter and one number."));
-                    return;
-        } 
-        
-        if(!v::stringType()->length(32)->validate($token)) {
-            $app->render(400, self::setResponse->fail('Invalid token. Request another forgot password link from the login page.'));
-        }
-        
-        if(v::int()->length(1,11)->validate($app->request->post('id')) &&
-           v::email()->validate($app->request->post('email'))) {
+    static function isFacebookAuthenticated($param) {
+        $user = FacebookAuthController::checkLoginStatus();
+        if($user) {
             
-            $user = self::isTokenValid($token);
-            $id = $app->request->post('id');
-            
-            if ($user && $user['id'] == $id && $user['email'] === $app->request->post('email')) {
-                $saved = AuthData::updateUserPassword($id, $app->request->post('password'));
-                
-                if($saved) {
-                    AuthData::deleteResetTokenForUser($id);
-                    $app->render(200, self::setResponse->success('Your password has been updated. You may now login using your new credentials.'));
-                    return;
-                }
-            }
         }
-        
-        $app->render(500, self::setResponse->fail('Error saving password. Please refresh the page and try again.'));
     }
-
-    static function userChagePassword($app, $userId) {
-        $newPassword = ($app->request->post('newPassword')) ? trim($app->request->post('newPassword')) : false;
-        if(!self::validatePassword($newPassword)) {
-            $app->render(400, self::setResponse->fail("Error saving password. Passwords must be at least 8 characters "
-                    . "long, contain no whitespace, have at least one letter and one number, and include only letters, numbers and "
-                    . "the following special characters \'!@#$%^&*_+=-\'."));
-            
-            return;
-        } 
-        
-        if(v::int()->length(1,11)->validate($userId) &&
-           v::stringType()->notEmpty()->validate($app->request->post('password'))) {
-            
-            $user = AuthData::selectUserPasswordById($userId);
-
-            if (!$user) {
-                $app->render(400, self::setResponse->fail('Error saving password. Please check your parameters and try again.'));
-                return;
-            } else if (!password_verify($app->request->post('password'), $user['password'])) {
-                $app->render(400, self::setResponse->fail('Incorrect current password. Please check your Caps Lock and try again.'));
-                return;
-            } else {
-                $saved = AuthData::updateUserPassword($userId, $newPassword);
-                if($saved) {
-                    AuthData::deleteResetTokenForUser($userId);
-                    $app->render(200, self::setResponse->success('Your password has been updated.'));
-                    return;
-                }
-            }
-        }
-
-        $app->render(400, self::setResponse->fail('Error saving password. Please check your parameters and try again.'));
-    }
-    */
+    
 }
