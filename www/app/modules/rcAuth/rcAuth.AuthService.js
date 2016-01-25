@@ -42,6 +42,10 @@ angular.module('rcAuth.AuthService', [])
             });
         };
         
+        factory.signup = function() {
+            
+        };
+        
         factory.login = function(credentials) {
             if($cookies.get(AUTH_COOKIES.apiKey)) { 
                 credentials.logout = $cookies.get(AUTH_COOKIES.apiKey); 
@@ -101,18 +105,6 @@ angular.module('rcAuth.AuthService', [])
                 
                 return resolve(AUTH_EVENTS.logoutSuccess);
             });
-        };
-
-        factory.forgotPasswordEmail = function(email) {
-            return API.postForgotPasswordEmail(email);
-        };
-        
-        factory.validatePasswordResetToken = function(token) {
-            return API.postValidatePasswordResetToken(token);
-        };
-
-        factory.changePassword = function(user) {
-            return API.updatePassword(user);
         };
 
         factory.isAuthenticated = function() {
@@ -175,6 +167,14 @@ angular.module('rcAuth.AuthService', [])
         };
         
         factory.facebookLogin = function() {
+            return FacebookAuthService.login().then(function(data) {
+                console.log('Auth Service ', data);
+            }, function(error) {
+                
+            });
+        };
+        
+        factory.facebookSignup = function() {
             return FacebookAuthService.login().then(function(data) {
                 console.log('Auth Service ', data);
             }, function(error) {
