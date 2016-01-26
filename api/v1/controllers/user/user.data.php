@@ -1,9 +1,10 @@
 <?php namespace API;
- require_once dirname(dirname(dirname(__FILE__))) . '/services/api.dbconn.php';
+require_once dirname(dirname(dirname(__FILE__))) . '/services/api.dbconn.php';
+require_once dirname(dirname(__FILE__)) . '/groups/groups.data.php';
 
 class UserData {
     
-    public static function selectUsers() {
+    static function selectUsers() {
         $qUsers = DBConn::executeQuery("SELECT id, name_first, name_last, email, email_verified, password, created, last_updated "
                 . "FROM " . DBConn::prefix() . "users;");
         
@@ -21,12 +22,12 @@ class UserData {
         return $users;
     }
     
-    public static function selectOtherUsersWithEmail($email, $id = 0) {
+    static function selectOtherUsersWithEmail($email, $id = 0) {
         return DBConn::selectAll("SELECT id FROM " . DBConn::prefix() . "users WHERE email = :email AND id != :id;", 
                     array(':email' => $email, ':id' => $id), \PDO::FETCH_COLUMN);
     }
     
-    public static function selectUserById($id) {
+    static function selectUserById($id) {
         $user = DBConn::selectOne("SELECT id, name_first as nameFirst, name_last as nameLast, email "
                 . "FROM " . DBConn::prefix() . "users WHERE id = :id LIMIT 1;", array(':id' => $id));
         if($user) {
@@ -38,7 +39,7 @@ class UserData {
         return $user;
     }
     
-    public static function selectUserByEmail($email) {
+    static function selectUserByEmail($email) {
         $user = DBConn::selectOne("SELECT id, name_first as nameFirst, name_last as nameLast, email, password "
                 . "FROM " . DBConn::prefix() . "users WHERE email = :email LIMIT 1;", array(':email' => $email));
         if($user) {
@@ -65,16 +66,34 @@ class UserData {
         return $user;
     }
   
-    public static function insertUser($validUser) {
-        return DBConn::insert("INSERT INTO " . DBConn::prefix() . "users(name_first, name_last, email, password) "
+    static function assignUserGroup($lookup) {
+        return DBConn::insert("INSERT INTO " . DBConn::prefix() . "users(name_first, name_last, email, facebook_id) "
+                . "VALUES (:name_first, :name_last, :email, :facebook_id);", $validUser);
+    }
+  
+    static function insertUser($validUser) {
+        $userId = DBConn::insert("INSERT INTO " . DBConn::prefix() . "users(name_first, name_last, email, password) "
                 . "VALUES (:name_first, :name_last, :email, :password);", $validUser);
+        if($userId) {
+            GroupData::addDefaultGroupToUser($userId);
+        }
+        return $userId;
+    }
+  
+    static function insertFacebookUser($validUser) {
+        $userId = DBConn::insert("INSERT INTO " . DBConn::prefix() . "users(name_first, name_last, email, facebook_id) "
+                . "VALUES (:name_first, :name_last, :email, :facebook_id);", $validUser);
+        if($userId) {
+            GroupData::addDefaultGroupToUser($userId);
+        }
+        return $userId;
     }
     
-    public static function updateUser($validUser) {
+    static function updateUser($validUser) {
         return DBConn::update("UPDATE " . DBConn::prefix() . "users SET name_first=:name_first, name_last=:name_last, email=:email WHERE id = :id;", $validUser);
     }
     
-    public static function deleteUser($id) {
+    static function deleteUser($id) {
         return DBConn::delete("DELETE FROM " . DBConn::prefix() . "users WHERE id = :id LIMIT 1;", array('id' => $id));
     }
 }

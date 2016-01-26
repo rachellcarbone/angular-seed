@@ -21,7 +21,7 @@ angular.module('app.auth.login', [])
         'remember' : false
     };
 
-    $scope.login = function() {
+    $scope.buttonLogin = function() {
         $scope.$broadcast('show-errors-check-validity');
 
         if($scope.form.login.$valid) {
@@ -36,13 +36,11 @@ angular.module('app.auth.login', [])
         }
     };
 
-    $scope.FacebookLogin = function() {
-        AuthService.facebookLogin().then(function (resp) {
-            console.log("Auth response");
-            console.log(resp);
-
-        }, function (err) {
-            console.log(err);
+    $scope.buttonFacebookLogin = function() {
+        AuthService.facebookLogin().then(function (results) {
+            $log.debug(results);
+        }, function (error) {
+            $log.debug(error);
         });
     };
 

@@ -19,6 +19,30 @@ angular.module('apiRoutes.auth', [])
 
         return API.post('auth/login/', credentials, 'System unable to login.');
     };
+    
+    api.postSignup = function(newUser) {
+        if(!newUser.password || 
+                !newUser.nameLast || 
+                !newUser.nameLast || 
+                !newUser.email) {
+            return API.reject('Invalid user please verify your information and try again.');
+        }
+        return API.post('auth/signup/', newUser, 'System unable to register new user.');
+    };
+    
+    api.postFacebookSignup = function(newUser) {
+        if(!newUser.facebookId || 
+                !newUser.nameFirst || 
+                !newUser.nameLast || 
+                !newUser.email || 
+                !newUser.link || 
+                !newUser.locale || 
+                !newUser.timezone || 
+                !newUser.ageRange) {
+            return API.reject('Invalid user please verify your information and try again.');
+        }
+        return API.post('auth/signup/facebook/', newUser, 'System unable to register new facebook user.');
+    };
 
     api.postLogout = function(logout) {
         var data = {};
@@ -26,6 +50,19 @@ angular.module('apiRoutes.auth', [])
         
         return API.post('auth/logout/', data, 'System unable to logout.');
     };
+
+    api.getAuthenticatedUser = function(credentials) {
+        if(!credentials.apiKey || !credentials.apiToken) {
+            return API.reject('Invalid credentials please verify your information and try again.');
+        }
+
+        return API.post('auth/authenticate/', credentials, 'Error, User Not Authenticated.');
+    };
+    
+    
+    
+
+
 
     api.postForgotPasswordEmail = function(email) {
         var data = { 'email' : email };
@@ -49,14 +86,6 @@ angular.module('apiRoutes.auth', [])
         }
 
         return API.post('auth/change-password/', user, 'Error changing password.');
-    };
-
-    api.getAuthenticatedUser = function(credentials) {
-        if(!credentials.apiKey || !credentials.apiToken) {
-            return API.reject('Invalid credentials please verify your information and try again.');
-        }
-
-        return API.post('auth/authenticate/', credentials, 'Error, User Not Authenticated.');
     };
 
     return api;

@@ -10,7 +10,101 @@ class AuthController {
     static $maxattempts = 6;
     static $passwordRules = "Passwords must be at least 8 characters long, contain no whitespace, have at least one letter and one number and any of the following !@#$%^&*_+=-.";
     
+    // Signup Function
+    static function signup($app) {
+        if(!v::key('email', v::email())->validate($app->request->post()) || 
+           !v::key('nameFirst', v::stringType())->validate($app->request->post()) || 
+           !v::key('nameLast', v::stringType())->validate($app->request->post()) || 
+           !v::key('password', v::stringType())->validate($app->request->post())) {
+            // Validate input parameters
+            return $app->render(401, array('msg' => 'Signup failed. Check your parameters and try again.'));
+        }
+        
+        $existing = UserData::selectUserByEmail($app->request->post('email'));
+        if($existing) { 
+            return $app->render(400, array('msg' => 'Signup failed. A user with that email already exists.'));        
+        }
+        
+        $validUser = array(
+            ':email' => $app->request->post('email'),
+            ':name_first' => $app->request->post('nameFirst'),
+            ':name_last' => $app->request->post('nameLast'),
+            ':password' => password_hash($app->request->post('password'), PASSWORD_DEFAULT)
+        );
+        $userId = UserData::insertUser($validUser);
+        if($userId) {
+            $user = UserData::selectUserById($userId);
+            if(!$user) { 
+                return $app->render(400, array('msg' => 'Signup failed. Could not select user.'));        
+            }
+            $user->apiKey = hash('sha512', uniqid());
+            $user->apiToken = hash('sha512', uniqid());
+            $hours = self::login_getSessionExpirationInHours($app);
+        
+            // Congrats - you're logged in!
+            AuthData::insertAuthToken(array(
+                ':user_id' => $user->id,
+                ':identifier' => $user->apiKey,
+                ':token' => password_hash($user->apiToken, PASSWORD_DEFAULT),
+                ':expires' => date('Y-m-d H:i:s', time() + ($hours * 60 * 60))
+            ));
+
+            // Send the session life back (in hours) for the cookies
+            return $app->render(200, array('user' => $user, 'sessionLifeHours' => $hours));
+        }
+        return $app->render(400, array('msg' => 'Signup failed. Could not save user.'));
+    }
+    
+    static function facebookSignup($app) {
+        if(!v::key('facebookId', v::stringType())->validate($app->request->post()) || 
+           !v::key('nameFirst', v::stringType())->validate($app->request->post()) || 
+           !v::key('nameLast', v::stringType())->validate($app->request->post()) || 
+           !v::key('email', v::email())->validate($app->request->post())) {
+            // Validate input parameters
+            return $app->render(400, array('msg' => 'Facebook signup failed. Check your parameters and try again.'));
+        }
+        
+        $existing = UserData::selectUserByEmail($app->request->post('email'));
+        if($existing) { 
+            return $app->render(400, array('msg' => 'Facebook signup failed. A user with that email already exists.'));        
+        }
+        
+        $validUser = array(
+            ':email' => $app->request->post('email'),
+            ':name_first' => $app->request->post('nameFirst'),
+            ':name_last' => $app->request->post('nameLast'),
+            ':facebook_id' => $app->request->post('facebookId')
+        );
+        $userId = UserData::insertFacebookUser($validUser);
+        if($userId) {
+            $user = UserData::selectUserById($userId);
+            if(!$user) { 
+                return $app->render(400, array('msg' => 'Facebook signup failed. Could not select user.'));        
+            }
+            $user->apiKey = hash('sha512', uniqid());
+            $user->apiToken = hash('sha512', uniqid());
+            $hours = self::login_getSessionExpirationInHours($app);
+        
+            // Congrats - you're logged in!
+            AuthData::insertAuthToken(array(
+                ':user_id' => $user->id,
+                ':identifier' => $user->apiKey,
+                ':token' => password_hash($user->apiToken, PASSWORD_DEFAULT),
+                ':expires' => date('Y-m-d H:i:s', time() + ($hours * 60 * 60))
+            ));
+
+            // Send the session life back (in hours) for the cookies
+            return $app->render(200, array('user' => $user, 'sessionLifeHours' => $hours));
+        }
+        return $app->render(400, array('msg' => 'Facebook signup failed. Could not save user.'));
+        
+    }
+    
     // Login Function
+    
+    static function facebookLogin($app) {
+        
+    }
     
     static function login($app) {
         // If anone is logged in currently, log them out
@@ -50,7 +144,7 @@ class AuthController {
         if(!v::key('email', v::email())->validate($app->request->post()) || 
            !v::key('password', v::stringType())->validate($app->request->post())) {
             // Validate input parameters
-            return $app->render(401, array('msg' => 'Login failed. Check your parameters and try again.'));
+            return $app->render(400, array('msg' => 'Login failed. Check your parameters and try again.'));
         }
         return true;
     }
@@ -60,10 +154,10 @@ class AuthController {
         
         if(!$user) {
             // Validate existing user
-            return $app->render(401, array('maxattempts' => self::$maxattempts, 'msg' => 'Login failed. A user with that email could not be found.'));
+            return $app->render(400, array('maxattempts' => self::$maxattempts, 'msg' => 'Login failed. A user with that email could not be found.'));
         } else if (!password_verify($app->request->post('password'), $user->password)) {
             // Validate Password
-            return $app->render(401, array('maxattempts' => self::$maxattempts, 'msg' => 'Login failed. Username and password combination did not match.' ));
+            return $app->render(400, array('maxattempts' => self::$maxattempts, 'msg' => 'Login failed. Username and password combination did not match.' ));
         }
         
         // Safty first
@@ -114,10 +208,10 @@ class AuthController {
         
         if(!$user) {
             // Validate existing user
-            return $app->render(401, array('msg' => 'Unauthenticated: No User'));
+            return $app->render(400, array('msg' => 'Unauthenticated: No User'));
         } else if (!password_verify($app->request->post('apiToken'), $user->apiToken)) {
             // Validate Password
-            return $app->render(401, array('msg' => 'Unauthenticated: Invalid Cookie'));
+            return $app->render(400, array('msg' => 'Unauthenticated: Invalid Cookie'));
         }
         
         // Go now. Be free little brother.

@@ -40,8 +40,9 @@ app.factory('FacebookAuthService', ['facebook', function(facebook) {
         return facebook.login();
     };
 
-    api.getUser = function() {
-        return facebook.getUser();
+    api.getUser = function(id) {
+        var fields = 'id,first_name,last_name,age_range,link,gender,locale,timezone,email';
+        return facebook.getUser(id, { 'fields' : fields });
     };
 
     /*

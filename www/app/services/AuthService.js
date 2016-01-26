@@ -45,14 +45,44 @@ angular.module('AuthService', [
             });
         };
         
-        factory.signup = function() {
+        factory.signup = function(newUser) {
+            /* 
+             * Regular Signup:
+             * var newUser = {
+                    'nameFirst': '',
+                    'nameLast': '',
+                    'email': '',
+                    'password': '',
+                    'passwordB': '',
+                    'referer': ''
+                };
+             */
             
+            return $q(function (resolve, reject) {
+                    API.postSignup(newUser)
+                    .then(function (data) {
+                        
+                        if (UserSession.create(data.user)) {
+                            //put valid login creds in a cookie
+                            CookieService.setAuthCookie(data.user.apiKey, data.user.apiToken, data.sessionLifeHours);
+                        
+                            resolve(UserSession.get());
+                            $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
+                        } else {
+                            $log.error(data);
+                            reject("Error: Could not sign up user. Please try again later.");
+                        }
+                    }, function (error) {
+                        $log.error(error);
+                        reject(error);
+                    });
+            });
         };
         
         factory.login = function(credentials) {
-            var credentials = CookieService.getAuthCookie();
-            if(credentials) { 
-                credentials.logout = credentials.apiKey; 
+            var savedAuth = CookieService.getAuthCookie();
+            if(savedAuth) { 
+                credentials.logout = savedAuth.apiKey; 
             }
             
             CookieService.destroyAuthCookie();
@@ -155,18 +185,81 @@ angular.module('AuthService', [
         };
         
         factory.facebookLogin = function() {
-            return FacebookAuthService.login().then(function(data) {
-                console.log('Auth Service ', data);
-            }, function(error) {
+            FacebookAuthService.login().then(function(data) {
+                $log.debug('facebookLogin Token: ', data);
                 
+                FacebookAuthService.getUser(data.userID).then(function (data) {
+                    $log.debug('facebookLogin User: ', data);
+
+
+                }, function (error) {
+                    $log.error('ERROR facebookLogin User: ', error);
+                });
+                
+            }, function(error) {
+                $log.error('ERROR facebookLogin Token: ', error);
             });
         };
         
         factory.facebookSignup = function() {
-            return FacebookAuthService.login().then(function(data) {
-                console.log('Auth Service ', data);
-            }, function(error) {
-                
+             /* Facebook Signup:
+             * var newUser = {
+                    'nameFirst' : data.user.first_name,
+                    'nameLast' : data.user.last_name,
+                    'email' : data.user.email,
+                    'facebookId': data.user.id,
+                    'link' : data.user.link,
+                    'locale' : data.user.locale,
+                    'timezone' : data.user.timezone,
+                    'ageRange' : angular.toJson(data.user.age_range)
+                };
+             */
+            return $q(function (resolve, reject) {
+                /* Is the user logged in with facebook?
+                 * Ask them to allow our app. */
+                FacebookAuthService.login().then(function(data) {
+                    //* Get logged in user data.
+                    FacebookAuthService.getUser(data.userID).then(function (data) {
+                        var newUser = {
+                            'facebookId': data.user.id,
+                            'nameFirst' : data.user.first_name,
+                            'nameLast' : data.user.last_name,
+                            'email' : data.user.email,
+                            'link' : data.user.link,
+                            'locale' : data.user.locale,
+                            'timezone' : data.user.timezone,
+                            'ageRange' : angular.toJson(data.user.age_range)
+                        };
+                        
+                        //* Signup through our normal method
+                        API.postFacebookSignup(newUser).then(function (data) {
+                            
+                            if (UserSession.create(data.user)) {
+                                //put valid login creds in a cookie
+                                CookieService.setAuthCookie(data.user.apiKey, data.user.apiToken, data.sessionLifeHours);
+
+                                resolve(UserSession.get());
+                                $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
+                            } else {
+                                reject("Error: Could not log in user. Please try again later.");
+                                $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
+                                $log.error(data);
+                            }
+                        }, function (error) {
+                            $log.error('ERROR Signup User: ', error);
+                            reject(error);
+                        });
+
+                    }, function (error) {
+                        $log.error('ERROR facebookLogin User: ', error);
+                        reject(error);
+                    });
+
+                }, function(error) {
+                    $log.error('ERROR facebookLogin Token: ', error);
+                    $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
+                    reject(error);
+                });
             });
         };
         

@@ -27,7 +27,7 @@ angular.module('rcMessages', [])
         scope: true,
         link: function($scope, element, attrs, ctrl) {
             $scope.formInput = ctrl[attrs.rcMessages];
-            console.log('formInput', $scope.formInput);
+            //console.log('formInput', $scope.formInput);
         }
     };
     

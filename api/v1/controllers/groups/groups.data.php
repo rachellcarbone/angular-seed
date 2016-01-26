@@ -3,7 +3,7 @@
 
 class GroupData {
     
-    public static function getGroup($id) {        
+    static function getGroup($id) {        
         $group = DBConn::selectOne("SELECT g.id, g.group, g.desc, g.created, g.last_updated AS lastUpdated, "
                         . "CONCAT(u1.name_first, ' ', u1.name_last) AS createdBy, "
                         . "CONCAT(u2.name_first, ' ', u2.name_last) AS updatedBy "
@@ -19,21 +19,44 @@ class GroupData {
         return $group;
     }
     
-    public static function insertGroup($validGroup) {
+    static function insertGroup($validGroup) {
         return DBConn::insert("INSERT INTO as_auth_groups(group, desc, created_user_id, last_updated_by) 
             VALUES (:group, :desc, :created_user_id, :last_updated_by);", $validGroup);
     }
     
-    public static function updateGroup($validGroup) {
+    static function updateGroup($validGroup) {
         return DBConn::update("UPDATE " . DBConn::prefix() . "auth_groups SET group=:group, desc=:desc, "
                 . "last_updated_by=:last_updated_by;", $validGroup);
     }
     
-    public static function deleteGroup($id) {
+    static function deleteGroup($id) {
         $users = DBConn::delete("DELETE FROM " . DBConn::prefix() . "auth_lookup_user_group WHERE auth_group_id = :id;", array('id' => $id));
         $roles = DBConn::delete("DELETE FROM " . DBConn::prefix() . "auth_lookup_group_role WHERE auth_group_id = :id;", array('id' => $id));
         
         return (!$users || !$roles)  ? false :
             DBConn::delete("DELETE FROM " . DBConn::prefix() . "auth_groups WHERE id = :id LIMIT 1;", array('id' => $id));
+    }
+    
+    static function addDefaultGroupToUser($userId) {
+        $groupId = DBConn::selectOne("SELECT g.id FROM " . DBConn::prefix() . "auth_groups AS g "
+                . "WHERE g.group LIKE :group;", array(':group' => 'member'));
+        
+        if(!$groupId) {
+            $groupId = DBConn::selectOne("SELECT g.id FROM " . DBConn::prefix() . "auth_groups AS g "
+                            . "WHERE g.group LIKE :group;", array(':group' => 'public'));
+        }
+        
+        if($groupId) {
+            $validGroup = array(
+                ':user_id' => $userId, 
+                ':auth_group_id' => $groupId->id, 
+                ':created_user_id' => $userId, 
+                ':last_updated_by' => $userId
+            );
+            return DBConn::insert("INSERT INTO as_auth_lookup_user_group(user_id, auth_group_id, created_user_id, last_updated_by) "
+                    . "VALUES (:user_id, :auth_group_id, :created_user_id, :last_updated_by);", $validGroup);
+        }
+        
+        return false;
     }
 }

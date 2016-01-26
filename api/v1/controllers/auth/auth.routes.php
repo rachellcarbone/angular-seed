@@ -17,12 +17,20 @@ class AuthRoutes {
 
             // Authentication
 
+            $app->post("/login/facebook/", function () use ($app) {
+                AuthController::facebookLogin($app);
+            });
+            
             $app->post("/login/", function () use ($app) {
                 AuthController::login($app);
             });
 
-            $app->post("/facebook-login/", function () use ($app) {
-                AuthController::isFacebookAuthenticated($app);
+            $app->post("/signup/facebook/", function () use ($app) {
+                AuthController::facebookSignup($app);
+            });
+
+            $app->post("/signup/", function () use ($app) {
+                AuthController::signup($app);
             });
 
             $app->post("/logout/", function () use ($app) {

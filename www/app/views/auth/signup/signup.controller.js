@@ -25,7 +25,7 @@ angular.module('app.auth.signup', [])
         $scope.signup = function() {
             $scope.$broadcast('show-errors-check-validity');
 
-            if($scope.form.login.$valid) {
+            if($scope.form.signup.$valid) {
                 AuthService.signup($scope.newUser).then(function(results) {
                     $log.debug(results);
                 }, function(error) {
@@ -37,7 +37,7 @@ angular.module('app.auth.signup', [])
             }
         };
 
-        $scope.FacebookSignup = function() {
+        $scope.facebookSignup = function() {
             AuthService.facebookSignup().then(function (resp) {
                 $log.debug(resp);
                 $scope.newUser = resp;
