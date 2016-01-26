@@ -37,10 +37,10 @@ angular.module('AuthService', [
                             return resolve(true);
                         }, function (error) {
                             $log.info('[authInit] No Credentials Found', error);
-                            return resolve(true);
+                            return resolve(false);
                         });
                 } else {
-                    return resolve(true);
+                    return resolve(false);
                 }
             });
         };
