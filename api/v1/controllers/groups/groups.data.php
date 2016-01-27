@@ -50,11 +50,10 @@ class GroupData {
             $validGroup = array(
                 ':user_id' => $userId, 
                 ':auth_group_id' => $groupId->id, 
-                ':created_user_id' => $userId, 
-                ':last_updated_by' => $userId
+                ':created_user_id' => $userId
             );
-            return DBConn::insert("INSERT INTO as_auth_lookup_user_group(user_id, auth_group_id, created_user_id, last_updated_by) "
-                    . "VALUES (:user_id, :auth_group_id, :created_user_id, :last_updated_by);", $validGroup);
+            return DBConn::insert("INSERT INTO as_auth_lookup_user_group(user_id, auth_group_id, created_user_id) "
+                    . "VALUES (:user_id, :auth_group_id, :created_user_id);", $validGroup);
         }
         
         return false;
