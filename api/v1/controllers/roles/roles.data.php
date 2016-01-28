@@ -85,4 +85,22 @@ class RoleData {
         
         return DBConn::delete("DELETE FROM " . DBConn::prefix() . "auth_roles WHERE `id` = :id LIMIT 1;", array(':id' => $id));
     }
+
+    static function addAdminRoleToNewField($fieldId) {
+        // TODO: Hook up super-admin group to config variable
+        $roleId = DBConn::selectOne("SELECT r.id FROM " . DBConn::prefix() . "auth_roles AS r "
+                . "WHERE r.slug = :slug LIMIT 1;", array(':slug' => 'administrative'));
+        
+        if($roleId) {
+            $validGroup = array(
+                ':auth_field_id' => $fieldId, 
+                ':auth_role_id' => $roleId->id,
+                ':created_user_id' => APIAuth::getUserId()
+            );
+            return DBConn::insert("INSERT INTO " . DBConn::prefix() . "auth_lookup_role_field(auth_field_id, auth_role_id, created_user_id) "
+                    . "VALUES (:auth_field_id, :auth_role_id, :created_user_id);", $validGroup);
+        }
+        
+        return false;
+    }
 }
