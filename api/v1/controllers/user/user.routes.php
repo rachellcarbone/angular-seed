@@ -7,7 +7,7 @@ class UserRoutes {
         
         //* /user/id - members can get their own profile
         
-        $app->map("/user/:userId/", $authenticateForRole('member'), function ($userId) use ($app) {
+        $app->map("/user/get/:userId/", $authenticateForRole('member'), function ($userId) use ($app) {
             UserController::selectUser($app, $userId);
         })->via('GET', 'POST');
             
