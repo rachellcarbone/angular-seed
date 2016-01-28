@@ -93,7 +93,9 @@ class UserData {
         return DBConn::update("UPDATE " . DBConn::prefix() . "users SET name_first=:name_first, name_last=:name_last, email=:email WHERE id = :id;", $validUser);
     }
     
-    static function deleteUser($id) {
-        return DBConn::delete("DELETE FROM " . DBConn::prefix() . "users WHERE id = :id LIMIT 1;", array('id' => $id));
+    static function deleteUser($userId) {
+        $deleted = GroupData::deleteUserGroups($userId);
+        return (!$deleted) ? false :
+            DBConn::delete("DELETE FROM " . DBConn::prefix() . "users WHERE id = :id LIMIT 1;", array(':id' => $userId));
     }
 }

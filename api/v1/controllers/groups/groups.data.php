@@ -58,4 +58,8 @@ class GroupData {
         
         return false;
     }
+    
+    static function deleteUserGroups($userId) {
+        return DBConn::delete("DELETE FROM " . DBConn::prefix() . "auth_lookup_user_group WHERE user_id = :user_id;", array(':user_id' => $userId));
+    }
 }
