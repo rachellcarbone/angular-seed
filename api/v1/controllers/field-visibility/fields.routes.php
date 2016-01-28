@@ -33,6 +33,13 @@ class FieldRoutes {
             /*
              * id
              */
+            $app->post("/initialize/:fieldId/", function ($fieldId) use ($app) {
+                FieldController::initializeField($app, $fieldId);
+            });
+
+            /*
+             * id
+             */
             $app->map("/delete/:fieldId/", function ($fieldId) use ($app) {
                 FieldController::deleteField($app, $fieldId);
             })->via('DELETE', 'POST');
