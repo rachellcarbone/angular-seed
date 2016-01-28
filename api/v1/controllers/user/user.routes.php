@@ -15,14 +15,23 @@ class UserRoutes {
 
         $app->group('/user', $authenticateForRole('admin'), function () use ($app) {
 
+            /*
+             * nameFirst, nameLast, email, password
+             */
             $app->post("/insert/", function () use ($app) {
                 UserController::insertUser($app);
             });
 
+            /*
+             * id, nameFirst, nameLast, email
+             */
             $app->post("/update/:userId/", function ($userId) use ($app) {
                 UserController::updateUser($app, $userId);
             });
 
+            /*
+             * id
+             */
             $app->map("/delete/:userId/", function ($userId) use ($app) {
                 UserController::deleteUser($app, $userId);
             })->via('DELETE', 'POST');
