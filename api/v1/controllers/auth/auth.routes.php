@@ -21,6 +21,9 @@ class AuthRoutes {
                 AuthController::facebookLogin($app);
             });
             
+            /*
+             * email, passowrd
+             */
             $app->post("/login/", function () use ($app) {
                 AuthController::login($app);
             });
@@ -43,30 +46,6 @@ class AuthRoutes {
 
             $app->post("/validate-password/", function () use ($app) {
                 AuthController::testValidatePassword($app);
-            });
-
-            // Email Managment
-
-            $app->post("/send-email/validate-new-email/", function () use ($app) {
-                AuthController::sendPasswordResetEmail($app);
-            });
-
-            $app->post("/validate-new-email-token/", function () use ($app) {
-                AuthController::validateResetToken($app);
-            });
-
-            // Forgot Password        
-
-            $app->post("/send-email/reset-password/", function () use ($app) {
-                AuthController::sendPasswordResetEmail($app);
-            });
-
-            $app->post("/validate-reset-token/", function () use ($app) {
-                AuthController::validateResetToken($app);
-            });
-
-            $app->post("/change-password/", function () use ($app) {
-                AuthController::changePasword($app);
             });
             
         });
