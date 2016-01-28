@@ -59,7 +59,16 @@ class ConfigController {
             return $app->render(400, array('msg' => 'This config variable is locked. It cannot be changed or deleted without special permissions.'));
         }
         
-        $disabled = (v::key('disabled', v::boolVal())->validate($app->request->post())) ? $app->request->post('disabled') : 0;
+        $disabled = $savedConfig->disabled; 
+        if (v::key('disabled')->validate($app->request->post())) {
+            // TODO: Implement cusitom boolean Respect\Validator
+            // Converting to boolean did not work well, 
+            // This allows a wider range of true false values
+            $disabled = ($app->request->post('disabled') === 1 || 
+                        $app->request->post('disabled') === '1' || 
+                        $app->request->post('disabled') === true || 
+                        $app->request->post('disabled') === 'true') ? 1 : 0;
+        }
         
         $data = array (
             ":id" => $variableId,
@@ -80,30 +89,46 @@ class ConfigController {
         }
     }
     
-    static function saveVariablePermissions($app) {
-        if(!v::key('id', v::intVal())->validate($app->request->post()) ||
-           !v::key('indestructable', v::boolVal())->validate($app->request->post()) || 
-           !v::key('locked', v::boolVal())->validate($app->request->post())) {
+    static function saveVariablePermissions($app, $variableId) {
+        if(!v::intVal()->validate($variableId) ||
+           !v::key('indestructable')->validate($app->request->post()) || 
+           !v::key('locked')->validate($app->request->post())) {
             // Validate input parameters
             return $app->render(401, array('msg' => 'Update failed. Check your parameters and try again.'));
         }
     
-        $savedConfig = ConfigData::getVariableById($app->request->post('id'));
+        $savedConfig = ConfigData::getVariableById($variableId);
         if(!$savedConfig) {
             return $app->render(400, array('msg' => 'Variable doesnt seem to exist.'));
         }
         
+        $indestructable = $savedConfig->indestructable; 
+        // Converting to boolean did not work well, 
+        // This allows a wider range of true false values
+        $indestructable = ($app->request->post('indestructable') === 1 || 
+                    $app->request->post('indestructable') === '1' || 
+                    $app->request->post('indestructable') === true || 
+                    $app->request->post('indestructable') === 'true') ? 1 : 0;
+        
+        $locked = $savedConfig->locked; 
+        // Converting to boolean did not work well, 
+        // This allows a wider range of true false values
+        $locked = ($app->request->post('locked') === 1 || 
+                    $app->request->post('locked') === '1' || 
+                    $app->request->post('locked') === true || 
+                    $app->request->post('locked') === 'true') ? 1 : 0;
+        
         // If its locked its also indestructable
         $data = array (
-            ":id" => $app->request->post('id'),
-            ":indestructable" => ($app->request->post('locked')) ? 1 : $app->request->post('indestructable'),
-            ":locked" => $app->request->post('locked'),
+            ":id" => $variableId,
+            ":indestructable" => ($locked) ? 1 : $indestructable,
+            ":locked" => $locked,
             ":last_updated_by" => APIAuth::getUserId()
         );
         
         $config = ConfigData::updateVariablePermissions($data);
         if($config) {
-            $config = ConfigData::getVariableById($app->request->post('id'));
+            $config = ConfigData::getVariableById($variableId);
             return $app->render(200, array('variable' => $config));
         } else {
             return $app->render(400,  array('msg' => 'Could not update system config variable permissions.'));
