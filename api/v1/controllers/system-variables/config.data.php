@@ -4,13 +4,13 @@
 class ConfigData {
   
     public static function getVariableByName($name, $id = 0) {
-        return DBConn::selectAll("SELECT c.name, c.value, c.disabled, c.indestructable, c.locked "
+        return DBConn::selectAll("SELECT c.id, c.name, c.value, c.disabled, c.indestructable, c.locked "
                 . "FROM " . DBConn::prefix() . "system_config AS c "
                 . "WHERE c.name = :name AND c.id != :id;", array(':name' => $name, ':id' => $id));
     }
   
     public static function getVariableById($id) {
-        return DBConn::selectOne("SELECT c.name, c.value, c.disabled, c.indestructable, c.locked "
+        return DBConn::selectOne("SELECT c.id, c.name, c.value, c.disabled, c.indestructable, c.locked "
                 . "FROM " . DBConn::prefix() . "system_config AS c "
                 . "WHERE c.id = :id;", array(':id' => $id));
     }
