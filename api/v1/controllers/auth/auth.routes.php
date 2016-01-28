@@ -14,12 +14,31 @@ class AuthRoutes {
         //* /auth/ routes - publicly accessable        
             
         $app->group('/auth', $authenticateForRole('public'), function () use ($app) {
+            
+            ///// 
+            ///// Authentication
+            ///// 
 
-            // Authentication
-
-            $app->post("/login/facebook/", function () use ($app) {
-                AuthController::facebookLogin($app);
+            $app->post("/authenticate/", function () use ($app) {
+                AuthController::isAuthenticated($app);
             });
+            
+            ///// 
+            ///// Sign Up
+            ///// 
+
+            $app->post("/signup/", function () use ($app) {
+                AuthController::signup($app);
+            });
+
+            $app->post("/signup/facebook/", function () use ($app) {
+                AuthController::facebookSignup($app);
+            });
+
+            ///// 
+            ///// Authentication
+            ///// 
+
             
             /*
              * email, passowrd
@@ -27,25 +46,17 @@ class AuthRoutes {
             $app->post("/login/", function () use ($app) {
                 AuthController::login($app);
             });
-
-            $app->post("/signup/facebook/", function () use ($app) {
-                AuthController::facebookSignup($app);
+            
+            $app->post("/login/facebook/", function () use ($app) {
+                AuthController::facebookLogin($app);
             });
-
-            $app->post("/signup/", function () use ($app) {
-                AuthController::signup($app);
-            });
+            
+            ///// 
+            ///// Logout
+            ///// 
 
             $app->post("/logout/", function () use ($app) {
                 AuthController::logout($app);
-            });
-
-            $app->post("/authenticate/", function () use ($app) {
-                AuthController::isAuthenticated($app);
-            });
-
-            $app->post("/validate-password/", function () use ($app) {
-                AuthController::testValidatePassword($app);
             });
             
         });

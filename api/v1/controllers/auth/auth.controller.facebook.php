@@ -2,7 +2,7 @@
 
 use \Respect\Validation\Validator as v;
 
-class FacebookAuthController {
+class AuthControllerFacebook {
     
     static $appId = "892044264250192"; // Dev
     static $appSecret = "680ed93062e7d97347a593cab43533f2"; // Dev

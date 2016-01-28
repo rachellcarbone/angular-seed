@@ -1,12 +1,10 @@
 <?php namespace API;
 require_once dirname(dirname(__FILE__)) . '/user/user.data.php';
 require_once dirname(__FILE__) . '/auth.data.php';
-require_once dirname(__FILE__) . '/auth.controller.native.php';
-require_once dirname(__FILE__) . '/auth.controller.facebook.php';
 
 use \Respect\Validation\Validator as v;
 
-class AuthController {
+class AuthControllerNative {
     
     static $maxattempts = 6;
     static $passwordRules = "Passwords must be at least 8 characters long, contain no whitespace, have at least one letter and one number and any of the following !@#$%^&*_+=-.";
