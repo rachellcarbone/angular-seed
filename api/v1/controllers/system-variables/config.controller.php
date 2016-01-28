@@ -12,7 +12,11 @@ class ConfigController {
             return $app->render(400,  array('msg' => 'Could not select system config variable.'));
         }
         $variable = ConfigData::getVariableById($variableId);
-        return $app->render(200, array('variable' => $variable));
+        if($variable) {
+            return $app->render(200, array('variable' => $variable));
+        } else {
+            return $app->render(400,  array('msg' => 'System config variable could not be found.'));
+        }
     }
     
     static function addVariable($app) {
