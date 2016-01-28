@@ -9,18 +9,30 @@ class RoleRoutes {
         
         $app->group('/role', $authenticateForRole('admin'), function () use ($app) {
             
+            /*
+             * id
+             */
             $app->map("/get/:roleId/", function ($roleId) use ($app) {
                 RoleController::getRole($app, $roleId);
             })->via('GET', 'POST');
 
+            /*
+             * role, desc
+             */
             $app->post("/insert/", function () use ($app) {
                 RoleController::addRole($app);
             });
 
+            /*
+             * id, role, desc
+             */
             $app->post("/update/:roleId/", function ($roleId) use ($app) {
                 RoleController::saveRole($app, $roleId);
             });
 
+            /*
+             * id
+             */
             $app->map("/delete/:roleId/", function ($roleId) use ($app) {
                 RoleController::deleteRole($app, $roleId);
             })->via('DELETE', 'POST');
