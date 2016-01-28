@@ -13,18 +13,30 @@ class ConfigRoutes {
                 ConfigController::getVariable($app, $variableId);
             })->via(['GET', 'POST']);
         
+            /*
+             *  name, value
+             */
             $app->post("/insert/", function () use ($app) {
                 ConfigController::addVariable($app);
             });
 
-            $app->post("/update/permissions/", function () use ($app) {
-                ConfigController::saveVariablePermissions($app);
+            /*
+             * id, indestructable, locked
+             */
+            $app->post("/update/permissions/:variableId/", function ($variableId) use ($app) {
+                ConfigController::saveVariablePermissions($app, $variableId);
             });
 
+            /*
+             *  id, name, value, disabled
+             */
             $app->post("/update/:variableId/", function ($variableId) use ($app) {
                 ConfigController::saveVariable($app, $variableId);
             });
 
+            /*
+             * id
+             */
             $app->map("/delete/:variableId/", function ($variableId) use ($app) {
                 ConfigController::deleteVariable($app, $variableId);
             })->via(['DELETE', 'POST']);
