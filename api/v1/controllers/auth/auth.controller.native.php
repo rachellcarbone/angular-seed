@@ -219,18 +219,6 @@ class AuthControllerNative {
         return $app->render(200, array('user' => $user));
     }
     
-    // Test Password Route
-    
-    static function testValidatePassword($app) {
-        return $app->render(200, array( 
-            'valid' => (self::validatePassword($app->request->post()))
-        ));
-    }
-    
-    static function validatePassword($post, $key = 'password') {
-        return (v::key($key, v::stringType()->length(8,255)->noWhitespace()->alnum('!@#$%^&*_+=-')->regex('/^(?=.*[a-zA-Z])(?=.*[0-9])/'))->validate($post));
-    }
-        
     // Delete Expired Auth Tokens
     
     static function deleteExpiredAuthTokens($app) {

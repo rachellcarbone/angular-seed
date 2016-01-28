@@ -1,5 +1,4 @@
 <?php namespace API;
-require_once dirname(dirname(__FILE__)) . '/auth/auth.controller.php';
 require_once dirname(__FILE__) . '/user.data.php';
 
 use \Respect\Validation\Validator as v;
@@ -24,7 +23,7 @@ class UserController {
             !v::key('nameLast', v::stringType()->length(1,255), false)->validate($app->request->post()) || 
             !v::key('email', v::email())->validate($app->request->post())) {
             return $app->render(400,  array('msg' => 'Invalid user. Check your parameters and try again.'));
-        } else if(!AuthController::validatePassword($app->request->post())) {
+        } else if(!self::validatePassword($app->request->post())) {
             return $app->render(400,  array('msg' => "Passwords must be at least 8 characters "
                     . "long, contain no whitespace, have at least one letter and one number. "
                     . "Check your parameters and try again."));
@@ -45,6 +44,10 @@ class UserController {
             $user = UserData::selectUserById($userId);
             return $app->render(200, array('user' => $user ));
         }
+    }
+    
+    private static function validatePassword($post, $key = 'password') {
+        return (v::key($key, v::stringType()->length(8,255)->noWhitespace()->alnum('!@#$%^&*_+=-')->regex('/^(?=.*[a-zA-Z])(?=.*[0-9])/'))->validate($post));
     }
 
     static function updateUser($app, $userId) {
