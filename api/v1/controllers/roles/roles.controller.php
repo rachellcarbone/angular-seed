@@ -99,7 +99,7 @@ class RoleController {
     }
 
     static function makeSlug($string) {
-        return preg_replace('/[^a-zA-Z0-9-_.]/', '', str_replace(' ', '-', trim($string)));
+        return preg_replace('/[^a-zA-Z0-9-_.]/', '', str_replace(' ', '-', strtolower(trim($string))));
     }
     
 }
