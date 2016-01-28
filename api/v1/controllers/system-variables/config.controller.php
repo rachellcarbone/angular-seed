@@ -117,7 +117,7 @@ class ConfigController {
         
         $savedConfig = ConfigData::getVariableById($variableId);
         if($savedConfig && ($savedConfig->locked || $savedConfig->indestructable)) {
-            return $app->render(401, array('msg' => 'This config variable is locked or indestructable and deleted without special permissions.'));
+            return $app->render(401, array('msg' => 'This config variable is locked or indestructable and cannot deleted without special permissions.'));
         }
         
         if(ConfigData::deleteVariable($variableId)) {
