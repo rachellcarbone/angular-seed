@@ -2,7 +2,7 @@
  require_once dirname(__FILE__) . '/user.controller.php';
 
 class UserRoutes {
-    
+    // TODO: API Docs
     static function addRoutes($app, $authenticateForRole) {
         
         //* /user/id - members can get their own profile

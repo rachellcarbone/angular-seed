@@ -68,6 +68,8 @@ class UserController {
         }
     }
 
+    // TODO: Delete user from any look up tables
+    // TODO: Add hooks for events such as deleting  auser so I dont have to import other controllers
     static function deleteUser($app, $userId) {
         if(UserData::deleteUser($userId)) {
             return $app->render(200,  array('msg' => 'User has been deleted.'));

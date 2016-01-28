@@ -170,7 +170,7 @@ class AuthController {
         $remember = (v::key('remember', v::stringType())->validate($app->request->post())) ? 
                 boolval($app->request->post('remember')) : false;
         
-        /* TO DO Change this to use config var */
+        // TODO: Change this to use config var
         return (!$remember) ? 1 : 3 * 24; // 1 Hours or 3 days if remember was checked
     }
     
