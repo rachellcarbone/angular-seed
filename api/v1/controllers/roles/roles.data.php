@@ -7,7 +7,7 @@ class RoleData {
     // that the adming group has the role, 
     // and the admin role is on every element. 
     
-    public static function getRole($id) {
+    static function getRole($id) {
         $role = DBConn::selectOne("SELECT r.id, r.role, r.desc, r.slug, r.created, r.last_updated AS lastUpdated, "
                 . "CONCAT(u1.name_first, ' ', u1.name_last) AS createdBy, "
                 . "CONCAT(u2.name_first, ' ', u2.name_last) AS updatedBy "
@@ -37,7 +37,7 @@ class RoleData {
         return $role;
     }
   
-    public static function selectRoleBySlug($slug, $id = 0) {
+    static function selectRoleBySlug($slug, $id = 0) {
         $role = DBConn::selectOne("SELECT r.id, r.role, r.desc, r.slug, r.created, r.last_updated AS lastUpdated, "
                 . "CONCAT(u1.name_first, ' ', u1.name_last) AS createdBy, "
                 . "CONCAT(u2.name_first, ' ', u2.name_last) AS updatedBy "
@@ -69,17 +69,17 @@ class RoleData {
         return $role;
     }
   
-    public static function insertRole($validRole) {
+    static function insertRole($validRole) {
         return DBConn::insert("INSERT INTO " . DBConn::prefix() . "auth_roles(`role`, `slug`, `desc`, `created_user_id`, `last_updated_by`) "
                 . "VALUES (:role, :slug, :desc, :created_user_id, :last_updated_by);", $validRole);
     }
     
-    public static function updateRole($validRole) {
+    static function updateRole($validRole) {
         return DBConn::update("UPDATE " . DBConn::prefix() . "auth_roles SET `role`=:role, `slug`=:slug, "
                 . "`desc`=:desc, `last_updated_by`=:last_updated_by WHERE `id`=:id;", $validRole);
     }
     
-    public static function deleteRole($id) {
+    static function deleteRole($id) {
         $fields = DBConn::delete("DELETE FROM " . DBConn::prefix() . "auth_lookup_role_field WHERE `auth_role_id`= :id;", array(':id' => $id));
         $groups = DBConn::delete("DELETE FROM " . DBConn::prefix() . "auth_lookup_group_role WHERE `auth_role_id` = :id;", array(':id' => $id));
         
