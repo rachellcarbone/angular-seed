@@ -8,11 +8,14 @@ use \Respect\Validation\Validator as v;
 class UserController {
 
     static function selectUser($app, $userId) {
+        if(!v::intVal()->validate($userId)) {
+            return $app->render(400,  array('msg' => 'Could not find user. Check your parameters and try again.'));
+        }
         $user = UserData::selectUserById($userId);
         if($user) {
             return $app->render(200, array('user' => $user ));
         } else {
-            return $app->render(400,  array('msg' => 'User could not be found. Check your parameters and try again.'));
+            return $app->render(400,  array('msg' => 'User could not be found.'));
         }
     }
     
@@ -45,7 +48,8 @@ class UserController {
     }
 
     static function updateUser($app, $userId) {
-        if(!v::key('nameFirst', v::stringType()->length(1,255))->validate($app->request->post()) ||
+        if(!v::intVal()->validate($userId) ||
+            !v::key('nameFirst', v::stringType()->length(1,255))->validate($app->request->post()) ||
             !v::key('nameLast', v::stringType()->length(1,255), false)->validate($app->request->post()) || 
             !v::key('email', v::email())->validate($app->request->post())) {
             return $app->render(400,  array('msg' => 'Invalid user. Check your parameters and try again.'));
@@ -71,10 +75,13 @@ class UserController {
     // TODO: Delete user from any look up tables
     // TODO: Add hooks for events such as deleting  auser so I dont have to import other controllers
     static function deleteUser($app, $userId) {
+        if(!v::intVal()->validate($userId)) {
+            return $app->render(400,  array('msg' => 'Could not find user. Check your parameters and try again.'));
+        }
         if(UserData::deleteUser($userId)) {
             return $app->render(200,  array('msg' => 'User has been deleted.'));
         } else {
-            return $app->render(400,  array('msg' => 'Could not delete user. Check your parameters and try again.'));
+            return $app->render(400,  array('msg' => 'Could not delete user.'));
         }
     }
 }
