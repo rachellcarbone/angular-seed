@@ -156,6 +156,24 @@ http://butlerccwebdev.net/support/testingserver/vhosts-setup-win.html
 
 ---
 
+#### Git Bash Password and Username Cache
+
+[Setup Git User and Email](https://help.github.com/articles/set-up-git/)
+
+```
+git config --global --list
+git config --global user.name "YOUR NAME"
+git config --global user.email "YOUR EMAIL ADDRESS"
+```
+
+[Store Git Credentials] (https://git-scm.com/docs/git-credential-store)
+
+```
+git config credential.helper store
+```
+
+---
+
 ###### To Do v1.0
 
 - MySQL Database Design
