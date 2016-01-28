@@ -5,6 +5,10 @@ class AuthRoutes {
     
     static function addRoutes($app, $authenticateForRole) {
         
+        ///// 
+        // System Admin
+        // TODO: Create system functions route
+        ///// 
         
         $app->map("/admin/auth/delete/expired-tokens/", $authenticateForRole('admin'), function () use ($app) {
             AuthController::deleteExpiredAuthTokens($app);
