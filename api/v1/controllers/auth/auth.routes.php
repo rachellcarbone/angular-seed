@@ -40,9 +40,8 @@ class AuthRoutes {
             });
 
             ///// 
-            ///// Authentication
+            ///// Login
             ///// 
-
             
             /*
              * email, passowrd

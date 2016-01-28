@@ -96,4 +96,49 @@ class AuthControllerFacebook {
 
         return $response->getGraphUser();
     }
+    
+    static function signup($app) {
+        if(!v::key('facebookId', v::stringType())->validate($app->request->post()) || 
+           !v::key('nameFirst', v::stringType())->validate($app->request->post()) || 
+           !v::key('nameLast', v::stringType())->validate($app->request->post()) || 
+           !v::key('email', v::email())->validate($app->request->post())) {
+            // Validate input parameters
+            return $app->render(400, array('msg' => 'Facebook signup failed. Check your parameters and try again.'));
+        }
+        
+        $existing = UserData::selectUserByEmail($app->request->post('email'));
+        if($existing) { 
+            return $app->render(400, array('msg' => 'Facebook signup failed. A user with that email already exists.'));        
+        }
+        
+        $validUser = array(
+            ':email' => $app->request->post('email'),
+            ':name_first' => $app->request->post('nameFirst'),
+            ':name_last' => $app->request->post('nameLast'),
+            ':facebook_id' => $app->request->post('facebookId')
+        );
+        $userId = UserData::insertFacebookUser($validUser);
+        if($userId) {
+            $user = UserData::selectUserById($userId);
+            if(!$user) { 
+                return $app->render(400, array('msg' => 'Facebook signup failed. Could not select user.'));        
+            }
+            $user->apiKey = hash('sha512', uniqid());
+            $user->apiToken = hash('sha512', uniqid());
+            $hours = self::login_getSessionExpirationInHours($app);
+        
+            // Congrats - you're logged in!
+            AuthData::insertAuthToken(array(
+                ':user_id' => $user->id,
+                ':identifier' => $user->apiKey,
+                ':token' => password_hash($user->apiToken, PASSWORD_DEFAULT),
+                ':expires' => date('Y-m-d H:i:s', time() + ($hours * 60 * 60))
+            ));
+
+            // Send the session life back (in hours) for the cookies
+            return $app->render(200, array('user' => $user, 'sessionLifeHours' => $hours));
+        }
+        return $app->render(400, array('msg' => 'Facebook signup failed. Could not save user.'));
+        
+    }
 }
