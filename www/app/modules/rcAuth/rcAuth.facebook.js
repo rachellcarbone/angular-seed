@@ -18,7 +18,7 @@ app.config(['facebookProvider', 'FACEBOOK_CONFIG', function (facebookProvider, F
      * @param cookie
      * @param api-version
      */
-    facebookProvider.setInitParams(FACEBOOK_CONFIG.appId, true, true, true, 'v2.5');
+    facebookProvider.setInitParams(FACEBOOK_CONFIG.appId, true, true, true, 'v2.5', 'en_US');
     facebookProvider.setPermissions(['public_profile','email']);
 }]);
 
