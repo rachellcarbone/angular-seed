@@ -1,7 +1,6 @@
 <?php
 namespace API;
 
-require_once dirname(dirname(__FILE__)) . '/vendor/autoload.php';   // Composer components
 require_once dirname(dirname(__FILE__)) . '/config/config.php';     // API Coifg File (Add your settings!)
 require_once dirname(dirname(__FILE__)) . '/services/logging.php'; // Router Module
 require_once dirname(dirname(__FILE__)) . '/services/api.auth.php'; // Auth Service
