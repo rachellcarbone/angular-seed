@@ -4,11 +4,6 @@ use \Respect\Validation\Validator as v;
 
 class AuthControllerFacebook {
     
-    static $appId = "892044264250192"; // Dev
-    static $appSecret = "680ed93062e7d97347a593cab43533f2"; // Dev
-    //static $appId = "1538616896450172"; //Triv
-    //static $appSecret = "f42275546311eb9094e9a2767a051086"; // Triv
-    
     static function checkLoginStatus() {
         $profile = false;
         $accessToken = self::getActiveAccessToken();
@@ -19,11 +14,19 @@ class AuthControllerFacebook {
     }
     
     private static function getFBConn() {
+        // TODO: Connect this to the config
         return new \Facebook\Facebook([
-            'app_id' => self::appId,
-            'app_secret' => self::appSecret,
+            'app_id' => "892044264250192",
+            'app_secret' => "680ed93062e7d97347a593cab43533f2",
             'default_graph_version' => 'v2.5'
-        ]);
+        ]); // Dev
+        /*
+        return new \Facebook\Facebook([
+            'app_id' => "1538616896450172",
+            'app_secret' => "f42275546311eb9094e9a2767a051086",
+            'default_graph_version' => 'v2.5'
+        ]); // Triv
+         */
     }
     
     /*
@@ -51,6 +54,7 @@ class AuthControllerFacebook {
         }
 
         if (isset($accessToken)) {
+            $_SESSION['FACEBOOK_ACCESS_TOKEN'] = (string) $accessToken;
             return (string) $accessToken;
         }
         return false;
@@ -97,35 +101,53 @@ class AuthControllerFacebook {
         return $response->getGraphUser();
     }
     
-    static function signup($app) {
-        if(!v::key('facebookId', v::stringType())->validate($app->request->post()) || 
-           !v::key('nameFirst', v::stringType())->validate($app->request->post()) || 
-           !v::key('nameLast', v::stringType())->validate($app->request->post()) || 
-           !v::key('email', v::email())->validate($app->request->post())) {
+    /*
+     * Incoming
+     * ageRange:{"min":21}
+        email:rachel.dotey@gmail.com
+        facebookId:55555555555555555
+        link:https://www.facebook.com/app_scoped_user_id/55555555555555555/
+        locale:en_US
+        nameFirst:Rachel
+        nameLast:Cantyoutell
+        timezone:-5
+     */
+    static function signup($post) {
+        if(!v::key('accessToken', v::stringType())->validate($post) || 
+           !v::key('facebookId', v::stringType())->validate($post) || 
+           !v::key('nameFirst', v::stringType())->validate($post) || 
+           !v::key('nameLast', v::stringType())->validate($post) || 
+           !v::key('email', v::email())->validate($post)) {
             // Validate input parameters
-            return $app->render(400, array('msg' => 'Facebook signup failed. Check your parameters and try again.'));
+            return array('registered' => false, 'msg' => 'Facebook signup failed. Check your parameters and try again.');
         }
-        
-        $existing = UserData::selectUserByEmail($app->request->post('email'));
+        /*
+        $token = self::getActiveAccessToken();
+        $profile = self::getProfile($post['accessToken']);
+        if(true || !$token) {
+            return array('registered' => false, 'msg' => 'Facebook signup failed. You are not logged into Facebook.', 'token' => $token, 'profile' => $profile, 'post' => $post, 'cookie' => $_COOKIE);
+        }
+         */
+        $existing = UserData::selectUserByEmail($post['email']);
         if($existing) { 
-            return $app->render(400, array('msg' => 'Facebook signup failed. A user with that email already exists.'));        
+            return array('registered' => false, 'msg' => 'Facebook signup failed. A user with that email already exists.');      
         }
         
         $validUser = array(
-            ':email' => $app->request->post('email'),
-            ':name_first' => $app->request->post('nameFirst'),
-            ':name_last' => $app->request->post('nameLast'),
-            ':facebook_id' => $app->request->post('facebookId')
+            ':email' => $post['email'],
+            ':name_first' => $post['nameFirst'],
+            ':name_last' => $post['nameLast'],
+            ':facebook_id' => $post['facebookId']
         );
         $userId = UserData::insertFacebookUser($validUser);
         if($userId) {
             $user = UserData::selectUserById($userId);
             if(!$user) { 
-                return $app->render(400, array('msg' => 'Facebook signup failed. Could not select user.'));        
+                return array('registered' => false, 'msg' => 'Facebook signup failed. Could not select user.');    
             }
             $user->apiKey = hash('sha512', uniqid());
             $user->apiToken = hash('sha512', uniqid());
-            $hours = self::login_getSessionExpirationInHours($app);
+            $hours = self::login_getSessionExpirationInHours($post);
         
             // Congrats - you're logged in!
             AuthData::insertAuthToken(array(
@@ -136,9 +158,17 @@ class AuthControllerFacebook {
             ));
 
             // Send the session life back (in hours) for the cookies
-            return $app->render(200, array('user' => $user, 'sessionLifeHours' => $hours));
+            return array('registered' => true, 'user' => $user, 'sessionLifeHours' => $hours);
         }
-        return $app->render(400, array('msg' => 'Facebook signup failed. Could not save user.'));
+        return array('registered' => false, 'msg' => 'Facebook signup failed. Could not save user.');
         
+    }
+    
+    private static function login_getSessionExpirationInHours($post) {
+        $remember = (v::key('remember', v::stringType())->validate($post)) ? 
+                boolval($post['remember']) : false;
+        
+        // TODO: Change this to use config var
+        return (!$remember) ? 1 : 3 * 24; // 1 Hours or 3 days if remember was checked
     }
 }

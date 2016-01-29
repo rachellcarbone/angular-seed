@@ -31,7 +31,8 @@ angular.module('apiRoutes.auth', [])
     };
     
     api.postFacebookSignup = function(newUser) {
-        if(!newUser.facebookId || 
+        if(!newUser.accessToken || 
+                !newUser.facebookId || 
                 !newUser.nameFirst || 
                 !newUser.nameLast || 
                 !newUser.email || 

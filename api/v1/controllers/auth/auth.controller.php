@@ -19,8 +19,13 @@ class AuthController {
         $found = AuthControllerNative::isAuthenticated($app->request->post());
         if($found['authenticated']) {
             return $app->render(200, $found);
+        } 
+        
+        $fb = AuthControllerFacebook::isAuthenticated($app->request->post());
+        if($fb) {
+            return $app->render(222, $found);
         } else {
-            return $app->render(401, $found);
+            return $app->render(400, $found);
         }
     }
             

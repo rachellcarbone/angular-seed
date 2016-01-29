@@ -36,7 +36,8 @@ angular.module('AuthService', [
                             }
                             return resolve(true);
                         }, function (error) {
-                            $log.info('[authInit] No Credentials Found', error);
+                            CookieService.destroyAuthCookie();
+                            $log.info('[authInit]', error);
                             return resolve(false);
                         });
                 } else {
@@ -221,7 +222,8 @@ angular.module('AuthService', [
                     //* Get logged in user data.
                     FacebookAuthService.getUser(data.userID).then(function (data) {
                         var newUser = {
-                            'facebookId': data.user.id,
+                            'accessToken' : data.authResponse.accessToken,
+                            'facebookId' : data.user.id,
                             'nameFirst' : data.user.first_name,
                             'nameLast' : data.user.last_name,
                             'email' : data.user.email,
@@ -241,8 +243,7 @@ angular.module('AuthService', [
                                 resolve(UserSession.get());
                                 $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
                             } else {
-                                reject("Error: Could not log in user. Please try again later.");
-                                $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
+                                reject(data);
                                 $log.error(data);
                             }
                         }, function (error) {
