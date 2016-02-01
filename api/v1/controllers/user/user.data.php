@@ -5,7 +5,7 @@ require_once dirname(dirname(__FILE__)) . '/groups/groups.data.php';
 class UserData {
     
     static function selectUsers() {
-        $qUsers = DBConn::executeQuery("SELECT id, name_first, name_last, email, email_verified, password, created, last_updated "
+        $qUsers = DBConn::executeQuery("SELECT id, name_first as nameFirst, name_last as nameLast, email, email_verified, password, created, last_updated AS updated "
                 . "FROM " . DBConn::prefix() . "users;");
         
         $qGroups = DBConn::preparedQuery("SELECT grp.id, grp.group, grp.desc "
