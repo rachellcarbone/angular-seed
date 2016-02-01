@@ -1,6 +1,8 @@
 <?php namespace API;
 require_once dirname(dirname(__FILE__)) . '/config/config.php';
-require_once dirname(dirname(__FILE__)) . '/controllers/auth/auth.controller.php';
+require_once dirname(dirname(__FILE__)) . '/controllers/user/user.controller.php';
+
+use \Respect\Validation\Validator as v;
 
 class APIAuth {    
     
@@ -11,7 +13,7 @@ class APIAuth {
             return true;
         }
         
-        $user = AuthController::authorizeApiToken($app);
+        $user = self::authorizeApiToken($app);
         if($user) {
             // Save that user id
             $_SESSION[self::APISESSIONNAME] = $user;
@@ -26,6 +28,22 @@ class APIAuth {
             $app->halt(401, json_encode($response));
             return false;
         }
+    }
+    
+    private static function authorizeApiToken($app) {
+        if(!v::key('apiKey', v::stringType())->validate($app->request->post()) || 
+           !v::key('apiToken', v::stringType())->validate($app->request->post())) {
+            return false;
+        }
+        $user = UserData::selectUserByIdentifierToken($app->request->post('apiKey'));
+        if(!$user) {
+            return "user";
+        }
+        if(!password_verify($app->request->post('apiToken'), $user->apiToken)) {
+            return "password";
+        }
+        // Go now. Be free little brother.
+        return $user->id;
     }
     
     static function getUserId() {        
