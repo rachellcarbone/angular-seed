@@ -153,7 +153,7 @@ http://butlerccwebdev.net/support/testingserver/vhosts-setup-win.html
 #### Other Resources
 
 [Link to GitHub Markdown Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet#links)
-
+[Link to Bower help](http://www.zell-weekeat.com/bower/)
 ---
 
 #### Git Bash Password and Username Cache
