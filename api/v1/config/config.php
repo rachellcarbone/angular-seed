@@ -1,30 +1,31 @@
 <?php namespace API;
 
 class APIConfig {
+    static $config = false;
 
-    function __construct() {
-        $this->setAPIConfig(filter_input(INPUT_SERVER, 'SERVER_ADDR'));
-    }
-
-    function setAPIConfig($ip) {
+    static function setAPIConfig() {
         $default = array(
             'apiVersion' => 'v1',
             'debugMode' => true,
+            
             'dbHost' => 'localhost',
             'db' => 'angular_seed',
             'dbUser' => 'root',
             'dbPass' => 'toot',
             'dbTablePrefix' => 'as_',
+            
+            'systemPath' => 'C:/xampp/htdocs/webdev/angular-seed/',
             'dirPublic' => 'public/',
             'dirSystem' => 'api/system/',
             'dirLogs' => 'api/system/logs/',
+            
+            'websiteUrl' => 'http://www.seed.dev/'
         );
 
-        switch ($ip) {
-            case '::1':
-            default:
+        if(filter_input(INPUT_SERVER, 'SERVER_ADDR') == '::1') {
                 // Localhost
-                $this->config = array_merge($default, array(
+                self::$config = array_merge($default, array(
+                    'dbHost' => 'localhost',
                     'db' => 'angular_seed',
                     'dbUser' => 'angular_seed',
                     'dbPass' => 'angular_seed',
@@ -34,11 +35,15 @@ class APIConfig {
         }
     }
 
-    function get($opt = false) {
-        if ($opt !== false && isset($this->config[$opt])) {
-            return $this->config[$opt];
+    static function get($opt = false) {
+        if(!self::$config) {
+            self::setAPIConfig();
         }
-        return $this->config;
+        
+        if ($opt !== false && isset(self::$config[$opt])) {
+            return self::$config[$opt];
+        }
+        return self::$config;
     }
 
 }
