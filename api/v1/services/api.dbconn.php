@@ -110,7 +110,7 @@ class DBConn {
                 return ($id === false) ? false : $id;
             }
         } catch (\PDOException $e) {
-            self::logPDOError($pdo);
+            self::logPDOError($q);
             return false;
         }
     }
@@ -130,7 +130,7 @@ class DBConn {
             $q = $pdo->prepare($query);            
             return $q->execute($data);
         } catch (\PDOException $e) {
-            self::logPDOError($pdo);
+            self::logPDOError($q);
             return false;
         }
     }
@@ -158,7 +158,7 @@ class DBConn {
             $q->execute($data);
             return $q->fetchAll($style);
         } catch (\PDOException $e) {
-            self::logPDOError($pdo);
+            self::logPDOError($q);
             return false;
         }
     }
@@ -183,7 +183,7 @@ class DBConn {
             $q->execute($data);
             return $q->fetch($style);
         } catch (\PDOException $e) {
-            self::logPDOError($pdo);
+            self::logPDOError($q);
             return false;
         }
     }
@@ -205,7 +205,7 @@ class DBConn {
             $effected = $q->rowCount();
             return ($effected > 0);
         } catch (\PDOException $e) {
-            self::logPDOError($pdo);
+            self::logPDOError($q);
             return false;
         }
     }
@@ -220,9 +220,10 @@ class DBConn {
     public static function preparedQuery($query) {
         $pdo = self::connect();
         try {
-            return $pdo->prepare($query);
+            $q = $pdo->prepare($query);
+            return $q;
         } catch (\PDOException $e) {
-            self::logPDOError($pdo);
+            self::logPDOError($q);
             return false;
         }
     }
@@ -243,7 +244,7 @@ class DBConn {
             $q->execute($data);
             return $q;
         } catch (\PDOException $e) {
-            self::logPDOError($pdo);
+            self::logPDOError($q);
             return false;
         }
     }
