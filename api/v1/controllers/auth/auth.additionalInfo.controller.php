@@ -22,19 +22,45 @@ class InfoController {
             }
             
         } else if(v::key('userId', v::stringType())->validate($app->request->post()) &&
-           v::key('triviaLove', v::stringType())->validate($app->request->post())) {
+           v::key('triviaLove', v::stringType())->validate($app->request->post()) &&
+           v::key('terms', v::stringType())->validate($app->request->post())) {
             
-            $data = array(
+            $question = array(
                 ':user_id' => $app->request->post('userId'),
                 ':question' => "How comitted are you?",
                 ':answer' => $app->request->post('triviaLove')
             );
             
-            if(InfoData::insertQuestion($data)) {
-                return $app->render(200, array('msg' => 'Love for trivia saved.'));
+            $terms = array(
+                ':user_id' => $app->request->post('userId'),
+                ':accepted_terms' => ($app->request->post('terms') === 1 || 
+                        $app->request->post('terms') === '1' || 
+                        $app->request->post('terms') === true || 
+                        $app->request->post('terms') === 'true') ? 1 : 0
+            );
+            
+            if(InfoData::insertQuestion($question) && InfoData::saveTerms($terms)) {
+                return $app->render(200, array('msg' => 'Additional info saved.'));
             } else {
-                return $app->render(400, array('msg' => 'Love for trivia could not be saved.'));
+                return $app->render(400, array('msg' => 'Additional info  could not be saved.'));
             }
+        } else if(v::key('userId', v::stringType())->validate($app->request->post()) &&
+           v::key('terms', v::stringType())->validate($app->request->post())) {
+            
+            $data = array(
+                ':user_id' => $app->request->post('userId'),
+                ':accepted_terms' => ($app->request->post('terms') === 1 || 
+                        $app->request->post('terms') === '1' || 
+                        $app->request->post('terms') === true || 
+                        $app->request->post('terms') === 'true') ? 1 : 0
+            );
+            
+            if(InfoData::saveTerms($data)) {
+                return $app->render(200, array('msg' => 'Terms and conditions acceptance saved.'));
+            } else {
+                return $app->render(400, array('msg' => 'Terms and conditions acceptance could not be saved.'));
+            }
+            
         }
         
         return $app->render(400, array('msg' => 'Save failed. Check your parameters and try again.'));
