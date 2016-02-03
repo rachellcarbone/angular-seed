@@ -59,6 +59,8 @@ class Logging {
      * Prepend a timestamp to a line of text and write it to the log file.
      */
     function write($logItem) {
+        syslog(LOG_ERR, $logItem);
+        
         // Get the timestamp
         file_put_contents($this->logFile, date("m d, Y, G:i:s T"), FILE_APPEND);
         // Concatenate log text with the timestamp
