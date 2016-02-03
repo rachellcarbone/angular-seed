@@ -22,16 +22,19 @@ class APIConfig {
             'websiteUrl' => 'http://www.seed.dev/'
         );
 
-        if(filter_input(INPUT_SERVER, 'SERVER_ADDR') == '::1') {
-                // Localhost
-                self::$config = array_merge($default, array(
-                    'dbHost' => 'localhost',
-                    'db' => 'angular_seed',
-                    'dbUser' => 'angular_seed',
-                    'dbPass' => 'angular_seed',
-                    'systemPath' => 'C:/xampp/htdocs/webdev/angular-seed/',
-                    'websiteUrl' => 'http://www.seed.dev/'
-                ));
+        if(filter_input(INPUT_SERVER, 'HTTP_HOST') == 'api.seed.dev' ||
+            filter_input(INPUT_SERVER, 'HTTP_HOST') == 'localhost' ||
+            filter_input(INPUT_SERVER, 'SERVER_ADDR') == '127.0.0.1') {
+            // Localhost
+            self::$config = array_merge($default, array(
+                'dbHost' => 'localhost',
+                'db' => 'angular_seed',
+                'dbUser' => 'angular_seed',
+                'dbPass' => 'angular_seed',
+                'dbTablePrefix' => 'as_',
+                'systemPath' => 'C:/xampp/htdocs/webdev/angular-seed/',
+                'websiteUrl' => 'http://www.seed.dev/'
+            ));
         }
     }
 
