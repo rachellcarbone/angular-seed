@@ -60,6 +60,13 @@ angular.module('apiRoutes.auth', [])
         return API.post('auth/authenticate/', credentials, 'Error, User Not Authenticated.');
     };
     
+    api.postAdditionalInfo = function(user) {
+        if(!user.userId ||
+                !(user.triviaLove || user.referrer)) {
+            return API.reject('Invalid user please verify your information and try again.');
+        }
+        return API.post('auth/signup/additional/', user, 'System unable to save additional user questions.');
+    };
     
     
 

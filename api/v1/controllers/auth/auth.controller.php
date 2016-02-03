@@ -1,5 +1,6 @@
 <?php namespace API;
 require_once dirname(__FILE__) . '/auth.data.php';
+require_once dirname(__FILE__) . '/auth.additionalInfo.data.php';
 require_once dirname(__FILE__) . '/auth.controller.native.php';
 require_once dirname(__FILE__) . '/auth.controller.facebook.php';
 

@@ -1,5 +1,6 @@
 <?php namespace API;
  require_once dirname(__FILE__) . '/auth.controller.php';
+ require_once dirname(__FILE__) . '/auth.additionalInfo.controller.php';
 
 class AuthRoutes {
     
@@ -39,6 +40,10 @@ class AuthRoutes {
                 AuthController::facebookSignup($app);
             });
 
+            $app->post("/signup/additional/", function () use ($app) {
+                InfoController::saveAdditional($app);
+            });
+            
             ///// 
             ///// Login
             ///// 
