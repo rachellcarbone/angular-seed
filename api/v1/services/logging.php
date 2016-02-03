@@ -59,13 +59,21 @@ class Logging {
      * Prepend a timestamp to a line of text and write it to the log file.
      */
     function write($logItem) {
-        syslog(LOG_ERR, $logItem);
+        if(is_array($logItem)) {
+            syslog(LOG_ERR, json_encode($logItem));
+        } else {
+            syslog(LOG_ERR, $logItem);
+        }
         
-        // Get the timestamp
-        file_put_contents($this->logFile, date("m d, Y, G:i:s T"), FILE_APPEND);
-        // Concatenate log text with the timestamp
-        file_put_contents($this->logFile, $logItem, FILE_APPEND);
-        // Append the log item (string) to the log file 
-        file_put_contents($this->logFile, "\n\r", FILE_APPEND);
+        try {
+            // Get the timestamp
+            file_put_contents($this->logFile, date("m d, Y, G:i:s T"), FILE_APPEND);
+            // Concatenate log text with the timestamp
+            file_put_contents($this->logFile, $logItem, FILE_APPEND);
+            // Append the log item (string) to the log file 
+            file_put_contents($this->logFile, "\n\r", FILE_APPEND);
+        } catch (\Exception $e) {
+            syslog(LOG_ERR, $this->getExceptionString($e));
+        }
     }
 }
