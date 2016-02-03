@@ -164,21 +164,6 @@ class AuthControllerFacebook {
         
     }
     
-    private static function signup_saveReferrerQuestion($post) {
-        if(v::key('userId', v::stringType())->validate($post) && 
-           v::key('referrer', v::stringType())->validate($post)) {
-            
-            $data = array(
-                ':user_id' => $post['userId'],
-                ':question' => "Where did you about from us?",
-                ':answer' => $post['referrer']
-            );
-            
-            return InfoData::insertQuestion($data);
-            
-        }
-    }
-    
     private static function login_getSessionExpirationInHours($post) {
         $remember = (v::key('remember', v::stringType())->validate($post)) ? 
                 boolval($post['remember']) : false;

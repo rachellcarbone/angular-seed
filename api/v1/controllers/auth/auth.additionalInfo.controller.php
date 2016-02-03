@@ -41,4 +41,51 @@ class InfoController {
             
     }
     
+    static function quietlySaveAdditional($post, $userId = false) {
+        $saved = false;
+        
+        $userId = (!$userId && v::key('userId', v::stringType())->validate($post)) ? $post['userId'] : $userId;
+        
+        if($userId && v::key('referrer', v::stringType())->validate($post)) {
+            
+            $data = array(
+                ':user_id' => $userId,
+                ':question' => "Where did you about from us?",
+                ':answer' => $post['referrer']
+            );
+            
+            $saved = InfoData::insertQuestion($data);
+            
+        } 
+        
+        if($userId && v::key('triviaLove', v::stringType())->validate($post)) {
+            
+            $data = array(
+                ':user_id' => $userId,
+                ':question' => "How comitted are you?",
+                ':answer' => $post['triviaLove']
+            );
+            
+            $saved = InfoData::insertQuestion($data);
+        } 
+        
+        if($userId && v::key('terms', v::stringType())->validate($post)) {
+            
+            $terms = ($post['terms'] === 1 || 
+                        $post['terms'] === '1' || 
+                        $post['terms'] === true || 
+                        $post['terms'] === 'true') ? 1 : 0;
+            
+            $data = array(
+                ':user_id' => $userId,
+                ':accepted_terms' => $terms
+            );
+            
+            $saved = InfoData::saveTerms($data);
+        } 
+        
+        return $saved;
+            
+    }
+    
 }

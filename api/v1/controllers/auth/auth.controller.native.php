@@ -79,26 +79,12 @@ class AuthControllerNative {
             ));
 
             // Save "Where did you hear about us" question
-            self::signup_saveReferrerQuestion($post, $user->id);
+            InfoController::quietlySaveAdditional($post, $user->id);
             
             // Send the session life back (in hours) for the cookies
             return array('registered' => true, 'user' => $user, 'sessionLifeHours' => $hours);
         }
         return array('registered' => false, 'msg' => 'Signup failed. Could not save user.');
-    }
-    
-    private static function signup_saveReferrerQuestion($post, $userId) {
-        if(v::key('referrer', v::stringType())->validate($post)) {
-            
-            $data = array(
-                ':user_id' => $userId,
-                ':question' => "Where did you about from us?",
-                ':answer' => $post['referrer']
-            );
-            
-            return InfoData::insertQuestion($data);
-            
-        }
     }
     
 
