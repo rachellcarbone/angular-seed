@@ -4,7 +4,7 @@
 class InfoData {
     
     public static function insertQuestion($data) {
-        return DBConn::insert("INSERT INTO as_user_additional_info(user_id, question, answer) "
+        return DBConn::insert("INSERT INTO " . DBConn::prefix() . "user_additional_info(user_id, question, answer) "
                 . "VALUES (:user_id, :question, :answer);", $data);
     }
     
