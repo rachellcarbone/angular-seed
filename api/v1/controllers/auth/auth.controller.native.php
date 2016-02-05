@@ -47,6 +47,9 @@ class AuthControllerNative {
            !v::key('password', v::stringType())->validate($post)) {
             // Validate input parameters
             return array('registered' => false, 'msg' => 'Signup failed. Check your parameters and try again.');
+        } else if(!self::validatePasswordRequirements($post, 'password')) {
+            // Validate input parameters
+            return array('registered' => false, 'msg' => 'Signup failed. ' . self::$passwordRules);
         }
         
         $existing = UserData::selectUserByEmail($post['email']);
@@ -85,6 +88,10 @@ class AuthControllerNative {
             return array('registered' => true, 'user' => $user, 'sessionLifeHours' => $hours);
         }
         return array('registered' => false, 'msg' => 'Signup failed. Could not save user.');
+    }
+    
+    static function validatePasswordRequirements($post, $key = 'password') {
+        return (v::key($key, v::stringType()->length(8,255)->noWhitespace()->alnum('!@#$%^&*_+=-')->regex('/^(?=.*[a-zA-Z])(?=.*[0-9])/'))->validate($post));
     }
     
 
