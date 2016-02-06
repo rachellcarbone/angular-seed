@@ -21,7 +21,7 @@ angular.module('apiRoutes.datatables', [])
                     return resolve([]);
                 });
         });
-    }
+    };
     
     api.adminUsersList = function() {
         return getPromise('/datatable/admin/users');
