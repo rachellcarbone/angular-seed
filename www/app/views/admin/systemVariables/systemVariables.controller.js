@@ -7,14 +7,23 @@
  */
 
 angular.module('app.admin.systemVariables', [])
-    .controller('AdminSystemVariablesCtrl', ['$scope', 'DataTableHelper', 'DTColumnBuilder', 'ModalService',
-        function($scope, DataTableHelper, DTColumnBuilder, ModalService) {
+    .controller('AdminSystemVariablesCtrl', ['$scope', '$filter', 'DataTableHelper', 'DTColumnBuilder', 'ModalService',
+        function($scope, $filter, DataTableHelper, DTColumnBuilder, ModalService) {
 
             /* Modal triggers */
-            $scope.openNewVariableModal = function () {
-                ModalService.openSystemVariable(false);
+            $scope.buttonOpenNewVariableModal = function () {
+                ModalService.openSystemVariable();
             };
-            $scope.openEditVariableModal = ModalService.openSystemVariable;
+            
+            $scope.buttonOpenEditVariableModal = function (id) {
+                var found = $filter('filter')($scope.dtSystemVars.instance.DataTable.data(), {id: id}, true);
+                if(angular.isDefined(found[0])) {
+                    ModalService.openSystemVariable(found[0]);
+                } else {
+                    console.log(found);
+                    console.log('Couldnt find value');
+                }
+            };
         
             // Init variables
             $scope.editing = false;
@@ -34,7 +43,7 @@ angular.module('app.admin.systemVariables', [])
                     return moment(data, 'YYYY-MM-DD HH:mm:ss').format('M/D/YYYY h:mm a');
                 }),
                 DTColumnBuilder.newColumn(null).withTitle('Edit').renderWith(function (data, type, full, meta) {
-                    return '<button type="button" ng-click="openEditVariableModal(\'' + data.id + '\')" class="btn btn-default btn-xs pull-right">Edit</button>';
+                    return '<button type="button" ng-click="buttonOpenEditVariableModal(\'' + data.id + '\')" class="btn btn-default btn-xs pull-right">Edit</button>';
                 }).notSortable()
             ];
         

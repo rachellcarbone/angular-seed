@@ -19,6 +19,18 @@ class ConfigController {
         }
     }
     
+    static function getVariableByName($app) {
+        if(!v::key('name', v::stringType())->validate($app->request->post())) {
+            return $app->render(400,  array('msg' => 'Could not select system config variable.'));
+        }
+        $variable = ConfigData::getVariableByName($app->request->post('name'));
+        if($variable) {
+            return $app->render(200, array('variable' => $variable));
+        } else {
+            return $app->render(400,  array('msg' => 'System config variable could not be found.'));
+        }
+    }
+    
     static function addVariable($app) {
         if(!v::key('name', v::stringType())->validate($app->request->post()) || 
            !v::key('value', v::stringType())->validate($app->request->post())) {

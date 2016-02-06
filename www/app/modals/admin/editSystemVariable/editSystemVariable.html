@@ -1,32 +1,50 @@
 <div class="modal-header">
-    <h3 ng-if="inNewMode" class="modal-title">New Category</h3>
-    <h3 ng-if="!inNewMode" class="modal-title">Edit Category</h3>
+    <h3 ng-if="!editMode" class="modal-title">New System Config Variable</h3>
+    <h3 ng-if="editMode" class="modal-title">Edit System Config Variable</h3>
 </div>
 
 <div class="modal-body">       
     
-    <form name="form.modalForm" class="form-horizontal" role="form" novalidate>
+    <form name="form.modalForm" role="form" novalidate>
+    
+        <div data-rc-bootstrap-alerts="alertProxy"></div>
         
         <div class="form-group">
-
-            <div class="col-sm-12 col-md-12">
-                <label>Category Name</label>
-                <input name="category" ng-model="category.category" type="text" maxlength="255" required />
-            </div>
-
+            <label>Variable Name</label>
+            <input ng-model="variable.name" class="form-control" type="text" maxlength="255" required />
+        </div>
+        
+        <div class="form-group">
+            <label>Variable Value</label>
+            <input ng-model="variable.value" class="form-control" type="text" maxlength="255" required />
         </div>
 
+        <div class="form-group">
+            <label>Variable Permissions</label><br/>
+            
+            <label class="checkbox-inline">
+                <input type="checkbox" ng-model="variable.indestructible" value="indestructible" title="This variable cannot be deleted."> Indestructible
+            </label>
+
+            <label class="checkbox-inline">
+                <input type="checkbox" ng-model="variable.disabled" value="disabled" title="This variableis disabled and will not be auto loaded."> Disabled
+            </label>
+
+            <label class="checkbox-inline">
+                <input type="checkbox" ng-model="variable.locked" value="locked" title="This variable is locked and cannot be modified without super admin permissions."> Locked
+            </label>
+            
+        </div>
+        
     </form>
 
 </div>
 
 <div class="modal-footer">
     
-    <div data-rc-alert-bar="modalForm"></div>
-    
-    <button class="btn btn-danger pull-left" ng-if="!inNewMode" ng-click="buttonDelete()">Delete</button>
+    <button class="btn btn-danger pull-left" ng-if="editMode" ng-click="buttonDelete()">Delete</button>
     
     <button class="btn btn-info" ng-click="buttonCancel()">Cancel</button>
-    <button class="btn btn-primary" ng-if="inNewMode" ng-click="buttonNew()">Add</button>
-    <button class="btn btn-primary" ng-if="!inNewMode" ng-click="buttonSave()">Save</button>
+    <button class="btn btn-primary" ng-if="!editMode" ng-click="buttonNew()">Add</button>
+    <button class="btn btn-primary" ng-if="editMode" ng-click="buttonSave()">Save</button>
 </div>

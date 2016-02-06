@@ -109,14 +109,19 @@ angular.module('ModalService', [
      * 
      * @return uibModalInstance
      */
-    api.openSystemVariable = function(variableId) {
+    api.openSystemVariable = function(variable) {
         return api.openModal({
             templateUrl: templatePath + 'admin/editSystemVariable/editSystemVariable.html',
             controller: 'EditSystemVariableModalCtrl',
             resolve: {
                 ApiRoutesSystemVariables: 'ApiRoutesSystemVariables',
                 editing: function(ApiRoutesSystemVariables) {
-                    return (variableId) ? ApiRoutesSystemVariables.getVariable(variableId) : {};
+                    if(angular.isDefined(variable)) {
+                        return (angular.isObject(variable)) ? variable : 
+                                ApiRoutesSystemVariables.getVariable(variable);
+                    } else {
+                        return {};
+                    }
                 }
             }
         });
