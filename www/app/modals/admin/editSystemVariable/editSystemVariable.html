@@ -9,14 +9,18 @@
     
         <div data-rc-bootstrap-alerts="alertProxy"></div>
         
+        <uib-alert ng-if="saved.locked === '1'" type="danger">This variable is locked and cannot be edited.</uib-alert>
+        <uib-alert ng-if="saved.indestructible === '1'" type="warning">This variable is indestructible and cannot be deleted.</uib-alert>
+        <uib-alert ng-if="saved.disabled === '1'" type="info">This variable is disabled and will not be loaded by the system.</uib-alert>
+        
         <div class="form-group">
             <label>Variable Name</label>
-            <input ng-model="variable.name" class="form-control" type="text" maxlength="255" required />
+            <input ng-model="variable.name" class="form-control" type="text" maxlength="255" required ng-disabled="saved.locked === '1'" />
         </div>
         
         <div class="form-group">
             <label>Variable Value</label>
-            <input ng-model="variable.value" class="form-control" type="text" maxlength="255" required />
+            <input ng-model="variable.value" class="form-control" type="text" maxlength="255" required ng-disabled="saved.locked === '1'" />
         </div>
 
         <div ng-if="!editMode" class="form-group">
@@ -37,6 +41,7 @@
                        ng-true-value="'1'"
                        ng-false-value="'0'"
                        value="indestructible" 
+                       ng-disabled="saved.locked === '1'"
                        title="This variable cannot be deleted."> Indestructible
             </label>
 
@@ -46,6 +51,7 @@
                        ng-true-value="'1'"
                        ng-false-value="'0'"
                        value="disabled" 
+                       ng-disabled="saved.locked === '1'"
                        title="This variableis disabled and will not be auto loaded."> Disabled
             </label>
 
@@ -55,6 +61,8 @@
                        ng-true-value="'1'"
                        ng-false-value="'0'"
                        value="locked" 
+                       ng-disabled="saved.locked === '1'"
+                       ng-click="checkboxLockedWarning($event, variable.locked)"
                        title="This variable is locked and cannot be modified without super admin permissions."> Locked
             </label>
             
@@ -66,7 +74,7 @@
 
 <div class="modal-footer">
     
-    <button class="btn btn-danger pull-left" ng-if="editMode" ng-click="buttonDelete()">Delete</button>
+    <button class="btn btn-danger pull-left" ng-if="editMode && !(saved.locked === '1' || saved.indestructible === '1')" ng-click="buttonDelete()">Delete</button>
     
     <button class="btn btn-info" ng-click="buttonCancel()">Cancel</button>
     <button class="btn btn-primary" ng-if="!editMode" ng-click="buttonNew()">Add</button>
