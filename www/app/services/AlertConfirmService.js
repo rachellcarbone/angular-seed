@@ -56,17 +56,28 @@ angular.module('AlertConfirmService', [])
         };
 
         /* Return the uibModalInstance */
-        api.confirm = function(options) {
+        api.confirm = function(msg, title) {
             var question = 'Are you sure you really want to do that? The action cannot be undone.';
             var header = 'Please Confirm';
             var buttonTextConfirm = 'Confirm';
             var buttonTextCancel = 'Cancel';
                 
-            if (typeof options === "object") {
-                question = options.question || question;
-                header = options.header || header;
-                buttonTextConfirm = options.buttonTextConfirm || buttonTextConfirm;
-                buttonTextCancel = options.buttonTextCancel || buttonTextCancel;
+            if (angular.isObject(msg)) {
+                question = msg.question || question;
+                header = msg.header || header;
+                buttonTextConfirm = msg.buttonTextConfirm || buttonTextConfirm;
+                buttonTextCancel = msg.buttonTextCancel || buttonTextCancel;
+            } else if (angular.isString(msg)) {
+                question = msg;
+            }
+            
+            if (angular.isObject(title)) {
+                question = title.question || question;
+                header = title.header || header;
+                buttonTextConfirm = title.buttonTextConfirm || buttonTextConfirm;
+                buttonTextCancel = title.buttonTextCancel || buttonTextCancel;
+            } else if (angular.isString(title)){
+                header = title;
             }
             
             var templateHtml = '<div class="modal-header"><h3 class="modal-title">{{header}}</h3></div>' +
