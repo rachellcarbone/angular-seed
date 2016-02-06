@@ -19,9 +19,12 @@ angular.module('DataTableHelper', [])
         dt.rows = {};
 
         /* Object to hold DataTableInstance */
-        dt.instance = {};
+        //dt.instance = {};
+        dt.instance = function (instance) {
+            dt.instance = instance;
+        };
 
-        dt.options = DTOptionsBuilder.fromFnPromise(ApiRoutesDatatables[method]())
+        dt.options = DTOptionsBuilder.fromFnPromise(ApiRoutesDatatables[method])
             .withBootstrap()
             .withDOM('<"row"<"col-sm-12 col-md-12"fr><"col-sm-12 col-md-12 add-space"t><"col-sm-4 col-md-4"l><"col-sm-4 col-md-4"i><"col-sm-4 col-md-4"p>>')
             .withPaginationType('full_numbers')
@@ -32,6 +35,15 @@ angular.module('DataTableHelper', [])
                 dt.rows[data.id] = data;
             });
             
+
+        dt.reloadData = function () {
+            var resetPaging = true;
+            var callback = function (json) {
+                console.log(json);
+            };
+            dt.instance.rerender();
+        };
+        
         return dt;
     };
 
