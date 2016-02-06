@@ -6,8 +6,8 @@
  * API calls related to field visibility.
  */
 
-angular.module('apiRoutes.visibilityFields', [])
-.factory('ApiRoutesVisibilityField', ['ApiService', function (API) {
+angular.module('apiRoutes.systemVisibility', [])
+.factory('ApiRoutesSystemVisibility', ['ApiService', function (API) {
         
     var api = {};
 

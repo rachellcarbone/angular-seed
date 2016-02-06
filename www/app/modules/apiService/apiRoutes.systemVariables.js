@@ -6,8 +6,8 @@
  * API calls related to authentication.
  */
 
-angular.module('apiRoutes.auth', [])
-.factory('ApiRoutesAuth', ['ApiService', function (API) {
+angular.module('apiRoutes.systemVariables', [])
+.factory('ApiRoutesSystemVariables', ['ApiService', function (API) {
         
     var api = {};
 
