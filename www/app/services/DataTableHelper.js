@@ -41,7 +41,7 @@ angular.module('DataTableHelper', [])
             var callback = function (json) {
                 console.log(json);
             };
-            dt.instance.rerender();
+            dt.instance.reloadData();
         };
         
         return dt;
