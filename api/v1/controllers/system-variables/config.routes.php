@@ -31,7 +31,7 @@ class ConfigRoutes {
             });
 
             /*
-             * id, indestructable, locked
+             * id, indestructible, locked
              */
             $app->post("/update/permissions/:variableId/", function ($variableId) use ($app) {
                 ConfigController::saveVariablePermissions($app, $variableId);

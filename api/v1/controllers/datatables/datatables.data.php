@@ -82,7 +82,7 @@ class DatatablesData {
     }
     
     public static function selectConfigVariables() {
-        return DBConn::selectAll("SELECT c.id, c.name, c.value, c.created, c.last_updated AS lastUpdated, c.disabled, c.indestructable, c.locked, "
+        return DBConn::selectAll("SELECT c.id, c.name, c.value, c.created, c.last_updated AS lastUpdated, c.disabled, c.indestructible, c.locked, "
                 . "CONCAT(u1.name_first, ' ', u1.name_last) AS createdBy, "
                 . "CONCAT(u2.name_first, ' ', u2.name_last) AS updatedBy "
                 . "FROM " . DBConn::prefix() . "system_config AS c "

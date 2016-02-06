@@ -20,7 +20,7 @@ angular.module('apiRoutes.systemVariables', [])
     };
     
     api.newSystemVariable = function(variable) {
-        if(!variable.name || !variable.value || !variable.disabled || !variable.indestructable || !variable.locked) {
+        if(!variable.name || !variable.value || !variable.disabled || !variable.indestructible || !variable.locked) {
             return API.reject('Invalid system config variable please check your parameters and try again.');
         }
 
@@ -28,7 +28,7 @@ angular.module('apiRoutes.systemVariables', [])
     };
 
     api.saveSystemVariable = function(variable) {
-        if(!variable.name || !variable.value || !variable.disabled || !variable.indestructable || !variable.locked) {
+        if(!variable.name || !variable.value || !variable.disabled || !variable.indestructible || !variable.locked) {
             return API.reject('Invalid system config variable please check your parameters and try again.');
         }
 

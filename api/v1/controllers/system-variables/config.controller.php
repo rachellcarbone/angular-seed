@@ -91,7 +91,7 @@ class ConfigController {
             ":name" => $app->request->post('name'),
             ":value" => $app->request->post('value'),
             ":disabled" => $disabled,
-            ":indestructable" => $savedConfig->indestructable,
+            ":indestructible" => $savedConfig->indestructible,
             ":locked" => $savedConfig->locked,
             ":last_updated_by" => APIAuth::getUserId()
         );
@@ -107,7 +107,7 @@ class ConfigController {
     
     static function saveVariablePermissions($app, $variableId) {
         if(!v::intVal()->validate($variableId) ||
-           !v::key('indestructable')->validate($app->request->post()) || 
+           !v::key('indestructible')->validate($app->request->post()) || 
            !v::key('locked')->validate($app->request->post())) {
             // Validate input parameters
             return $app->render(401, array('msg' => 'Update failed. Check your parameters and try again.'));
@@ -118,13 +118,13 @@ class ConfigController {
             return $app->render(400, array('msg' => 'Variable doesnt seem to exist.'));
         }
         
-        $indestructable = $savedConfig->indestructable; 
+        $indestructible = $savedConfig->indestructible; 
         // Converting to boolean did not work well, 
         // This allows a wider range of true false values
-        $indestructable = ($app->request->post('indestructable') === 1 || 
-                    $app->request->post('indestructable') === '1' || 
-                    $app->request->post('indestructable') === true || 
-                    $app->request->post('indestructable') === 'true') ? 1 : 0;
+        $indestructible = ($app->request->post('indestructible') === 1 || 
+                    $app->request->post('indestructible') === '1' || 
+                    $app->request->post('indestructible') === true || 
+                    $app->request->post('indestructible') === 'true') ? 1 : 0;
         
         $locked = $savedConfig->locked; 
         // Converting to boolean did not work well, 
@@ -134,10 +134,10 @@ class ConfigController {
                     $app->request->post('locked') === true || 
                     $app->request->post('locked') === 'true') ? 1 : 0;
         
-        // If its locked its also indestructable
+        // If its locked its also indestructible
         $data = array (
             ":id" => $variableId,
-            ":indestructable" => ($locked) ? 1 : $indestructable,
+            ":indestructible" => ($locked) ? 1 : $indestructible,
             ":locked" => $locked,
             ":last_updated_by" => APIAuth::getUserId()
         );
@@ -157,8 +157,8 @@ class ConfigController {
         }
         
         $savedConfig = ConfigData::getVariableById($variableId);
-        if($savedConfig && ($savedConfig->locked || $savedConfig->indestructable)) {
-            return $app->render(401, array('msg' => 'This config variable is locked or indestructable and cannot deleted without special permissions.'));
+        if($savedConfig && ($savedConfig->locked || $savedConfig->indestructible)) {
+            return $app->render(401, array('msg' => 'This config variable is locked or indestructible and cannot deleted without special permissions.'));
         }
         
         if(ConfigData::deleteVariable($variableId)) {
