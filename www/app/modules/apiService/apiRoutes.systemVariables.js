@@ -20,23 +20,23 @@ angular.module('apiRoutes.systemVariables', [])
     };
     
     api.newSystemVariable = function(variable) {
-        if(!variable.name || !variable.value || !variable.disabled || !variable.indestructible || !variable.locked) {
+        if(!variable.name || !variable.value || !variable.disabled) {
             return API.reject('Invalid system config variable please check your parameters and try again.');
         }
 
-        return API.post('config/insert/', variable, 'System unable to create new user.');
+        return API.post('config/insert/', variable, 'System unable to create new config variable.');
     };
 
     api.saveSystemVariable = function(variable) {
-        if(!variable.name || !variable.value || !variable.disabled || !variable.indestructible || !variable.locked) {
+        if(!variable.id || !variable.name || !variable.value || !variable.disabled || !variable.indestructible || !variable.locked) {
             return API.reject('Invalid system config variable please check your parameters and try again.');
         }
 
-        return API.post('config/save/', variable, 'System unable to save system config variable.');
+        return API.post('config/update/' + variable.id, variable, 'System unable to save config variable.');
     };
 
     api.deleteSystemVariable = function(id) {
-        return API.delete('config/delete/' + id, 'System unable to delete system config variable.');
+        return API.delete('config/delete/' + id, 'System unable to delete config variable.');
     };
     
     return api;

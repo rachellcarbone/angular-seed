@@ -19,19 +19,43 @@
             <input ng-model="variable.value" class="form-control" type="text" maxlength="255" required />
         </div>
 
-        <div class="form-group">
+        <div ng-if="!editMode" class="form-group">
             <label>Variable Permissions</label><br/>
             
             <label class="checkbox-inline">
-                <input type="checkbox" ng-model="variable.indestructible" value="indestructible" title="This variable cannot be deleted."> Indestructible
+                <input type="checkbox" ng-model="variable.disabled" value="disabled" title="This variableis disabled and will not be auto loaded."> Disabled when created
+            </label>
+            
+        </div>
+
+        <div ng-if="editMode" class="form-group">
+            <label>Variable Permissions</label><br/>
+            
+            <label class="checkbox-inline">
+                <input type="checkbox" 
+                       ng-model="variable.indestructible" 
+                       ng-true-value="'1'"
+                       ng-false-value="'0'"
+                       value="indestructible" 
+                       title="This variable cannot be deleted."> Indestructible
             </label>
 
             <label class="checkbox-inline">
-                <input type="checkbox" ng-model="variable.disabled" value="disabled" title="This variableis disabled and will not be auto loaded."> Disabled
+                <input type="checkbox" 
+                       ng-model="variable.disabled" 
+                       ng-true-value="'1'"
+                       ng-false-value="'0'"
+                       value="disabled" 
+                       title="This variableis disabled and will not be auto loaded."> Disabled
             </label>
 
             <label class="checkbox-inline">
-                <input type="checkbox" ng-model="variable.locked" value="locked" title="This variable is locked and cannot be modified without super admin permissions."> Locked
+                <input type="checkbox" 
+                       ng-model="variable.locked" 
+                       ng-true-value="'1'"
+                       ng-false-value="'0'"
+                       value="locked" 
+                       title="This variable is locked and cannot be modified without super admin permissions."> Locked
             </label>
             
         </div>

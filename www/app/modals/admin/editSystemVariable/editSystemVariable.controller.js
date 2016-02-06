@@ -25,7 +25,7 @@ angular.module('app.modal.editSystemVariable', [])
     $scope.buttonNew = function() {
         ApiRoutesSystemVariables.newSystemVariable($scope.variable).then(
             function (result) {
-                $uibModalInstance.close();
+                $uibModalInstance.close(result);
             }, function (error) {
                 $scope.alertProxy.error(error);
             });
@@ -37,12 +37,12 @@ angular.module('app.modal.editSystemVariable', [])
             .result.then(function () {
                 ApiRoutesSystemVariables.saveSystemVariable($scope.variable).then(
                     function (result) {
-                        $uibModalInstance.close();
+                        $uibModalInstance.close(result);
                     }, function (error) {
                         $scope.alertProxy.error(error);
                     });
-            }, function (error) {
-                $scope.alertProxy.error(error);
+            }, function (declined) {
+                $scope.alertProxy.info('No changes were saved.');
             });
     };
     
@@ -52,10 +52,12 @@ angular.module('app.modal.editSystemVariable', [])
             .result.then(function () {
                 ApiRoutesSystemVariables.deleteSystemVariable($scope.variable.id).then(
                     function (result) {
-                        $uibModalInstance.close();
+                        $uibModalInstance.close(result);
                     }, function (error) {
                         $scope.alertProxy.error(error);
                     });
+            }, function (declined) {
+                $scope.alertProxy.info('No changes were saved.');
             });
     };
         

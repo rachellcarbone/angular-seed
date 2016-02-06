@@ -16,8 +16,8 @@ class ConfigData {
     }
   
     public static function insertVariable($validConfig) {
-        return DBConn::insert("INSERT INTO " . DBConn::prefix() . "system_config(name, value, created_user_id, last_updated_by) "
-                . "VALUES (:name, :value, :created_user_id, :last_updated_by);", $validConfig);
+        return DBConn::insert("INSERT INTO " . DBConn::prefix() . "system_config(name, value, disabled, created_user_id, last_updated_by) "
+                . "VALUES (:name, :value, :disabled, :created_user_id, :last_updated_by);", $validConfig);
     }
     
     public static function updateVariable($validConfig) {
