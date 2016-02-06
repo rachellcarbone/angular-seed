@@ -7,7 +7,7 @@
  */
 
 angular.module('rcDirectives', [
-    'rc.alertBar',
+    'rc.bootstrapAlerts',
     'rc.placeholdBrokenImg',
     'rc.stateRedirectTimeout',
     'rcMessages'
