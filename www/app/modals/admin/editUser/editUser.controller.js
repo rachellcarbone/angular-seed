@@ -7,23 +7,24 @@ angular.module('app.modal.editUser', [])
     function($scope, $uibModalInstance, $log, AlertConfirmService, editing, ApiRoutesUsers) {
         
     /* Used to restrict alert bars */
-    $scope.restrictTo = "edit-user-modal";
+    $scope.alertProxy = {};
     
     /* Holds the add / edit form on the modal */
     $scope.form = {};
     
     /* Is the modal in edit mode? Shows / Hides form */
-    $scope.editMode = Boolean(editing.user);
+    $scope.editMode = (!angular.isDefined(editing.id));
+    $scope.newMode = (!angular.isDefined(editing.id));
     
-    /* Save the user for resetting purposes */
-    $scope.savedUser = (editing.user) ? angular.copy(editing.user) : {};
+    /* Save for resetting purposes */
+    $scope.saved = (angular.isDefined(editing.id)) ? angular.copy(editing) : {};
     
-    /* User to display and edit */
-    $scope.user = (editing.user) ? angular.copy(editing.user) : {};
+    /* Item to display and edit */
+    $scope.editing = angular.copy($scope.saved);
     
     /* Click event for the Add / New button */
     $scope.buttonNew = function() {
-        ApiRoutesUsers.addUser($scope.user).then(
+        ApiRoutesUsers.addUser($scope.editing).then(
             function (result) {
                 $scope.editMode = false;
             }, function (error) {
@@ -35,7 +36,7 @@ angular.module('app.modal.editUser', [])
     $scope.buttonSave = function() {
         AlertConfirmService.confirm('Are you sure you want to manually override this user?')
             .result.then(function () {
-                ApiRoutesUsers.saveUser($scope.user).then(
+                ApiRoutesUsers.saveUser($scope.editing).then(
                     function (result) {
                         $scope.editMode = false;
                     }, function (error) {
@@ -50,7 +51,7 @@ angular.module('app.modal.editUser', [])
     $scope.buttonDelete = function() {
         AlertConfirmService.confirm('Are you sure you want to disable this user? They will no longer be able to log in.')
             .result.then(function () {
-                ApiRoutesUsers.deleteUser($scope.user.id).then(
+                ApiRoutesUsers.deleteUser($scope.editing.id).then(
                     function (result) {
                         $scope.editMode = false;
                     }, function (error) {

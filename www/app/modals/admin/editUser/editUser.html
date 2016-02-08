@@ -6,11 +6,11 @@
 
 <div class="modal-body">     
     
-    <div class="alert alert-danger well-sm" role="alert" ng-if="!user.verified">
+    <div class="alert alert-danger well-sm" role="alert" ng-if="!editing.verified">
         <strong>Email Verification!</strong> This user has not verified their email.
     </div>
     
-    <div class="alert alert-danger well-sm" role="alert" ng-if="user.disabled == 'true'">
+    <div class="alert alert-danger well-sm" role="alert" ng-if="editing.disabled == 'true'">
         <strong>Disabled User!</strong> This user is disabled and cannot log in.
     </div>
     
@@ -20,13 +20,13 @@
             <div class="col-xs-6">
                 <div class="form-group">
                     <label for="nameFirst">First Name</label>
-                    <p>{{user.nameFirst}}</p>
+                    <p>{{saved.nameFirst}}</p>
                 </div>
             </div>
             <div class="col-xs-6">
                 <div class="form-group">
                     <label for="nameLast">Last Name</label>
-                    <p>{{user.nameLast}}</p>
+                    <p>{{saved.nameLast}}</p>
                 </div>
             </div>
         </div>
@@ -35,17 +35,23 @@
             <div class="col-xs-6">
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <p>{{user.email}}</p>
+                    <p>{{saved.email}}</p>
                 </div>
             </div>
 
             <div class="col-xs-6">
                 <div class="form-group">
                     <label for="verified">Email Verified</label>
-                    <p ng-if="!user.verified"><span class="label label-danger">Not Verified</span></p>
-                    <p ng-if="user.verified"><span class="label label-success">Verified</span></p>
+                    <p ng-if="!saved.verified"><span class="label label-danger">Not Verified</span></p>
+                    <p ng-if="saved.verified"><span class="label label-success">Verified</span></p>
                 </div>
             </div>
+        </div>
+
+        <div class="meta" ng-if="!newMode">
+            <hr/>
+            <p class="text-muted"><strong>Created:</strong> {{saved.created | formatMySQLDate}}</p>
+            <p class="text-muted"><strong>Updated:</strong> {{saved.lastUpdated | formatMySQLDate}} by {{saved.updatedBy}}</p>
         </div>
 
     </div>
@@ -56,13 +62,13 @@
             <div class="col-xs-6">
                 <div class="form-group">
                     <label for="nameFirst">First Name</label>
-                    <input class="form-control" name="nameFirst" ng-model="user.nameFirst" type="text" maxlength="100" required />
+                    <input class="form-control" name="nameFirst" ng-model="editing.nameFirst" type="text" maxlength="100" required />
                 </div>
             </div>
             <div class="col-xs-6">
                 <div class="form-group">
                     <label for="nameLast">Last Name</label>
-                    <input class="form-control" name="nameLast" ng-model="user.nameLast" type="text" maxlength="100" required />
+                    <input class="form-control" name="nameLast" ng-model="editing.nameLast" type="text" maxlength="100" required />
                 </div>
             </div>
         </div>
@@ -71,44 +77,37 @@
             <div class="col-xs-6">
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input class="form-control" name="email" ng-model="user.email" type="email" maxlength="255" required />
+                    <input class="form-control" name="email" ng-model="editing.email" type="email" maxlength="255" required />
                 </div>
             </div>
 
             <div class="col-xs-6">
                 <div class="form-group">
                     <label for="verified">Email Verified</label>
-                    <p ng-if="!user.verified"><span class="label label-danger">Not Verified</span></p>
-                    <p ng-if="user.verified"><span class="label label-success">Verified</span></p>
+                    <p ng-if="!editing.verified"><span class="label label-danger">Not Verified</span></p>
+                    <p ng-if="editing.verified"><span class="label label-success">Verified</span></p>
                 </div>
             </div>
         </div>
 
         <div class="row">
-            <div class="col-xs-6">
+            <div class="col-xs-12">
                 <div class="form-group">
-                    <label for="disabled">Restrict User Access</label>
-                    <div class="radio">
-                        <label><input type="radio" name="disabled" ng-model="user.disabled" value="false"> Enable User</label><br/>
-                        <label><input type="radio" name="disabled" ng-model="user.disabled" value="true"> Disable User</label><br/>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xs-6">
-                <div class="form-group">
+                    <label for="disabled">Restrict User Access</label><br/>
+                    <label class="radio-inline"><input type="radio" name="disabled" ng-model="editing.disabled" value="false"> Enable User</label>
+                    <label class="radio-inline"><input type="radio" name="disabled" ng-model="editing.disabled" value="true"> Disable User</label>
                 </div>
             </div>
         </div>
-
+        
     </form>
 
 </div>
 
 <div class="modal-footer">
-    <button class="btn btn-danger pull-left" ng-if="!inNewMode" ng-click="buttonDelete()">Delete</button>
+    <button class="btn btn-danger pull-left" ng-if="!newMode" ng-click="buttonDelete()">Delete</button>
     
     <button class="btn btn-info" ng-click="buttonCancel()">Cancel</button>
-    <button class="btn btn-primary" ng-if="inNewMode" ng-click="buttonNew()">Add</button>
-    <button class="btn btn-primary" ng-if="!inNewMode" ng-click="buttonSave()">Save</button>
+    <button class="btn btn-primary" ng-if="newMode" ng-click="buttonNew()">Add</button>
+    <button class="btn btn-primary" ng-if="!newMode" ng-click="buttonSave()">Save</button>
 </div>
