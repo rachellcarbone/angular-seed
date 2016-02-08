@@ -25,7 +25,7 @@ class DatatablesData {
     }
     
     public static function selectUserGroups() {
-        $qGroups = DBConn::executeQuery("SELECT g.id, g.group, g.desc, g.created, g.last_updated AS lastUpdated, "
+        $qGroups = DBConn::executeQuery("SELECT g.id, g.group, g.slug AS identifier, g.desc, g.created, g.last_updated AS lastUpdated, "
                 . "CONCAT(u1.name_first, ' ', u1.name_last) AS createdBy, "
                 . "CONCAT(u2.name_first, ' ', u2.name_last) AS updatedBy "
                 . "FROM " . DBConn::prefix() . "auth_groups AS g "
@@ -49,7 +49,7 @@ class DatatablesData {
     }
     
     public static function selectGroupRoles() {
-        $qRoles = DBConn::executeQuery("SELECT r.id, r.role, r.desc, r.created, r.last_updated AS lastUpdated, "
+        $qRoles = DBConn::executeQuery("SELECT r.id, r.role, r.slug AS identifier, r.desc, r.created, r.last_updated AS lastUpdated, "
                 . "CONCAT(u1.name_first, ' ', u1.name_last) AS createdBy, "
                 . "CONCAT(u2.name_first, ' ', u2.name_last) AS updatedBy "
                 . "FROM " . DBConn::prefix() . "auth_roles AS r "
