@@ -22,3 +22,12 @@ app.filter("formatPrice", function () {
         return '$' + value;
     };
 });
+
+app.filter("formatMySQLDate", function () {
+    return function (value) {
+        if (!value) {
+            return value;
+        }
+        return moment(value, 'YYYY-MM-DD HH:mm:ss').format('M/D/YYYY h:mm a');
+    };
+});
