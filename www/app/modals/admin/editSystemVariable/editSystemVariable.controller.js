@@ -13,17 +13,18 @@ angular.module('app.modal.editSystemVariable', [])
     $scope.form = {};
     
     /* Is the modal in edit mode? Shows / Hides form */
-    $scope.editMode = Boolean(editing.id);
+    $scope.editMode = (!angular.isDefined(editing.id));
+    $scope.newMode = (!angular.isDefined(editing.id));
     
     /* Save for resetting purposes */
-    $scope.saved = (editing.id) ? angular.copy(editing) : {};
+    $scope.saved = (angular.isDefined(editing.id)) ? angular.copy(editing) : {};
     
     /* Item to display and edit */
-    $scope.variable = angular.copy($scope.saved);
+    $scope.editing = angular.copy($scope.saved);
     
     /* Click event for the Add / New button */
     $scope.buttonNew = function() {
-        ApiRoutesSystemVariables.newSystemVariable($scope.variable).then(
+        ApiRoutesSystemVariables.newSystemVariable($scope.editing).then(
             function (result) {
                 $uibModalInstance.close(result);
             }, function (error) {
@@ -54,7 +55,7 @@ angular.module('app.modal.editSystemVariable', [])
     $scope.buttonSave = function() {
         AlertConfirmService.confirm('Are you sure you want to change this variable? It may effect system settings.', 'System Wide Setting')
             .result.then(function () {
-                ApiRoutesSystemVariables.saveSystemVariable($scope.variable).then(
+                ApiRoutesSystemVariables.saveSystemVariable($scope.editing).then(
                     function (result) {
                         $uibModalInstance.close(result);
                     }, function (error) {
@@ -69,7 +70,7 @@ angular.module('app.modal.editSystemVariable', [])
     $scope.buttonDelete = function() {
         AlertConfirmService.confirm('Are you sure you want to delete this variable? It may effect system settings.', 'Delete Warning')
             .result.then(function () {
-                ApiRoutesSystemVariables.deleteSystemVariable($scope.variable.id).then(
+                ApiRoutesSystemVariables.deleteSystemVariable($scope.editing.id).then(
                     function (result) {
                         $uibModalInstance.close(result);
                     }, function (error) {
@@ -81,7 +82,17 @@ angular.module('app.modal.editSystemVariable', [])
     };
         
     /* Click event for the Cancel button */
-    $scope.buttonCancel = function() {
-        $uibModalInstance.dismiss(false);
+    $scope.buttonCancel = function() {    
+        if($scope.newMode || !$scope.editMode) {
+            $uibModalInstance.dismiss(false);
+        } else {
+            $scope.editMode = false;
+        }
     };
+    
+    /* Click event for the Edit button*/
+    $scope.buttonEdit = function() {
+        $scope.editMode = true;
+    };
+    
 }]);

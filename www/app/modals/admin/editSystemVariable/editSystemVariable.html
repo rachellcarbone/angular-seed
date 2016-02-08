@@ -1,11 +1,45 @@
 <div class="modal-header">
-    <h3 ng-if="!editMode" class="modal-title">New System Config Variable</h3>
-    <h3 ng-if="editMode" class="modal-title">Edit System Config Variable</h3>
+    <h3 ng-if="newMode" class="modal-title">New System Config Variable</h3>
+    <h3 ng-if="!newMode && editMode" class="modal-title">Edit System Config Variable #{{saved.id}}</h3>
+    <h3 ng-if="!newMode && !editMode" class="modal-title">System Config Variable #{{saved.id}}</h3>
 </div>
 
-<div class="modal-body">       
+<div class="modal-body">   
+    <div ng-if="!editMode">
+        
+        <div class="row">
+            <div class="col-xs-6">
+                <div class="form-group">
+                    <label>Variable Name</label>
+                    <p class="form-control-static"><code>{{saved.name}}</code></p>
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="form-group">
+                    <label>Variable Value</label>
+                    <p class="form-control-static"><code>{{saved.value}}</code></p>
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <label>Variable Permissions</label><br/>
+                    <p ng-if="saved.locked === '1'" class="text-danger"><strong>Locked</strong> - This variable is locked and cannot be edited.</p>
+                    <p ng-if="saved.indestructible === '1'" class="text-warning"><strong>Indestructible</strong> - This variable is indestructible and cannot be deleted.</p>
+                    <p ng-if="saved.disabled === '1'" class="text-info"><strong>Disabled</strong> - This variable is disabled and will not be loaded by the system.</p>
+                    <p ng-if="saved.locked === '0' && saved.indestructible === '0' && saved.disabled === '0'">No special permissions.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="meta" ng-if="!newMode">
+            <hr/>
+            <p class="text-muted"><strong>Created:</strong> {{saved.created | formatMySQLDate}} by {{saved.createdBy}}</p>
+            <p class="text-muted"><strong>Updated:</strong> {{saved.lastUpdated | formatMySQLDate}} by {{saved.updatedBy}}</p>
+        </div>
+        
+    </div>
     
-    <form name="form.modalForm" role="form" novalidate>
+    <form ng-if="editMode" name="form.modalForm" role="form" novalidate>
     
         <div data-rc-bootstrap-alerts="alertProxy"></div>
         
@@ -15,19 +49,19 @@
         
         <div class="form-group">
             <label>Variable Name</label>
-            <input ng-model="variable.name" class="form-control" type="text" maxlength="255" required ng-disabled="saved.locked === '1'" />
+            <input ng-model="editing.name" class="form-control" type="text" maxlength="255" required ng-disabled="saved.locked === '1'" />
         </div>
         
         <div class="form-group">
             <label>Variable Value</label>
-            <input ng-model="variable.value" class="form-control" type="text" maxlength="255" required ng-disabled="saved.locked === '1'" />
+            <input ng-model="editing.value" class="form-control" type="text" maxlength="255" required ng-disabled="saved.locked === '1'" />
         </div>
 
         <div ng-if="!editMode" class="form-group">
             <label>Variable Permissions</label><br/>
             
             <label class="checkbox-inline">
-                <input type="checkbox" ng-model="variable.disabled" value="disabled" title="This variableis disabled and will not be auto loaded."> Disabled when created
+                <input type="checkbox" ng-model="editing.disabled" value="disabled" title="This variableis disabled and will not be auto loaded."> Disabled when created
             </label>
             
         </div>
@@ -37,7 +71,7 @@
             
             <label class="checkbox-inline">
                 <input type="checkbox" 
-                       ng-model="variable.indestructible" 
+                       ng-model="editing.indestructible" 
                        ng-true-value="'1'"
                        ng-false-value="'0'"
                        value="indestructible" 
@@ -47,7 +81,7 @@
 
             <label class="checkbox-inline">
                 <input type="checkbox" 
-                       ng-model="variable.disabled" 
+                       ng-model="editing.disabled" 
                        ng-true-value="'1'"
                        ng-false-value="'0'"
                        value="disabled" 
@@ -57,12 +91,12 @@
 
             <label class="checkbox-inline">
                 <input type="checkbox" 
-                       ng-model="variable.locked" 
+                       ng-model="editing.locked" 
                        ng-true-value="'1'"
                        ng-false-value="'0'"
                        value="locked" 
                        ng-disabled="saved.locked === '1'"
-                       ng-click="checkboxLockedWarning($event, variable.locked)"
+                       ng-click="checkboxLockedWarning($event, editing.locked)"
                        title="This variable is locked and cannot be modified without super admin permissions."> Locked
             </label>
             
@@ -72,11 +106,15 @@
 
 </div>
 
-<div class="modal-footer">
-    
-    <button class="btn btn-danger pull-left" ng-if="editMode && !(saved.locked === '1' || saved.indestructible === '1')" ng-click="buttonDelete()">Delete</button>
-    
+<div ng-if="!editMode" class="modal-footer">
+    <button class="btn btn-default pull-left" ng-click="buttonEdit()">Edit</button>
+    <button class="btn btn-info" ng-click="buttonCancel()">Done</button>
+</div>
+
+<div ng-if="editMode" class="modal-footer">
+    <button class="btn btn-danger pull-left" ng-if="!newMode && (saved.locked === '0' && saved.indestructible === '0')" ng-click="buttonDelete()">Delete</button>
+        
     <button class="btn btn-info" ng-click="buttonCancel()">Cancel</button>
-    <button class="btn btn-primary" ng-if="!editMode" ng-click="buttonNew()">Add</button>
-    <button class="btn btn-primary" ng-if="editMode" ng-click="buttonSave()">Save</button>
+    <button class="btn btn-primary" ng-if="newMode" ng-click="buttonNew()">Add</button>
+    <button class="btn btn-primary" ng-if="!newMode && (saved.locked === '0')" ng-click="buttonSave()">Save</button>
 </div>

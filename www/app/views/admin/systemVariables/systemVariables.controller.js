@@ -46,12 +46,11 @@ angular.module('app.admin.systemVariables', [])
                     return (data === '1') ? '<span class="label label-danger" title="This variable is locked and cannot be changed."><i class="fa fa-lg fa-lock"></i></span>' : 
                             '<span class="label" title="This variable is unlocked and editable."><i class="fa fa-lg fa-unlock"></i></span>';
                 }),
-                DTColumnBuilder.newColumn('updatedBy').withTitle('Last Update'),
                 DTColumnBuilder.newColumn('lastUpdated').withTitle('Updated On').renderWith(function (data, type, full, meta) {
                     return moment(data, 'YYYY-MM-DD HH:mm:ss').format('M/D/YYYY h:mm a');
                 }),
-                DTColumnBuilder.newColumn(null).withTitle('Edit').withClass('text-center').renderWith(function (data, type, full, meta) {
-                    return '<button type="button" ng-click="buttonOpenEditVariableModal(\'' + data.id + '\')" class="btn btn-default btn-xs pull-right">Edit</button>';
+                DTColumnBuilder.newColumn(null).withTitle('').withClass('text-center').renderWith(function (data, type, full, meta) {
+                    return '<button type="button" ng-click="buttonOpenEditVariableModal(\'' + data.id + '\')" class="btn btn-default btn-xs pull-right">View</button>';
                 }).notSortable()
             ];
             
