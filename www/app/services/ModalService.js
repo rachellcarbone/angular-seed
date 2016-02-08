@@ -132,14 +132,19 @@ angular.module('ModalService', [
      * 
      * @return uibModalInstance
      */
-    api.openEditGroup = function(groupId) {
+    api.openEditGroup = function(group) {
         return api.openModal({
             templateUrl: templatePath + 'admin/editGroup/editGroup.html',
             controller: 'EditGroupModalCtrl',
             resolve: {
                 ApiRoutesGroups: 'ApiRoutesGroups',
                 editing: function(ApiRoutesGroups) {
-                    return (groupId) ? ApiRoutesGroups.getGroup(groupId) : {};
+                    if(angular.isDefined(group)) {
+                        return (angular.isObject(group)) ? group : 
+                                ApiRoutesGroups.getGroup(group);
+                    } else {
+                        return {};
+                    }
                 }
             }
         });
@@ -150,14 +155,19 @@ angular.module('ModalService', [
      * 
      * @return uibModalInstance
      */
-    api.openEditRole = function(roleId) {
+    api.openEditRole = function(role) {
         return api.openModal({
             templateUrl: templatePath + 'admin/editRole/editRole.html',
             controller: 'EditRoleModalCtrl',
             resolve: {
                 ApiRoutesRoles: 'ApiRoutesRoles',
                 editing: function(ApiRoutesRoles) {
-                    return (roleId) ? ApiRoutesRoles.getRole(roleId) : {};
+                    if(angular.isDefined(role)) {
+                        return (angular.isObject(role)) ? role : 
+                                ApiRoutesRoles.getRole(role);
+                    } else {
+                        return {};
+                    }
                 }
             }
         });
@@ -168,14 +178,19 @@ angular.module('ModalService', [
      * 
      * @return uibModalInstance
      */
-    api.openEditUser = function(userId) {
+    api.openEditUser = function(user) {
         return api.openModal({
             templateUrl: templatePath + 'admin/editUser/editUser.html',
             controller: 'EditUserModalCtrl',
             resolve: {
                 ApiRoutesUsers: 'ApiRoutesUsers',
                 editing: function(ApiRoutesUsers) {
-                    return (userId) ? ApiRoutesUsers.getUser(userId) : {};
+                    if(angular.isDefined(user)) {
+                        return (angular.isObject(user)) ? user : 
+                                ApiRoutesUsers.getUser(user);
+                    } else {
+                        return {};
+                    }
                 }
             }
         });
@@ -186,14 +201,19 @@ angular.module('ModalService', [
      * 
      * @return uibModalInstance
      */
-    api.openEditVisibilityField = function(fieldId) {
+    api.openEditVisibilityField = function(field) {
         return api.openModal({
-            templateUrl: templatePath + 'admin/editVisibilityElement/editVisibilityField.html',
+            templateUrl: templatePath + 'admin/editVisibilityField/editVisibilityField.html',
             controller: 'EditVisibilityFieldModalCtrl',
             resolve: {
-                ApiRoutesFieldVisibility: 'ApiRoutesFieldVisibility',
-                editing: function(ApiRoutesFieldVisibility) {
-                    return (fieldId) ? ApiRoutesFieldVisibility.getField(fieldId) : {};
+                ApiRoutesSystemVisibility: 'ApiRoutesSystemVisibility',
+                editing: function(ApiRoutesSystemVisibility) {
+                    if(angular.isDefined(field)) {
+                        return (angular.isObject(field)) ? field : 
+                                ApiRoutesSystemVisibility.getField(field);
+                    } else {
+                        return {};
+                    }
                 }
             }
         });
