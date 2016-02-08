@@ -139,23 +139,6 @@
   animation-duration: 0.75s;
 }
 /*
- * Typography Styles
- * 
- * General typography and text elements style overrides.
- */
-.align-right,
-.text-right {
-  text-align: right;
-}
-.align-center,
-.text-center {
-  text-align: center;
-}
-.align-left,
-.text-left {
-  text-align: left;
-}
-/*
  * Form Styles
  * 
  * Form and form element style overrides.
@@ -184,6 +167,99 @@ img.img-thumbnail.pull-right {
 }
 img.img-thumbnail.no-margin {
   margin: 0;
+}
+/*
+ * Table Styles
+ * 
+ * DataTable and standard Table style overrides.
+ */
+table.dataTable {
+  border-bottom: 1px solid #e3e3e3;
+}
+table.dataTable thead {
+  background-color: #f5f5f5;
+  border-color: #e3e3e3;
+}
+table.dataTable thead tr th {
+  font-size: .9em;
+  padding: 8px 4px 4px;
+  /* Sorting Icon */
+  /* End: Sorting Icon */
+}
+table.dataTable thead tr th.sorting,
+table.dataTable thead tr th.sorting_asc,
+table.dataTable thead tr th.sorting_desc,
+table.dataTable thead tr th.sorting_asc_disabled,
+table.dataTable thead tr th.sorting_desc_disabled {
+  padding-right: 15px;
+}
+table.dataTable thead tr th.sorting:after,
+table.dataTable thead tr th.sorting_asc:after,
+table.dataTable thead tr th.sorting_desc:after,
+table.dataTable thead tr th.sorting_asc_disabled:after,
+table.dataTable thead tr th.sorting_desc_disabled:after {
+  bottom: 4px;
+  right: 8px;
+}
+table.dataTable tbody tr {
+  /* Responsive Controls */
+  /* Responsive sub table */
+}
+table.dataTable tbody tr td.responsive-control i.fa:before {
+  content: "\f105";
+}
+table.dataTable tbody tr.parent td.responsive-control i.fa:before {
+  content: "\f107";
+}
+table.dataTable tbody tr.child {
+  padding: 0;
+  border-left: 2px solid #e3e3e3;
+}
+table.dataTable tbody tr.child td.child {
+  padding: 0;
+}
+table.dataTable tbody tr.child td.child table.sub-table {
+  margin: 0;
+}
+table.dataTable tbody tr td {
+  padding: 4px;
+}
+/*
+ * Typography Styles
+ * 
+ * General typography and text elements style overrides.
+ */
+.align-right,
+.alignRight,
+.text-right,
+.textRight {
+  text-align: right;
+}
+.align-center,
+.alignCanter,
+.text-center,
+.textCenter {
+  text-align: center;
+}
+.align-left,
+.alignLeft,
+.text-left,
+.textLeft {
+  text-align: left;
+}
+.alert {
+  padding: 7px 7px 7px 14px;
+  margin-bottom: 10px;
+}
+.modal-body .meta {
+  font-size: .9em;
+}
+.modal-body .meta hr {
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+.modal-body .meta p {
+  margin: 0 0 5px;
 }
 /*
  * Layout(s) Styles
