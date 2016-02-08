@@ -7,15 +7,44 @@
  */
 
 angular.module('app.admin.fieldVisibility', [])
-    .controller('AdminFieldVisibilityCtrl', ['$scope', '$compile', 'DataTableHelper', 'DTOptionsBuilder', 'DTColumnBuilder', 'ModalService',
-        function($scope, $compile, DataTableHelper, DTOptionsBuilder, DTColumnBuilder, ModalService) {
+    .controller('AdminFieldVisibilityCtrl', ['$scope', '$compile', '$filter', 'DataTableHelper', 'DTOptionsBuilder', 'DTColumnBuilder', 'ModalService',
+        function($scope, $compile, $filter, DataTableHelper, DTOptionsBuilder, DTColumnBuilder, ModalService) {
 
             /* Modal triggers */
-            $scope.openNewElementModal = function () {
-                ModalService.openEditVisibilityField(false);
+            // Edit Visibility Field Modal
+            $scope.buttonOpenEditVisibilityFieldModal = function (id) {
+                var found = $filter('filter')($scope.dtFields.instance.DataTable.data(), {id: id}, true);
+                if(angular.isDefined(found[0])) {
+                    var modalInstance = ModalService.openEditVisibilityField(found[0]);
+                    modalInstance.result.then(function (selectedItem) {
+                        $scope.dtFields.reloadData();
+                    }, function () {});
+                }
             };
-            $scope.openEditElementModal = ModalService.openEditVisibilityField;
-            $scope.openEditRoleModal = ModalService.openEditRole;
+            
+            // New Group Modal
+            $scope.buttonOpenNewGroupModal = function () {
+                var modalInstance = ModalService.openEditGroup();
+                modalInstance.result.then(function (selectedItem) {
+                    $scope.dtUserGroups.reloadData();
+                }, function () {});
+            };
+            
+            // New Role Modal
+            $scope.buttonOpenNewRoleModal = function () {
+                var modalInstance = ModalService.openEditRole();
+                modalInstance.result.then(function (selectedItem) {
+                    $scope.dtUserGroups.reloadData();
+                }, function () {});
+            };
+            
+            // New Visibility Field Modal
+            $scope.buttonOpenNewVisibilityFieldModal = function () {
+                var modalInstance = ModalService.openEditVisibilityField();
+                modalInstance.result.then(function (selectedItem) {
+                    $scope.dtUserGroups.reloadData();
+                }, function () {});
+            };
                 
             // Init variables
             $scope.editing = false;
@@ -31,12 +60,12 @@ angular.module('app.admin.fieldVisibility', [])
                     renderer: function(api, rowIdx, columns) {
                         var data = {};
                         angular.forEach(columns, function (value, key) {
-                            if(value.title == 'getData') {
+                            if(value.title === 'getData') {
                                 data = value.data;
                             }
                         });
 
-                        var addButton = '<button ng-click="openEditRoleModal(' + data.id + ')" class="btn btn-default btn-xs pull-right" type="button"><i class="fa fa-plus"></i> Role</button>';
+                        var addButton = '<button ng-click="openEditRoleModal()" class="btn btn-default btn-xs pull-right" type="button"><i class="fa fa-plus"></i> Role</button>';
                         var header = '<table datatable="" dt-options="dtFieldRoles.options" class="table table-hover sub-table">\n\
                             <thead><tr>\n\
                             <td>ID</td>\n\
@@ -69,28 +98,23 @@ angular.module('app.admin.fieldVisibility', [])
             });
             
             $scope.dtFields.columns = [
-                DTColumnBuilder.newColumn(null).withTitle('Roles').renderWith(function(data, type, full, meta) {
-                    return '<small>(' + data.roles.length +' Roles)</small>';
-                }).withClass('responsive-control').notSortable(),
+                DTColumnBuilder.newColumn(null).withTitle('Roles').withClass('responsive-control text-right noclick').renderWith(function(data, type, full, meta) {
+                    return '<a><small>(' + data.roles.length +')</small> <i class="fa"></i></a>';
+                }).notSortable(),
                 DTColumnBuilder.newColumn('id').withTitle('ID'),
                 DTColumnBuilder.newColumn('identifier').withTitle('Identifier'),
                 DTColumnBuilder.newColumn('type').withTitle('Type'),
                 DTColumnBuilder.newColumn('desc').withTitle('Description'),
-                DTColumnBuilder.newColumn('initialized').withTitle('Initialized').renderWith(function(data, type, full, meta) {
+                DTColumnBuilder.newColumn('initialized').withTitle('Initialized').withClass('text-center').renderWith(function(data, type, full, meta) {
                     return (data === null) ?
                             '<span class="label label-danger" style="font-size: 12px; padding: 5px 8px;"><i class="fa fa-lg fa-exclamation-circle"></i></span>' :
                             '<span class="label label-success" style="font-size: 12px; padding: 5px 8px;"><i class="fa fa-lg fa-check-circle-o"></i></span>';
                 }),
-                DTColumnBuilder.newColumn('createdBy').withTitle('Created By'),
-                DTColumnBuilder.newColumn('created').withTitle('Created').renderWith(function (data, type, full, meta) {
-                    return moment(data, 'YYYY-MM-DD HH:mm:ss').format('M/D/YYYY h:mm a');
-                }),
-                DTColumnBuilder.newColumn('updatedBy').withTitle('Last Update'),
                 DTColumnBuilder.newColumn('lastUpdated').withTitle('Updated On').renderWith(function (data, type, full, meta) {
                     return moment(data, 'YYYY-MM-DD HH:mm:ss').format('M/D/YYYY h:mm a');
                 }),
-                DTColumnBuilder.newColumn(null).withTitle('Edit').renderWith(function (data, type, full, meta) {
-                    return '<button type="button" ng-click="openEditElementModal(\'' + data.id + '\')" class="btn btn-default btn-xs pull-right">Edit</button>';
+                DTColumnBuilder.newColumn(null).withTitle('').withClass('text-center noclick').renderWith(function (data, type, full, meta) {
+                    return '<button type="button" ng-click="buttonOpenEditVisibilityFieldModal(\'' + data.id + '\')" class="btn btn-default btn-xs pull-right">View</button>';
                 }).notSortable(),
                 DTColumnBuilder.newColumn(null).withTitle('getData').withClass('none').notSortable()
             ];
