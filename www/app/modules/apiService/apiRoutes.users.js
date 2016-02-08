@@ -12,7 +12,7 @@ angular.module('apiRoutes.users', [])
     var api = {};
 
     api.getUser = function(id) {
-        return API.get('user/' + id, 'Could not get user.');
+        return API.get('user/get/' + id, 'Could not get user.');
     };
     
     api.addUser = function(user) {
