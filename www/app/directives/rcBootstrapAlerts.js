@@ -28,7 +28,6 @@ var app = angular.module('rc.bootstrapAlerts', [])
                      
                     // Init 
                     $scope.alerts = [];
-                    $scope.proxy = {};
                     
                     var timeoutDur = 5000;
                     
