@@ -1,32 +1,81 @@
 <div class="modal-header">
-    <h3 ng-if="inNewMode" class="modal-title">New Category</h3>
-    <h3 ng-if="!inNewMode" class="modal-title">Edit Category</h3>
+    <h3 ng-if="newMode" class="modal-title">New Group Role</h3>
+    <h3 ng-if="!newMode && editMode" class="modal-title">Edit Group Role #{{saved.id}}</h3>
+    <h3 ng-if="!newMode && !editMode" class="modal-title">Group Role #{{saved.id}}</h3>
 </div>
 
-<div class="modal-body">       
+<div class="modal-body">
     
-    <form name="form.modalForm" class="form-horizontal" role="form" novalidate>
+    
+    <div ng-if="!editMode">
         
-        <div class="form-group">
-
-            <div class="col-sm-12 col-md-12">
-                <label>Category Name</label>
-                <input name="category" ng-model="category.category" type="text" maxlength="255" required />
+        <div class="row">
+            <div class="col-xs-6">
+                <div class="form-role">
+                    <label>Role Name</label>
+                    <p class="form-control-static">{{saved.role}}</p>
+                </div>
             </div>
-
+            <div class="col-xs-6">
+                <div class="form-role" title="Unique identifier to be embedded within the system.">
+                    <label>Unique Reference Identifier</label>
+                    <p class="form-control-static"><code>{{saved.identifier}}</code></p>
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <div class="form-role">
+                    <label>Description</label>
+                    <div class="form-control-static">{{saved.desc | formatParagraphsAsHtml}}</div>
+                </div>
+            </div>
         </div>
 
+        <div class="meta" ng-if="!newMode">
+            <hr/>
+            <p class="text-muted"><strong>Created:</strong> {{saved.created | formatMySQLDate}} by {{saved.createdBy}}</p>
+            <p class="text-muted"><strong>Updated:</strong> {{saved.lastUpdated | formatMySQLDate}} by {{saved.updatedBy}}</p>
+        </div>
+
+    </div>
+    
+    <form ng-if="editMode" name="form.modalForm" role="form" novalidate>
+        
+        <div class="row">
+            <div class="col-xs-6">
+                <div class="form-role">
+                    <label>Role Name</label>
+                    <input class="form-control" name="role" ng-model="editing.role" type="text" maxlength="255" required />
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="form-role" title="Unique identifier to be embedded within the system.">
+                    <label>Unique Reference Identifier</label>
+                    <p class="form-control-static"><code>{{editing.identifier}}</code></p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="form-role">
+                    <label for="desc">Description</label>
+                    <textarea class="form-control" name="desc" row="2" ng-model="editing.desc" maxlength="1000"></textarea>
+                </div>
+            </div>
+        </div>
     </form>
 
 </div>
 
-<div class="modal-footer">
-    
-    <div data-rc-alert-bar="modalForm"></div>
-    
-    <button class="btn btn-danger pull-left" ng-if="!inNewMode" ng-click="buttonDelete()">Delete</button>
+<div ng-if="!editMode" class="modal-footer">
+    <button class="btn btn-default pull-left" ng-click="buttonEdit()">Edit</button>
+    <button class="btn btn-info" ng-click="buttonCancel()">Done</button>
+</div>
+
+<div ng-if="editMode" class="modal-footer">
+    <button class="btn btn-danger pull-left" ng-if="!newMode" ng-click="buttonDelete()">Delete</button>
     
     <button class="btn btn-info" ng-click="buttonCancel()">Cancel</button>
-    <button class="btn btn-primary" ng-if="inNewMode" ng-click="buttonNew()">Add</button>
-    <button class="btn btn-primary" ng-if="!inNewMode" ng-click="buttonSave()">Save</button>
+    <button class="btn btn-primary" ng-if="newMode" ng-click="buttonNew()">Add</button>
+    <button class="btn btn-primary" ng-if="!newMode" ng-click="buttonSave()">Save</button>
 </div>
