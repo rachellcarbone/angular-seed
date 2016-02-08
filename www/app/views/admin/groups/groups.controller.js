@@ -7,15 +7,55 @@
  */
 
 angular.module('app.admin.groups', [])
-    .controller('AdminGroupsCtrl', ['$scope', '$compile', 'DataTableHelper', 'DTColumnBuilder', 'ModalService',
-        function($scope, $compile, DataTableHelper, DTColumnBuilder, ModalService) {
+    .controller('AdminGroupsCtrl', ['$scope', '$compile', '$filter', 'DataTableHelper', 'DTColumnBuilder', 'ModalService',
+        function($scope, $compile, $filter, DataTableHelper, DTColumnBuilder, ModalService) {
 
-        /* Modal triggers */
-        $scope.openNewGroupModal = function () {
-            ModalService.openEditGroup(false);
-        };
-        $scope.openEditGroupModal = ModalService.openEditGroup;
-        $scope.openEditRoleModal = ModalService.openEditRole;
+    
+            /* Modal triggers */
+            // Edit Group Modal
+            $scope.buttonOpenEditGroupModal = function (id) {
+                var found = $filter('filter')($scope.dtUserGroups.instance.DataTable.data(), {id: id}, true);
+                if(angular.isDefined(found[0])) {
+                    var modalInstance = ModalService.openEditGroup(found[0]);
+                    modalInstance.result.then(function (selectedItem) {
+                        $scope.dtUserGroups.reloadData();
+                    }, function () {});
+                }
+            };
+            
+            // New Group Modal
+            $scope.buttonOpenNewGroupModal = function () {
+                var modalInstance = ModalService.openEditGroup();
+                modalInstance.result.then(function (selectedItem) {
+                    $scope.dtUserGroups.reloadData();
+                }, function () {});
+            };
+            
+            // New Role Modal
+            $scope.buttonOpenNewRoleModal = function () {
+                var modalInstance = ModalService.openEditRole();
+                modalInstance.result.then(function (selectedItem) {
+                    $scope.dtUserGroups.reloadData();
+                }, function () {});
+            };
+            
+            // New Visibility Field Modal
+            $scope.buttonOpenNewVisibilityFieldModal = function () {
+                var modalInstance = ModalService.openEditVisibilityField();
+                modalInstance.result.then(function (selectedItem) {
+                    $scope.dtUserGroups.reloadData();
+                }, function () {});
+            };
+            
+        
+            // New Group to Role Modal
+            $scope.buttonAssignRoleModal = function (id) {
+                var modalInstance = ModalService.openAssignGroupRole(id);
+                modalInstance.result.then(function (selectedItem) {
+                    $scope.dtUsers.reloadData();
+                }, function () {});
+            };
+            
         
         // Init variables
         $scope.editing = false;
@@ -38,7 +78,7 @@ angular.module('app.admin.groups', [])
                             }
                         });
 
-                        var addButton = '<button ng-click="openEditRoleModal(' + id + ')" class="btn btn-default btn-xs pull-right" type="button"><i class="fa fa-plus"></i> Role</button>';
+                        var addButton = '<button ng-click="buttonAssignRoleModal(' + id + ')" class="btn btn-default btn-xs pull-right" type="button"><i class="fa fa-plus"></i> Role</button>';
                         var header = '<table datatable="" dt-options="dtGroupRoles.options" class="table table-hover sub-table">\n\
                             <thead><tr>\n\
                             <td>ID</td>\n\
@@ -70,23 +110,19 @@ angular.module('app.admin.groups', [])
                     }
                 }
             });
+            
         $scope.dtUserGroups.columns = [
-            DTColumnBuilder.newColumn(null).withTitle('Roles').renderWith(function(data, type, full, meta) {
-                return '<small>(' + data.roles.length +' Roles)</small>';
-            }).withClass('responsive-control').notSortable(),
+            DTColumnBuilder.newColumn(null).withTitle('Roles').withClass('responsive-control text-right noclick').renderWith(function(data, type, full, meta) {
+                return '<a><small>(' + data.roles.length +')</small> <i class="fa"></i></a>';
+            }).notSortable(),
             DTColumnBuilder.newColumn('id').withTitle('ID'),
             DTColumnBuilder.newColumn('group').withTitle('Group'),
             DTColumnBuilder.newColumn('desc').withTitle('Description'),
-            DTColumnBuilder.newColumn('createdBy').withTitle('Created By'),
-            DTColumnBuilder.newColumn('created').withTitle('Created').renderWith(function (data, type, full, meta) {
-                return moment(data, 'YYYY-MM-DD HH:mm:ss').format('M/D/YYYY h:mm a');
-            }),
-            DTColumnBuilder.newColumn('updatedBy').withTitle('Last Update'),
             DTColumnBuilder.newColumn('lastUpdated').withTitle('Updated On').renderWith(function (data, type, full, meta) {
                 return moment(data, 'YYYY-MM-DD HH:mm:ss').format('M/D/YYYY h:mm a');
             }),
-            DTColumnBuilder.newColumn(null).withTitle('Edit').renderWith(function(data, type, full, meta) {
-                return '<button type="button" ng-click="openEditGroupModal(\'' + data.id + '\')" class="btn btn-default btn-xs pull-right">Edit</button>';
+            DTColumnBuilder.newColumn(null).withTitle('').withClass('text-center noclick').renderWith(function(data, type, full, meta) {
+                return '<button type="button" ng-click="buttonOpenEditGroupModal(\'' + data.id + '\')" class="btn btn-default btn-xs pull-right">View</button>';
             }).notSortable(),
             DTColumnBuilder.newColumn('roles').withTitle('Group Roles').withClass('none').notSortable()
         ];

@@ -8,13 +8,13 @@
     <div ng-if="!editMode">
         
         <div class="row">
-            <div class="col-xs-6">
+            <div class="col-xs-12">
                 <div class="form-group">
                     <label>Variable Name</label>
                     <p class="form-control-static"><code>{{saved.name}}</code></p>
                 </div>
             </div>
-            <div class="col-xs-6">
+            <div class="col-xs-12">
                 <div class="form-group">
                     <label>Variable Value</label>
                     <p class="form-control-static"><code>{{saved.value}}</code></p>
@@ -54,7 +54,7 @@
         
         <div class="form-group">
             <label>Variable Value</label>
-            <input ng-model="editing.value" class="form-control" type="text" maxlength="255" required ng-disabled="saved.locked === '1'" />
+            <textarea class="form-control" name="desc" row="2" ng-model="editing.value" maxlength="1000" required ng-disabled="saved.locked === '1'"></textarea>
         </div>
 
         <div ng-if="!editMode" class="form-group">

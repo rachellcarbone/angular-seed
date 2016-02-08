@@ -7,15 +7,28 @@
  */
 
 angular.module('app.admin.users', [])
-    .controller('AdminUsersCtrl', ['$scope', '$compile', 'DTOptionsBuilder', 'DTColumnBuilder', 'DataTableHelper', 'ModalService', 
-        function($scope, $compile, DTOptionsBuilder, DTColumnBuilder, DataTableHelper, ModalService) {
+    .controller('AdminUsersCtrl', ['$scope', '$compile', '$filter', 'DTOptionsBuilder', 'DTColumnBuilder', 'DataTableHelper', 'ModalService', 
+        function($scope, $compile, $filter, DTOptionsBuilder, DTColumnBuilder, DataTableHelper, ModalService) {
 
         /* Modal triggers */
-        $scope.openNewUserModal = function() {
-            ModalService.openEditUser(false);
+        // Edit User Modal
+        $scope.buttonOpenEditUserModal = function (id) {
+            var found = $filter('filter')($scope.dtUserGroups.instance.DataTable.data(), {id: id}, true);
+            if(angular.isDefined(found[0])) {
+                var modalInstance = ModalService.openEditGroup(found[0]);
+                modalInstance.result.then(function (selectedItem) {
+                    $scope.dtUserGroups.reloadData();
+                }, function () {});
+            }
         };
-        $scope.openEditUserModal = ModalService.openEditUser;
-        $scope.openEditUserGroupsModal = ModalService.openEditUser;
+        
+        // New Group to User Modal
+        $scope.buttonAssignGroupModal = function (id) {
+            var modalInstance = ModalService.openAssignUserGroup(id);
+            modalInstance.result.then(function (selectedItem) {
+                $scope.dtUsers.reloadData();
+            }, function () {});
+        };
 
         // DataTable Setup
         $scope.dtUserGroups = {};
@@ -38,7 +51,7 @@ angular.module('app.admin.users', [])
                         }
                     });
 
-                    var addButton = '<button ng-click="openEditUserGroupsModal(' + id + ')" class="btn btn-default btn-xs pull-right" type="button"><i class="fa fa-plus"></i> Group</button>';
+                    var addButton = '<button ng-click="buttonAssignGroupModal(' + id + ')" class="btn btn-default btn-xs pull-right" type="button"><i class="fa fa-plus"></i> Group</button>';
                     var header = '<table datatable="" dt-options="dtUserGroups.options" class="table table-hover sub-table">\n\
                         <thead><tr>\n\
                         <td>ID</td>\n\
@@ -65,9 +78,9 @@ angular.module('app.admin.users', [])
         });
 
         $scope.dtUsers.columns = [
-            DTColumnBuilder.newColumn(null).withTitle('Groups').renderWith(function(data, type, full, meta) {
-                return '<small>(' + data.groups.length +' Groups)</small>';
-            }).withClass('responsive-control').notSortable(),
+            DTColumnBuilder.newColumn(null).withTitle('Groups').withClass('responsive-control text-right noclick').renderWith(function(data, type, full, meta) {
+                return '<a><small>(' + data.groups.length +')</small> <i class="fa"></i></a>';
+            }).notSortable(),
             DTColumnBuilder.newColumn('id').withTitle('ID'),
             DTColumnBuilder.newColumn('blocked').withTitle('Enabled').renderWith(function(data, type, full, meta) {
                 return (data === "1") ?
@@ -79,18 +92,14 @@ angular.module('app.admin.users', [])
                         '<span class="label label-danger" style="font-size: 12px; padding: 5px 8px;"><i class="fa fa-lg fa-exclamation-circle"></i></span>' :
                         '<span class="label label-success" style="font-size: 12px; padding: 5px 8px;"><i class="fa fa-lg fa-check-circle-o"></i></span>';
             }),
-            DTColumnBuilder.newColumn('firstName').withTitle('First Name'),
-            DTColumnBuilder.newColumn('lastName').withTitle('Last Name'),
-            DTColumnBuilder.newColumn('email').withTitle('Email (username)'),
+            DTColumnBuilder.newColumn('firstName').withTitle('First'),
+            DTColumnBuilder.newColumn('lastName').withTitle('Last'),
+            DTColumnBuilder.newColumn('email').withTitle('Email'),
             DTColumnBuilder.newColumn('created').withTitle('Created').renderWith(function (data, type, full, meta) {
                 return moment(data, 'YYYY-MM-DD HH:mm:ss').format('M/D/YYYY h:mm a');
             }),
-            DTColumnBuilder.newColumn('updatedBy').withTitle('Last Update'),
-            DTColumnBuilder.newColumn('lastUpdated').withTitle('Updated On').renderWith(function (data, type, full, meta) {
-                return moment(data, 'YYYY-MM-DD HH:mm:ss').format('M/D/YYYY h:mm a');
-            }),
-            DTColumnBuilder.newColumn(null).withTitle('View').renderWith(function(data, type, full, meta) {
-                return '<button ng-click="openEditUserModal(' + data.id + ')" type="button" class="btn btn-default btn-xs pull-right">View</button>';
+            DTColumnBuilder.newColumn(null).withTitle('').renderWith(function(data, type, full, meta) {
+                return '<button ng-click="buttonOpenEditUserModal(' + data.id + ')" type="button" class="btn btn-default btn-xs pull-right">View</button>';
             }).notSortable(),
             DTColumnBuilder.newColumn('groups').withTitle('User Groups').withClass('none').notSortable()
         ];

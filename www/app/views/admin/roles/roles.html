@@ -2,15 +2,15 @@
     
     <div class="well well-sm pull-right">
         <div class="btn-group btn-group-sm" uib-dropdown>
-            <button id="split-button" type="button" class="btn btn-info"  ng-click="buttonOpenNewVariableModal()"><i class="fa fa-plus"></i> Add Group Role</button>
+            <button id="split-button" type="button" class="btn btn-info"  ng-click="buttonOpenNewRoleModal()"><i class="fa fa-plus"></i> Add Group Role</button>
             <button type="button" class="btn btn-info" uib-dropdown-toggle>
                 <span class="caret"></span>
                 <span class="sr-only">Split button!</span>
             </button>
             <ul uib-dropdown-menu role="menu" aria-labelledby="split-button">
-                <li role="menuitem"><a href="#"><i class="fa fa-plus"></i> Add User Group</a></li>
-                <li role="menuitem"><a href="#"><i class="fa fa-plus"></i> Add Group Role</a></li>
-                <li role="menuitem"><a href="#"><i class="fa fa-plus"></i> Add Visibility Field</a></li>
+                <li role="menuitem"><a ng-click="buttonOpenNewGroupModal()">Create New User Group</a></li>
+                <li role="menuitem"><a ng-click="buttonOpenNewRoleModal()">Create New Group Role</a></li>
+                <li role="menuitem"><a ng-click="buttonOpenNewVisibilityFieldModal()">Create New Visibility Field</a></li>
             </ul>
         </div>
     </div>
