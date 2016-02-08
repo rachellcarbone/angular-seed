@@ -12,7 +12,7 @@ angular.module('DataTableHelper', [])
         
     var helper = {};
     
-    helper.getDTStructure = function($scope, method) {
+    helper.getDTStructure = function($scope, method, rowCallback) {
         var dt = {};
 
         /* Holds a copy of each row data */
@@ -28,21 +28,41 @@ angular.module('DataTableHelper', [])
             .withBootstrap()
             .withDOM('<"row"<"col-sm-12 col-md-12"fr><"col-sm-12 col-md-12 add-space"t><"col-sm-4 col-md-4"l><"col-sm-4 col-md-4"i><"col-sm-4 col-md-4"p>>')
             .withPaginationType('full_numbers')
-            .withOption('createdRow', function (row, data, dataIndex) {
+            .withOption('rowCallback', function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+                if(angular.isFunction(rowCallback)) {
+                    // Unbind first in order to avoid any duplicate handler (see https://github.com/l-lin/angular-datatables/issues/87)
+                    $('td:not(.noclick)', nRow).unbind('click');
+                    $('td:not(.noclick)', nRow).bind('click', function() {
+                        $scope.$apply(function() {
+                            rowCallback(nRow, aData, iDisplayIndex, iDisplayIndexFull);
+                        });
+                    });
+                }
+
+                return nRow;
+            })
+            .withOption('createdRow', function(nRow, aData, iDisplayIndex) {
                 // Recompiling so we can bind Angular directive to the DT
-                $compile(angular.element(row).contents())($scope);
+                $compile(angular.element(nRow).contents())($scope);
                 // Add this row to the variable list for editing
-                dt.rows[data.id] = data;
+                dt.rows[aData.id] = aData;
+
+                return nRow;
             });
             
-
-        dt.reloadData = function () {
-            var resetPaging = true;
-            var callback = function (json) {
-                console.log(json);
+            dt.reloadData = function () {
+                var resetPaging = true;
+                var callback = function (json) {
+                    console.log(json);
+                };
+                dt.instance.reloadData(callback, resetPaging);
             };
-            dt.instance.reloadData();
-        };
+
+            $scope.$on('event:dataTableLoaded', function(event, loadedDT) {
+                $('#' + loadedDT.id).on('xhr.dt', function (e, settings, json) {
+                    dt.data = json;
+                });
+            });
         
         return dt;
     };
