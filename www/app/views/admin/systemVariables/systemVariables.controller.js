@@ -10,8 +10,6 @@ angular.module('app.admin.systemVariables', [])
     .controller('AdminSystemVariablesCtrl', ['$scope', '$filter', 'DataTableHelper', 'DTColumnBuilder', 'ModalService',
         function($scope, $filter, DataTableHelper, DTColumnBuilder, ModalService) {
 
-            
-    
             /* Modal triggers */
             $scope.buttonOpenNewVariableModal = function () {
                 var modalInstance = ModalService.openSystemVariable();
@@ -29,9 +27,6 @@ angular.module('app.admin.systemVariables', [])
                     }, function () {});
                 }
             };
-            
-            // Init variables
-            $scope.editing = false;
 
             // DataTable Setup
             $scope.dtSystemVars = DataTableHelper.getDTStructure($scope, 'adminConfigList');
