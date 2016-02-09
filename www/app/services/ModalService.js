@@ -164,6 +164,10 @@ angular.module('ModalService', [
             controller: 'EditVisibilityFieldModalCtrl',
             resolve: {
                 ApiRoutesSystemVisibility: 'ApiRoutesSystemVisibility',
+                ApiRoutesSimpleLists: 'ApiRoutesSimpleLists',
+                roleList: function(ApiRoutesSimpleLists) {
+                    return ApiRoutesSimpleLists.simpleRolesList();
+                },
                 editing: function(ApiRoutesSystemVisibility) {
                     if(angular.isDefined(field)) {
                         return (angular.isObject(field)) ? field : 

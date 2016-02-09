@@ -3,9 +3,10 @@
 /* @author  Rachel Carbone */
 
 angular.module('app.modal.editVisibilityField', [])
-    .controller('EditVisibilityFieldModalCtrl', ['$scope', '$uibModalInstance', '$log', 'AlertConfirmService', 'editing', 'ApiRoutesSystemVisibility',
-    function($scope, $uibModalInstance, $log, AlertConfirmService, editing, ApiRoutesSystemVisibility) {
-        
+    .controller('EditVisibilityFieldModalCtrl', ['$scope', '$uibModalInstance', '$filter', 'AlertConfirmService', 'editing', 'ApiRoutesSystemVisibility', 'roleList',
+    function($scope, $uibModalInstance, $filter, AlertConfirmService, editing, ApiRoutesSystemVisibility, roleList) {
+    $scope.roleList = roleList;
+    
     /* Used to restrict alert bars */
     $scope.alertProxy = {};
     
@@ -130,6 +131,12 @@ angular.module('app.modal.editVisibilityField', [])
     /* Click event for the Edit button*/
     $scope.buttonEdit = function() {
         $scope.setMode('edit');
+    };
+    
+    /* Return BOOL if Role is assigned to this field */
+    $scope.isRoleAssignedToField = function(roleId) {
+        var found = $filter('filter')($scope.saved.roles, {id: roleId}, true);
+        return (angular.isDefined(found[0]));
     };
     
 }]);
