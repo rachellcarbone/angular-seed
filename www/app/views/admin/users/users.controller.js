@@ -51,12 +51,11 @@ angular.module('app.admin.users', [])
                         }
                     });
 
-                    var addButton = '<button ng-click="buttonAssignGroupModal(' + id + ')" class="btn btn-default btn-xs pull-right" type="button"><i class="fa fa-plus"></i> Group</button>';
                     var header = '<table datatable="" dt-options="dtUserGroups.options" class="table table-hover sub-table">\n\
                         <thead><tr>\n\
                         <td>ID</td>\n\
                         <td>Group</td>\n\
-                        <td>Description' + addButton + '</td>\n\
+                        <td>Description</td>\n\
                         </tr></thead><tbody>';
 
                     var body = '';
