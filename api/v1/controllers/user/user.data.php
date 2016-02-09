@@ -66,11 +66,6 @@ class UserData {
         return $user;
     }
   
-    static function assignUserGroup($lookup) {
-        return DBConn::insert("INSERT INTO " . DBConn::prefix() . "users(name_first, name_last, email, facebook_id) "
-                . "VALUES (:name_first, :name_last, :email, :facebook_id);", $validUser);
-    }
-  
     static function insertUser($validUser) {
         $userId = DBConn::insert("INSERT INTO " . DBConn::prefix() . "users(name_first, name_last, email, password) "
                 . "VALUES (:name_first, :name_last, :email, :password);", $validUser);
@@ -97,5 +92,15 @@ class UserData {
         $deleted = GroupData::deleteUserGroups($userId);
         return (!$deleted) ? false :
             DBConn::delete("DELETE FROM " . DBConn::prefix() . "users WHERE id = :id LIMIT 1;", array(':id' => $userId));
+    }
+    
+    static function insertGroupAssignment($data) {
+        return DBConn::insert("INSERT INTO " . DBConn::prefix() . "auth_lookup_user_group(`auth_group_id`, `user_id`, `created_user_id`) "
+                . "VALUES (:auth_group_id, :user_id, :created_user_id);", $data);
+    }
+                    
+    static function deleteGroupAssignment($data) {
+        return DBConn::delete("DELETE FROM " . DBConn::prefix() . "auth_lookup_user_group "
+                . "WHERE user_id = :user_id AND auth_group_id = :auth_group_id;", $data);
     }
 }

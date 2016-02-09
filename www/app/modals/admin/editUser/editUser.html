@@ -1,7 +1,7 @@
 <div class="modal-header">    
     <h3 ng-if="newMode" class="modal-title">New New User</h3>
-    <h3 ng-if="!newMode && editMode" class="modal-title">Edit User: {{saved.firstName}} {{saved.lastName}}</h3>
-    <h3 ng-if="!newMode && !editMode" class="modal-title">User: {{saved.firstName}} {{saved.lastName}}</h3>
+    <h3 ng-if="!newMode && editMode" class="modal-title">Edit User: {{saved.nameFirst}} {{saved.nameLast}}</h3>
+    <h3 ng-if="!newMode && !editMode" class="modal-title">User: {{saved.nameFirst}} {{saved.nameLast}}</h3>
 </div>
 
 <div class="modal-body">
@@ -17,14 +17,14 @@
         <div class="row">
             <div class="col-xs-6">
                 <div class="form-group">
-                    <label for="firstName">First Name</label>
-                    <p>{{saved.firstName}}</p>
+                    <label for="nameFirst">First Name</label>
+                    <p>{{saved.nameFirst}}</p>
                 </div>
             </div>
             <div class="col-xs-6">
                 <div class="form-group">
-                    <label for="lastName">Last Name</label>
-                    <p>{{saved.lastName}}</p>
+                    <label for="nameLast">Last Name</label>
+                    <p>{{saved.nameLast}}</p>
                 </div>
             </div>
         </div>
@@ -59,14 +59,14 @@
         <div class="row">
             <div class="col-xs-6">
                 <div class="form-group">
-                    <label for="firstName">First Name</label>
-                    <input class="form-control" name="firstName" ng-model="editing.firstName" type="text" maxlength="100" required />
+                    <label for="nameFirst">First Name</label>
+                    <input class="form-control" name="nameFirst" ng-model="editing.nameFirst" type="text" maxlength="100" required />
                 </div>
             </div>
             <div class="col-xs-6">
                 <div class="form-group">
-                    <label for="lastName">Last Name</label>
-                    <input class="form-control" name="lastName" ng-model="editing.lastName" type="text" maxlength="100" required />
+                    <label for="nameLast">Last Name</label>
+                    <input class="form-control" name="nameLast" ng-model="editing.nameLast" type="text" maxlength="100" required />
                 </div>
             </div>
         </div>
@@ -110,8 +110,8 @@
                     <td>{{group.id}}</td>
                     <td>{{group.label}}</td>
                     <td>
-                        <button ng-if="isRoleAssignedToField(group.id)" type="button" ng-click="buttonRemoveRoleFromField(group.id)" class="btn btn-warning btn-xs pull-right">Remove</button>
-                        <button ng-if="!isRoleAssignedToField(group.id)" type="button" ng-click="buttonAddRoleToField(group.id)" class="btn btn-default btn-xs pull-right">Add</button>
+                        <button ng-if="isUserAssignedToGroup(group.id)" type="button" ng-click="buttonRemoveUserFromGroup(group.id)" class="btn btn-warning btn-xs pull-right">Remove</button>
+                        <button ng-if="!isUserAssignedToGroup(group.id)" type="button" ng-click="buttonAddUserToGroup(group.id)" class="btn btn-default btn-xs pull-right">Add</button>
                     </td>
                 </tr>
             </tbody>

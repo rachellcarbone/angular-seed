@@ -12,52 +12,64 @@ angular.module('apiRoutes.users', [])
     var api = {};
 
     api.getUser = function(id) {
+        if(angular.isUndefined(id)) {
+            return API.reject('Invalid user. Please check your parameters and try again.');
+        }
         return API.get('user/get/' + id, 'Could not get user.');
     };
     
     api.addUser = function(user) {
-        if(!user.nameFirst || !user.nameLast || !user.email || !user.password) {
+        if(angular.isUndefined(user.nameFirst) || angular.isUndefined(user.nameLast) || 
+                angular.isUndefined(user.email) || angular.isUndefined(user.password)) {
             return API.reject('Invalid user please verify your information and try again.');
         }
 
-        return API.post('user/add/', user, 'System unable to create new user.');
+        return API.post('user/insert/', user, 'System unable to create new user.');
     };
 
     api.saveUser = function(user) {
-        if(!user.id || !user.nameFirst || !user.nameLast || !user.email) {
-            return API.reject('Invalid user please verify your information and try again.');
+        if(angular.isUndefined(user.nameFirst) || angular.isUndefined(user.nameLast) || 
+                angular.isUndefined(user.email) || angular.isUndefined(user.id)) {
+            return API.reject('Invalid user. Please check your parameters and try again.');
         }
 
-        return API.post('user/save/' + user.id, user, 'System unable to save user.');
+        return API.post('user/update/' + user.id, user, 'System unable to save user.');
     };
 
-    api.deleteUser = function(userId) {
-        return API.delete('user/delete/' + userId, 'System unable to delete user.');
-    };
-
-    api.disableUser = function(userId) {
-        return API.post('user/disable/' + userId, 'System unable to disable user.');
-    };
-
-    api.enableUser = function(userId) {
-        return API.post('user/enable/' + userId, 'System unable to enable user.');
-    };
-
-    api.addUserGroup = function(userGroupPair) {
-        if(!userGroupPair.userId || !userGroupPair.groupIdl) {
-            return API.reject('Invalid user and group pair please verify your information and try again.');
+    api.deleteUser = function(id) {
+        if(angular.isUndefined(id)) {
+            return API.reject('Invalid user. Please check your parameters and try again.');
         }
-        
-        return API.post('user/add/group/', userGroupPair, 'System unable to add group to user.');
+        return API.delete('user/delete/' + id, 'System unable to delete user.');
     };
 
-    api.removeUserGroup = function(userGroupPair) {
-        if(!userGroupPair.userId || !userGroupPair.groupIdl) {
-            return API.reject('Invalid user and group pair please verify your information and try again.');
+    api.disableUser = function(id) {
+        if(angular.isUndefined(id)) {
+            return API.reject('Invalid user. Please check your parameters and try again.');
         }
-        
-        return API.post('user/remove/group/', userGroupPair, 'System unable to remove group from user.');
+        return API.post('user/disable/' + id, 'System unable to disable user.');
     };
 
+    api.enableUser = function(id) {
+        if(angular.isUndefined(id)) {
+            return API.reject('Invalid user. Please check your parameters and try again.');
+        }
+        return API.post('user/enable/' + id, 'System unable to enable user.');
+    };
+
+    api.unassignUserFromGroup = function(pair) {
+        if(angular.isUndefined(pair.userId) || angular.isUndefined(pair.groupId)) {
+            return API.reject('Invalid user / group pair please check your parameters and try again.');
+        }
+        return API.post('user/unassign-group', pair, 'System unable to unassign user to group.');
+    };
+    
+    api.assignUserToGroup = function(pair) {
+        if(angular.isUndefined(pair.userId) || angular.isUndefined(pair.groupId)) {
+            return API.reject('Invalid user / group pair please check your parameters and try again.');
+        }
+        return API.post('user/assign-group', pair, 'System unable to assign user from group.');
+    };
+    
     return api;
 }]);

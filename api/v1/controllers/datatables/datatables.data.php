@@ -4,7 +4,7 @@
 class DatatablesData {
     
     public static function selectUsers() {
-        $qUsers = DBConn::executeQuery("SELECT u.id, u.name_first AS firstName, u.name_last AS lastName, "
+        $qUsers = DBConn::executeQuery("SELECT u.id, u.name_first AS nameFirst, u.name_last AS nameLast, "
                 . "u.email, u.email_verified AS verified, u.created, u.last_updated AS lastUpdated, "
                 . "u.disabled, CONCAT(u1.name_first, ' ', u1.name_last) AS updatedBy "
                 . "FROM " . DBConn::prefix() . "users AS u "

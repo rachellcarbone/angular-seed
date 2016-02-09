@@ -36,6 +36,20 @@ class UserRoutes {
                 UserController::deleteUser($app, $userId);
             })->via('DELETE', 'POST');
             
+            /*
+             * userId, groupId
+             */
+            $app->post("/unassign-group/", function () use ($app) {
+                UserController::unassignGroup($app);
+            });
+            
+            /*
+             * userId, groupId
+             */
+            $app->post("/assign-group/", function () use ($app) {
+                UserController::assignGroup($app);
+            });
+            
         });
     }
 }

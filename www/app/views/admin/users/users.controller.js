@@ -83,8 +83,8 @@ angular.module('app.admin.users', [])
                         '<span class="label label-danger" style="font-size: 12px; padding: 5px 8px;"><i class="fa fa-lg fa-exclamation-circle"></i></span>' :
                         '<span class="label label-success" style="font-size: 12px; padding: 5px 8px;"><i class="fa fa-lg fa-check-circle-o"></i></span>';
             }),
-            DTColumnBuilder.newColumn('firstName').withTitle('First'),
-            DTColumnBuilder.newColumn('lastName').withTitle('Last'),
+            DTColumnBuilder.newColumn('nameFirst').withTitle('First'),
+            DTColumnBuilder.newColumn('nameLast').withTitle('Last'),
             DTColumnBuilder.newColumn('email').withTitle('Email'),
             DTColumnBuilder.newColumn('created').withTitle('Created').renderWith(function (data, type, full, meta) {
                 return moment(data, 'YYYY-MM-DD HH:mm:ss').format('M/D/YYYY h:mm a');

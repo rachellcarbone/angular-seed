@@ -3,8 +3,8 @@
 /* @author  Rachel Carbone */
 
 angular.module('app.modal.editUser', [])
-    .controller('EditUserModalCtrl', ['$scope', '$uibModalInstance', '$log', 'AlertConfirmService', 'editing', 'ApiRoutesUsers', 'groupList',
-    function($scope, $uibModalInstance, $log, AlertConfirmService, editing, ApiRoutesUsers, groupList) {
+    .controller('EditUserModalCtrl', ['$scope', '$uibModalInstance', '$log', '$filter', 'AlertConfirmService', 'editing', 'ApiRoutesUsers', 'groupList',
+    function($scope, $uibModalInstance, $log, $filter, AlertConfirmService, editing, ApiRoutesUsers, groupList) {
         $scope.groupList = groupList;
         
         /* Used to restrict alert bars */
@@ -133,17 +133,17 @@ angular.module('app.modal.editUser', [])
         };
 
         /* Return BOOL if Group is assigned to this user */
-        $scope.isGroupAssignedToUser = function(groupId) {
+        $scope.isUserAssignedToGroup = function(groupId) {
             var found = $filter('filter')($scope.saved.groups, {id: groupId}, true);
             return (angular.isDefined(found[0]));
         };
 
-        $scope.buttonRemoveRoleFromField = function(groupId) {
-            ApiRoutesUsers.unassignGroupFromUser({ 'userId':$scope.saved.id, 'groupId': groupId }).then(
+        $scope.buttonRemoveUserFromGroup = function(groupId) {
+            ApiRoutesUsers.unassignUserFromGroup({ 'userId':$scope.saved.id, 'groupId': groupId }).then(
                 function (result) {
                     $scope.alertProxy.success(result.msg);
 
-                    angular.forEach($scope.saved.roles, function (obj, index) {
+                    angular.forEach($scope.saved.groups, function (obj, index) {
                         if (obj.id == groupId) {
                             $scope.saved.groups.splice(index, 1);
                             return;
@@ -155,8 +155,8 @@ angular.module('app.modal.editUser', [])
                 });
         };
 
-        $scope.buttonAddRoleToField = function(groupId) {
-            ApiRoutesUsers.assignGroupToUser({ 'userId':$scope.saved.id, 'groupId': groupId }).then(
+        $scope.buttonAddUserToGroup = function(groupId) {
+            ApiRoutesUsers.assignUserToGroup({ 'userId':$scope.saved.id, 'groupId': groupId }).then(
                 function (result) {
                     $scope.alertProxy.success(result.msg);
 

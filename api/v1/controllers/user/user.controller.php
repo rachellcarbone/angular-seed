@@ -87,4 +87,41 @@ class UserController {
             return $app->render(400,  array('msg' => 'Could not delete user.'));
         }
     }
+    
+    static function unassignGroup($app) {
+        if(!v::key('groupId', v::stringType())->validate($app->request->post()) || 
+           !v::key('userId', v::stringType())->validate($app->request->post())) {
+            return $app->render(400,  array('msg' => 'Could not unassign user from group. Check your parameters and try again.'));
+        } 
+        
+        $data = array (
+            ':auth_group_id' => $app->request->post('groupId'),
+            ':user_id' => $app->request->post('userId')
+        );
+        
+        if(UserData::deleteGroupAssignment($data)) {
+            return $app->render(200,  array('msg' => 'User has been unassigned from group.'));
+        } else {
+            return $app->render(400,  array('msg' => 'Could not unassign user from group.'));
+        }
+    }
+    
+    static function assignGroup($app) {
+        if(!v::key('groupId', v::stringType())->validate($app->request->post()) || 
+           !v::key('userId', v::stringType())->validate($app->request->post())) {
+            return $app->render(400,  array('msg' => 'Could not assign user from group. Check your parameters and try again.'));
+        }
+        
+        $data = array (
+            ':auth_group_id' => $app->request->post('groupId'),
+            ':user_id' => $app->request->post('userId'),
+            ":created_user_id" => APIAuth::getUserId()
+        );
+        
+        if(UserData::insertGroupAssignment($data)) {
+            return $app->render(200,  array('msg' => 'User has been assigned to group.'));
+        } else {
+            return $app->render(400,  array('msg' => 'Could not assign user to group.', 'data' => $data));
+        }
+    }
 }
