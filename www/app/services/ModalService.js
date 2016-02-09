@@ -138,8 +138,8 @@ angular.module('ModalService', [
             resolve: {
                 ApiRoutesUsers: 'ApiRoutesUsers',
                 ApiRoutesSimpleLists: 'ApiRoutesSimpleLists',
-                roleList: function(ApiRoutesSimpleLists) {
-                    return ApiRoutesSimpleLists.simpleRolesList();
+                groupList: function(ApiRoutesSimpleLists) {
+                    return ApiRoutesSimpleLists.simpleGroupsList();
                 },
                 editing: function(ApiRoutesUsers) {
                     if(angular.isDefined(user)) {

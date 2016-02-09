@@ -1,14 +1,10 @@
-<div class="modal-header">
-    <h3 ng-if="!savedUser.id" class="modal-title">Add New User</h3>
-    <h3 ng-if="savedUser.id && editMode" class="modal-title">Edit User: {{savedUser.nameFirst}} {{savedUser.nameLast}}</h3>
-    <h3 ng-if="savedUser.id && !editMode" class="modal-title">User: {{savedUser.nameFirst}} {{savedUser.nameLast}}</h3>
+<div class="modal-header">    
+    <h3 ng-if="newMode" class="modal-title">New New User</h3>
+    <h3 ng-if="!newMode && editMode" class="modal-title">Edit User: {{saved.firstName}} {{saved.lastName}}</h3>
+    <h3 ng-if="!newMode && !editMode" class="modal-title">User: {{saved.firstName}} {{saved.lastName}}</h3>
 </div>
 
-<div class="modal-body">     
-    
-    <div class="alert alert-danger well-sm" role="alert" ng-if="!editing.verified">
-        <strong>Email Verification!</strong> This user has not verified their email.
-    </div>
+<div class="modal-body">
     
     <div class="alert alert-danger well-sm" role="alert" ng-if="editing.disabled == 'true'">
         <strong>Disabled User!</strong> This user is disabled and cannot log in.
@@ -16,19 +12,19 @@
     
     <div data-rc-bootstrap-alerts="alertProxy"></div>
     
-    <div ng-if="!editMode">
+    <div ng-if="!editMode && !manageGroupsMode">
         
         <div class="row">
             <div class="col-xs-6">
                 <div class="form-group">
-                    <label for="nameFirst">First Name</label>
-                    <p>{{saved.nameFirst}}</p>
+                    <label for="firstName">First Name</label>
+                    <p>{{saved.firstName}}</p>
                 </div>
             </div>
             <div class="col-xs-6">
                 <div class="form-group">
-                    <label for="nameLast">Last Name</label>
-                    <p>{{saved.nameLast}}</p>
+                    <label for="lastName">Last Name</label>
+                    <p>{{saved.lastName}}</p>
                 </div>
             </div>
         </div>
@@ -63,14 +59,14 @@
         <div class="row">
             <div class="col-xs-6">
                 <div class="form-group">
-                    <label for="nameFirst">First Name</label>
-                    <input class="form-control" name="nameFirst" ng-model="editing.nameFirst" type="text" maxlength="100" required />
+                    <label for="firstName">First Name</label>
+                    <input class="form-control" name="firstName" ng-model="editing.firstName" type="text" maxlength="100" required />
                 </div>
             </div>
             <div class="col-xs-6">
                 <div class="form-group">
-                    <label for="nameLast">Last Name</label>
-                    <input class="form-control" name="nameLast" ng-model="editing.nameLast" type="text" maxlength="100" required />
+                    <label for="lastName">Last Name</label>
+                    <input class="form-control" name="lastName" ng-model="editing.lastName" type="text" maxlength="100" required />
                 </div>
             </div>
         </div>
@@ -103,10 +99,34 @@
         </div>
         
     </form>
+    
+    <div ng-if="manageGroupsMode">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr><th>ID</th><th>Label</th><th></th></tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="group in groupList">
+                    <td>{{group.id}}</td>
+                    <td>{{group.label}}</td>
+                    <td>
+                        <button ng-if="isRoleAssignedToField(group.id)" type="button" ng-click="buttonRemoveRoleFromField(group.id)" class="btn btn-warning btn-xs pull-right">Remove</button>
+                        <button ng-if="!isRoleAssignedToField(group.id)" type="button" ng-click="buttonAddRoleToField(group.id)" class="btn btn-default btn-xs pull-right">Add</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
 </div>
 
-<div class="modal-footer">
+<div ng-if="!editMode" class="modal-footer">
+    <button ng-if="!manageGroupsMode" class="btn btn-default pull-left" ng-click="buttonEdit()">Edit</button>
+    <button ng-if="!manageGroupsMode" class="btn btn-default pull-left" ng-click="buttonManageGroups()">Manage Groups</button>
+    <button class="btn btn-info" ng-click="buttonCancel()">Done</button>
+</div>
+
+<div ng-if="editMode" class="modal-footer">
     <button class="btn btn-danger pull-left" ng-if="!newMode" ng-click="buttonDelete()">Delete</button>
     
     <button class="btn btn-info" ng-click="buttonCancel()">Cancel</button>

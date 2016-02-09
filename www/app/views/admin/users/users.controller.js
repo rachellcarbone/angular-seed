@@ -15,19 +15,11 @@ angular.module('app.admin.users', [])
         $scope.buttonOpenEditUserModal = function (id) {
             var found = $filter('filter')($scope.dtUsers.instance.DataTable.data(), {id: id}, true);
             if(angular.isDefined(found[0])) {
-                var modalInstance = ModalService.openEditGroup(found[0]);
+                var modalInstance = ModalService.openEditUser(found[0]);
                 modalInstance.result.then(function (selectedItem) {
                     $scope.dtUsers.reloadData();
                 }, function () {});
             }
-        };
-        
-        // New Group to User Modal
-        $scope.buttonAssignGroupModal = function (id) {
-            var modalInstance = ModalService.openAssignUserGroup(id);
-            modalInstance.result.then(function (selectedItem) {
-                $scope.dtUsers.reloadData();
-            }, function () {});
         };
 
         // DataTable Setup
@@ -98,7 +90,7 @@ angular.module('app.admin.users', [])
                 return moment(data, 'YYYY-MM-DD HH:mm:ss').format('M/D/YYYY h:mm a');
             }),
             DTColumnBuilder.newColumn(null).withTitle('').renderWith(function(data, type, full, meta) {
-                return '<button ng-click="buttonOpenEditUserModal(' + data.id + ')" type="button" class="btn btn-default btn-xs pull-right">View</button>';
+                return '<button ng-click="buttonOpenEditUserModal(\'' + data.id + '\')" type="button" class="btn btn-default btn-xs pull-right">View</button>';
             }).notSortable(),
             DTColumnBuilder.newColumn('groups').withTitle('User Groups').withClass('none').notSortable()
         ];
