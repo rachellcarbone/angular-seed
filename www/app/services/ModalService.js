@@ -47,64 +47,6 @@ angular.module('ModalService', [
     };
     
     /*
-     * Open Edit Assign Element Roles Modal
-     * 
-     * @return uibModalInstance
-     */
-    api.openAssignElementRole = function (elementId, roleId) {
-        return api.openModal({
-            templateUrl: templatePath + 'admin/assignElementRoles/assignElementRoles.html',
-            controller: 'EditAssignElementRolesModalCtrl',
-            resolve: {
-                ApiRoutesUsers: 'ApiRoutesUsers',
-                ApiRoutesGroups: 'ApiRoutesGroups',
-                editing: function(ApiRoutesUsers) {
-                    ApiRoutesUsers.getUserGroups(data);
-                },
-                list: function(ApiRoutesGroups) {
-                    ApiRoutesGroups.getGroupList(data);
-                }
-            }
-        });
-        
-    };
-    api.openAssignRoleElement = function(roleId, elementId) {
-        api.openAssignElementRole(elementId, roleId);
-    };
-    
-    /*
-     * Open Edit Assign Group Roles Modal
-     * 
-     * @return uibModalInstance
-     */
-    api.openAssignGroupRole = function(groupId, roleId) {
-        var data = { roleId: roleId, groupId: groupId };
-        return api.openModal({
-            templateUrl: templatePath + 'admin/assignGroupRoles/assignGroupRoles.html',
-            controller: 'EditAssignGroupRolesModalCtrl'
-        });
-    };
-    api.openAssignRoleGroup = function(roleId, groupId) {
-        api.openAssignGroupRole(groupId, roleId);
-    };
-    
-    /*
-     * Open Edit Assign User Groups Modal
-     * 
-     * @return uibModalInstance
-     */
-    api.openAssignUserGroup = function(userId, groupId) {
-        var data = { userId: userId, groupId: groupId };
-        return api.openModal({
-            templateUrl: templatePath + 'admin/assignUserGroups/assignUserGroups.html',
-            controller: 'EditAssignUserGroupsModalCtrl'
-        });
-    };
-    api.openAssignGroupUser = function(groupId, userId) {
-        api.openAssignUserGroups(userId, groupId);
-    };
-    
-    /*
      * Open Edit Config Variable Modal
      * 
      * @return uibModalInstance
@@ -138,6 +80,10 @@ angular.module('ModalService', [
             controller: 'EditGroupModalCtrl',
             resolve: {
                 ApiRoutesGroups: 'ApiRoutesGroups',
+                ApiRoutesSimpleLists: 'ApiRoutesSimpleLists',
+                roleList: function(ApiRoutesSimpleLists) {
+                    return ApiRoutesSimpleLists.simpleRolesList();
+                },
                 editing: function(ApiRoutesGroups) {
                     if(angular.isDefined(group)) {
                         return (angular.isObject(group)) ? group : 
@@ -161,6 +107,13 @@ angular.module('ModalService', [
             controller: 'EditRoleModalCtrl',
             resolve: {
                 ApiRoutesRoles: 'ApiRoutesRoles',
+                ApiRoutesSimpleLists: 'ApiRoutesSimpleLists',
+                groupList: function(ApiRoutesSimpleLists) {
+                    return ApiRoutesSimpleLists.simpleGroupsList();
+                },
+                fieldList: function(ApiRoutesSimpleLists) {
+                    return ApiRoutesSimpleLists.simpleVisibilityFieldList();
+                },
                 editing: function(ApiRoutesRoles) {
                     if(angular.isDefined(role)) {
                         return (angular.isObject(role)) ? role : 
@@ -184,6 +137,10 @@ angular.module('ModalService', [
             controller: 'EditUserModalCtrl',
             resolve: {
                 ApiRoutesUsers: 'ApiRoutesUsers',
+                ApiRoutesSimpleLists: 'ApiRoutesSimpleLists',
+                roleList: function(ApiRoutesSimpleLists) {
+                    return ApiRoutesSimpleLists.simpleRolesList();
+                },
                 editing: function(ApiRoutesUsers) {
                     if(angular.isDefined(user)) {
                         return (angular.isObject(user)) ? user : 
