@@ -8,9 +8,6 @@
  */
 
 angular.module('ModalService', [
-    'app.modal.assignElementRoles',
-    'app.modal.assignGroupRoles',
-    'app.modal.assignUserGroups',
     'app.modal.editSystemVariable',
     'app.modal.editGroup',
     'app.modal.editRole',
