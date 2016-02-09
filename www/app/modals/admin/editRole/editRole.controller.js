@@ -27,7 +27,7 @@ angular.module('app.modal.editRole', [])
     
     /* Click event for the Add / New button */
     $scope.buttonNew = function() {
-        ApiRoutesRoles.newSystemVariable($scope.variable).then(
+        ApiRoutesRoles.newRole($scope.editing).then(
             function (result) {
                 $uibModalInstance.close(result);
             }, function (error) {
@@ -37,9 +37,9 @@ angular.module('app.modal.editRole', [])
     
     /* Click event for the Save button */
     $scope.buttonSave = function() {
-        AlertConfirmService.confirm('Are you sure you want to change this variable? It may effect system settings.', 'System Wide Setting')
+        AlertConfirmService.confirm('Are you sure you want to change this  group role? It may effect system settings.', 'System Wide Setting')
             .result.then(function () {
-                ApiRoutesRoles.saveSystemVariable($scope.variable).then(
+                ApiRoutesRoles.saveRole($scope.editing).then(
                     function (result) {
                         $uibModalInstance.close(result);
                     }, function (error) {
@@ -52,9 +52,9 @@ angular.module('app.modal.editRole', [])
     
     /* Click event for the Delete button */
     $scope.buttonDelete = function() {
-        AlertConfirmService.confirm('Are you sure you want to delete this variable? It may effect system settings.', 'Delete Warning')
+        AlertConfirmService.confirm('Are you sure you want to delete this  group role? It may effect system settings.', 'Delete Warning')
             .result.then(function () {
-                ApiRoutesRoles.deleteSystemVariable($scope.variable.id).then(
+                ApiRoutesRoles.deleteRole($scope.editing.id).then(
                     function (result) {
                         $uibModalInstance.close(result);
                     }, function (error) {

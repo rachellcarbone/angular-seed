@@ -27,7 +27,7 @@ angular.module('app.modal.editGroup', [])
     
     /* Click event for the Add / New button */
     $scope.buttonNew = function() {
-        ApiRoutesGroups.newSystemVariable($scope.variable).then(
+        ApiRoutesGroups.newGroup($scope.editing).then(
             function (result) {
                 $uibModalInstance.close(result);
             }, function (error) {
@@ -37,9 +37,9 @@ angular.module('app.modal.editGroup', [])
     
     /* Click event for the Save button */
     $scope.buttonSave = function() {
-        AlertConfirmService.confirm('Are you sure you want to change this variable? It may effect system settings.', 'System Wide Setting')
+        AlertConfirmService.confirm('Are you sure you want to change this user group? It may effect system settings.', 'System Wide Setting')
             .result.then(function () {
-                ApiRoutesGroups.saveSystemVariable($scope.variable).then(
+                ApiRoutesGroups.saveGroup($scope.editing).then(
                     function (result) {
                         $uibModalInstance.close(result);
                     }, function (error) {
@@ -52,9 +52,9 @@ angular.module('app.modal.editGroup', [])
     
     /* Click event for the Delete button */
     $scope.buttonDelete = function() {
-        AlertConfirmService.confirm('Are you sure you want to delete this variable? It may effect system settings.', 'Delete Warning')
+        AlertConfirmService.confirm('Are you sure you want to delete this user group? It may effect system settings.', 'Delete Warning')
             .result.then(function () {
-                ApiRoutesGroups.deleteSystemVariable($scope.variable.id).then(
+                ApiRoutesGroups.deleteGroup($scope.editing.id).then(
                     function (result) {
                         $uibModalInstance.close(result);
                     }, function (error) {
