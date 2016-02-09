@@ -13,11 +13,11 @@ angular.module('app.admin.users', [])
         /* Modal triggers */
         // Edit User Modal
         $scope.buttonOpenEditUserModal = function (id) {
-            var found = $filter('filter')($scope.dtUserGroups.instance.DataTable.data(), {id: id}, true);
+            var found = $filter('filter')($scope.dtUsers.instance.DataTable.data(), {id: id}, true);
             if(angular.isDefined(found[0])) {
                 var modalInstance = ModalService.openEditGroup(found[0]);
                 modalInstance.result.then(function (selectedItem) {
-                    $scope.dtUserGroups.reloadData();
+                    $scope.dtUsers.reloadData();
                 }, function () {});
             }
         };

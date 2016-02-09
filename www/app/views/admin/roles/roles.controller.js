@@ -26,7 +26,7 @@ angular.module('app.admin.roles', [])
             $scope.buttonOpenNewGroupModal = function () {
                 var modalInstance = ModalService.openEditGroup();
                 modalInstance.result.then(function (selectedItem) {
-                    $scope.dtUserGroups.reloadData();
+                    $scope.dtGroupRoles.reloadData();
                 }, function () {});
             };
             
@@ -34,7 +34,7 @@ angular.module('app.admin.roles', [])
             $scope.buttonOpenNewRoleModal = function () {
                 var modalInstance = ModalService.openEditRole();
                 modalInstance.result.then(function (selectedItem) {
-                    $scope.dtUserGroups.reloadData();
+                    $scope.dtGroupRoles.reloadData();
                 }, function () {});
             };
             
@@ -42,7 +42,7 @@ angular.module('app.admin.roles', [])
             $scope.buttonOpenNewVisibilityFieldModal = function () {
                 var modalInstance = ModalService.openEditVisibilityField();
                 modalInstance.result.then(function (selectedItem) {
-                    $scope.dtUserGroups.reloadData();
+                    $scope.dtGroupRoles.reloadData();
                 }, function () {});
             };
             

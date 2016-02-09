@@ -26,7 +26,7 @@ angular.module('app.admin.fieldVisibility', [])
             $scope.buttonOpenNewGroupModal = function () {
                 var modalInstance = ModalService.openEditGroup();
                 modalInstance.result.then(function (selectedItem) {
-                    $scope.dtUserGroups.reloadData();
+                    $scope.dtFields.reloadData();
                 }, function () {});
             };
             
@@ -34,7 +34,7 @@ angular.module('app.admin.fieldVisibility', [])
             $scope.buttonOpenNewRoleModal = function () {
                 var modalInstance = ModalService.openEditRole();
                 modalInstance.result.then(function (selectedItem) {
-                    $scope.dtUserGroups.reloadData();
+                    $scope.dtFields.reloadData();
                 }, function () {});
             };
             
@@ -42,12 +42,9 @@ angular.module('app.admin.fieldVisibility', [])
             $scope.buttonOpenNewVisibilityFieldModal = function () {
                 var modalInstance = ModalService.openEditVisibilityField();
                 modalInstance.result.then(function (selectedItem) {
-                    $scope.dtUserGroups.reloadData();
+                    $scope.dtFields.reloadData();
                 }, function () {});
             };
-                
-            // Init variables
-            $scope.editing = false;
 
             // DataTable Setup
             $scope.dtFieldRoles = {};
