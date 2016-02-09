@@ -39,6 +39,20 @@ angular.module('apiRoutes.groups', [])
         }
         return API.delete('group/delete/' + id, 'System unable to delete user group.');
     };
+    
+    api.unassignRoleFromGroup = function(pair) {
+        if(angular.isUndefined(pair.roleId) || angular.isUndefined(pair.groupId)) {
+            return API.reject('Invalid role / group pair please check your parameters and try again.');
+        }
+        return API.post('group/unassign-role', pair, 'System unable to unassign role to group.');
+    };
+    
+    api.assignRoleToGroup = function(pair) {
+        if(angular.isUndefined(pair.roleId) || angular.isUndefined(pair.groupId)) {
+            return API.reject('Invalid role / group pair please check your parameters and try again.');
+        }
+        return API.post('group/assign-role', pair, 'System unable to assign role from group.');
+    };
 
     return api;
 }]);

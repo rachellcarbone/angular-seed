@@ -37,6 +37,19 @@ class GroupRoutes {
                 GroupController::deleteGroup($app, $groupId);
             })->via('DELETE', 'POST');
             
+            /*
+             * roleId, groupId
+             */
+            $app->post("/unassign-role/", function () use ($app) {
+                GroupController::unassignRole($app);
+            });
+            
+            /*
+             * roleId, groupId
+             */
+            $app->post("/assign-role/", function () use ($app) {
+                GroupController::assignRole($app);
+            });
         });
     }
 }

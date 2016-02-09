@@ -116,4 +116,14 @@ class GroupData {
     static function deleteUserGroups($userId) {
         return DBConn::delete("DELETE FROM " . DBConn::prefix() . "auth_lookup_user_group WHERE user_id = :user_id;", array(':user_id' => $userId));
     }
+  
+    static function insertRoleAssignment($data) {
+        return DBConn::insert("INSERT INTO " . DBConn::prefix() . "auth_lookup_group_role(`auth_group_id`, `auth_role_id`, `created_user_id`) "
+                . "VALUES (:auth_group_id, :auth_role_id, :created_user_id)", $data);
+    }
+                    
+    static function deleteRoleAssignment($data) {
+        return DBConn::delete("DELETE FROM " . DBConn::prefix() . "auth_lookup_group_role "
+                . "WHERE auth_group_id = :auth_group_id AND auth_role_id = :auth_role_id;", $data);
+    }
 }

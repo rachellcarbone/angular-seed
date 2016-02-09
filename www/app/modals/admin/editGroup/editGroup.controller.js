@@ -138,4 +138,35 @@ angular.module('app.modal.editGroup', [])
         return (angular.isDefined(found[0]));
     };
     
+    $scope.buttonRemoveRoleFromGroup = function(roleId) {
+        ApiRoutesGroups.unassignRoleFromGroup({ 'groupId':$scope.saved.id, 'roleId': roleId }).then(
+            function (result) {
+                $scope.alertProxy.success(result.msg);
+                
+                angular.forEach($scope.saved.roles, function (obj, index) {
+                    if (obj.id == roleId) {
+                        $scope.saved.roles.splice(index, 1);
+                        return;
+                    }
+                });
+        
+            }, function (error) {
+                $scope.alertProxy.error(error);
+            });
+    };
+    
+    $scope.buttonAddRoleToGroup = function(roleId) {
+        ApiRoutesGroups.assignRoleToGroup({ 'groupId':$scope.saved.id, 'roleId': roleId }).then(
+            function (result) {
+                $scope.alertProxy.success(result.msg);
+                
+                var found = $filter('filter')($scope.roleList, {id: roleId}, true);
+                if (angular.isDefined(found[0])) {
+                    $scope.saved.roles.push(found[0]);
+                }
+            }, function (error) {
+                $scope.alertProxy.error(error);
+            });
+    };
+    
 }]);
