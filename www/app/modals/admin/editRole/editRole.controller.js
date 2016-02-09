@@ -17,7 +17,10 @@ angular.module('app.modal.editRole', [])
     $scope.newMode = (!angular.isDefined(editing.id));
     
     /* Save for resetting purposes */
-    $scope.saved = (angular.isDefined(editing.id)) ? angular.copy(editing) : {};
+    $scope.saved = (angular.isDefined(editing.id)) ? angular.copy(editing) : {
+        'role' : '',
+        'desc' : ''
+    };
     
     /* Item to display and edit */
     $scope.editing = angular.copy($scope.saved);

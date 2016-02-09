@@ -17,7 +17,12 @@ angular.module('app.modal.editUser', [])
     $scope.newMode = (!angular.isDefined(editing.id));
     
     /* Save for resetting purposes */
-    $scope.saved = (angular.isDefined(editing.id)) ? angular.copy(editing) : {};
+    $scope.saved = (angular.isDefined(editing.id)) ? angular.copy(editing) : {
+        'nameFirst' : '',
+        'nameLast' : '',
+        'email' : '',
+        'disabled' : 'false'
+    };
     
     /* Item to display and edit */
     $scope.editing = angular.copy($scope.saved);

@@ -17,7 +17,14 @@ angular.module('app.modal.editSystemVariable', [])
     $scope.newMode = (!angular.isDefined(editing.id));
     
     /* Save for resetting purposes */
-    $scope.saved = (angular.isDefined(editing.id)) ? angular.copy(editing) : {};
+    $scope.saved = (angular.isDefined(editing.id)) ? angular.copy(editing) : 
+    { 
+        'name' : '',
+        'value' : '',
+        'disabled' : '0',
+        'locked' : '0',
+        'indestructible' : '0'
+    };
     
     /* Item to display and edit */
     $scope.editing = angular.copy($scope.saved);
@@ -42,7 +49,7 @@ angular.module('app.modal.editSystemVariable', [])
                 AlertConfirmService.confirm('Are you sure you want to lock this variable? I can only be changed by admin with the correct permissions.', 'Restricting Access')
                     .result.then(function () {
                     }, function (declined) {
-                        checkbox.checked = false;
+                        $scope.editing.locked = '0';
                     });
 
             }

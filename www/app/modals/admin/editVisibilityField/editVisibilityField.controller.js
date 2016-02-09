@@ -17,7 +17,11 @@ angular.module('app.modal.editVisibilityField', [])
     $scope.newMode = (!angular.isDefined(editing.id));
     
     /* Save for resetting purposes */
-    $scope.saved = (angular.isDefined(editing.id)) ? angular.copy(editing) : {};
+    $scope.saved = (angular.isDefined(editing.id)) ? angular.copy(editing) : {
+        'identifier' : '',
+        'type' : 'element',
+        'desc' : ''
+    };
     
     /* Item to display and edit */
     $scope.editing = angular.copy($scope.saved);
