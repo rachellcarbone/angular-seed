@@ -23,20 +23,10 @@ angular.module('app.admin.fieldVisibility', [])
             };
             
             // New Group Modal
-            $scope.buttonOpenNewGroupModal = function () {
-                var modalInstance = ModalService.openEditGroup();
-                modalInstance.result.then(function (selectedItem) {
-                    $scope.dtFields.reloadData();
-                }, function () {});
-            };
+            $scope.buttonOpenNewGroupModal = ModalService.openEditGroup;
             
             // New Role Modal
-            $scope.buttonOpenNewRoleModal = function () {
-                var modalInstance = ModalService.openEditRole();
-                modalInstance.result.then(function (selectedItem) {
-                    $scope.dtFields.reloadData();
-                }, function () {});
-            };
+            $scope.buttonOpenNewRoleModal = ModalService.openEditRole;
             
             // New Visibility Field Modal
             $scope.buttonOpenNewVisibilityFieldModal = function () {

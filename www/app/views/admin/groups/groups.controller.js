@@ -32,20 +32,10 @@ angular.module('app.admin.groups', [])
             };
             
             // New Role Modal
-            $scope.buttonOpenNewRoleModal = function () {
-                var modalInstance = ModalService.openEditRole();
-                modalInstance.result.then(function (selectedItem) {
-                    $scope.dtUserGroups.reloadData();
-                }, function () {});
-            };
+            $scope.buttonOpenNewRoleModal = ModalService.openEditRole;
             
             // New Visibility Field Modal
-            $scope.buttonOpenNewVisibilityFieldModal = function () {
-                var modalInstance = ModalService.openEditVisibilityField();
-                modalInstance.result.then(function (selectedItem) {
-                    $scope.dtUserGroups.reloadData();
-                }, function () {});
-            };
+            $scope.buttonOpenNewVisibilityFieldModal = ModalService.openEditVisibilityField;
             
         
             // New Group to Role Modal
