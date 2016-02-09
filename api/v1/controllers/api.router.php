@@ -1,5 +1,6 @@
 <?php namespace API;
 require_once dirname(dirname(__FILE__)) . '/services/logging.php';  // Logging Service
+require_once dirname(__FILE__) . '/api-test/test.routes.php';
 require_once dirname(__FILE__) . '/auth/auth.routes.php';
 require_once dirname(__FILE__) . '/datatables/datatables.routes.php';
 require_once dirname(__FILE__) . '/field-visibility/fields.routes.php';
