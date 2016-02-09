@@ -28,7 +28,7 @@ angular.module('app.modal.editVisibilityField', [])
     
     /* Click event for the Add / New button */
     $scope.buttonNew = function() {
-        ApiRoutesSystemVisibility.newSystemVariable($scope.variable).then(
+        ApiRoutesSystemVisibility.newVisibilityField($scope.editing).then(
             function (result) {
                 $uibModalInstance.close(result);
             }, function (error) {
@@ -38,9 +38,9 @@ angular.module('app.modal.editVisibilityField', [])
     
     /* Click event for the Save button */
     $scope.buttonSave = function() {
-        AlertConfirmService.confirm('Are you sure you want to change this variable? It may effect system settings.', 'System Wide Setting')
+        AlertConfirmService.confirm('Are you sure you want to change this visibility field? It may effect system settings.', 'System Wide Setting')
             .result.then(function () {
-                ApiRoutesSystemVisibility.saveSystemVariable($scope.variable).then(
+                ApiRoutesSystemVisibility.saveVisibilityField($scope.editing).then(
                     function (result) {
                         $uibModalInstance.close(result);
                     }, function (error) {
@@ -53,9 +53,9 @@ angular.module('app.modal.editVisibilityField', [])
     
     /* Click event for the Delete button */
     $scope.buttonDelete = function() {
-        AlertConfirmService.confirm('Are you sure you want to delete this variable? It may effect system settings.', 'Delete Warning')
+        AlertConfirmService.confirm('Are you sure you want to delete this visibility field? Any elements using this tag will no longer be controlled by auth visibility..', 'Delete Warning')
             .result.then(function () {
-                ApiRoutesSystemVisibility.deleteSystemVariable($scope.variable.id).then(
+                ApiRoutesSystemVisibility.deleteVisibilityField($scope.editing.id).then(
                     function (result) {
                         $uibModalInstance.close(result);
                     }, function (error) {
