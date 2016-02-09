@@ -3,8 +3,10 @@
 /* @author  Rachel Carbone */
 
 angular.module('app.modal.editRole', [])
-    .controller('EditRoleModalCtrl', ['$scope', '$uibModalInstance', '$log', 'AlertConfirmService', 'editing', 'ApiRoutesRoles',
-    function($scope, $uibModalInstance, $log, AlertConfirmService, editing, ApiRoutesRoles) {
+    .controller('EditRoleModalCtrl', ['$scope', '$uibModalInstance', '$filter', 'AlertConfirmService', 'editing', 'ApiRoutesRoles', 'groupList', 'fieldList',
+    function($scope, $uibModalInstance, $filter, AlertConfirmService, editing, ApiRoutesRoles, groupList, fieldList) {
+    $scope.groupList = groupList;
+    $scope.fieldList = fieldList;
         
     /* Used to restrict alert bars */
     $scope.alertProxy = {};
@@ -110,9 +112,14 @@ angular.module('app.modal.editRole', [])
             });
     };
     
-    /* Click event for the Manage Roles button */
-    $scope.buttonManageRoles = function() {
-        $scope.setMode('roles');
+    /* Click event for the Manage Groups button */
+    $scope.buttonManageGroups = function() {
+        $scope.setMode('groups');
+    };
+    
+    /* Click event for the Manage Fields button */
+    $scope.buttonManageFields = function() {
+        $scope.setMode('fields');
     };
         
     /* Click event for the Cancel button */
@@ -136,6 +143,18 @@ angular.module('app.modal.editRole', [])
     /* Click event for the Edit button*/
     $scope.buttonEdit = function() {
         $scope.setMode('edit');
+    };
+    
+    /* Return BOOL if Group is assigned to this role */
+    $scope.isGroupAssignedToRole = function(groupId) {
+        var found = $filter('filter')($scope.saved.groups, {id: groupId}, true);
+        return (angular.isDefined(found[0]));
+    };
+    
+    /* Return BOOL if Field is assigned to this role */
+    $scope.isFieldAssignedToRole = function(fieldId) {
+        var found = $filter('filter')($scope.saved.elements, {id: fieldId}, true);
+        return (angular.isDefined(found[0]));
     };
     
 }]);

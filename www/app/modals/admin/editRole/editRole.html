@@ -69,11 +69,39 @@
     </form>
     
     <div ng-if="manageGroupsMode">
-        MANAGE GROUPS
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr><th>ID</th><th>Label</th><th></th></tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="group in groupList">
+                    <td>{{group.id}}</td>
+                    <td>{{group.label}}</td>
+                    <td>
+                        <button ng-if="isGroupAssignedToRole(group.id)" type="button" ng-click="buttonRemoveGroupFromRole(group.id)" class="btn btn-warning btn-xs pull-right">Remove</button>
+                        <button ng-if="!isGroupAssignedToRole(group.id)" type="button" ng-click="buttonAddGroupToRole(group.id)" class="btn btn-default btn-xs pull-right">Add</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
     
     <div ng-if="manageFieldsMode">
-        MANAGE FIELDS
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr><th>ID</th><th>Label</th><th></th></tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="field in fieldList">
+                    <td>{{field.id}}</td>
+                    <td>{{field.label}}</td>
+                    <td>
+                        <button ng-if="isFieldAssignedToRole(field.id)" type="button" ng-click="buttonRemoveFieldFromRole(field.id)" class="btn btn-warning btn-xs pull-right">Remove</button>
+                        <button ng-if="!isFieldAssignedToRole(field.id)" type="button" ng-click="buttonAddFieldToRole(field.id)" class="btn btn-default btn-xs pull-right">Add</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
 </div>
