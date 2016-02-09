@@ -15,7 +15,7 @@ class ListsController {
         return $app->render(200, array('list' => $list));
     }
     
-    static function getTolesList($app) {
+    static function getRolesList($app) {
         $data = ListsData::selectRoles();
         $list = ($data) ? $data : array();
         return $app->render(200, array('list' => $list));

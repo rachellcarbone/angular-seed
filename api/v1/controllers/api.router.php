@@ -5,6 +5,7 @@ require_once dirname(__FILE__) . '/datatables/datatables.routes.php';
 require_once dirname(__FILE__) . '/field-visibility/fields.routes.php';
 require_once dirname(__FILE__) . '/groups/groups.routes.php';
 require_once dirname(__FILE__) . '/roles/roles.routes.php';
+require_once dirname(__FILE__) . '/simple-lists/lists.routes.php';
 require_once dirname(__FILE__) . '/system-variables/config.routes.php';
 require_once dirname(__FILE__) . '/user/user.routes.php';
 
@@ -19,6 +20,7 @@ class ApiRouter {
         FieldRoutes::addRoutes($app, $authenticateForRole);
         GroupRoutes::addRoutes($app, $authenticateForRole);
         RoleRoutes::addRoutes($app, $authenticateForRole);
+        ListRoutes::addRoutes($app, $authenticateForRole);
         ConfigRoutes::addRoutes($app, $authenticateForRole);
         UserRoutes::addRoutes($app, $authenticateForRole);
     }

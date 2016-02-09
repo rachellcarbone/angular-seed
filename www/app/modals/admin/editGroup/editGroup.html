@@ -69,7 +69,21 @@
     </form>
     
     <div ng-if="manageRolesMode">
-        MANAGE ROLES
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr><th>ID</th><th>Label</th><th></th></tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="role in roleList">
+                    <td>{{role.id}}</td>
+                    <td>{{role.label}}</td>
+                    <td>
+                        <button ng-if="isRoleAssignedToGroup(role.id)" type="button" ng-click="buttonRemoveRoleFromGroup(role.id)" class="btn btn-warning btn-xs pull-right">Remove</button>
+                        <button ng-if="!isRoleAssignedToGroup(role.id)" type="button" ng-click="buttonAddRoleToGroup(role.id)" class="btn btn-default btn-xs pull-right">Add</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
 </div>

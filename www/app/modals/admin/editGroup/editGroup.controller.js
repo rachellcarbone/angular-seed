@@ -3,8 +3,9 @@
 /* @author  Rachel Carbone */
 
 angular.module('app.modal.editGroup', [])        
-    .controller('EditGroupModalCtrl', ['$scope', '$uibModalInstance', '$log', 'AlertConfirmService', 'editing', 'ApiRoutesGroups',
-    function($scope, $uibModalInstance, $log, AlertConfirmService, editing, ApiRoutesGroups) {
+    .controller('EditGroupModalCtrl', ['$scope', '$uibModalInstance', '$filter', 'AlertConfirmService', 'editing', 'ApiRoutesGroups', 'roleList',
+    function($scope, $uibModalInstance, $filter, AlertConfirmService, editing, ApiRoutesGroups, roleList) {
+    $scope.roleList = roleList;
         
     /* Used to restrict alert bars */
     $scope.alertProxy = {};
@@ -129,6 +130,12 @@ angular.module('app.modal.editGroup', [])
     /* Click event for the Edit button*/
     $scope.buttonEdit = function() {
         $scope.setMode('edit');
+    };
+    
+    /* Return BOOL if Role is assigned to this group */
+    $scope.isRoleAssignedToGroup = function(roleId) {
+        var found = $filter('filter')($scope.saved.roles, {id: roleId}, true);
+        return (angular.isDefined(found[0]));
     };
     
 }]);

@@ -7,7 +7,7 @@ class ListRoutes {
         
         //* /simple-lists/ routes - authenticated members only
         
-        $app->group('/simple-lists', $authenticateForRole('member'), function () use ($app) {
+        $app->group('/simple-list', $authenticateForRole('member'), function () use ($app) {
 
             $app->map("/users", function () use ($app) {
                 ListsController::getUsersList($app);
