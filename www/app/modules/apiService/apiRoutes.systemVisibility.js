@@ -39,6 +39,20 @@ angular.module('apiRoutes.systemVisibility', [])
         }
         return API.delete('field/delete/' + id, 'System unable to delete visibility field.');
     };
+    
+    api.unassignRoleFromField = function(pair) {
+        if(angular.isUndefined(pair.roleId) || angular.isUndefined(pair.fieldId)) {
+            return API.reject('Invalid role / field pair please check your parameters and try again.');
+        }
+        return API.post('field/unassign-role', pair, 'System unable to unassign role to field.');
+    };
+    
+    api.assignRoleToField = function(pair) {
+        if(angular.isUndefined(pair.roleId) || angular.isUndefined(pair.fieldId)) {
+            return API.reject('Invalid role / field pair please check your parameters and try again.');
+        }
+        return API.post('field/assign-role', pair, 'System unable to assign role from field.');
+    };
 
     return api;
 }]);
