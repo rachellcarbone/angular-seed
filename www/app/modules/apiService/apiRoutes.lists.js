@@ -7,7 +7,7 @@
  */
 
 angular.module('apiRoutes.lists', [])
-.factory('ApiRoutesSimpleLists', ['ApiService', function (API) {
+.factory('ApiRoutesSimpleLists', ['ApiService', '$q', function (API, $q) {
         
     var api = {};
     
