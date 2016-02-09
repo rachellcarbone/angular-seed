@@ -48,3 +48,31 @@ app.filter('readingTimeInSeconds', function () {
         
     };
 });
+
+app.filter('getSlugPeriodSeperated', [function () {
+    return function (value) {
+        if (!value) {
+            return value;
+        }
+        var a = value.trim();
+        var b = a.toLowerCase();
+        var c = b.replace(/ /g, '.');
+        var d = c.replace(/[^a-zA-Z0-9-_.]/g, '');
+        
+        return d;
+    };
+}]);
+
+app.filter('getSlugDashSeperated', [function () {
+    return function (value) {
+        if (!value) {
+            return value;
+        }
+        var a = value.trim();
+        var b = a.toLowerCase();
+        var c = b.replace(/ /g, '-');
+        var d = c.replace(/[^a-zA-Z0-9-_.]/g, '');
+        
+        return d;
+    };
+}]);

@@ -10,13 +10,13 @@
     <div ng-if="!editMode">
         
         <div class="row">
-            <div class="col-xs-6">
+            <div class="col-xs-12">
                 <div class="form-role">
                     <label>Role Name</label>
                     <p class="form-control-static">{{saved.role}}</p>
                 </div>
             </div>
-            <div class="col-xs-6">
+            <div class="col-xs-12">
                 <div class="form-role" title="Unique identifier to be embedded within the system.">
                     <label>Unique Reference Identifier</label>
                     <p class="form-control-static"><code>{{saved.identifier}}</code></p>
@@ -41,16 +41,16 @@
     <form ng-if="editMode" name="form.modalForm" role="form" novalidate>
         
         <div class="row">
-            <div class="col-xs-6">
+            <div class="col-xs-12">
                 <div class="form-role">
                     <label>Role Name</label>
                     <input class="form-control" name="role" ng-model="editing.role" type="text" maxlength="255" required />
                 </div>
             </div>
-            <div class="col-xs-6">
+            <div class="col-xs-12">
                 <div class="form-role" title="Unique identifier to be embedded within the system.">
                     <label>Unique Reference Identifier</label>
-                    <p class="form-control-static"><code>{{editing.identifier}}</code></p>
+                    <p class="form-control-static"><code>{{editing.role | getSlugDashSeperated}}</code></p>
                 </div>
             </div>
         </div>
