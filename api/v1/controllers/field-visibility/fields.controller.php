@@ -152,9 +152,9 @@ class FieldController {
         );
         
         if(FieldData::insertRoleAssignment($data)) {
-            return $app->render(200,  array('msg' => 'Role has been assigned from field.'));
+            return $app->render(200,  array('msg' => 'Role has been assigned to field.'));
         } else {
-            return $app->render(400,  array('msg' => 'Could not assign role from field.'));
+            return $app->render(400,  array('msg' => 'Could not assign role to field.'));
         }
     }
 }

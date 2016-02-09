@@ -39,6 +39,34 @@ angular.module('apiRoutes.roles', [])
         }
         return API.delete('role/delete/' + id, 'System unable to delete group role.');
     };
+    
+    api.unassignRoleFromGroup = function(pair) {
+        if(angular.isUndefined(pair.roleId) || angular.isUndefined(pair.groupId)) {
+            return API.reject('Invalid role / group pair please check your parameters and try again.');
+        }
+        return API.post('role/unassign-group', pair, 'System unable to unassign role to group.');
+    };
+    
+    api.assignRoleToGroup = function(pair) {
+        if(angular.isUndefined(pair.roleId) || angular.isUndefined(pair.groupId)) {
+            return API.reject('Invalid role / group pair please check your parameters and try again.');
+        }
+        return API.post('role/assign-group', pair, 'System unable to assign role from group.');
+    };
+    
+    api.unassignRoleFromField = function(pair) {
+        if(angular.isUndefined(pair.roleId) || angular.isUndefined(pair.fieldId)) {
+            return API.reject('Invalid role / field pair please check your parameters and try again.');
+        }
+        return API.post('role/unassign-field', pair, 'System unable to unassign role to field.');
+    };
+    
+    api.assignRoleToField = function(pair) {
+        if(angular.isUndefined(pair.roleId) || angular.isUndefined(pair.fieldId)) {
+            return API.reject('Invalid role / field pair please check your parameters and try again.');
+        }
+        return API.post('role/assign-field', pair, 'System unable to assign role from field.');
+    };
 
     return api;
 }]);

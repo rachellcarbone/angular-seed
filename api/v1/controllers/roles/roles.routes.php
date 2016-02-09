@@ -37,6 +37,33 @@ class RoleRoutes {
                 RoleController::deleteRole($app, $roleId);
             })->via('DELETE', 'POST');
             
+            /*
+             * roleId, fieldId
+             */
+            $app->post("/unassign-field/", function () use ($app) {
+                RoleController::unassignField($app);
+            });
+            
+            /*
+             * roleId, fieldId
+             */
+            $app->post("/assign-field/", function () use ($app) {
+                RoleController::assignField($app);
+            });
+            
+            /*
+             * roleId, groupId
+             */
+            $app->post("/unassign-group/", function () use ($app) {
+                RoleController::unassignGroup($app);
+            });
+            
+            /*
+             * roleId, groupId
+             */
+            $app->post("/assign-group/", function () use ($app) {
+                RoleController::assignGroup($app);
+            });
         });
     }
 }

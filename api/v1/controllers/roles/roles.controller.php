@@ -102,4 +102,78 @@ class RoleController {
         return preg_replace('/[^a-zA-Z0-9-_.]/', '', str_replace(' ', '-', strtolower(trim($string))));
     }
     
+    static function unassignField($app) {
+        if(!v::key('fieldId', v::stringType())->validate($app->request->post()) || 
+           !v::key('roleId', v::stringType())->validate($app->request->post())) {
+            return $app->render(400,  array('msg' => 'Could not unassign role from field. Check your parameters and try again.'));
+        } 
+        
+        $data = array (
+            ':auth_field_id' => $app->request->post('fieldId'),
+            ':auth_role_id' => $app->request->post('roleId')
+        );
+        
+        if(RoleData::deleteFieldAssignment($data)) {
+            return $app->render(200,  array('msg' => 'Role has been unassigned from field.'));
+        } else {
+            return $app->render(400,  array('msg' => 'Could not unassign role from field.'));
+        }
+    }
+    
+    static function assignField($app) {
+        if(!v::key('fieldId', v::stringType())->validate($app->request->post()) || 
+           !v::key('roleId', v::stringType())->validate($app->request->post())) {
+            return $app->render(400,  array('msg' => 'Could not assign role from field. Check your parameters and try again.'));
+        }
+        
+        $data = array (
+            ':auth_field_id' => $app->request->post('fieldId'),
+            ':auth_role_id' => $app->request->post('roleId'),
+            ":created_user_id" => APIAuth::getUserId()
+        );
+        
+        if(RoleData::insertFieldAssignment($data)) {
+            return $app->render(200,  array('msg' => 'Role has been assigned to field.'));
+        } else {
+            return $app->render(400,  array('msg' => 'Could not assign role to field.'));
+        }
+    }
+    
+    static function unassignGroup($app) {
+        if(!v::key('groupId', v::stringType())->validate($app->request->post()) || 
+           !v::key('roleId', v::stringType())->validate($app->request->post())) {
+            return $app->render(400,  array('msg' => 'Could not unassign role from group. Check your parameters and try again.'));
+        } 
+        
+        $data = array (
+            ':auth_group_id' => $app->request->post('groupId'),
+            ':auth_role_id' => $app->request->post('roleId')
+        );
+        
+        if(RoleData::deleteGroupAssignment($data)) {
+            return $app->render(200,  array('msg' => 'Role has been unassigned from group.'));
+        } else {
+            return $app->render(400,  array('msg' => 'Could not unassign role from group.'));
+        }
+    }
+    
+    static function assignGroup($app) {
+        if(!v::key('groupId', v::stringType())->validate($app->request->post()) || 
+           !v::key('roleId', v::stringType())->validate($app->request->post())) {
+            return $app->render(400,  array('msg' => 'Could not assign role from group. Check your parameters and try again.'));
+        }
+        
+        $data = array (
+            ':auth_group_id' => $app->request->post('groupId'),
+            ':auth_role_id' => $app->request->post('roleId'),
+            ":created_user_id" => APIAuth::getUserId()
+        );
+        
+        if(RoleData::insertGroupAssignment($data)) {
+            return $app->render(200,  array('msg' => 'Role has been assigned to group.'));
+        } else {
+            return $app->render(400,  array('msg' => 'Could not assign role to group.'));
+        }
+    }
+    
 }

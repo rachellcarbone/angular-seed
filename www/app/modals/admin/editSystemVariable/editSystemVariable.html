@@ -4,7 +4,10 @@
     <h3 ng-if="!newMode && !editMode" class="modal-title">System Config Variable #{{saved.id}}</h3>
 </div>
 
-<div class="modal-body">   
+<div class="modal-body">
+    
+    <div data-rc-bootstrap-alerts="alertProxy"></div>
+        
     <div ng-if="!editMode">
         
         <div class="row">
@@ -40,8 +43,6 @@
     </div>
     
     <form ng-if="editMode" name="form.modalForm" role="form" novalidate>
-    
-        <div data-rc-bootstrap-alerts="alertProxy"></div>
         
         <uib-alert ng-if="saved.locked === '1'" type="danger">This variable is locked and cannot be edited.</uib-alert>
         <uib-alert ng-if="saved.indestructible === '1'" type="warning">This variable is indestructible and cannot be deleted.</uib-alert>

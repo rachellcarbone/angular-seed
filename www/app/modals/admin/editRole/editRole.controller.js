@@ -157,4 +157,66 @@ angular.module('app.modal.editRole', [])
         return (angular.isDefined(found[0]));
     };
     
+    $scope.buttonRemoveGroupFromRole = function(groupId) {
+        ApiRoutesRoles.unassignRoleFromGroup({ 'roleId':$scope.saved.id, 'groupId': groupId }).then(
+            function (result) {
+                $scope.alertProxy.success(result.msg);
+                
+                angular.forEach($scope.saved.groups, function (obj, index) {
+                    if (obj.id == groupId) {
+                        $scope.saved.groups.splice(index, 1);
+                        return;
+                    }
+                });
+        
+            }, function (error) {
+                $scope.alertProxy.error(error);
+            });
+    };
+    
+    $scope.buttonAddGroupToRole = function(groupId) {
+        ApiRoutesRoles.assignRoleToGroup({ 'roleId':$scope.saved.id, 'groupId': groupId }).then(
+            function (result) {
+                $scope.alertProxy.success(result.msg);
+                
+                var found = $filter('filter')($scope.groupList, {id: groupId}, true);
+                if (angular.isDefined(found[0])) {
+                    $scope.saved.groups.push(found[0]);
+                }
+            }, function (error) {
+                $scope.alertProxy.error(error);
+            });
+    };
+    
+    $scope.buttonRemoveFieldFromRole = function(fieldId) {
+        ApiRoutesRoles.unassignRoleFromField({ 'roleId':$scope.saved.id, 'fieldId': fieldId }).then(
+            function (result) {
+                $scope.alertProxy.success(result.msg);
+                
+                angular.forEach($scope.saved.elements, function (obj, index) {
+                    if (obj.id == fieldId) {
+                        $scope.saved.elements.splice(index, 1);
+                        return;
+                    }
+                });
+        
+            }, function (error) {
+                $scope.alertProxy.error(error);
+            });
+    };
+    
+    $scope.buttonAddFieldToRole = function(fieldId) {
+        ApiRoutesRoles.assignRoleToField({ 'roleId':$scope.saved.id, 'fieldId': fieldId }).then(
+            function (result) {
+                $scope.alertProxy.success(result.msg);
+                
+                var found = $filter('filter')($scope.fieldList, {id: fieldId}, true);
+                if (angular.isDefined(found[0])) {
+                    $scope.saved.elements.push(found[0]);
+                }
+            }, function (error) {
+                $scope.alertProxy.error(error);
+            });
+    };
+    
 }]);
