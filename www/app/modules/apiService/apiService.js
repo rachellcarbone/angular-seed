@@ -10,6 +10,7 @@ angular.module('api.v1', [
     'apiRoutes.auth',
     'apiRoutes.datatables',
     'apiRoutes.groups',
+    'apiRoutes.lists',
     'apiRoutes.roles',
     'apiRoutes.systemVariables',
     'apiRoutes.systemVisibility',
