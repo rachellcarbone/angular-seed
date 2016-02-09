@@ -6,6 +6,8 @@
 
 <div class="modal-body">
     
+    <div data-rc-bootstrap-alerts="alertProxy"></div>
+    
     <div ng-if="!editMode && !manageRolesMode">     
 
         <div ng-if="!saved.initialized" class="alert alert-danger well-sm" role="alert">
@@ -87,8 +89,8 @@
                     <td>{{role.id}}</td>
                     <td>{{role.label}}</td>
                     <td>
-                        <button ng-if="isRoleAssignedToField(role.id)" type="button" ng-click="buttonRemoveRoleFromGroup(role.id)" class="btn btn-warning btn-xs pull-right">Remove</button>
-                        <button ng-if="!isRoleAssignedToField(role.id)" type="button" ng-click="buttonAddRoleToGroup(role.id)" class="btn btn-default btn-xs pull-right">Add</button>
+                        <button ng-if="isRoleAssignedToField(role.id)" type="button" ng-click="buttonRemoveRoleFromField(role.id)" class="btn btn-warning btn-xs pull-right">Remove</button>
+                        <button ng-if="!isRoleAssignedToField(role.id)" type="button" ng-click="buttonAddRoleToField(role.id)" class="btn btn-default btn-xs pull-right">Add</button>
                     </td>
                 </tr>
             </tbody>

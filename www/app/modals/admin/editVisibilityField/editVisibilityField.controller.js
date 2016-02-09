@@ -139,4 +139,35 @@ angular.module('app.modal.editVisibilityField', [])
         return (angular.isDefined(found[0]));
     };
     
+    $scope.buttonRemoveRoleFromField = function(roleId) {
+        ApiRoutesSystemVisibility.unassignRoleFromField({ 'fieldId':$scope.saved.id, 'roleId': roleId }).then(
+            function (result) {
+                $scope.alertProxy.success(result.msg);
+                
+                angular.forEach($scope.saved.roles, function (obj, index) {
+                    if (obj.id == roleId) {
+                        $scope.saved.roles.splice(index, 1);
+                        return;
+                    }
+                });
+        
+            }, function (error) {
+                $scope.alertProxy.error(error);
+            });
+    };
+    
+    $scope.buttonAddRoleToField = function(roleId) {
+        ApiRoutesSystemVisibility.assignRoleToField({ 'fieldId':$scope.saved.id, 'roleId': roleId }).then(
+            function (result) {
+                $scope.alertProxy.success(result.msg);
+                
+                var found = $filter('filter')($scope.roleList, {id: roleId}, true);
+                if (angular.isDefined(found[0])) {
+                    $scope.saved.roles.push(found[0]);
+                }
+            }, function (error) {
+                $scope.alertProxy.error(error);
+            });
+    };
+    
 }]);

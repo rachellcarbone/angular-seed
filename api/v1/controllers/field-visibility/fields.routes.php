@@ -44,6 +44,20 @@ class FieldRoutes {
                 FieldController::deleteField($app, $fieldId);
             })->via('DELETE', 'POST');
             
+            /*
+             * roleId, fieldId
+             */
+            $app->post("/unassign-role/", function () use ($app) {
+                FieldController::unassignRole($app);
+            });
+            
+            /*
+             * roleId, fieldId
+             */
+            $app->post("/assign-role/", function () use ($app) {
+                FieldController::assignRole($app);
+            });
+            
         });
     }
 }
