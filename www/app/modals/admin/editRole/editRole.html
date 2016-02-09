@@ -7,7 +7,7 @@
 <div class="modal-body">
     
     
-    <div ng-if="!editMode">
+    <div ng-if="!editMode && !manageGroupsMode && !manageFieldsMode">
         
         <div class="row">
             <div class="col-xs-12">
@@ -67,11 +67,21 @@
             </div>
         </div>
     </form>
+    
+    <div ng-if="manageGroupsMode">
+        MANAGE GROUPS
+    </div>
+    
+    <div ng-if="manageFieldsMode">
+        MANAGE FIELDS
+    </div>
 
 </div>
 
 <div ng-if="!editMode" class="modal-footer">
     <button class="btn btn-default pull-left" ng-click="buttonEdit()">Edit</button>
+    <button class="btn btn-default pull-left" ng-click="buttonManageGroups()">Manage Groups</button>
+    <button class="btn btn-default pull-left" ng-click="buttonManageFields()">Manage Fields</button>
     <button class="btn btn-info" ng-click="buttonCancel()">Done</button>
 </div>
 

@@ -6,7 +6,7 @@
 
 <div class="modal-body">
     
-    <div ng-if="!editMode">     
+    <div ng-if="!editMode && !manageRolesMode">     
 
         <div ng-if="!saved.initialized" class="alert alert-danger well-sm" role="alert">
             <strong>Not Initialized!</strong> This field has not been initialized.
@@ -44,7 +44,6 @@
     
     <form ng-if="editMode" name="form.modalForm" role="form" novalidate>
         
-        
         <div class="row">
             <div class="col-xs-12">
                 <div class="form-group">
@@ -77,11 +76,16 @@
             </div>
         </div>
     </form>
+    
+    <div ng-if="manageRolesMode">
+        MANAGE ROLES
+    </div>
 
 </div>
 
 <div ng-if="!editMode" class="modal-footer">
-    <button class="btn btn-default pull-left" ng-click="buttonEdit()">Edit</button>
+    <button ng-if="!manageRolesMode" class="btn btn-default pull-left" ng-click="buttonEdit()">Edit</button>
+    <button ng-if="!manageRolesMode" class="btn btn-default pull-left" ng-click="buttonManageRoles()">Manage Roles</button>
     <button class="btn btn-info" ng-click="buttonCancel()">Done</button>
 </div>
 
