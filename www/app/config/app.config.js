@@ -7,15 +7,29 @@
  */
 
 var app = angular.module('app.config', [
+    'ui.router'
   //'flow',
   //'ngNotificationsBar'
 ]);
-app.config(['$locationProvider', function ($locationProvider) {
+app.config(['$locationProvider', '$urlMatcherFactoryProvider', 
+    function ($locationProvider, $urlMatcherFactoryProvider) {
         
-        // Allows for use of regular URL path segments (i.e. /articles/21), 
-        // instead of their hashbang equivalents (/#/articles/21).
+        /*
+         * Routing Setup
+         */
+        
+        // Allows for use of regular URL path segments (i.e. /article/21), 
+        // instead of their hashbang equivalents (/#/article/21).
         // https://docs.angularjs.org/guide/$location#html5-mode
         $locationProvider.html5Mode(true);
+        
+        // Defines whether URL matching should be case sensitive (the default behavior), or not.
+        // http://angular-ui.github.io/ui-router/site/#/api/ui.router.util.$urlMatcherFactory
+        $urlMatcherFactoryProvider.caseInsensitive(true);
+        
+        // Defines whether URLs should match trailing slashes, or not (the default behavior).
+        // http://angular-ui.github.io/ui-router/site/#/api/ui.router.util.$urlMatcherFactory
+        $urlMatcherFactoryProvider.strictMode(false);
         
         /*
          * Tripple check that I dont need this.
