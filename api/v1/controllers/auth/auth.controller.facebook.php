@@ -114,16 +114,15 @@ class AuthControllerFacebook {
         timezone:-5
      */
     static function signup($app) {
+        // Get Post Data
         $post = $app->request->post();
         
-        if(!v::key('accessToken', v::stringType())->validate($post) || 
-           !v::key('facebookId', v::stringType())->validate($post) || 
-           !v::key('nameFirst', v::stringType())->validate($post) || 
-           !v::key('nameLast', v::stringType())->validate($post) || 
-           !v::key('email', v::email())->validate($post)) {
-            // Validate input parameters
-            return array('registered' => false, 'msg' => 'Facebook signup failed. Check your parameters and try again.');
+        // Validate Sent Input
+        $valid = self::signup_validateSentParameters($post);
+        if($valid !== true) {
+            return array('registered' => false, 'msg' => $valid);
         }
+        
         /*
         $token = self::getActiveAccessToken();
         $profile = self::getProfile($post['accessToken']);
@@ -131,9 +130,12 @@ class AuthControllerFacebook {
             return array('registered' => false, 'msg' => 'Facebook signup failed. You are not logged into Facebook.', 'token' => $token, 'profile' => $profile, 'post' => $post, 'cookie' => $_COOKIE);
         }
          */
+        
+        // Look for user with that email
         $existing = AuthData::selectUserByEmail($post['email']);
         if($existing) { 
-            return array('registered' => false, 'msg' => 'Facebook signup failed. A user with that email already exists.');      
+            /// FAIL - If a user with that email already exists
+            return array('registered' => false, 'msg' => 'Facebook signup failed. A user with that email already exists.');   
         }
         
         $validUser = array(
@@ -143,27 +145,52 @@ class AuthControllerFacebook {
             ':facebook_id' => $post['facebookId']
         );
         $userId = AuthData::insertFacebookUser($validUser);
-        if($userId) {
-            $user = AuthData::selectUserById($userId);
-            if(!$user) { 
-                return array('registered' => false, 'msg' => 'Facebook signup failed. Could not select user.');    
-            }
-            
-            $token = AuthControllerNative::createAuthToken($app, $user->id);
-            if($token) {
-                $found = array('user' => $user);
-                $found['user']->apiKey = $token['apiKey'];
-                $found['user']->apiToken = $token['apiToken'];
-                $found['sessionLifeHours'] = $token['sessionLifeHours'];
-                $found['registered'] = true;
-
-                // Send the session life back (in hours) for the cookies
-                return $found;
-            } else {
-                return array('registered' => false, 'msg' => 'Facebook Signup failed to creat auth token.');
-            }
+        if(!$userId) {
+            /// FAIL - If Inserting the user failed
+            return array('registered' => false, 'msg' => 'Facebook signup failed. Could not save user.');
         }
-        return array('registered' => false, 'msg' => 'Facebook signup failed. Could not save user.');
         
+        // Select our new user
+        $user = AuthData::selectUserById($userId);
+        if(!$user) { 
+            /// FAIL - If Inserting the user failed (hopefully this is redundant)
+            return array('registered' => false, 'msg' => 'Facebook signup failed. Could not select user.');    
+        }
+
+        // Save "Where did you hear about us" and any other additional questions
+        // This is "quiet" in that it may not execute if no paramters match
+        // And it doesnt set the response for the api call
+        InfoController::quietlySaveAdditional($post, $user->id);
+
+        // Create an authorization
+        $token = AuthControllerNative::createAuthToken($app, $user->id);
+        if($token) {
+            // Create the return object
+            $found = array('user' => $user);
+            $found['user']->apiKey = $token['apiKey'];
+            $found['user']->apiToken = $token['apiToken'];
+            $found['sessionLifeHours'] = $token['sessionLifeHours'];
+            $found['registered'] = true;
+
+            return $found;
+        } else {
+            return array('registered' => false, 'msg' => 'Facebook Signup failed to creat auth token.');
+        }
+    }
+    
+    /*
+     * return String|bool Failed message or true 
+     */
+    private function signup_validateSentParameters($post) {
+        if(!v::key('accessToken', v::stringType())->validate($post) || 
+           !v::key('facebookId', v::stringType())->validate($post) || 
+           !v::key('nameFirst', v::stringType())->validate($post) || 
+           !v::key('nameLast', v::stringType())->validate($post) || 
+           !v::key('email', v::email())->validate($post)) {
+            // Validate input parameters
+            return 'Facebook signup failed. Check your parameters and try again.';
+        } else {
+            return true;
+        }
     }
 }
