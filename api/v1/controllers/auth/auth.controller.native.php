@@ -73,27 +73,27 @@ class AuthControllerNative {
         }
         
         // Select our new user
-        $found = AuthData::selectUserById($userId);
-        if(!$found) { 
+        $user = AuthData::selectUserById($userId);
+        if(!$user) { 
             /// FAIL - If Inserting the user failed (hopefully this is redundant)
-            return array('registered' => false, 'msg' => 'Signup failed. Could not select user.');        
+            return array('registered' => false, 'msg' => 'Signup failed. Could not select user.');    
         }
 
         // Save "Where did you hear about us" and any other additional questions
         // This is "quiet" in that it may not execute if no paramters match
         // And it doesnt set the response for the api call
-        InfoController::quietlySaveAdditional($post, $found->id);
+        InfoController::quietlySaveAdditional($post, $user->id);
 
         // Create an authorization
-        $token = self::createAuthToken($app, $found->id);
+        $token = self::createAuthToken($app, $user->id);
         if($token) {
             // Create the return object
-            $found['registered'] = true;
+            $found = array('user' => $user);
             $found['user']->apiKey = $token['apiKey'];
             $found['user']->apiToken = $token['apiToken'];
             $found['sessionLifeHours'] = $token['sessionLifeHours'];
+            $found['registered'] = true;
 
-            // Send the session life back (in hours) for the cookies
             return $found;
         } else {
             /// FAIL - If the auth token couldnt be created and saved
