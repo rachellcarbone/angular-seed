@@ -8,11 +8,11 @@ class AuthData {
                 . 'VALUES (:identifier, :token, :user_id, :expires);', $validToken);
     }
     
-    public static function deleteAuthToken($identifier) {
+    static function deleteAuthToken($identifier) {
         return DBConn::delete('DELETE FROM ' . DBConn::prefix() . 'tokens_auth WHERE identifier = :identifier;', $identifier);
     }
     
-    public static function deleteExpiredAuthTokens() {
+    static function deleteExpiredAuthTokens() {
         return DBConn::executeQuery('DELETE FROM ' . DBConn::prefix() . 'tokens_auth WHERE expires < NOW();');
     }
     
