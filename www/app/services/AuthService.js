@@ -17,6 +17,10 @@ angular.module('AuthService', [
         
         var factory = {};
         
+        factory.getUser = function() {
+            return UserSession.get();
+        };
+        
         factory.init = function() {
             /* Returns promise that always resolves true */ 
             return $q(function (resolve, reject) {
