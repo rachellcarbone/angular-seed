@@ -8,6 +8,11 @@ class AuthData {
                 . 'VALUES (:identifier, :token, :user_id, :expires, :ip_address, :user_agent);', $validToken);
     }
     
+    static function insertLoginLocation($validLog) {
+        return DBConn::insert('INSERT INTO ' . DBConn::prefix() . 'logs_login_location(user_id, ip_address, user_agent) '
+                . 'VALUES (:user_id, :ip_address, :user_agent);', $validLog);
+    }
+    
     static function deleteAuthToken($identifier) {
         return DBConn::delete('DELETE FROM ' . DBConn::prefix() . 'tokens_auth WHERE identifier = :identifier;', $identifier);
     }
