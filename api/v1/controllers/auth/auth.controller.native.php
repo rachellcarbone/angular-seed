@@ -19,7 +19,7 @@ class AuthControllerNative {
             return array('authenticated' => false, 'msg' => 'Unauthenticated: Invalid request. Check your parameters and try again.');
         }
         
-        $user = UserData::selectUserByIdentifierToken($post['apiKey']);
+        $user = AuthData::selectUserByIdentifierToken($post['apiKey']);
         
         if(!$user) {
             // Validate existing user
@@ -52,7 +52,7 @@ class AuthControllerNative {
             return array('registered' => false, 'msg' => 'Signup failed. ' . self::$passwordRules);
         }
         
-        $existing = UserData::selectUserByEmail($post['email']);
+        $existing = AuthData::selectUserByEmail($post['email']);
         if($existing) { 
             return array('registered' => false, 'msg' => 'Signup failed. A user with that email already exists.');        
         }
@@ -63,7 +63,7 @@ class AuthControllerNative {
             ':name_last' => $post['nameLast'],
             ':password' => password_hash($post['password'], PASSWORD_DEFAULT)
         );
-        $userId = UserData::insertUser($validUser);
+        $userId = AuthData::insertUser($validUser);
         if($userId) {
             $user = UserData::selectUserById($userId);
             if(!$user) { 

@@ -1,6 +1,6 @@
 <?php namespace API;
 require_once dirname(dirname(__FILE__)) . '/config/config.php';
-require_once dirname(dirname(__FILE__)) . '/controllers/user/user.controller.php';
+require_once dirname(dirname(__FILE__)) . '/controllers/auth/auth.data.php';
 
 use \Respect\Validation\Validator as v;
 
@@ -35,7 +35,7 @@ class APIAuth {
            !v::key('apiToken', v::stringType())->validate($app->request->post())) {
             return false;
         }
-        $user = UserData::selectUserByIdentifierToken($app->request->post('apiKey'));
+        $user = AuthData::selectUserByIdentifierToken($app->request->post('apiKey'));
         if(!$user) {
             return "user";
         }

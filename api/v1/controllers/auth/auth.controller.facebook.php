@@ -128,7 +128,7 @@ class AuthControllerFacebook {
             return array('registered' => false, 'msg' => 'Facebook signup failed. You are not logged into Facebook.', 'token' => $token, 'profile' => $profile, 'post' => $post, 'cookie' => $_COOKIE);
         }
          */
-        $existing = UserData::selectUserByEmail($post['email']);
+        $existing = AuthData::selectUserByEmail($post['email']);
         if($existing) { 
             return array('registered' => false, 'msg' => 'Facebook signup failed. A user with that email already exists.');      
         }
@@ -139,9 +139,9 @@ class AuthControllerFacebook {
             ':name_last' => $post['nameLast'],
             ':facebook_id' => $post['facebookId']
         );
-        $userId = UserData::insertFacebookUser($validUser);
+        $userId = AuthData::insertFacebookUser($validUser);
         if($userId) {
-            $user = UserData::selectUserById($userId);
+            $user = AuthData::selectUserById($userId);
             if(!$user) { 
                 return array('registered' => false, 'msg' => 'Facebook signup failed. Could not select user.');    
             }
