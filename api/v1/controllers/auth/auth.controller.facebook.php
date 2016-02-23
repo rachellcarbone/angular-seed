@@ -1,4 +1,5 @@
 <?php namespace API;
+require_once dirname(__FILE__) . '/auth.controller.native.php';
 
 use \Respect\Validation\Validator as v;
 
@@ -112,7 +113,9 @@ class AuthControllerFacebook {
         nameLast:Cantyoutell
         timezone:-5
      */
-    static function signup($post) {
+    static function signup($app) {
+        $post = $app->request->post();
+        
         if(!v::key('accessToken', v::stringType())->validate($post) || 
            !v::key('facebookId', v::stringType())->validate($post) || 
            !v::key('nameFirst', v::stringType())->validate($post) || 
@@ -145,30 +148,22 @@ class AuthControllerFacebook {
             if(!$user) { 
                 return array('registered' => false, 'msg' => 'Facebook signup failed. Could not select user.');    
             }
-            $user->apiKey = hash('sha512', uniqid());
-            $user->apiToken = hash('sha512', uniqid());
-            $hours = self::login_getSessionExpirationInHours($post);
-        
-            // Congrats - you're logged in!
-            AuthData::insertAuthToken(array(
-                ':user_id' => $user->id,
-                ':identifier' => $user->apiKey,
-                ':token' => password_hash($user->apiToken, PASSWORD_DEFAULT),
-                ':expires' => date('Y-m-d H:i:s', time() + ($hours * 60 * 60))
-            ));
             
-            // Send the session life back (in hours) for the cookies
-            return array('registered' => true, 'user' => $user, 'sessionLifeHours' => $hours);
+            $token = AuthControllerNative::createAuthToken($app, $user->id);
+            if($token) {
+                $found = array('user' => $user);
+                $found['user']->apiKey = $token['apiKey'];
+                $found['user']->apiToken = $token['apiToken'];
+                $found['sessionLifeHours'] = $token['sessionLifeHours'];
+                $found['registered'] = true;
+
+                // Send the session life back (in hours) for the cookies
+                return $found;
+            } else {
+                return array('registered' => false, 'msg' => 'Facebook Signup failed to creat auth token.');
+            }
         }
         return array('registered' => false, 'msg' => 'Facebook signup failed. Could not save user.');
         
-    }
-    
-    private static function login_getSessionExpirationInHours($post) {
-        $remember = (v::key('remember', v::stringType())->validate($post)) ? 
-                boolval($post['remember']) : false;
-        
-        // TODO: Change this to use config var
-        return (!$remember) ? 1 : 3 * 24; // 1 Hours or 3 days if remember was checked
     }
 }

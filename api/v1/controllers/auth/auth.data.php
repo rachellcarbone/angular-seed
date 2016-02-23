@@ -3,9 +3,9 @@
 
 class AuthData {
     
-    public static function insertAuthToken($validToken) {
-        return DBConn::insert('INSERT INTO ' . DBConn::prefix() . 'tokens_auth(identifier, token, user_id, expires) '
-                . 'VALUES (:identifier, :token, :user_id, :expires);', $validToken);
+    static function insertAuthToken($validToken) {
+        return DBConn::insert('INSERT INTO ' . DBConn::prefix() . 'tokens_auth(identifier, token, user_id, expires, ip_address, user_agent) '
+                . 'VALUES (:identifier, :token, :user_id, :expires, :ip_address, :user_agent);', $validToken);
     }
     
     static function deleteAuthToken($identifier) {

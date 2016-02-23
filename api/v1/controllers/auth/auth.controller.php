@@ -16,17 +16,21 @@ class AuthController {
      * apiKey, apiToken
      */
     static function isAuthenticated($app) {
-        $found = AuthControllerNative::isAuthenticated($app->request->post());
+        $found = AuthControllerNative::isAuthenticated($app);
         if($found['authenticated']) {
             return $app->render(200, $found);
-        } 
+        }  else {
+            return $app->render(401, "Unauthenticated");
+        }
         
-        $fb = AuthControllerFacebook::isAuthenticated($app->request->post());
+        /*
+        $fb = AuthControllerFacebook::isAuthenticated($app);
         if($fb) {
             return $app->render(222, $found);
         } else {
             return $app->render(400, $found);
         }
+        */
     }
             
     ///// 
@@ -37,7 +41,7 @@ class AuthController {
      * email, nameFirst, nameLast, password
      */
     static function signup($app) {
-        $result = AuthControllerNative::signup($app->request->post());
+        $result = AuthControllerNative::signup($app);
         if($result['registered']) {
             return $app->render(200, $result);
         } else {
@@ -46,7 +50,7 @@ class AuthController {
     }
     
     static function facebookSignup($app) {
-        $result = AuthControllerFacebook::signup($app->request->post());
+        $result = AuthControllerFacebook::signup($app);
         if($result['registered']) {
             return $app->render(200, $result);
         } else {
@@ -62,7 +66,7 @@ class AuthController {
      * email, password, remember
      */
     static function login($app) {
-        $result = AuthControllerNative::login($app->request->post());
+        $result = AuthControllerNative::login($app);
         if($result['authenticated']) {
             return $app->render(200, $result);
         } else {
@@ -83,7 +87,7 @@ class AuthController {
      * logout (apiKey)
      */
     static function logout($app) {
-        if(AuthControllerNative::logout($app->request->post())) {
+        if(AuthControllerNative::logout($app)) {
             return $app->render(200, array('msg' => "User sucessfully logged out." ));
         } else {
             return $app->render(400, array('msg' => "User could not be logged out. Check your parameters and try again." ));
@@ -97,7 +101,7 @@ class AuthController {
     
     // TODO: Add this to Cron Job
     static function deleteExpiredAuthTokens($app) {
-        AuthData::deleteExpiredAuthTokens($app->request->post());
+        AuthData::deleteExpiredAuthTokens($app);
         return $app->render(200, array('msg' => "Deleted expired auth tokens." ));
     }
     
