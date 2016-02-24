@@ -138,10 +138,13 @@ class AuthControllerNative {
             return array('authenticated' => false, 'msg' => 'Login failed. Check your parameters and try again.');
         }
         
+        // Validate the user email and password
         $found = self::login_validateFoundUser($post);
         if(!$found['authenticated']) { 
             return $found;
         }
+        
+        // Create logged in token
         $token = self::createAuthToken($app, $found['user']->id);
         if($token) {
             $found['user']->apiKey = $token['apiKey'];
@@ -151,7 +154,7 @@ class AuthControllerNative {
             // Send the session life back (in hours) for the cookies
             return $found;
         } else {
-            return array('registered' => false, 'msg' => 'Signup failed to creat auth token.');   
+            return array('authenticated' => false, 'msg' => 'Login failed to create token.');   
         }
     }
     

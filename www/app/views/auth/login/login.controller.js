@@ -7,8 +7,11 @@
  */
 
 angular.module('app.auth.login', [])
-    .controller('AuthLoginCtrl', ['$scope', '$state', '$log', 'AuthService',
-    function ($scope, $state, $log, AuthService) {
+    .controller('AuthLoginCtrl', ['$scope', '$state', 'AuthService',
+    function ($scope, $state, AuthService) {
+        
+    /* Used to restrict alert bars */
+    $scope.alertProxy = {};
 
     $scope.results = [];
 
@@ -26,21 +29,19 @@ angular.module('app.auth.login', [])
 
         if($scope.form.login.$valid) {
             AuthService.login($scope.credentials).then(function(results) {
-                $log.debug(results);
             }, function(error) {
-                $log.debug(error);
+                $scope.alertProxy.error(error);
             });
         } else {
             $scope.form.login.$setDirty();
-            console.log("Nope");
+            $scope.alertProxy.error('Please fill in both fields.');
         }
     };
 
     $scope.buttonFacebookLogin = function() {
-        AuthService.facebookLogin().then(function (results) {
-            $log.debug(results);
+        AuthService.facebookLogin($scope.credentials.remember).then(function (results) {
         }, function (error) {
-            $log.debug(error);
+            $scope.alertProxy.error(error);
         });
     };
 

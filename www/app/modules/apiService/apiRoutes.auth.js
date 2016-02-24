@@ -19,6 +19,23 @@ angular.module('apiRoutes.auth', [])
 
         return API.post('auth/login/', credentials, 'System unable to login.');
     };
+
+    api.postFacebookLogin = function(user) {
+        if(!user.accessToken || 
+                !user.facebookId || 
+                !user.nameFirst || 
+                !user.nameLast || 
+                !user.email || 
+                !user.link || 
+                !user.locale || 
+                !user.timezone || 
+                !user.ageRange) {
+            return API.reject('Invalid credentials please verify your information and try again.');
+        }
+        user.remember = user.remember|| false;
+
+        return API.post('auth/login/facebook/', user, 'System unable to login.');
+    };
     
     api.postSignup = function(newUser) {
         if(!newUser.password || 

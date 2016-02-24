@@ -3,6 +3,25 @@
 
 class AuthData {
     
+  
+    static function insertUser($validUser) {
+        $userId = DBConn::insert("INSERT INTO " . DBConn::prefix() . "users(name_first, name_last, email, password) "
+                . "VALUES (:name_first, :name_last, :email, :password);", $validUser);
+        if($userId) {
+            GroupData::addDefaultGroupToUser($userId);
+        }
+        return $userId;
+    }
+  
+    static function insertFacebookUser($validUser) {
+        $userId = DBConn::insert("INSERT INTO " . DBConn::prefix() . "users(name_first, name_last, email, facebook_id) "
+                . "VALUES (:name_first, :name_last, :email, :facebook_id);", $validUser);
+        if($userId) {
+            GroupData::addDefaultGroupToUser($userId);
+        }
+        return $userId;
+    }
+    
     static function insertAuthToken($validToken) {
         return DBConn::insert('INSERT INTO ' . DBConn::prefix() . 'tokens_auth(identifier, token, user_id, expires, ip_address, user_agent) '
                 . 'VALUES (:identifier, :token, :user_id, :expires, :ip_address, :user_agent);', $validToken);
@@ -21,7 +40,9 @@ class AuthData {
         return DBConn::executeQuery('DELETE FROM ' . DBConn::prefix() . 'tokens_auth WHERE expires < NOW();');
     }
     
-    
+    static function updateUserFacebookId($validUser) {
+        return DBConn::update("UPDATE " . DBConn::prefix() . "users SET facebook_id = :facebook_id WHERE id = :id;", $validUser);
+    }
     
     static function selectUserById($id) {
         $user = DBConn::selectOne("SELECT id, name_first as nameFirst, name_last as nameLast, email "
@@ -31,6 +52,18 @@ class AuthData {
             $user->roles = DBConn::selectAll("SELECT gr.auth_role_id FROM " . DBConn::prefix() . "auth_lookup_user_group AS ug "
                     . "JOIN " . DBConn::prefix() . "auth_lookup_group_role AS gr ON ug.auth_group_id = gr.auth_group_id "
                     . "WHERE ug.user_id = :id;", array(':id' => $id), \PDO::FETCH_COLUMN);
+        }
+        return $user;
+    }
+    
+    static function selectUserByFacebookId($facebookId) {
+        $user = DBConn::selectOne("SELECT id, name_first as nameFirst, name_last as nameLast, email "
+                . "FROM " . DBConn::prefix() . "users WHERE facebook_id = :facebook_id LIMIT 1;", array(':facebook_id' => $facebookId));
+        if($user) {
+            $user->displayName = $user->nameFirst;
+            $user->roles = DBConn::selectAll("SELECT gr.auth_role_id FROM " . DBConn::prefix() . "auth_lookup_user_group AS ug "
+                    . "JOIN " . DBConn::prefix() . "auth_lookup_group_role AS gr ON ug.auth_group_id = gr.auth_group_id "
+                    . "WHERE ug.user_id = :id;", array(':id' => $user->id), \PDO::FETCH_COLUMN);
         }
         return $user;
     }
@@ -60,23 +93,5 @@ class AuthData {
                     . "WHERE ug.user_id = :id;", array(':id' => $user->id), \PDO::FETCH_COLUMN);
         }
         return $user;
-    }
-  
-    static function insertUser($validUser) {
-        $userId = DBConn::insert("INSERT INTO " . DBConn::prefix() . "users(name_first, name_last, email, password) "
-                . "VALUES (:name_first, :name_last, :email, :password);", $validUser);
-        if($userId) {
-            GroupData::addDefaultGroupToUser($userId);
-        }
-        return $userId;
-    }
-  
-    static function insertFacebookUser($validUser) {
-        $userId = DBConn::insert("INSERT INTO " . DBConn::prefix() . "users(name_first, name_last, email, facebook_id) "
-                . "VALUES (:name_first, :name_last, :email, :facebook_id);", $validUser);
-        if($userId) {
-            GroupData::addDefaultGroupToUser($userId);
-        }
-        return $userId;
     }
 }

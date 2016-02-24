@@ -75,8 +75,12 @@ class AuthController {
     }
     
     static function facebookLogin($app) {
-        AuthControllerFacebook::login($app);
-        return $app->render(200, array('msg' => "Deleted expired auth tokens." ));
+        $result = AuthControllerFacebook::login($app);
+        if($result['authenticated']) {
+            return $app->render(200, $result);
+        } else {
+            return $app->render(401, $result);
+        }
     }
             
     ///// 

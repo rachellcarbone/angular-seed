@@ -102,6 +102,51 @@ class AuthControllerFacebook {
         return $response->getGraphUser();
     }
     
+    static function login($app) {
+        // Get Post Data
+        $post = $app->request->post();
+        
+        // Validate Sent Input
+        $valid = self::validateFacebookProfile($post);
+        if($valid !== true) {
+            return array('authenticated' => false, 'msg' => 'Facebook login failed. Check your parameters and try again.');
+        }
+        
+        // Look for user with that facebook id
+        $existing = AuthData::selectUserByFacebookId($post['facebookId']);
+        if(!$existing) {         
+            // Look for user with that email
+            $emailExists = AuthData::selectUserByEmail($post['email']);
+            if(!$emailExists) { 
+                /// FAIL - If a user with that email already exists
+                return array('authenticated' => false, 'msg' => 'Login failed. No user with that Facebook account exists.');  
+            }
+                
+            $facebookAdded = AuthData::updateUserFacebookId(array(':id' => $emailExists->id, ':facebook_id' => $post['facebookId']));
+            if(!$facebookAdded) {
+                /// FAIL - If a user with that email already exists
+                return array('authenticated' => false, 'msg' => 'Login failed. No user with that Facebook account exists.');  
+            }
+            unset($emailExists->password);
+            $existing = $emailExists;
+        }
+        
+        // Create logged in token
+        $token = AuthControllerNative::createAuthToken($app, $existing->id);
+        if($token) {
+            $found = array('user' => $existing);
+            $found['user']->apiKey = $token['apiKey'];
+            $found['user']->apiToken = $token['apiToken'];
+            $found['sessionLifeHours'] = $token['sessionLifeHours'];
+            $found['authenticated'] = true;
+
+            // Send the session life back (in hours) for the cookies
+            return $found;
+        } else {
+            return array('authenticated' => false, 'msg' => 'Facebook login failed to create token.');   
+        }
+    }
+    
     /*
      * Incoming
      * ageRange:{"min":21}
@@ -118,9 +163,9 @@ class AuthControllerFacebook {
         $post = $app->request->post();
         
         // Validate Sent Input
-        $valid = self::signup_validateSentParameters($post);
+        $valid = self::validateFacebookProfile($post);
         if($valid !== true) {
-            return array('registered' => false, 'msg' => $valid);
+            return array('registered' => false, 'msg' => 'Facebook signup failed. Check your parameters and try again.');
         }
         
         /*
@@ -181,16 +226,11 @@ class AuthControllerFacebook {
     /*
      * return String|bool Failed message or true 
      */
-    private function signup_validateSentParameters($post) {
-        if(!v::key('accessToken', v::stringType())->validate($post) || 
-           !v::key('facebookId', v::stringType())->validate($post) || 
-           !v::key('nameFirst', v::stringType())->validate($post) || 
-           !v::key('nameLast', v::stringType())->validate($post) || 
-           !v::key('email', v::email())->validate($post)) {
-            // Validate input parameters
-            return 'Facebook signup failed. Check your parameters and try again.';
-        } else {
-            return true;
-        }
+    private function validateFacebookProfile($post) {
+        return (v::key('accessToken', v::stringType())->validate($post) || 
+           v::key('facebookId', v::stringType())->validate($post) || 
+           v::key('nameFirst', v::stringType())->validate($post) || 
+           v::key('nameLast', v::stringType())->validate($post) || 
+           v::key('email', v::email())->validate($post));
     }
 }
