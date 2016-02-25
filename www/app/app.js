@@ -14,6 +14,7 @@ angular.module('theApp', [
     'datatables.bootstrap',
     'ngCookies',
     'ngMessages',
+    'angular-md5',
     'api.v1',
     'rcDirectives',
     'rcCart',
