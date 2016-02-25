@@ -36,6 +36,15 @@ angular.module('apiRoutes.users', [])
         return API.post('user/update/' + user.id, user, 'System unable to save user.');
     };
 
+    api.changePassword = function(password) {
+        if(angular.isUndefined(password.userId) ||
+                angular.isUndefined(password.current) || angular.isUndefined(password.new)) {
+            return API.reject('Invalid password. Please check your parameters and try again.');
+        }
+
+        return API.post('user/update/password/', password, 'System unable to save user.');
+    };
+
     api.deleteUser = function(id) {
         if(angular.isUndefined(id)) {
             return API.reject('Invalid user. Please check your parameters and try again.');

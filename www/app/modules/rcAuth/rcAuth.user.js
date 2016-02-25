@@ -17,20 +17,35 @@ angular.module('rcAuth.user', [])
     
     // Validate that an object is a valid user object
     self.validateUser = function(user, session) {
-        return (typeof(user) !== 'undefined' &&
-                typeof(user.id) !== 'undefined' &&
-                typeof(user.displayName) !== 'undefined' &&
-                typeof(user.email) !== 'undefined' && 
-                typeof(user.roles) !== 'undefined' &&
-                typeof(user.apiKey) !== 'undefined' &&
-                typeof(user.apiToken) !== 'undefined');
+        return (angular.isDefined(user.id) &&
+                angular.isDefined(user.displayName) &&
+                angular.isDefined(user.nameFirst) &&
+                angular.isDefined(user.nameLast) &&
+                angular.isDefined(user.email) && 
+                angular.isDefined(user.roles));
     };
     
     // Create a user session
     self.create = function(user) {
         // Validate that the sent object is a valid user
+        if(self.validateUser(user) &&
+            angular.isDefined(user.apiKey) &&
+            angular.isDefined(user.apiToken)) {
+            // Set the user session
+            self.user = user;
+            return self.user;
+        } else {
+            return false;
+        }
+    };
+    
+    // Create a user session
+    self.updateUser = function(user) {
+        // Validate that the sent object is a valid user
         if(self.validateUser(user)) {
             // Set the user session
+            user.apiKey = self.user.apiKey;
+            user.apiToken = self.user.apiToken;
             self.user = user;
             return self.user;
         } else {
@@ -82,6 +97,7 @@ angular.module('rcAuth.user', [])
             create : self.create,
             destroy : self.destroy,
             get : self.get,
+            updateUser : self.updateUser,
             getAuthCredentials: self.getAuthCredentials,
             id : self.id,
             displayName : self.displayName,

@@ -14,6 +14,13 @@ class AuthRoutes {
         $app->map("/admin/auth/delete/expired-tokens/", $authenticateForRole('admin'), function () use ($app) {
             AuthController::deleteExpiredAuthTokens($app);
         })->via(['DELETE', 'POST']);
+
+        /*
+         * id, nameFirst, nameLast, email
+         */
+        $app->post("/user/update/password/", $authenticateForRole('member'), function () use ($app) {
+            AuthController::changeUserPassword($app);
+        });
         
         
         //* /auth/ routes - publicly accessable        

@@ -10,6 +10,13 @@ class UserRoutes {
         $app->map("/user/get/:userId/", $authenticateForRole('member'), function ($userId) use ($app) {
             UserController::selectUser($app, $userId);
         })->via('GET', 'POST');
+
+        /*
+         * id, nameFirst, nameLast, email
+         */
+        $app->post("/update/:userId/", $authenticateForRole('member'), function ($userId) use ($app) {
+            UserController::updateUser($app, $userId);
+        });
             
         //* /user/ routes - admin users only
 
@@ -20,13 +27,6 @@ class UserRoutes {
              */
             $app->post("/insert/", function () use ($app) {
                 UserController::insertUser($app);
-            });
-
-            /*
-             * id, nameFirst, nameLast, email
-             */
-            $app->post("/update/:userId/", function ($userId) use ($app) {
-                UserController::updateUser($app, $userId);
             });
 
             /*

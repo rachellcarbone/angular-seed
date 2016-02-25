@@ -6,76 +6,135 @@
     
     <div class="row">
         <div class="col-xs-12 col-sm-3 col-md-4 align-center">
-            <img src="" 
-                 class="img-responsive img-thumbnail top" 
-                 data-img-height="200"
-                 data-img-width="200"
-                 data-img-category="people"
-                 data-placehold-broken-img/>
+            <img src="http://www.gravatar.com/avatar/{{user.email | gravatar}}?s=200"
+                 class="img-responsive img-thumbnail top"/>
+            <p class="text-muted">Update at <a href="http://www.gravatar.com/" target="_blank">gravatar.com</a>.</p>
         </div>
         <div class="col-xs-12 col-sm-9 col-md-8">
-
+                
             <h4>General</h4>
             
-            <form name="form.general" class="form-horizontal">
-                
+            <form ng-if="!editGeneralMode" class="form-horizontal">
+                 
                 <div class="form-group">
                     <label for="nameFirst" class="col-sm-3 control-label">First Name</label>
                     <div class="col-sm-9">
-                        <input type="text" class="form-control" name="nameFirst">
+                        <p class="form-control-static">{{user.nameFirst}}</p>
                     </div>
                 </div>
                 
                 <div class="form-group">
                     <label for="nameLast" class="col-sm-3 control-label">Last Name</label>
                     <div class="col-sm-9">
-                        <input type="text" class="form-control" name="nameLast">
+                        <p class="form-control-static">{{user.nameLast}}</p>
                     </div>
                 </div>
                 
                 <div class="form-group">
                     <label for="email" class="col-sm-3 control-label">Email</label>
                     <div class="col-sm-9">
-                        <input type="email" class="form-control" name="email">
+                        <p class="form-control-static">{{user.email}}</p>
+                    </div>
+                </div>
+                 
+                <div class="form-group text-right">
+                    <div class="col-xs-12">
+                        <button ng-if="!editPasswordMode" ng-click="buttonShowChangePassword()" type="button" class="btn btn-default">Change Password</button>
+                        <button ng-if="!editPasswordMode" ng-click="buttonShowGeneralEdit()" type="button" class="btn btn-primary">Edit</button>
+                    </div>
+                </div>
+                 
+            </form>
+            
+            <form ng-if="editGeneralMode" name="form.general" class="form-horizontal">
+            
+                <div data-rc-bootstrap-alerts="generalFormAlerts"></div>
+                
+                <div class="form-group">
+                    <label for="nameFirst" class="col-sm-3 control-label">First Name</label>
+                    <div class="col-sm-9">
+                        <input ng-model="editingUser.nameFirst" type="text" class="form-control" name="nameFirst" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="nameLast" class="col-sm-3 control-label">Last Name</label>
+                    <div class="col-sm-9">
+                        <input ng-model="editingUser.nameLast" type="text" class="form-control" name="nameLast" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email" class="col-sm-3 control-label">Email</label>
+                    <div class="col-sm-9">
+                        <input ng-model="editingUser.email" type="email" class="form-control" name="email" required>
                     </div>
                 </div>
                 
                 <div class="form-group text-right">
                     <div class="col-xs-12">
-                        <button type="button" class="btn btn-primary">Save General</button>
+                        <button ng-click="buttonCancel()" type="button" class="btn btn-default">Cancel</button>
+                        <button ng-click="buttonSave()" type="button" class="btn btn-primary">Save General</button>
                     </div>
                 </div>
                 
             </form>
             
-            <h4 class="title">Password</h4>
-                
-            <form name="form.password" class="form-horizontal">
+            <form ng-if="editPasswordMode" name="form.password" class="form-horizontal">
+            
+                <h4 class="title">Password</h4>
+            
+                <div data-rc-bootstrap-alerts="passwordFormAlerts"></div>
                 
                 <div class="form-group">
                     <label for="password" class="col-sm-3 control-label">Current Password</label>
                     <div class="col-sm-9">
-                        <input type="password" class="form-control" name="password">
+                        <input ng-model="changePassword.current" type="password" class="form-control" name="password" required>
+                    </div>
+                </div>
+                
+                <div ng-if="showPasswordRules" class="form-group">
+                    <div class="col-sm-9 col-sm-push-3">
+                        <div class="alert alert-info" role="alert">
+                            <p><strong>Passwords Must:</strong></p>
+                            <ul>
+                                <li>Be at least 8 characters in length.</li>
+                                <li>Contain at least one letter and number.</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
                 
                 <div class="form-group">
                     <label for="newPassword" class="col-sm-3 control-label">New Password</label>
                     <div class="col-sm-9">
-                        <input type="password" class="form-control" name="newPassword">
+                        <input ng-model="changePassword.new" 
+                               ng-change="onChangeValidatePassword()" 
+                               type="password" class="form-control" name="newPassword" required>
+                    </div>
+                </div>
+                
+                <div ng-if="showPasswordMissmatch" class="form-group">
+                    <div class="col-sm-9 col-sm-push-3">
+                        <div class="alert alert-info" role="alert">
+                            <p>Passwords must match</p>
+                        </div>
                     </div>
                 </div>
                 
                 <div class="form-group">
                     <label for="confirmPassword" class="col-sm-3 control-label">Confirm Password</label>
                     <div class="col-sm-9">
-                        <input type="password" class="form-control" name="confirmPassword">
+                        <input ng-model="changePassword.confirm" 
+                               ng-change="onChangeValidateConfirmPassword()" 
+                               type="password" class="form-control" name="confirmPassword" required>
                     </div>
                 </div>
                 
                 <div class="form-group text-right">
                     <div class="col-xs-12">
-                        <button type="button" class="btn btn-primary">Change Password</button>
+                        <button ng-click="buttonCancel()" type="button" class="btn btn-default">Cancel</button>
+                        <button ng-click="buttonChangePassword()" type="button" class="btn btn-primary">Change Password</button>
                     </div>
                 </div>
                 
