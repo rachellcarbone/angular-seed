@@ -108,7 +108,7 @@ class AuthControllerNative {
     /*
      * return String|bool Failed message or true 
      */
-    private function signup_validateSentParameters($post) {
+    private static function signup_validateSentParameters($post) {
         if(!v::key('email', v::email())->validate($post) || 
            !v::key('nameFirst', v::stringType())->validate($post) || 
            !v::key('nameLast', v::stringType())->validate($post) || 
