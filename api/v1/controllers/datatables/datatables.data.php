@@ -3,12 +3,12 @@
 
 class DatatablesData {
     
-    public static function selectUsers() {
+    static function selectUsers() {
         $qUsers = DBConn::executeQuery("SELECT u.id, u.name_first AS nameFirst, u.name_last AS nameLast, "
                 . "u.email, u.email_verified AS verified, u.created, u.last_updated AS lastUpdated, "
                 . "u.disabled, CONCAT(u1.name_first, ' ', u1.name_last) AS updatedBy "
                 . "FROM " . DBConn::prefix() . "users AS u "
-                . "JOIN " . DBConn::prefix() . "users AS u1 ON u1.id = u.last_updated_by ORDER BY u.id;");
+                . "LEFT JOIN " . DBConn::prefix() . "users AS u1 ON u1.id = u.last_updated_by ORDER BY u.id;");
         
         $qGroups = DBConn::preparedQuery("SELECT grp.id, grp.group, grp.desc, look.created AS assigned "
                 . "FROM " . DBConn::prefix() . "auth_groups AS grp "
@@ -24,7 +24,7 @@ class DatatablesData {
         return $users;
     }
     
-    public static function selectUserGroups() {
+    static function selectUserGroups() {
         $qGroups = DBConn::executeQuery("SELECT g.id, g.group, g.slug AS identifier, g.desc, g.created, g.last_updated AS lastUpdated, "
                 . "CONCAT(u1.name_first, ' ', u1.name_last) AS createdBy, "
                 . "CONCAT(u2.name_first, ' ', u2.name_last) AS updatedBy "
@@ -48,7 +48,7 @@ class DatatablesData {
         return $groups;
     }
     
-    public static function selectGroupRoles() {
+    static function selectGroupRoles() {
         $qRoles = DBConn::executeQuery("SELECT r.id, r.role, r.slug AS identifier, r.desc, r.created, r.last_updated AS lastUpdated, "
                 . "CONCAT(u1.name_first, ' ', u1.name_last) AS createdBy, "
                 . "CONCAT(u2.name_first, ' ', u2.name_last) AS updatedBy "
@@ -81,7 +81,7 @@ class DatatablesData {
         return $roles;
     }
     
-    public static function selectConfigVariables() {
+    static function selectConfigVariables() {
         return DBConn::selectAll("SELECT c.id, c.name, c.value, c.created, c.last_updated AS lastUpdated, c.disabled, c.indestructible, c.locked, "
                 . "CONCAT(u1.name_first, ' ', u1.name_last) AS createdBy, "
                 . "CONCAT(u2.name_first, ' ', u2.name_last) AS updatedBy "
@@ -90,7 +90,7 @@ class DatatablesData {
                 . "JOIN " . DBConn::prefix() . "users AS u2 ON u2.id = c.last_updated_by ORDER BY c.name;");
     }
     
-    public static function selectVisibilityFields() {
+    static function selectVisibilityFields() {
         $qFields = DBConn::executeQuery("SELECT e.id, e.identifier, e.type, e.desc, e.initialized, e.created, e.last_updated AS lastUpdated, "
                 . "CONCAT(u1.name_first, ' ', u1.name_last) AS createdBy, CONCAT(u2.name_first, ' ', u2.name_last) AS updatedBy "
                 . "FROM " . DBConn::prefix() . "auth_fields AS e "
