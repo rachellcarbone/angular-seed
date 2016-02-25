@@ -226,7 +226,7 @@ class AuthControllerFacebook {
     /*
      * return String|bool Failed message or true 
      */
-    private function validateFacebookProfile($post) {
+    private static function validateFacebookProfile($post) {
         return (v::key('accessToken', v::stringType())->validate($post) || 
            v::key('facebookId', v::stringType())->validate($post) || 
            v::key('nameFirst', v::stringType())->validate($post) || 
