@@ -1,0 +1,33 @@
+{
+	"files": {
+		"less/main.less": {
+			"engines": [
+				{
+					"compiler": "less",
+					"output": "../styles.css",
+					"options": {
+						"compress": false,
+						"ieCompat": false,
+						"strictMath": false,
+						"strictUnits": false,
+						"javascriptEnabled": false,
+						"sourcemap": true
+					}
+				}
+			],
+			"sources": [
+				"base-forms.less",
+				"base-images.less",
+				"base-tables.less",
+				"base-typography.less",
+				"page-footer.less",
+				"page-header.less",
+				"page-layout.less",
+				"store.less",
+				"vars-animation.less",
+				"vars-colors.less",
+				"vars-mixins.less"
+			]
+		}
+	}
+}
