@@ -45,44 +45,81 @@
                 <h1>Sign Up</h1>
             </div>
             
+            <div data-rc-bootstrap-alerts="formAlerts"></div>
+            
+            <h4>Have a social media account?</h4>
+                
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" ng-model="newUser.acceptTerms" ng-true-value="true" ng-true-value="false" required> Agree to our <a ui-sref="app.public.terms" target="_blank">Terms of Use</a>
+                    </label>
+                </div>
+
+            <a ng-click="facebookSignup()" class="btn btn-block btn-social btn-facebook">
+                <span class="fa fa-facebook"></span>
+                Sign up with Facebook
+            </a>
+            
+            <hr />
+            
             <form name="form.signup" role="form" novalidate>                
                 
+                <h5>Or</h5>
+            
                 <div class="form-group">
                     <label for="nameFirst">First Name</label>
-                    <input ng-model="newUser.nameFirst" type="text" class="form-control" name="nameFirst">
+                    <input ng-model="newUser.nameFirst" type="text" class="form-control" name="nameFirst" ng-maxlength="255" required>
                 </div>
                 
                 <div class="form-group">
                     <label for="nameLast">Last Name</label>
-                    <input ng-model="newUser.nameLast" type="text" class="form-control" name="nameLast">
+                    <input ng-model="newUser.nameLast" type="text" class="form-control" name="nameLast" ng-maxlength="255" required>
                 </div>
                 
                 <div class="form-group">
                     <label for="email">Best Email</label>
-                    <input ng-model="newUser.email" type="email" class="form-control" name="email">
+                    <input ng-model="newUser.email" type="email" class="form-control" ng-maxlength="255" name="email" required>
                 </div>
-                
-                <div class="alert alert-info" role="alert">
-                    <p><strong>Passwords Must:</strong></p>
-                    <ul>
-                        <li>Be at least 8 characters in length.</li>
-                        <li>Contain at least one letter and number.</li>
-                    </ul>
+
+                <div ng-if="showPasswordRules" class="form-group">
+                    <div class="alert alert-info" role="alert">
+                        <p><strong>Passwords Must:</strong></p>
+                        <ul>
+                            <li>Be at least 8 characters in length.</li>
+                            <li>Contain at least one letter and number.</li>
+                        </ul>
+                    </div>
                 </div>
             
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input ng-model="newUser.password" type="password" class="form-control" name="password">
+                    <input ng-model="newUser.password" 
+                           ng-change="onChangeValidatePassword()" 
+                           type="password" class="form-control" ng-maxlength="100" name="password" required>
+                </div>
+                
+                <div ng-if="showPasswordMissmatch" class="form-group">
+                    <div class="alert alert-info" role="alert">
+                        <p>Passwords must match</p>
+                    </div>
                 </div>
                 
                 <div class="form-group">
                     <label for="passwordB">Confirm Password</label>
-                    <input ng-model="newUser.passwordB" type="password" class="form-control" name="passwordB">
+                    <input ng-model="newUser.passwordB" 
+                            ng-change="onChangeValidateConfirmPassword()" 
+                            type="password" class="form-control" ng-maxlength="100" name="passwordB" required>
                 </div>
                 
                 <div class="form-group">
                     <label for="referer">How did you hear about us? <small>(Google, Facebook, Email...)</small></label>
-                    <input ng-model="newUser.referer" type="text" class="form-control" name="referer">
+                    <input ng-model="newUser.referer" type="text" class="form-control" name="referer" ng-maxlength="255">
+                </div>
+                
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" ng-model="newUser.acceptTerms" ng-true-value="true" ng-true-value="false" required> Agree to our <a ui-sref="app.public.terms" target="_blank">Terms of Use</a>
+                    </label>
                 </div>
                 
                 <hr/>
@@ -104,17 +141,6 @@
                 
                 
             </form>
-
-            
-            
-            <hr />
-            
-            <h4>Already have a social media account?</h4>
-
-            <a ng-click="facebookSignup()" class="btn btn-block btn-social btn-lg btn-facebook">
-                <span class="fa fa-facebook"></span>
-                Sign up with Facebook
-            </a>
             
         </div>
         <div class="col-sm-0 col-sm-3"></div>
