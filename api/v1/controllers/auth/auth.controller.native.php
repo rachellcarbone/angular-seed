@@ -202,8 +202,17 @@ class AuthControllerNative {
     }
     
     private static function login_getSessionExpirationInHours($post) {
-        $remember = (v::key('remember', v::stringType())->validate($post)) ? 
-                boolval($post['remember']) : false;
+        $remember = false;
+        
+        if (v::key('remember')->validate($post)) {
+            // TODO: Implement cusitom boolean Respect\Validator
+            // Converting to boolean did not work well, 
+            // This allows a wider range of true false values
+            $remember = ($post['remember'] === 1 || 
+                        $post['remember'] === '1' || 
+                        $post['remember'] === true || 
+                        $post['remember'] === 'true');
+        }
         
         // TODO: Change this to use config var
         return (!$remember) ? 1 : 3 * 24; // 1 Hours or 3 days if remember was checked
