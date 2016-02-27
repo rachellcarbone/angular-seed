@@ -24,7 +24,7 @@ angular.module('AlertConfirmService', [])
             }
             
             var templateHtml = '<div class="modal-header"><h3 class="modal-title">{{header}}</h3></div>' +
-                    '<div class="modal-body">{{message}}</div>' +
+                    '<div class="modal-body">' + message + '</div>' +
                     '<div class="modal-footer"><button ng-click="buttonCancel()" class="btn btn-primary" type="button">{{buttonTextOk}}</button></div>';
             
             return $uibModal.open({
@@ -81,7 +81,7 @@ angular.module('AlertConfirmService', [])
             }
             
             var templateHtml = '<div class="modal-header"><h3 class="modal-title">{{header}}</h3></div>' +
-                    '<div class="modal-body">{{question}}</div>' +
+                    '<div class="modal-body">' + question + '</div>' +
                     '<div class="modal-footer"><button ng-click="buttonCancel()" class="btn btn-warning" type="button">{{buttonTextCancel}}</button>' +
                     '<button ng-click="buttonConfirm()" class="btn btn-danger" type="button">{{buttonTextConfirm}}</button></div>';
             
