@@ -197,13 +197,12 @@ class DBConn {
      * 
      * @return bool Returns TRUE on success or FALSE on failure.
      */
-    public static function delete($query, $data) {
+    public static function delete($query, $data = array()) {
         $pdo = self::connect();
         try {
             $q = $pdo->prepare($query);            
             $q->execute($data);
-            $effected = $q->rowCount();
-            return ($effected > 0);
+            return $q->rowCount();
         } catch (\PDOException $e) {
             self::logPDOError($q);
             return false;
