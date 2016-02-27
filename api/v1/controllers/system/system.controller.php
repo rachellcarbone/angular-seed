@@ -5,6 +5,15 @@ use \Respect\Validation\Validator as v;
 
 class SystemController {
     
+    static function cronJob($app) {
+        $data = array();
+        $data['deleteExpiredAuthTokens'] = SystemData::deleteExpiredAuthTokens();
+        $data['cleanLookupGroupRole'] = SystemData::cleanLookupGroupRole();
+        $data['cleanLookupRoleField'] = SystemData::cleanLookupRoleField();
+        $data['cleanLookupRoleField'] = SystemData::cleanLookupRoleField();
+        return $app->render(200, array('msg' => "Cron complete.", 'results' => $data));
+    }
+    
     ///// 
     ///// Authentication
     ///// 

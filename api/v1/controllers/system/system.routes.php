@@ -9,6 +9,10 @@ class SystemRoutes {
             
         $app->group('/system', $authenticateForRole('admin'), function () use ($app) {
 
+            $app->map("/cron/", function () use ($app) {
+                SystemController::cronJob($app);
+            })->via(['DELETE', 'POST']);
+            
             $app->map("/auth/delete/expired-tokens/", function () use ($app) {
                 SystemController::deleteExpiredAuthTokens($app);
             })->via(['DELETE', 'POST']);
