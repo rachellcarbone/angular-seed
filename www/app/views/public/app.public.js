@@ -13,5 +13,6 @@ angular.module('app.public', [
     'app.public.layout',
     'app.public.header',
     'app.public.footer',
+    'app.public.terms',
     'app.public.tour'
 ]);

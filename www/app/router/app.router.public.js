@@ -61,6 +61,17 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
             }
         });
 
+        $stateProvider.state('app.public.terms', {
+            title: 'Terms of Use',
+            url: '/terms-of-use',
+            views: {
+                'content@app.public': {
+                    templateUrl: 'app/views/public/terms/terms.html',
+                    controller: 'PublicTermsCtrl'
+                }
+            }
+        });
+
         $stateProvider.state('app.public.tour', {
             title: 'Tour',
             url: '/tour',
