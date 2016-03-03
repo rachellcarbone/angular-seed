@@ -3,24 +3,26 @@
         <label class="for">{{inputLabel}}</label><br/>
         
         <div class="input-group">
-            <span class="input-group-btn">
-                <ng-file-input 
-                    tmpl="'/app/directives/rcFileUploads/fileInputTemplate.html'"
-                    name="logo-upload" 
-                    id="logo-upload" 
-                    mode="data-url" 
-                    callback="fileInputCallback(file)"></ng-file-input>
+            <span class="input-group-btn">                
+                <button 
+                    ngf-select 
+                    ng-model="imageUpload.file" 
+                    ngf-change="fileSelectionCallback($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)"
+                    ngf-capture="'camera'"
+                    ngf-accept="'image/*'"
+                    ngf-pattern="'image/*'"
+                    class="btn btn-primary btn-file" > Select Picture</button>
             </span>
             <input type="text" class="form-control" value="{{imageUpload.selectedFilesLabel}}" readonly>
         </div>
         
     </div>
-
-    <div class="col-md-6" ng-if="imageUpload.photostream">
+    
+    <div class="col-md-6" ng-if="imageUpload.file">
         <label>{{cropAreaLabel}}</label>
         <div class="cropArea center-block">
             <img-crop 
-                image="imageUpload.photostream"
+                image="imageUpload.file | ngfDataUrl"
                 result-image="imageUpload.imageDataUrl"
                 area-type="square"
                 result-image-size="200"
@@ -29,7 +31,7 @@
         </div>
     </div>
 
-    <div class="col-md-6" ng-if="imageUpload.photostream">
+    <div class="col-md-6" ng-if="imageUpload.file">
         <label>{{cropPreviewLabel}}</label>
         <div class="preview-image center-block">
             <img ng-src="{{imageUpload.imageDataUrl}}" />
