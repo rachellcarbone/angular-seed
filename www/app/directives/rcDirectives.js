@@ -8,6 +8,7 @@
 
 angular.module('rcDirectives', [
     'rc.bootstrapAlerts',
+    'rc.DropDowns',
     'rc.placeholdBrokenImg',
     'rc.stateRedirectTimeout',
     'rcMessages'
