@@ -14,6 +14,8 @@ angular.module('theApp', [
     'datatables.bootstrap',
     'ngCookies',
     'ngMessages',
+    'ngFileUpload',
+    'ngImgCrop',
     'angular-md5',
     'api.v1',
     'rcDirectives',
