@@ -11,7 +11,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="/media/favicon.ico" rel="icon" type="image/x-icon" />
         
-        <title ng-bind="title">New Project Seed by Rachel L Carbone</title>
+        <title ng-bind="title">Welcome</title>
         <meta name="description" content="">
         
         <!-- Style Lib -->
@@ -36,7 +36,7 @@
 	   }(document, 'script', 'facebook-jssdk'));
 	</script>
     </head>
-    <body>
+    <body class="{{bodyClass}}">
         
         <!-- Views in Layout -->
         <div data-ui-view="layout" class="layout-view"></div>
@@ -53,6 +53,7 @@
         <script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
         <script src="bower_components/angular-datatables/dist/angular-datatables.min.js"></script>
         <script src="bower_components/angular-datatables/dist/plugins/bootstrap/angular-datatables.bootstrap.min.js"></script>
+        <script src="bower_components/angular-datatables/dist/plugins/fixedcolumns/angular-datatables.fixedcolumns.min.js"></script>
         
         <script src="bower_components/angular-cookies/angular-cookies.min.js"></script>
         <script src="bower_components/angular-messages/angular-messages.min.js"></script>
@@ -64,6 +65,7 @@
         <script src="bower_components/ng-img-crop/compile/minified/ng-img-crop.js"></script>
         <script src="bower_components/ng-facebook-api/dist/ng-facebook-api.js"></script>
         <script src="bower_components/simple-angular-file-input/dist/angular-file-input.min.js"></script>
+        <script src="bower_components/ng-file-upload/ng-file-upload-all.js"></script>
         
         <!-- App -->
         <script src="app/config/app.config.js"></script>
