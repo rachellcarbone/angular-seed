@@ -7,6 +7,7 @@
  */
 
 angular.module('rcDirectives', [
+    'rc.FileUploads',
     'rc.bootstrapAlerts',
     'rc.DropDowns',
     'rc.placeholdBrokenImg',

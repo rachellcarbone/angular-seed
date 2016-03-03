@@ -1,0 +1,38 @@
+<div class="image-editior">
+    <div class="col-xs-12 form-group">
+        <label class="for">{{inputLabel}}</label><br/>
+        
+        <div class="input-group">
+            <span class="input-group-btn">
+                <ng-file-input 
+                    tmpl="'/app/directives/rcFileUploads/fileInputTemplate.html'"
+                    name="logo-upload" 
+                    id="logo-upload" 
+                    mode="data-url" 
+                    callback="fileInputCallback(file)"></ng-file-input>
+            </span>
+            <input type="text" class="form-control" value="{{imageUpload.selectedFilesLabel}}" readonly>
+        </div>
+        
+    </div>
+
+    <div class="col-md-6" ng-if="imageUpload.photostream">
+        <label>{{cropAreaLabel}}</label>
+        <div class="cropArea center-block">
+            <img-crop 
+                image="imageUpload.photostream"
+                result-image="imageUpload.imageDataUrl"
+                area-type="square"
+                result-image-size="200"
+                result-image-format="image/png"
+                result-image-quality="1"></img-crop>
+        </div>
+    </div>
+
+    <div class="col-md-6" ng-if="imageUpload.photostream">
+        <label>{{cropPreviewLabel}}</label>
+        <div class="preview-image center-block">
+            <img ng-src="{{imageUpload.imageDataUrl}}" />
+        </div>
+    </div>
+</div>
