@@ -189,6 +189,9 @@ form .form-control.ng-dirty.ng-invalid {
   height: 200px;
   width: 100%;
 }
+.image-editior .preview-image img {
+  margin: 0 auto;
+}
 /*
  * Image Styles
  * 
