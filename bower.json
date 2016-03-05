@@ -34,6 +34,7 @@
     "bootstrap-social": "~4.12.0",
     "angular-md5": "~0.1.10",
     "ng-img-crop": "ngImgCrop#^0.3.2",
-    "simple-angular-file-input": "*"
+    "simple-angular-file-input": "*",
+    "smalot-bootstrap-datetimepicker": "^2.3.8"
   }
 }
