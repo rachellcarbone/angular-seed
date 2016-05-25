@@ -60,13 +60,36 @@ angular.module('app.modal.editUser', [])
             'nameFirst' : '',
             'nameLast' : '',
             'email' : '',
+            'phone' : '',
             'disabled' : 'false'
         };
+        $scope.saved.disabled = (angular.isUndefined(editing.disabled) || editing.disabled === null || !editing.disabled) ? 'false' : 'true';
 
         /* Item to display and edit */
         $scope.editing = angular.copy($scope.saved);
-        $scope.editing.disabled = (angular.isUndefined($scope.editing.disabled) || $scope.editing.disabled === null) ? false : $scope.editing.disabled;
 
+        $scope.buttonChangeDisabled = function() {
+            // Changing the disable flage to a new value
+            if($scope.saved.disabled !== $scope.editing.disabled) {
+                if($scope.editing.disabled === 'true') {
+                    AlertConfirmService.confirm('Are you sure you want to disable this user? They will not be able to log into the app. (Note - Change takes effect only after saving the user.)')
+                        .result.then(function () { }, function (error) {
+                            $scope.editing.disabled = 'false';
+                        });
+                } else {
+                    AlertConfirmService.confirm('Are you sure you want to enable this user? They will now be able to log into, and use, the app. (Note - Change takes effect only after saving the user.)')
+                        .result.then(function () {  }, function (error) {
+                            $scope.editing.disabled = 'true';
+                        });
+                }
+            } else {
+                var userState = ($scope.editing.disabled === 'true') ? "The user is already disabled and will remain disabled after save. This user cannot login to the app." :
+                        "The user is already enabled and will remain enabled after save. This user can login to the app.";
+                var alertTitle = ($scope.editing.disabled === 'true') ? "User is Disabled." : "User is Enabled.";
+                AlertConfirmService.alert(userState, alertTitle);
+            }
+        };
+        
         /* Click event for the Add / New button */
         $scope.buttonNew = function() {
             ApiRoutesUsers.addUser($scope.editing).then(
@@ -87,7 +110,7 @@ angular.module('app.modal.editUser', [])
                         }, function (error) {
                             $scope.alertProxy.error(error);
                         });
-                }, function () {
+                }, function (error) {
                     $log.info(error);
                 });
         };

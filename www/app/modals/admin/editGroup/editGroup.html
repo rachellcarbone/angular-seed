@@ -1,7 +1,7 @@
 <div class="modal-header">
     <h3 ng-if="newMode" class="modal-title">New User Group</h3>
-    <h3 ng-if="!newMode && editMode" class="modal-title">Edit User Group #{{saved.id}}</h3>
-    <h3 ng-if="!newMode && !editMode" class="modal-title">User Group #{{saved.id}}</h3>
+    <h3 ng-if="!newMode && editMode" class="modal-title">Edit User Group #{{saved.id}} - {{saved.group}}</h3>
+    <h3 ng-if="!newMode && !editMode" class="modal-title">User Group #{{saved.id}} - {{saved.group}}</h3>
 </div>
 
 <div class="modal-body">
@@ -32,10 +32,10 @@
             </div>
         </div>
 
-        <div class="meta" ng-if="!newMode">
+        <div class="meta" ng-if="!newMode && (saved.created || saved.lastUpdated)">
             <hr/>
-            <p class="text-muted"><strong>Created:</strong> {{saved.created | formatMySQLDate}} by {{saved.createdBy}}</p>
-            <p class="text-muted"><strong>Updated:</strong> {{saved.lastUpdated | formatMySQLDate}} by {{saved.updatedBy}}</p>
+            <p ng-show="saved.created" class="text-muted"><strong>Created:</strong> {{saved.created | formatMySQLDate}} <span ng-show="saved.createdBy">by {{saved.createdBy}}</span></p>
+            <p ng-show="saved.lastUpdated" class="text-muted"><strong>Updated:</strong> {{saved.lastUpdated | formatMySQLDate}} <span ng-show="saved.updatedBy">by {{saved.updatedBy}}</span></p>
         </div>
 
     </div>
@@ -97,9 +97,9 @@
 </div>
 
 <div ng-if="editMode" class="modal-footer">
-    <button class="btn btn-danger pull-left" ng-if="!newMode" ng-click="buttonDelete()">Delete</button>
+    <button class="btn btn-warning pull-left" ng-if="!newMode" ng-click="buttonDelete()">Delete</button>
     
-    <button class="btn btn-info" ng-click="buttonCancel()">Cancel</button>
+    <button class="btn btn-info pull-left" ng-click="buttonCancel()">Cancel</button>
     <button class="btn btn-primary" ng-if="newMode" ng-click="buttonNew()">Add</button>
     <button class="btn btn-primary" ng-if="!newMode" ng-click="buttonSave()">Save</button>
 </div>
