@@ -1,6 +1,6 @@
-<div class="image-editior">
-    <div class="col-xs-12 form-group">
-        <label class="for">{{inputLabel}}</label><br/>
+<div class="image-editior form-group row">
+    <div class="col-xs-12">
+        <label class="for">{{labelInput}}</label><br/>
         
         <div class="input-group">
             <span class="input-group-btn">                
@@ -8,18 +8,16 @@
                     ngf-select 
                     ng-model="imageUpload.file" 
                     ngf-change="fileSelectionCallback($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)"
-                    ngf-capture="'camera'"
                     ngf-accept="'image/*'"
                     ngf-pattern="'image/*'"
-                    class="btn btn-primary btn-file" > Select Picture</button>
+                    class="btn btn-primary btn-file" >{{labelBrowseButton}}</button>
             </span>
             <input type="text" class="form-control" value="{{imageUpload.selectedFilesLabel}}" readonly>
         </div>
-        
     </div>
-    
-    <div class="col-md-6" ng-if="imageUpload.file">
-        <label>{{cropAreaLabel}}</label>
+     
+    <div class="col-md-6" ng-show="imageUpload.file" style="margin: 2em 0;">
+        <label>{{labelCropArea}}</label>
         <div class="cropArea center-block">
             <img-crop 
                 image="imageUpload.file | ngfDataUrl"
@@ -31,10 +29,17 @@
         </div>
     </div>
 
-    <div class="col-md-6" ng-if="imageUpload.file">
-        <label>{{cropPreviewLabel}}</label>
+    <div class="col-md-6" ng-show="imageUpload.file" style="margin: 2em 0;">
+        <label>{{labelCropPreview}}</label>
         <div class="preview-image center-block">
-            <img ng-src="{{imageUpload.imageDataUrl}}" class="img-responsive" />
+            <img data-ng-src="{{imageUpload.imageDataUrl}}" class="img-responsive" />
+        </div>
+    </div>
+
+    <div class="col-md-6" ng-show="savedImageDataUrl && !imageUpload.file" style="margin: 2em 0;">
+        <label>{{labelSavedImage}}</label>
+        <div class="preview-image center-block">
+            <img data-ng-src="{{savedImageDataUrl}}" class="img-responsive" />
         </div>
     </div>
 </div>
