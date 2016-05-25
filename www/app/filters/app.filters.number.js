@@ -28,6 +28,6 @@ app.filter("formatMySQLDate", function () {
         if (!value) {
             return value;
         }
-        return moment(value, 'YYYY-MM-DD HH:mm:ss').format('M/D/YYYY h:mm a');
+        return moment(value, 'YYYY-MM-DD HH:mm:ss').tz('America/New_York').format('M/D/YYYY h:mm a');
     };
 });
