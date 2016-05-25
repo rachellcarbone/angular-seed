@@ -1,7 +1,10 @@
 <div class="page admin field-visibility">
     
     <div class="well well-sm pull-right">
-        <button type="button" class="btn btn-sm btn-warning"><i class="fa fa-hourglass-o"></i> Visibility Dev Mode</button>
+        <button ng-show="inVisibilityAdminMode" ng-click="toggleVisibilityAdminMode()" class="btn btn-warning" type="button">Disable Visibility Dev Mode</button>
+        <button ng-hide="inVisibilityAdminMode" ng-click="toggleVisibilityAdminMode()" class="btn btn-primary" type="button">Enable Visibility Dev Mode</button>
+
+        <button data-element-identifier="cuddle.button" ng-click="testButtonClick()" type="button" class="btn btn-sm btn-success">Test Button</button>
         
         <div class="btn-group btn-group-sm" uib-dropdown>
             <button id="split-button" type="button" class="btn btn-info"  ng-click="buttonOpenNewVisibilityFieldModal()"><i class="fa fa-plus"></i> Add Visibility Field</button>
@@ -21,7 +24,8 @@
         <h1>Auth Visibility Field's</h1>
     </div>
       
-
+    <div data-rc-bootstrap-alerts="alertProxy"></div>
+    
     <table
         data-datatable=""
         data-dt-options="dtFields.options"
