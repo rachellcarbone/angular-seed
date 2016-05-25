@@ -19,8 +19,8 @@ class UserController {
     }
     
     static function insertUser($app) {
-        if(!v::key('nameFirst', v::stringType()->length(1,255))->validate($app->request->post()) ||
-            !v::key('nameLast', v::stringType()->length(1,255), false)->validate($app->request->post()) || 
+        if(!v::key('nameFirst', v::stringType()->length(0,255))->validate($app->request->post()) ||
+            !v::key('nameLast', v::stringType()->length(0,255), false)->validate($app->request->post()) || 
             !v::key('email', v::email())->validate($app->request->post())) {
             return $app->render(400,  array('msg' => 'Invalid user. Check your parameters and try again.'));
         } else if(!self::validatePassword($app->request->post())) {
@@ -51,28 +51,40 @@ class UserController {
     }
 
     static function updateUser($app, $userId) {
+        $post = $app->request->post();
         if(!v::intVal()->validate($userId) ||
-            !v::key('nameFirst', v::stringType()->length(1,255))->validate($app->request->post()) ||
-            !v::key('nameLast', v::stringType()->length(1,255), false)->validate($app->request->post()) || 
-            !v::key('email', v::email())->validate($app->request->post())) {
+            !v::key('nameFirst', v::stringType()->length(0,255))->validate($post) ||
+            !v::key('nameLast', v::stringType()->length(0,255), false)->validate($post) || 
+            !v::key('phone', v::stringType()->length(0,20), false)->validate($post) || 
+            !v::key('email', v::email())->validate($post)) {
             return $app->render(400,  array('msg' => 'Invalid user. Check your parameters and try again.'));
         } 
         
-        $found = UserData::selectOtherUsersWithEmail($app->request->post('email'), $userId);
+        $found = UserData::selectOtherUsersWithEmail($post['email'], $userId);
         
         if ($found && count($found) > 0) {
             return $app->render(400,  array('msg' => 'An account with that email already exists. No two users may have the same email address.'));
-        } else {
-            $data = array(
-                ':id' => $userId,
-                ':name_first' => $app->request->post('nameFirst'),
-                ':name_last' => $app->request->post('nameLast'),
-                ':email' => $app->request->post('email')
-            );
-            UserData::updateUser($data);
-            $user = UserData::selectUserById($userId);
-            return $app->render(200, array('user' => $user));
         }
+        
+        $data = array(
+            ':id' => $userId,
+            ':name_first' => $post['nameFirst'],
+            ':name_last' => $post['nameLast'],
+            ':email' => $post['email'],
+            ':phone' => $post['phone']
+        );
+        UserData::updateUser($data);
+        
+        if((v::key('disabled', v::stringType()->length(1,5))->validate($post)) && 
+                ($post['disabled'] === true || $post['disabled'] === 'true')) {
+            UserData::disableUser($userId);
+        } else if((v::key('disabled', v::stringType()->length(1,5))->validate($post)) && 
+                ($post['disabled'] === false || $post['disabled'] === 'false')) {
+            UserData::enableUser($userId);
+        }
+        
+        $user = UserData::selectUserById($userId);
+        return $app->render(200, array('user' => $user));
     }
 
     // TODO: Delete user from any look up tables
