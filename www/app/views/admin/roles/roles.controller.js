@@ -10,6 +10,8 @@ angular.module('app.admin.roles', [])
     .controller('AdminRolesCtrl', ['$scope', '$compile', '$filter', 'DataTableHelper', 'DTColumnBuilder', 'ModalService',
         function($scope, $compile, $filter, DataTableHelper, DTColumnBuilder, ModalService) {
 
+        $scope.alertProxy = {};
+
         /* Modal triggers */
             // Edit Role Modal
             $scope.buttonOpenEditRoleModal = function (id) {
@@ -46,7 +48,7 @@ angular.module('app.admin.roles', [])
 
         // DataTable Setup
         $scope.dtGroupRoles = DataTableHelper.getDTStructure($scope, 'adminRolesList');
-        $scope.dtGroupRoles.options.withOption('responsive', {
+        $scope.dtGroupRoles.options.withOption('order', [1, 'desc']).withOption('responsive', {
                 details: {
                     type: 'column',
                     renderer: function(api, rowIdx, columns) {

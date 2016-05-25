@@ -7,10 +7,27 @@
  */
 
 angular.module('app.admin.fieldVisibility', [])
-    .controller('AdminFieldVisibilityCtrl', ['$scope', '$compile', '$filter', 'DataTableHelper', 'DTOptionsBuilder', 'DTColumnBuilder', 'ModalService',
-        function($scope, $compile, $filter, DataTableHelper, DTOptionsBuilder, DTColumnBuilder, ModalService) {
+    .controller('AdminFieldVisibilityCtrl', ['$scope', '$compile', '$filter', 'DataTableHelper', 
+'DTOptionsBuilder', 'DTColumnBuilder', 'ModalService', 'AlertConfirmService', 'ElementVisibilityKeyService',
+        function($scope, $compile, $filter, DataTableHelper, 
+DTOptionsBuilder, DTColumnBuilder, ModalService, AlertConfirmService, ElementVisibilityKeyService) {
 
-            /* Modal triggers */
+            $scope.alertProxy = {};
+
+            $scope.inVisibilityAdminMode = ElementVisibilityKeyService.inEditMode();
+            $scope.toggleVisibilityAdminMode = function() {
+                $scope.inVisibilityAdminMode = !$scope.inVisibilityAdminMode;
+                if($scope.inVisibilityAdminMode) {
+                    ElementVisibilityKeyService.enableEditMode();
+                    alert("Edit mode has been enabled for the next 10 minutes.");
+                } else {
+                    ElementVisibilityKeyService.disableEditMode();
+                }
+            };
+            $scope.testButtonClick = function() {
+                AlertConfirmService.alert("This is a test button to check if the visibility dev mode is working. It doesn't do anything.", "Have a nice day!");
+            };
+                    
             // Edit Visibility Field Modal
             $scope.buttonOpenEditVisibilityFieldModal = function (id) {
                 var found = $filter('filter')($scope.dtFields.instance.DataTable.data(), {id: id}, true);
@@ -41,7 +58,7 @@ angular.module('app.admin.fieldVisibility', [])
             $scope.dtFieldRoles.options = DTOptionsBuilder.newOptions();
                     
             $scope.dtFields = DataTableHelper.getDTStructure($scope, 'adminVisibilityFieldList');
-            $scope.dtFields.options.withOption('responsive', {
+            $scope.dtFields.options.withOption('order', [1, 'desc']).withOption('responsive', {
                 details: {
                     type: 'column',
                     renderer: function(api, rowIdx, columns) {

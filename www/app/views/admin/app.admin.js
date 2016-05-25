@@ -15,5 +15,5 @@ angular.module('app.admin', [
     'app.admin.groups',
     'app.admin.roles',
     'app.admin.fieldVisibility',
-    'app.admin.users'
+    'app.admin.users',
 ]);
