@@ -26,6 +26,13 @@ angular.module('app.admin.header', [])
         $scope.userNavDropdownIsOpen = false;
         
         //* ui.bootstrap authentication menu drop down
+        $scope.triviaNavDropdownIsOpen = false;
+        
+        //* ui.bootstrap authentication menu drop down
         $scope.authNavDropdownIsOpen = false;
         
+        
+        $(".navbar-nav li.trigger-collapse a").click(function (event) {
+            $scope.navbarCollapsed = true;
+        });
     }]);

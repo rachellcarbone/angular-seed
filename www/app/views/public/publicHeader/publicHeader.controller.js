@@ -25,7 +25,8 @@ angular.module('app.public.header', [])
         //* ui.bootstrap logged in user menu drop down
         $scope.userNavDropdownIsOpen = false;
         
-        //* ui.bootstrap authentication menu drop down
-        $scope.authNavDropdownIsOpen = false;
+        $(".navbar-nav li.trigger-collapse a").click(function (event) {
+            $scope.navbarCollapsed = true;
+        });
         
     }]);
