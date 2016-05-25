@@ -116,9 +116,9 @@ class AuthControllerFacebook {
         $existing = AuthData::selectUserByFacebookId($post['facebookId']);
         if(!$existing) {         
             // Look for user with that email
-            $emailExists = AuthData::selectUserByEmail($post['email']);
+            $emailExists = AuthData::selectUserAndPasswordByEmail($post['email']);
             if(!$emailExists) { 
-                /// FAIL - If a user with that email already exists
+                /// FAIL - If a user with that email does not exist
                 return array('authenticated' => false, 'msg' => 'Login failed. No user with that Facebook account exists.');  
             }
                 
@@ -177,7 +177,7 @@ class AuthControllerFacebook {
          */
         
         // Look for user with that email
-        $existing = AuthData::selectUserByEmail($post['email']);
+        $existing = AuthData::selectUserAndPasswordByEmail($post['email']);
         if($existing) { 
             /// FAIL - If a user with that email already exists
             return array('registered' => false, 'msg' => 'Facebook signup failed. A user with that email already exists.');   
@@ -227,10 +227,10 @@ class AuthControllerFacebook {
      * return String|bool Failed message or true 
      */
     private static function validateFacebookProfile($post) {
-        return (v::key('accessToken', v::stringType())->validate($post) || 
-           v::key('facebookId', v::stringType())->validate($post) || 
-           v::key('nameFirst', v::stringType())->validate($post) || 
-           v::key('nameLast', v::stringType())->validate($post) || 
+        return (v::key('accessToken', v::stringType())->validate($post) &&
+           v::key('facebookId', v::stringType())->validate($post) &&
+           v::key('nameFirst', v::stringType())->validate($post) &&
+           v::key('nameLast', v::stringType())->validate($post) &&
            v::key('email', v::email())->validate($post));
     }
 }
