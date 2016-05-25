@@ -7,8 +7,8 @@
  */
 
 angular.module('app.auth.login', [])
-    .controller('AuthLoginCtrl', ['$scope', '$state', 'AuthService',
-    function ($scope, $state, AuthService) {
+    .controller('AuthLoginCtrl', ['$scope', '$state', 'AuthService', 'ModalService',
+    function ($scope, $state, AuthService,ModalService) {
         
     /* Used to restrict alert bars */
     $scope.alertProxy = {};
@@ -21,6 +21,12 @@ angular.module('app.auth.login', [])
     $scope.credentials = {
         'email' : 'rachellcarbone@gmail.com',
         'password' : 'password1',
+        'remember' : false
+    };
+
+    $scope.credentials = {
+        'email' : '',
+        'password' : '',
         'remember' : false
     };
 
@@ -44,5 +50,12 @@ angular.module('app.auth.login', [])
             $scope.alertProxy.error(error);
         });
     };
-
+    // Forgot Password Modal
+    $scope.buttonOpenForgotPasswordModal = function (credentials) {
+        var emailAddress = '';
+        if (typeof (credentials) !== undefined && typeof (credentials.email) !== undefined) {
+            emailAddress = credentials.email;
+        }
+      ModalService.openForgotPassword(emailAddress);
+    };
 }]);
