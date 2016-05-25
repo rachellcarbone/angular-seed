@@ -5,19 +5,19 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
     </button>
-    <a class="navbar-brand" data-ui-sref="app.admin.dashboard">{{siteOptions.siteTitle}}</a>
+    <a class="navbar-brand" data-ui-sref="app.admin.dashboard">Admin Home</a>
 </div>
 
 <div class="collapse navbar-collapse" data-uib-collapse="navbarCollapsed">
     <ul class="nav navbar-nav">
-        <li data-ui-sref-active="active"><a data-ui-sref="app.admin.dashboard">Home</a></li>
-        <li data-ui-sref-active="active"><a data-ui-sref="app.admin.users">Users</a></li>
+        <li class="trigger-collapse" data-ui-sref-active="active"><a data-ui-sref="app.admin.dashboard">Home</a></li>
+        <li class="trigger-collapse" data-ui-sref-active="active"><a data-ui-sref="app.admin.users">Users</a></li>
         <li data-uib-dropdown data-is-open="authNavDropdownIsOpen">
             <a data-uib-dropdown-toggle>Auth <b class="caret"></b></a>
             <ul data-uib-dropdown-menu>
-                <li data-ui-sref-active="active"><a data-ui-sref="app.admin.groups">User Groups</a></li>
-                <li data-ui-sref-active="active"><a data-ui-sref="app.admin.roles">Group Roles</a></li>
-                <li data-ui-sref-active="active"><a data-ui-sref="app.admin.visibility">Visibility Fields</a></li>
+                <li class="trigger-collapse" data-ui-sref-active="active"><a data-ui-sref="app.admin.groups">User Groups</a></li>
+                <li class="trigger-collapse" data-ui-sref-active="active"><a data-ui-sref="app.admin.roles">Group Roles</a></li>
+                <li class="trigger-collapse" data-ui-sref-active="active"><a data-ui-sref="app.admin.visibility">Visibility Fields</a></li>
             </ul>
         </li>
         <li data-ui-sref-active="active"><a data-ui-sref="app.admin.config">System Variables</a></li>
@@ -26,10 +26,13 @@
         <li data-uib-dropdown data-is-open="userNavDropdownIsOpen">
             <a data-uib-dropdown-toggle>Hi {{userDisplayName}} <b class="caret"></b></a>
             <ul data-uib-dropdown-menu>
-                <li data-ui-sref-active="active"><a data-ui-sref="app.member.profile">Profile</a></li>
-                <li data-ui-sref-active="active"><a data-ui-sref="app.member.settings">Settings</a></li>
+                <li class="trigger-collapse" rc-auth-visible-if="user" data-ui-sref-active="active"><a data-ui-sref="app.member.dashboard">Dashboard</a></li>
+                <li class="trigger-collapse" rc-auth-visible-if="admin" data-ui-sref-active="active"><a data-ui-sref="app.admin.dashboard">Admin Area</a></li>
                 <li class="divider"></li>
-                <li><a ng-click="logout()">Logout</a></li>
+                <li class="trigger-collapse" data-ui-sref-active="active"><a data-ui-sref="app.member.profile">Profile</a></li>
+                <li class="trigger-collapse" data-ui-sref-active="active"><a data-ui-sref="app.member.settings">Settings</a></li>
+                <li class="divider"></li>
+                <li class="trigger-collapse"><a ng-click="logout()">Logout</a></li>
             </ul>
         </li>
     </ul>
