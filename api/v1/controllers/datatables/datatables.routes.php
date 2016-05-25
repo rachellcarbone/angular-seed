@@ -28,6 +28,48 @@ class DatatableRoutes {
             $app->post("/visibility-fields", function () use ($app) {
                 DatatablesController::getVisibilityFields($app);
             });
+
+            $app->post("/trivia-games", function () use ($app) {
+                DatatablesController::getCurrentGames($app);
+            });
+
+            $app->post("/trivia-teams", function () use ($app) {
+                DatatablesController::getTriviaTeams($app);
+            });
+
+            $app->post("/trivia-venues", function () use ($app) {
+                DatatablesController::getTriviaVenues($app);
+            });
+
+            $app->post("/game-checkins/:teamId", function ($teamId) use ($app) {
+                DatatablesController::getTeamGameCheckins($app, $teamId);
+            });
+            
+        });
+        
+        // Games
+        
+        $app->group('/datatable', $authenticateForRole('public'), function () use ($app) {
+            
+            $app->map("/games/", function () use ($app) {
+                DatatablesController::getGames($app);
+            })->via('GET', 'POST');
+            
+            $app->map("/games/host/:hostId/", function ($hostId) use ($app) {
+                DatatablesController::getHostGames($app, $hostId);
+            })->via('GET', 'POST');
+            
+            $app->map("/games/venue/:venueId/", function ($venueId) use ($app) {
+                DatatablesController::getVenueGames($app, $venueId);
+            })->via('GET', 'POST');
+            
+            $app->map("/games/team/:teamId/", function ($teamId) use ($app) {
+                DatatablesController::getTeamGames($app, $teamId);
+            })->via('GET', 'POST');
+            
+            $app->map("/game/simple-scoreboard/:gameId/:roundNumber", function ($gameId, $roundNumber) use ($app) {
+                DatatablesController::getGameSimpleScoreboard($app, $gameId, $roundNumber);
+            })->via('GET', 'POST');
             
         });
     }

@@ -4,6 +4,7 @@ require_once dirname(__FILE__) . '/action-tracking/actions.routes.php';
 require_once dirname(__FILE__) . '/api-test/test.routes.php';
 require_once dirname(__FILE__) . '/auth/auth.routes.php';
 require_once dirname(__FILE__) . '/datatables/datatables.routes.php';
+require_once dirname(__FILE__) . '/emails/emails.routes.php';
 require_once dirname(__FILE__) . '/field-visibility/fields.routes.php';
 require_once dirname(__FILE__) . '/groups/groups.routes.php';
 require_once dirname(__FILE__) . '/roles/roles.routes.php';
@@ -18,9 +19,11 @@ class ApiRouter {
         self::addDefaultRoutes();
         //self::addErrorRoutes($app, $debugEnabled);
         
+        TestRoutes::addRoutes($app, $authenticateForRole);
         ActionRoutes::addRoutes($app, $authenticateForRole);
         AuthRoutes::addRoutes($app, $authenticateForRole);
         DatatableRoutes::addRoutes($app, $authenticateForRole);
+        EmailRoutes::addRoutes($app, $authenticateForRole);
         FieldRoutes::addRoutes($app, $authenticateForRole);
         GroupRoutes::addRoutes($app, $authenticateForRole);
         RoleRoutes::addRoutes($app, $authenticateForRole);

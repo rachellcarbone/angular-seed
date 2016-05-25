@@ -3,16 +3,16 @@
 
 class ConfigData {
   
-    public static function getVariableByName($name, $id = 0) {
-        return DBConn::selectAll("SELECT c.id, c.name, c.value, c.disabled, c.indestructible, c.locked "
+    public static function getVariableByName($name) {
+        return DBConn::selectOne("SELECT c.id, c.name, c.value, c.disabled, c.indestructible, c.locked "
                 . "FROM " . DBConn::prefix() . "system_config AS c "
-                . "WHERE c.name = :name AND c.id != :id;", array(':name' => $name, ':id' => $id));
+                . "WHERE c.name = :name LIMIT 1;", array(':name' => $name));
     }
   
     public static function getVariableById($id) {
         return DBConn::selectOne("SELECT c.id, c.name, c.value, c.disabled, c.indestructible, c.locked "
                 . "FROM " . DBConn::prefix() . "system_config AS c "
-                . "WHERE c.id = :id;", array(':id' => $id));
+                . "WHERE c.id = :id LIMIT 1;", array(':id' => $id));
     }
   
     public static function insertVariable($validConfig) {

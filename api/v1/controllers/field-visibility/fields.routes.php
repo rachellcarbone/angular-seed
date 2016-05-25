@@ -5,7 +5,14 @@ class FieldRoutes {
     
     static function addRoutes($app, $authenticateForRole) {
         
-        //* /field/ routes - admin users only
+        $app->map("/element-visibility/get-key/", $authenticateForRole('public'), function () use ($app) {
+            FieldController::getVisibilityKey($app);
+        })->via('GET', 'POST');
+        
+        $app->map("/element-visibility/init/", $authenticateForRole('admin'), function () use ($app) {
+            FieldController::initVisibilityElement($app);
+        })->via('GET', 'POST');
+
         
         $app->group('/field', $authenticateForRole('admin'), function () use ($app) {
             

@@ -38,6 +38,10 @@ class GroupData {
         return $group;
     }
     
+    public static function selectGroupIdBySlug($slug) {
+        return DBConn::selectColumn("SELECT g.id FROM " . DBConn::prefix() . "auth_groups AS g WHERE g.slug = :slug LIMIT 1;", array(':slug' => $slug));
+    }
+    
     static function insertGroup($validGroup) {
         return DBConn::insert("INSERT INTO " . DBConn::prefix() . "auth_groups(`group`, `desc`, `slug`, `created_user_id`, `last_updated_by`) "
                 . "VALUES (:group, :desc, :slug, :created_user_id, :last_updated_by);", $validGroup);

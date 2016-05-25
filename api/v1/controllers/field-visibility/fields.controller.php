@@ -157,4 +157,27 @@ class FieldController {
             return $app->render(400,  array('msg' => 'Could not assign role to field.'));
         }
     }
+    
+    static function getVisibilityKey($app) {
+        $data = FieldData::selectVisibilityKey();
+        $key = ($data) ? $data : array();
+        return $app->render(200, array('key' => $key));
+    }
+    
+    static function initVisibilityElement($app) {
+        if(!v::key('fieldIdentifier', v::stringType())->validate($app->request->post())) {
+            return $app->render(400,  array('msg' => 'Could not initialize visibility field. Check your parameters and try again.'));
+        }
+        
+        if(FieldData::updateVisibilityElementInit(array (
+            ':identifier' => $app->request->post('fieldIdentifier'),
+            ":last_updated_by" => APIAuth::getUserId()
+        ))) {
+            $field = FieldData::getByIdentifier($app->request->post('fieldIdentifier'));
+            return $app->render(200,  array('msg' => 'The visibility field has been initialized.', 'field' => $field));
+        } else {
+            return $app->render(400,  array('msg' => 'Could not initialize visibility field.'));
+        }
+        
+    }
 }
