@@ -14,6 +14,8 @@
                 
             <h4>General</h4>
             
+            <div data-rc-bootstrap-alerts="generalFormAlerts"></div>
+            
             <form ng-if="!editGeneralMode" class="form-horizontal">
                  
                 <div class="form-group">
@@ -36,6 +38,13 @@
                         <p class="form-control-static">{{user.email}}</p>
                     </div>
                 </div>
+                
+                <div class="form-group">
+                    <label for="email" class="col-sm-3 control-label">Phone Number</label>
+                    <div class="col-sm-9">
+                        <p class="form-control-static">{{user.phone}}</p>
+                    </div>
+                </div>
                  
                 <div class="form-group text-right">
                     <div class="col-xs-12">
@@ -47,8 +56,6 @@
             </form>
             
             <form ng-if="editGeneralMode" name="form.general" class="form-horizontal">
-            
-                <div data-rc-bootstrap-alerts="generalFormAlerts"></div>
                 
                 <div class="form-group">
                     <label for="nameFirst" class="col-sm-3 control-label">First Name</label>
@@ -71,6 +78,13 @@
                     </div>
                 </div>
                 
+                <div class="form-group">
+                    <label for="phone" class="col-sm-3 control-label">Phone Number</label>
+                    <div class="col-sm-9">
+                        <input ng-model="editingUser.phone" type="text" class="form-control" name="phone">
+                    </div>
+                </div>
+                
                 <div class="form-group text-right">
                     <div class="col-xs-12">
                         <button ng-click="buttonCancel()" type="button" class="btn btn-default">Cancel</button>
@@ -81,7 +95,8 @@
             </form>
             
             <form ng-if="editPasswordMode" name="form.password" class="form-horizontal">
-            
+                <hr/>
+                
                 <h4 class="title">Password</h4>
             
                 <div data-rc-bootstrap-alerts="passwordFormAlerts"></div>
@@ -89,7 +104,7 @@
                 <div class="form-group">
                     <label for="password" class="col-sm-3 control-label">Current Password</label>
                     <div class="col-sm-9">
-                        <input ng-model="changePassword.current" type="password" class="form-control" name="password" required>
+                        <input ng-model="changePassword.current" maxlength="55" type="password" class="form-control" name="password" required>
                     </div>
                 </div>
                 
