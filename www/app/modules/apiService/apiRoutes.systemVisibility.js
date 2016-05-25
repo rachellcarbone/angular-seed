@@ -53,6 +53,17 @@ angular.module('apiRoutes.systemVisibility', [])
         }
         return API.post('field/assign-role', pair, 'System unable to assign role from field.');
     };
-
+    
+    api.getElementVisibilityKey = function() {
+        return API.get('element-visibility/get-key', 'Could not get element visibilty key.');
+    };
+    
+    api.initVisibilityElement = function(fieldIdentifier) {
+        if(angular.isUndefined(fieldIdentifier)) {
+            return API.reject('Invalid visibility field please check your parameters and try again.');
+        }
+        return API.post('element-visibility/init', fieldIdentifier, 'System unable to initialize visibility field by identifier.');
+    };
+    
     return api;
 }]);

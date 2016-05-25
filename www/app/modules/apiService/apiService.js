@@ -9,6 +9,8 @@
 angular.module('api.v1', [
     'apiRoutes.auth',
     'apiRoutes.datatables',
+    'apiRoutes.emails',
+    'apiRoutes.games',
     'apiRoutes.groups',
     'apiRoutes.lists',
     'apiRoutes.roles',
@@ -22,7 +24,9 @@ angular.module('api.v1', [
     var api = {};
     
     // API URL Base
-    api.apiUrl = 'http://api.seed.dev/';
+    //api.apiUrl = 'http://api.seed.dev/';
+    //api.apiUrl = 'https://api-dot-triviajoint-prod2.appspot.com/'; // PROD
+    api.apiUrl = 'https://api-dot-triviajoint-qa2.appspot.com/'; // QA
     
     // Default Error Message 
     // Used when no other message is available.
@@ -38,7 +42,7 @@ angular.module('api.v1', [
     };
     
     var getErrorMessage = function(message, defaultMessage) {
-        defaultMessage = defaultMessage | api.defaultErr;
+        defaultMessage = defaultMessage || api.defaultErr;
         // If no error message was sent use the default error message
         return (message) ? message : defaultMessage;
     };
@@ -97,15 +101,16 @@ angular.module('api.v1', [
                 data: $httpParamSerializerJQLike(data),
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             })
-            .success(function (data) {
+            .success(function (response) {
                     // If its successful, resolve the promise
-                    return resolve(data.data);
+                    return resolve(response.data);
                 })
-                .error(function(data) {
+                .error(function(error) {
                     // If there eas an error log it
-                    $log.error(getErrorMessage(data.data.msg, err));
+                    var msg = (!angular.isDefined(error) || !angular.isDefined(error.data)) ? false : error.data.msg;
+                    $log.error(getErrorMessage(msg, err));
                     // Reject the promise
-                    return reject(getErrorMessage(data.data.msg, err));
+                    return reject(getErrorMessage(msg, err));
             });            
         });
     };
