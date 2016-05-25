@@ -88,70 +88,6 @@ app.config(['$stateProvider', 'USER_ROLES',
             }
         });
 
-        $stateProvider.state('app.auth.signup.iframe', {
-            bodyClass: 'auth signup iframe-compatible',
-            title: 'Sign Up',
-            url: '/iframe',
-            views: {
-                'header@app.auth': {},
-                'content@app.auth': {
-                    templateUrl: 'app/views/auth/signup/signupiFrame.html',
-                    controller: 'AuthSignupCtrl'
-                },
-                'signupform@app.auth.signup.iframe': {
-                    templateUrl: 'app/views/auth/signup/signupForm.html'
-                },
-                'footer@app.auth': {}
-            }
-        });
-
-        $stateProvider.state('app.auth.signupVenue', {
-            bodyClass: 'auth signup',
-            title: 'Venue Sign Up',
-            url: '/venue/signup',
-            views: {
-                'content@app.auth': {
-                    templateUrl: 'app/views/auth/signupVenue/signupVenue.html',
-                    controller: 'AuthSignupVenueCtrl'
-                },
-                'signupform@app.auth.signupVenue': {
-                    templateUrl: 'app/views/auth/signupVenue/signupVenueForm.html'
-                }
-            }/*,
-            resolve: {
-                $q: '$q',
-                $rootScope: '$rootScope',
-                AUTH_EVENTS: 'AUTH_EVENTS',
-                alreadyLoggedIn: function(initUser, $rootScope, AUTH_EVENTS, $q, AuthService) {
-                    return $q(function(resolve, reject) {  
-                        if(AuthService.getUser()) {
-                            $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
-                            resolve(true);
-                        } else {
-                            resolve(false);
-                        }
-                    });
-                }
-            }*/
-        });
-
-        $stateProvider.state('app.auth.signupVenue.iframe', {
-            bodyClass: 'auth signup iframe-compatible',
-            title: 'Venue Sign Up',
-            url: '/iframe',
-            views: {
-                'header@app.auth': {},
-                'content@app.auth': {
-                    templateUrl: 'app/views/auth/signupVenue/signupVenueiFrame.html',
-                    controller: 'AuthSignupVenueCtrl'
-                },
-                'signupform@app.auth.signupVenue.iframe': {
-                    templateUrl: 'app/views/auth/signupVenue/signupVenueForm.html'
-                },
-                'footer@app.auth': {}
-            }
-        });
-
         $stateProvider.state('app.auth.signup.confirmEmail', {
             title: 'Please Confirm Your Email',
             url: '/please-confirm-email'
@@ -190,28 +126,6 @@ app.config(['$stateProvider', 'USER_ROLES',
                     });
                 }
             }*/
-        });
-        
-        $stateProvider.state('app.auth.login.iframe', {
-            bodyClass: 'auth login iframe-compatible',
-            title: 'Login',
-            url: '/iframe',
-            views: {
-                'header@app.auth': {},
-                'content@app.auth': {
-                    templateUrl: 'app/views/auth/login/loginiFrame.html'
-                },
-                'loginform@app.auth.login.iframe': {
-                    templateUrl: 'app/views/auth/login/loginForm.html',
-                    controller: 'AuthLoginCtrl'
-                },
-                'footer@app.auth': {}
-            },
-            resolve: {
-                $q: '$q',
-                $rootScope: '$rootScope',
-                $state: '$state'
-            }
         });
         
         $stateProvider.state('app.auth.login.locked', {

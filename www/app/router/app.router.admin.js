@@ -111,42 +111,6 @@ app.config(['$stateProvider', '$urlRouterProvider', 'USER_ROLES',
                 }
             }
         });
-
-        $stateProvider.state('app.admin.games', {
-            bodyClass: 'admin games',
-            title: 'Trivia Games',
-            url: '/trivia-games',
-            views: {
-                'content@app.admin': {
-                    templateUrl: 'app/views/admin/games/games.html',
-                    controller: 'AdminGamesCtrl'
-                }
-            }
-        });
-
-        $stateProvider.state('app.admin.teams', {
-            bodyClass: 'admin teams',
-            title: 'Trivia Teams',
-            url: '/trivia-teams',
-            views: {
-                'content@app.admin': {
-                    templateUrl: 'app/views/admin/teams/teams.html',
-                    controller: 'AdminTeamsCtrl'
-                }
-            }
-        });
-
-        $stateProvider.state('app.admin.venues', {
-            bodyClass: 'admin venues',
-            title: 'Trivia Joints',
-            url: '/trivia-joint',
-            views: {
-                'content@app.admin': {
-                    templateUrl: 'app/views/admin/venues/venues.html',
-                    controller: 'AdminVenuesCtrl'
-                }
-            }
-        });
         
         // For any unmatched url, redirect to /
         $urlRouterProvider.when('/admin/', '/admin/dashboard');

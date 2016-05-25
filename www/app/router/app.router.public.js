@@ -38,86 +38,15 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
                 }
             }
         });
-
-        $stateProvider.state('app.public.homepage', {
-            title: 'Redirecting to Trivia Joint Homepage...',
-            url: '/',
-            resolve: {
-                $window: '$window',
-                homepageRedirect : function($window) {
-                    $window.top.location.href = 'http://www.triviajoint.com/';
-                }
-            }
-        });
         
         $stateProvider.state('app.public.landing', {
             bodyClass: 'public landing',
             title: 'Welcome',
-            url: '/game-list',
+            url: '/',
             views: {
                 'content@app.public': {
                     templateUrl: 'app/views/public/landing/landing.html',
                     controller: 'PublicLandingCtrl'
-                }
-            }
-        });
-
-        $stateProvider.state('app.public.game', {
-            bodyClass: 'public scoreboard',
-            title: 'Game Scoreboard',
-            url: '/scoreboard/:gameId/:roundNumber',
-            views: {
-                'content@app.public': {
-                    templateUrl: 'app/views/member/scoreboard/scoreboard.html',
-                    controller: 'MemberScoreboardDashboardCtrl'
-                }
-            },
-            resolve: {
-                $q: '$q',
-                $rootScope: '$rootScope', 
-                $state: '$state',
-                TriviaScoreboard: 'TriviaScoreboard',
-                AlertConfirmService: 'AlertConfirmService',
-                currentGame: function(initUser, TriviaScoreboard, AlertConfirmService, $stateParams, $rootScope, $state, $q) {
-                    $stateParams.roundNumber = (parseInt($stateParams.roundNumber)) ? $stateParams.roundNumber : 1;
-                    return $q(function (resolve, reject) {
-                        TriviaScoreboard.loadGame($stateParams.gameId, $stateParams.roundNumber).then(function (result) {
-                            if(!result && $stateParams.roundNumber > 1) {
-                                $rootScope.$evalAsync(function () {
-                                    $state.go('app.public.game', {gameId: $stateParams.gameId, roundNumber: 1 });
-                                });
-                            } else if (!result) {
-                                AlertConfirmService.alert('A game with this ID could not be found. Confirm your URL and try again.', 'Game could not be loaded.')
-                                    .result.then(function () {
-                                        $rootScope.$evalAsync(function () {
-                                            $state.go('app.public.landing');
-                                        });
-                                    }, function (declined) {
-                                        $rootScope.$evalAsync(function () {
-                                            $state.go('app.public.landing');
-                                        });
-                                    });
-                            } else {
-                                resolve(result);
-                            }
-                        }, function (error) {
-                            $rootScope.$evalAsync(function () {
-                                $state.go('app.public.landing');
-                            });
-                            console.log(error);
-                            reject(false);
-                        });
-                    }); 
-                }
-            }
-        });
-        
-        $stateProvider.state('app.public.gameRedirect', {
-            url: '/scoreboard/:gameId',
-            resolve: {
-                $state: '$state',
-                currentGame: function($stateParams, $state) {
-                    $state.go('app.public.game', {gameId: $stateParams.gameId, roundNumber: 1 });
                 }
             }
         });
