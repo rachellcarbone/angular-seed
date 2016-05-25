@@ -17,7 +17,8 @@ angular.module('rcAuth.user', [])
     
     // Validate that an object is a valid user object
     self.validateUser = function(user, session) {
-        return (angular.isDefined(user.id) &&
+        return (angular.isDefined(user) &&
+                angular.isDefined(user.id) &&
                 angular.isDefined(user.displayName) &&
                 angular.isDefined(user.nameFirst) &&
                 angular.isDefined(user.nameLast) &&
