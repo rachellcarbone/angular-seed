@@ -24,6 +24,7 @@ angular.module('theApp', [
     'api.v1',
     'rcDirectives',
     'rcCart',
+    'rcElementVisibility',
     'app.config',
     'app.router',
     'app.run',
