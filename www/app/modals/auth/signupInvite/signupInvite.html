@@ -1,0 +1,54 @@
+<div class="modal-header">
+    <h3 class="modal-title">Invite Your Friends</h3>
+</div>
+
+<div class="modal-body">
+    
+    <div data-rc-bootstrap-alerts="alertProxy"></div>
+    
+    <div ng-if="invitingPlayer">
+        <p>Invite a friend to play on your team, '{{invitingTeamName}}'.</p>
+    </div>
+    
+    <div ng-if="!invitingPlayer">
+        <p>Invite a friend to signup to TriviaJoint.com and join in on the fun!</p>
+    </div>
+        
+    <form name="form.modalForm" role="form" novalidate>
+        
+        <div class="row">
+            <div class="col-xs-12 col-sm-6">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input placeholder="Player Email" class="form-control" name="email" ng-model="invite.email" type="email" maxlength="255" required />
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <div class="form-group">
+                    <label>Phone <small>(optional)</small></label>
+                    <input placeholder="Player Phone (optional)" class="form-control" name="phone" ng-model="invite.phone" type="text" maxlength="20" />
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <div class="form-group">
+                    <label>First Name <small>(optional)</small></label>
+                    <input placeholder="Player First Name (optional)" class="form-control" name="nameFirst" ng-model="invite.nameFirst" type="text" maxlength="100" />
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <div class="form-group">
+                    <label>Last Name <small>(optional)</small></label>
+                    <input placeholder="Player Last Name (optional)" class="form-control" name="nameLast" ng-model="invite.nameLast" type="text" maxlength="100" />
+                </div>
+            </div>
+            
+        </div>
+    </form>
+
+</div>
+
+<div class="modal-footer">    
+    <button class="btn btn-default pull-left" ng-click="buttonCancel()">Cancel</button>
+    <button ng-if="invitingPlayer" class="btn btn-primary" ng-click="buttonInvite()"><span class="glyphicon glyphicon-envelope"></span>&nbsp;Send Team Invite</button>
+    <button ng-if="!invitingPlayer" class="btn btn-primary" ng-click="buttonInvite()"><span class="glyphicon glyphicon-envelope"></span>&nbsp;Send Signup Request</button>
+</div>

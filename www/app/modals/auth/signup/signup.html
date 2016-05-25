@@ -1,0 +1,74 @@
+<div class="modal-header">
+    <h3 class="modal-title">Signup New Player</h3>
+</div>
+
+<div class="modal-body">
+
+    <form name="form.signup" role="form" novalidate>
+        <div class="row">
+
+            <div class="form-group">
+                <div class="col-sm-12" data-rc-bootstrap-alerts="signupAlerts"></div>
+            </div>
+
+            <div class="form-group col-xs-6">
+                <input ng-model="newUser.nameFirst" type="text" class="form-control" name="nameFirst" placeholder="Player First Name (optional)" maxlength="255">
+            </div>
+
+            <div class="form-group col-xs-6">
+                <input ng-model="newUser.nameLast" type="text" class="form-control" name="nameLast" placeholder="Player Last Name (optional)" maxlength="255">
+            </div>
+
+            <div class="form-group col-xs-12 col-sm-6">
+                <input ng-model="newUser.email" type="email" class="form-control" name="email" placeholder="Player Email" maxlength="255" required>
+            </div>
+
+            <div class="form-group col-xs-12 col-sm-6">
+                <input ng-model="newUser.phone" type="text" class="form-control" name="phone" placeholder="Player Phone (optional)" maxlength="20">
+            </div>
+
+            <div ng-if="showPasswordRules" class="form-group">
+                <div class="col-xs-12">
+                    <div class="alert alert-warning" role="alert">
+                        <p><strong>Passwords Must:</strong></p>
+                        <ul>
+                            <li>Be at least 8 characters in length.</li>
+                            <li>Contain at least one letter and number.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group col-xs-6">
+                <input ng-model="newUser.password"
+                       ng-change="onChangeValidatePassword()" 
+                       type="password" class="form-control" name="password" placeholder="Player Password" maxlength="55" required>
+            </div>
+
+            <div class="form-group col-xs-6">
+                <input ng-model="newUser.passwordB"
+                       ng-change="onChangeValidateConfirmPassword()" 
+                       type="password" class="form-control" name="passwordB" placeholder="Confirm Player Password" maxlength="55" required>
+            </div>
+
+            <div ng-if="showPasswordMissmatch" class="form-group">
+                <div  class="col-xs-12">
+                    <div class="alert alert-warning" role="alert">
+                        <p>Passwords must match</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group col-xs-12">
+                <label>Create Player and Add to Team (Optional)</label>
+                <div rc-trivia-select-list-team="joinTeam" teams-list-data="teamsList"></div>
+            </div>
+        </div>
+    </form>
+
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-default pull-left" ng-click="buttonCancel()">Cancel</button>
+    <button class="btn btn-primary" ng-click="signup()"><span class="glyphicon glyphicon-envelope"></span>&nbsp;&nbsp;&nbsp;&nbsp;Sign up with Email Address</button>
+</div>
