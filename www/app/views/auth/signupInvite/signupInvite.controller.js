@@ -6,8 +6,8 @@
  * Controller for the sinup page accessed by a player invite.
  */
 
-angular.module('app.auth.playerInvite', [])
-        .controller('AuthPlayerInviteCtrl', ['$scope', '$state', '$log', '$window', '$timeout', '$stateParams', 'AuthService', 'AlertConfirmService', 'InvitationData',
+angular.module('app.auth.signupInvite', [])
+        .controller('AuthSignupInviteCtrl', ['$scope', '$state', '$log', '$window', '$timeout', '$stateParams', 'AuthService', 'AlertConfirmService', 'InvitationData',
         function ($scope, $state, $log, $window, $timeout, $stateParams, AuthService, AlertConfirmService, InvitationData) {
         
         $scope.$state = $state;
