@@ -5,7 +5,7 @@
  * 
  * Set up the states for auth routes, such as the 
  * login page, forgot password and other auth states.
- * Ueses ui-roter's $stateProvider.
+ * Uses ui-roter's $stateProvider.
  * 
  * Set each state's title (used in the config for the html <title>).
  * 
@@ -43,6 +43,7 @@ app.config(['$stateProvider', 'USER_ROLES',
         /* Login / Authentication Related States */
 
         $stateProvider.state('app.auth.signup', {
+            bodyClass: 'auth signup',
             title: 'Sign Up',
             url: '/signup',
             views: {
@@ -50,21 +51,35 @@ app.config(['$stateProvider', 'USER_ROLES',
                     templateUrl: 'app/views/auth/signup/signup.html',
                     controller: 'AuthSignupCtrl'
                 }
+            }
+        });
+
+        $stateProvider.state('app.auth.signup.invite', {
+            bodyClass: 'auth signup',
+            title: 'You have been invited!',
+            url: '/:token',
+            views: {
+                'content@app.auth': {
+                    templateUrl: 'app/views/auth/playerInvite/playerInvite.html',
+                    controller: 'AuthPlayerInviteCtrl'
+                },
+                'signupform@app.auth.signup.invite': {
+                    templateUrl: 'app/views/auth/signup/signupForm.html'
+                }
             },
             resolve: {
                 $q: '$q',
-                $rootScope: '$rootScope',
-                $state: '$state',
-                alreadyLoggedIn: function($rootScope, $state, $q, AuthService) {
+                ApiRoutesEmails: 'ApiRoutesEmails',
+                $stateParams: '$stateParams',
+                InvitationData: function($q, $stateParams, ApiRoutesEmails) {
                     return $q(function(resolve, reject) {  
-                        if(AuthService.getUser()) {
-                            $rootScope.$evalAsync(function () {
-                                $state.go('app.member.dashboard');
-                            });
-                            reject(false);
-                        } else {
-                            resolve(true);
-                        }
+                        ApiRoutesEmails.validateInviteToken($stateParams.token).then(function (result) {
+                            resolve(result.invite);
+                            console.log(result);
+                        }, function(error) {
+                            console.log(error);
+                            resolve(error);
+                        });
                     });
                 }
             }
@@ -81,31 +96,29 @@ app.config(['$stateProvider', 'USER_ROLES',
         });
         
         $stateProvider.state('app.auth.login', {
+            bodyClass: 'auth login',
             title: 'Login',
             url: '/login',
             views: {
                 'content@app.auth': {
-                    templateUrl: 'app/views/auth/login/login.html',
-                    controller: 'AuthLoginCtrl'
+                    templateUrl: 'app/views/auth/login/login.html'
                 }
-            },
+            }/*,
             resolve: {
                 $q: '$q',
                 $rootScope: '$rootScope',
-                $state: '$state',
-                alreadyLoggedIn: function($rootScope, $state, $q, AuthService) {
+                AUTH_EVENTS: 'AUTH_EVENTS',
+                alreadyLoggedIn: function(initUser, $rootScope, AUTH_EVENTS, $q, AuthService) {
                     return $q(function(resolve, reject) {  
                         if(AuthService.getUser()) {
-                            $rootScope.$evalAsync(function () {
-                                $state.go('app.member.dashboard');
-                            });
-                            reject(false);
-                        } else {
+                            $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
                             resolve(true);
+                        } else {
+                            resolve(false);
                         }
                     });
                 }
-            }
+            }*/
         });
         
         $stateProvider.state('app.auth.login.locked', {
@@ -132,7 +145,27 @@ app.config(['$stateProvider', 'USER_ROLES',
         // Trigger the logout method and then redirect
         // to public.
         $stateProvider.state('app.auth.logout', {
+            bodyClass: 'auth logout',
             url: '/logout'
+        });
+
+        $stateProvider.state('app.auth.resetPassword', {
+            title: 'Reset Password',
+            url: '/reset_password/:usertoken',
+            views: {
+                'content@app.auth': {
+                    templateUrl: 'app/views/auth/resetPassword/resetPassword.html',
+                    controller: 'ResetPasswordCtrl'
+                },
+                'signupform@app.auth.resetPassword': {
+                    templateUrl: 'app/views/auth/resetPassword/resetPasswordForm.html'
+                }
+            },
+            resolve: {
+                $q: '$q',
+                $rootScope: '$rootScope',
+                $state: '$state'
+            }
         });
 
     }]);
