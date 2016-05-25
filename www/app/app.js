@@ -10,22 +10,23 @@
 angular.module('theApp', [
     'ui.bootstrap',
     'ui.bootstrap.showErrors',
+    'ui.select', 
     'datatables',
     'datatables.bootstrap',
     'datatables.fixedcolumns',
     'ngCookies',
     'ngMessages',
-    'angularFileInput',
-    'ngFileUpload',
-    'ngImgCrop',
+    'ngSanitize',
     'angular-md5',
     'api.v1',
     'rcDirectives',
     'rcCart',
+    'rcElementVisibility',
     'app.config',
     'app.router',
     'app.run',
     'app.run.dev',
     'app.filters',
-    'app.services'
+    'app.services',
+    'ui.mask'
 ]);
