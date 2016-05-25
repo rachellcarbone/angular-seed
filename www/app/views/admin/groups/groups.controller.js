@@ -10,6 +10,8 @@ angular.module('app.admin.groups', [])
     .controller('AdminGroupsCtrl', ['$scope', '$compile', '$filter', 'DataTableHelper', 'DTColumnBuilder', 'ModalService',
         function($scope, $compile, $filter, DataTableHelper, DTColumnBuilder, ModalService) {
 
+            $scope.alertProxy = {};
+
     
             /* Modal triggers */
             // Edit Group Modal
@@ -53,7 +55,7 @@ angular.module('app.admin.groups', [])
 
         // DataTable Setup
         $scope.dtUserGroups = DataTableHelper.getDTStructure($scope, 'adminGroupsList');
-        $scope.dtUserGroups.options.withOption('responsive', {
+        $scope.dtUserGroups.options.withOption('order', [1, 'desc']).withOption('responsive', {
                 details: {
                     type: 'column',
                     renderer: function(api, rowIdx, columns) {
