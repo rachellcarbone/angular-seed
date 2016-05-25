@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <!--[if lt IE 7]>      <html lang="en" ng-app="theApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html lang="en" ng-app="theApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html lang="en" ng-app="theApp" class="no-js lt-ie9"> <![endif]-->
@@ -21,6 +21,7 @@
         <link rel="stylesheet" type="text/css" href="bower_components/angular-bootstrap/ui-bootstrap-csp.css">
         <link rel="stylesheet" type="text/css" href="bower_components/smalot-bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css">
         <link rel="stylesheet" type="text/css" href="bower_components/ng-img-crop/compile/minified/ng-img-crop.css">
+        <link rel="stylesheet" type="text/css" href="bower_components/ui-select/dist/select.css">
         <link rel="stylesheet" type="text/css" href="lib/datatables/datatables.min.css"/>
         
         <!-- Style Sheets -->
@@ -45,12 +46,15 @@
         <!-- Pre Angular -->
         <script src="bower_components/jquery/dist/jquery.min.js"></script>
         <script src="bower_components/moment/min/moment.min.js"></script>
+        <script src="bower_components/moment-timezone/builds/moment-timezone.min.js"></script>
         <!--<script src="bower_components/dataTables/media/js/jquery.dataTables.min.js"></script>-->
         <script type="text/javascript" src="lib/datatables/datatables.min.js"></script>
         <script src="bower_components/qtip2/jquery.qtip.min.js"></script>
         
         <!-- Angular Angular -->
         <script src="bower_components/angular/angular.min.js"></script>
+        <script src="bower_components/ui-select/dist/select.min.js"></script>
+        <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
         <script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
         <script src="bower_components/angular-datatables/dist/angular-datatables.min.js"></script>
         <script src="bower_components/angular-datatables/dist/plugins/bootstrap/angular-datatables.bootstrap.min.js"></script>
@@ -68,13 +72,18 @@
         <script src="bower_components/simple-angular-file-input/dist/angular-file-input.min.js"></script>
         <script src="bower_components/ng-file-upload/ng-file-upload-all.js"></script>
         <script src="bower_components/smalot-bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
-        
+        <script src="bower_components/angular-ui-mask/dist/mask.min.js"></script>
+
         <!-- App -->
         <script src="app/config/app.config.js"></script>
         <script src="app/config/app.run.dev.js"></script>
         <script src="app/config/app.run.js"></script>
+        
+        <!-- App Routing -->
         <script src="app/router/app.router.admin.js"></script>
         <script src="app/router/app.router.auth.js"></script>
+        <script src="app/router/app.router.errors.js"></script>
+        <script src="app/router/app.router.host.js"></script>
         <script src="app/router/app.router.js"></script>
         <script src="app/router/app.router.member.js"></script>
         <script src="app/router/app.router.public.js"></script>
@@ -119,7 +128,10 @@
         <script src="app/views/auth/authHeader/authHeader.controller.js"></script>
         <script src="app/views/auth/authFooter/authFooter.controller.js"></script>
         <script src="app/views/auth/login/login.controller.js"></script>
+        <script src="app/views/auth/resetPassword/resetPassword.controller.js"></script>
         <script src="app/views/auth/signup/signup.controller.js"></script>
+        <script src="app/views/auth/playerInvite/playerInvite.controller.js"></script>
+        <script src="app/views/auth/signupVenue/signupVenue.controller.js"></script>
         <script src="app/views/auth/app.auth.js"></script>
         
         <script src="app/views/error/errorLayout/errorLayout.controller.js"></script>
