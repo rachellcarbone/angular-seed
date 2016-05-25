@@ -9,9 +9,11 @@
  */
 
 angular.module('app.maintenance', ['ui.bootstrap'])
-    .controller('MaintenanceCtrl', ['$scope', '$timeout', function($scope, $timeout) {
+    .controller('MaintenanceCtrl', ['$scope', '$timeout', 'siteSystemVariables',
+        function($scope, $timeout, siteSystemVariables) {
         
-        $scope.currentYear = moment().year();
+        //* Site configuration variables pre loaded by the resolve
+        $scope.siteOptions = siteSystemVariables;
 
         $scope.progressValue = 5;
         
