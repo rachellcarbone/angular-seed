@@ -1,40 +1,36 @@
 <?php namespace API;
+ require_once dirname(dirname(__FILE__)) . '/services/api.dbconn.php';
 
 class APIConfig {
+    static $dbConfig = false;
     static $config = false;
 
     static function setAPIConfig() {
         $default = array(
             'apiVersion' => 'v1',
             'debugMode' => true,
-            
             'dbHost' => 'localhost',
+            'dbUnixSocket' => false,
             'db' => 'angular_seed',
-            'dbUser' => 'root',
-            'dbPass' => 'toot',
+            'dbUser' => 'angular_seed',
+            'dbPass' => 'angular_seed',
             'dbTablePrefix' => 'as_',
-            
             'systemPath' => 'C:/xampp/htdocs/webdev/angular-seed/',
             'dirPublic' => 'public/',
             'dirSystem' => 'api/system/',
-            'dirLogs' => 'api/system/logs/',
-            
-            'websiteUrl' => 'http://www.seed.dev/'
+            'dirLogs' => 'api/system/logs/'
         );
-
-        if(filter_input(INPUT_SERVER, 'HTTP_HOST') == 'api.seed.dev' ||
-            filter_input(INPUT_SERVER, 'HTTP_HOST') == 'localhost' ||
-            filter_input(INPUT_SERVER, 'SERVER_ADDR') == '127.0.0.1') {
+        
+        if($_SERVER['HTTP_HOST'] === 'api.seed.dev') {
             // Localhost
-            self::$config = array_merge($default, array(
-                'dbHost' => 'localhost',
-                'db' => 'angular_seed',
-                'dbUser' => 'angular_seed',
-                'dbPass' => 'angular_seed',
-                'dbTablePrefix' => 'as_',
-                'systemPath' => 'C:/xampp/htdocs/webdev/angular-seed/',
-                'websiteUrl' => 'http://www.seed.dev/'
-            ));
+            self::$config = $default;
+        } else {
+            self::$config = false;
+	}
+        
+        if(self::$config !== false) {
+            $dbConfig = self::selectSystemVariables();
+            self::$config = array_merge(self::$config, $dbConfig);
         }
     }
 
@@ -49,4 +45,15 @@ class APIConfig {
         return self::$config;
     }
 
+    private static function selectSystemVariables() {
+        $qDBConfig = DBConn::executeQuery("SELECT name, value FROM " . DBConn::prefix() . "system_config WHERE disabled = 0;");
+        
+        $dbConfig = Array();
+        while($var = $qDBConfig->fetch(\PDO::FETCH_OBJ)) {  
+            $dbConfig[$var->name] = $var->value;
+        }
+        self::$dbConfig = $dbConfig;
+        
+        return self::$dbConfig;
+    }
 }
