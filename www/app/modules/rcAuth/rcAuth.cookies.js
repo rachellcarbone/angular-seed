@@ -36,6 +36,12 @@ angular.module('rcAuth.cookies', [])
         };
 
         factory.destroyAuthCookie = function() {
+            console.log("Destroying Cookie");
+            console.log({
+                'apiKey' : $cookies.get(AUTH_COOKIES.apiKey),
+                'apiToken' : $cookies.get(AUTH_COOKIES.apiToken)
+            });
+            
             $cookies.remove(AUTH_COOKIES.apiKey);
             $cookies.remove(AUTH_COOKIES.apiToken);
             return true;

@@ -51,7 +51,7 @@ app.run(['$rootScope', '$state', 'AUTH_EVENTS', 'AuthService',
                         event.preventDefault();
                         // Broadcast reason for failure
                         // https://docs.angularjs.org/api/ng/type/$rootScope.Scope#$broadcast
-                        $rootScope.$broadcast(results, { 'state' : toState.name, 'params' : toParams });
+                        $rootScope.$broadcast(results, { 'state': toState.name, 'params': toParams });
                     });
                 });
 
@@ -60,7 +60,7 @@ app.run(['$rootScope', '$state', 'AUTH_EVENTS', 'AuthService',
          * 
          * Set up the variious event listeners for the auth module.
          */
-        
+
         // On: Login Success
         $rootScope.$on(AUTH_EVENTS.loginSuccess, function(event, args) {
             // Evaluate asynchronously
@@ -80,12 +80,10 @@ app.run(['$rootScope', '$state', 'AUTH_EVENTS', 'AuthService',
         });
 
         // On: Login Failure
-        $rootScope.$on(AUTH_EVENTS.loginFailed, function(event, args) {
-            $rootScope.$evalAsync(function () {
-                // Go to the login state
-                $state.go('app.auth.login');
-            });
-        });
+        // $rootScope.$on(AUTH_EVENTS.loginFailed, function(event, args) {});
+
+        //$rootScope.$on(AUTH_EVENTS.forgotpasswordFailed, function (event, args) {});
+        //$rootScope.$on(AUTH_EVENTS.getforgotemailaddressFailed, function (event, args) {});
 
         // On: Logout Success
         $rootScope.$on(AUTH_EVENTS.logoutSuccess, function(event, args) {

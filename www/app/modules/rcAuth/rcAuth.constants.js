@@ -9,9 +9,10 @@
 var app = angular.module('rcAuth.constants', []);
 
 // Events that are triggered by different auth states
-app.constant('AUTH_EVENTS',  {
+app.constant('AUTH_EVENTS', {
     loginSuccess: 'auth-login-success',
     loginFailed: 'auth-login-failed',
+    forgotpasswordFailed: 'auth-forgotpassword-failed',
     logoutSuccess: 'auth-logout-success',
     sessionTimeout: 'auth-session-timeout',
     notAuthenticated: 'auth-not-authenticated',
@@ -19,7 +20,7 @@ app.constant('AUTH_EVENTS',  {
 });
 
 // Events that are triggered by different auth states
-app.constant('AUTH_COOKIES',  {
+app.constant('AUTH_COOKIES', {
     userEmail: '_as_ue_2180',
     apiKey: '_as_uk_2332',
     apiToken: '_as_ut_7942'
@@ -30,12 +31,15 @@ app.constant('AUTH_COOKIES',  {
 app.constant('USER_ROLES', {
     guest: "1",
     admin: "2",
-    user: "3"
+    user: "3",
+    host: "4",
+    venue: "5"
 });
 
 app.constant('FACEBOOK_CONFIG', {
     appId: '892044264250192', // Dev
-    //appId: '1538616896450172', //Triv
-    
+    //appId: '892044264250192', // Dev
+    appId: '1538616896450172', //QA
+    //appId: '1538601933118335', //PROD
     comma: 'placeholder'
 });

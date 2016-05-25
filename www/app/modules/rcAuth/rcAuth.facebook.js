@@ -22,7 +22,7 @@ app.config(['facebookProvider', 'FACEBOOK_CONFIG', function (facebookProvider, F
     facebookProvider.setPermissions(['public_profile','email']);
 }]);
 
-app.factory('FacebookAuthService', ['facebook', function(facebook) {
+app.factory('FacebookAuthService', ['facebook', '$q',  function(facebook, $q) {
         
     var api = {};
 
@@ -37,7 +37,21 @@ app.factory('FacebookAuthService', ['facebook', function(facebook) {
      * https://developers.facebook.com/docs/reference/javascript/FB.login/v2.5
      */
     api.login = function() {
-        return facebook.login();
+        return $q(function (resolve, reject) {
+            
+            facebook.login().then(function (data) {
+                api.getUser(data.userId).then(function (data) {
+                    resolve(data);
+                }, function (error) {
+                    console.error('ERROR facebookLogin User: ', error);
+                    reject(error);
+                });
+            }, function (error) {
+                console.error('ERROR facebookLogin Token: ', error);
+                reject(error);
+            });
+                
+        });
     };
 
     api.getUser = function(id) {
