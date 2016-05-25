@@ -1,4 +1,4 @@
-'use strict';
+ 'use strict';
 
 /* 
  * API Routes for Datatable Content
@@ -31,7 +31,7 @@ angular.module('apiRoutes.datatables', [])
         return getPromise('/datatable/admin/user-groups');
     };
     
-    api.adminRolesList = function() { 
+    api.adminRolesList = function() {
         return getPromise('/datatable/admin/group-roles');
     };
     
@@ -41,6 +41,49 @@ angular.module('apiRoutes.datatables', [])
     
     api.adminVisibilityFieldList = function() { 
         return getPromise('/datatable/admin/visibility-fields');
+    };
+    
+    // Admin Trivia
+    
+    api.adminGamesList = function() { 
+        return getPromise('/datatable/admin/trivia-games');
+    };
+    
+    api.adminTeamsList = function() { 
+        return getPromise('/datatable/admin/trivia-teams');
+    };
+    
+    api.adminTeamCheckinsList = function(teamId) { 
+        return getPromise('/datatable/admin/game-checkins/' + teamId);
+    };
+    
+    api.adminVenuesList = function() { 
+        return getPromise('/datatable/admin/trivia-venues');
+    };
+    
+    
+    // Games
+    
+    api.publicGamesList = function() { 
+        return getPromise('/datatable/games/');
+    };
+    
+    api.publicHostGamesList = function(hostId) { 
+        return getPromise('/datatable/games/host/' + hostId);
+    };
+    
+    api.publicVenueGamesList = function(venueId) { 
+        return getPromise('/datatable/games/venue/' + venueId);
+    };
+    
+    api.publicTeamGamesList = function(teamId) { 
+        return getPromise('/datatable/games/team/' + teamId);
+    };
+    
+    // Game Scoreboard
+    
+    api.publicGameScoreboardList = function(gameId, roundNumber) { 
+        return getPromise('/datatable/game/simple-scoreboard/' + gameId + '/' + roundNumber);
     };
     
     return api;
