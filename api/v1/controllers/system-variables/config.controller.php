@@ -43,6 +43,7 @@ class ConfigController {
             return $app->render(400,  array('msg' => 'A system config variable with that name already exists.'));
         }
         
+        $disabled = 0;
         if (v::key('disabled')->validate($app->request->post())) {
             // TODO: Implement cusitom boolean Respect\Validator
             // Converting to boolean did not work well, 
