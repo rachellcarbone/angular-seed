@@ -9,14 +9,12 @@ class APIAuth {
     const APISESSIONNAME = 'API_AUTHENTICATED_USER_ID';
     
     static function isAuthorized($app, $role = 'public') {
-        if(strtolower($role) === 'public') {
-            return true;
-        }
-        
         $user = self::authorizeApiToken($app);
         if($user) {
             // Save that user id
             $_SESSION[self::APISESSIONNAME] = $user;
+            return true;
+        } else if(strtolower($role) === 'public') {
             return true;
         } else {
             $response = array('data' => array(
