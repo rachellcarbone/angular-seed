@@ -1,7 +1,7 @@
 'use strict';
 
 /*
- * Centeral Router
+ * Central Router
  * 
  * Include all the router area sub modules and use the
  * url router provider to set redirects and error routes. 
@@ -54,19 +54,8 @@
         "@" : { } 
   });
  */
-
-var app = angular.module('app.router', [
-  'ui.router',
-  'rcAuth.constants',
-  'app.maintenance',
-  'app.error',
-  'app.router.admin',
-  'app.router.auth',
-  'app.router.member',
-  'app.router.public',
-  'app.router.store'
-]);
-app.config(['$stateProvider', '$urlRouterProvider', 'USER_ROLES', 
+angular.module('app.router.init', [])
+    .config(['$stateProvider', '$urlRouterProvider', 'USER_ROLES', 
     function ($stateProvider, $urlRouterProvider, USER_ROLES) {
 
         /*  Abstract App */
@@ -74,71 +63,55 @@ app.config(['$stateProvider', '$urlRouterProvider', 'USER_ROLES',
             abstract: true,
             data: {authorizedRoles: USER_ROLES.guest},
             resolve: {
+                $q: '$q',
                 AuthService: 'AuthService',
-                initUser: function(AuthService) {
-                    return AuthService.init();
+                ElementVisibilityKeyService: 'ElementVisibilityKeyService',
+                initUser: function($q, AuthService) {
+                    return $q(function (resolve, reject) {
+                        AuthService.init().then(function (data) {
+                            resolve(data);
+                        }, function (error) {
+                            reject(error);
+                        });
+                    });
                 },
                 siteSystemVariables: function() {
                     return {
-                        siteTitle : 'Angular Seed',
-                        siteUrl : 'angular-seed.com',
+                        siteTitle : 'Trivia Joint',
+                        siteUrl : 'triviajoint.com',
                         siteCopywrite : 'All rights reserved.'
                     };
+                },
+                InitElementVisibilityKeyService: function (initUser, ElementVisibilityKeyService) {
+                    return ElementVisibilityKeyService.getKey();
                 }
             }
         });
+    }]);
 
-        /*  Abstract Error Route */
-        $stateProvider.state('app.error', {
-            url: '/error',
-            abstract: true,
-            data: {authorizedRoles: USER_ROLES.guest},
-            views: {
-                'layout@': {
-                    templateUrl: 'app/views/error/errorLayout/errorLayout.html',
-                    controller: 'ErrorLayoutCtrl'
-                }
-            }
-        });
-
-        /* Error Pages */
-        $stateProvider.state('app.error.notfound', {
-            title: 'Page Not Found',
-            url: '/404',
-            views: {
-                'content@app.error': {
-                    templateUrl: 'app/views/error/notFound/notFound.html',
-                    controller: 'ErrorNotFoundCtrl'
-                }
-            }
-        });
-        
-        $stateProvider.state('app.error.notauthorized', {
-            title: 'User Not Authorized',
-            url: '/unauthorized',
-            views: {
-                'content@app.error': {
-                    templateUrl: 'app/views/error/notAuthorized/notAuthorized.html',
-                    controller: 'ErrorNotAuthorizedCtrl'
-                }
-            }
-        });
-        
-        /* Maintenance Page */
-        $stateProvider.state('app.maintenance', {
-            title: 'Maintenance Mode',
-            url: '/maintenance',
-            data: {authorizedRoles: USER_ROLES.guest},
-            views: {
-                'layout@': {
-                    templateUrl: 'app/views/maintenance/maintenance.html',
-                    controller: 'MaintenanceCtrl'
-                }
-            }
-        });
+angular.module('app.router.default', [])
+    .config(['$urlRouterProvider',
+    function ($urlRouterProvider) {
 
         // For any unmatched url, redirect to /
         $urlRouterProvider.when('', '/');
+        $urlRouterProvider.when('/', '/');
         $urlRouterProvider.when('/#', '/');
         $urlRouterProvider.otherwise('/error/404');
     }]);
+
+angular.module('app.router', [
+  'ui.router',
+  'rcAuth.constants',
+  'app.maintenance',
+  'app.error',
+  'app.router.init',
+  'app.router.errors',
+  'app.router.admin',
+  'app.router.auth',
+  'app.router.host',
+  'app.router.member',
+  'app.router.public',
+  'app.router.venue',
+  'app.router.default'
+]);
