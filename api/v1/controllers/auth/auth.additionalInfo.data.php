@@ -9,6 +9,7 @@ class InfoData {
     }
     
     public static function saveTerms($data) {
-        return DBConn::insert("UPDATE " . DBConn::prefix() . "users SET accepted_terms = ':accepted_terms WHERE id = :user_id;", $data);
+        return DBConn::update("UPDATE " . DBConn::prefix() . "users SET accepted_terms = :accepted_terms "
+                . "WHERE id = :user_id LIMIT 1;", $data);
     }
 }
