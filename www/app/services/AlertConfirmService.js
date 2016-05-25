@@ -12,15 +12,24 @@ angular.module('AlertConfirmService', [])
         var api = {};
 
         /* Return the uibModalInstance */
-        api.alert = function(options) {
+        api.alert = function(msg, title) {
             var message = 'It\'s dangerous to go alone.';
             var header = 'Alert!';
-            var buttonText = 'OK';
+            var buttonTextOk = 'OK';
                 
-            if (typeof options === "object") {
-                message = options.message || message;
-                header = options.header || header;
-                buttonTextOk = options.buttonText || buttonText;
+            if (angular.isObject(msg)) {
+                message = msg.message || message;
+                header = msg.header || header;
+                buttonTextOk = msg.buttonTextOk || buttonTextOk;
+            } else if (angular.isString(msg)) {
+                message = msg;
+            }
+            
+            if (angular.isObject(title)) {
+                header = title.header || header;
+                buttonTextOk = title.buttonTextOk || buttonTextOk;
+            } else if (angular.isString(title)){
+                header = title;
             }
             
             var templateHtml = '<div class="modal-header"><h3 class="modal-title">{{header}}</h3></div>' +
@@ -83,7 +92,7 @@ angular.module('AlertConfirmService', [])
             var templateHtml = '<div class="modal-header"><h3 class="modal-title">{{header}}</h3></div>' +
                     '<div class="modal-body">' + question + '</div>' +
                     '<div class="modal-footer"><button ng-click="buttonCancel()" class="btn btn-warning" type="button">{{buttonTextCancel}}</button>' +
-                    '<button ng-click="buttonConfirm()" class="btn btn-danger" type="button">{{buttonTextConfirm}}</button></div>';
+                    '<button ng-click="buttonConfirm()" class="btn btn-primary" type="button">{{buttonTextConfirm}}</button></div>';
             
             return $uibModal.open({
                 size: 'sm',

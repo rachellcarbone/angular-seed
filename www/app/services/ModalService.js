@@ -13,7 +13,10 @@ angular.module('ModalService', [
     'app.modal.editRole',
     'app.modal.editRole',
     'app.modal.editUser',
-    'app.modal.editVisibilityField'
+    'app.modal.editVisibilityField',
+    'app.modal.signup',
+    'app.modal.invitePlayer',
+    'app.modal.forgotPassword'
 ])
 .factory('ModalService', ['$uibModal', function($uibModal) {
         
@@ -133,18 +136,28 @@ angular.module('ModalService', [
             templateUrl: templatePath + 'admin/editUser/editUser.html',
             controller: 'EditUserModalCtrl',
             resolve: {
+                $q: '$q',
                 ApiRoutesUsers: 'ApiRoutesUsers',
                 ApiRoutesSimpleLists: 'ApiRoutesSimpleLists',
                 groupList: function(ApiRoutesSimpleLists) {
                     return ApiRoutesSimpleLists.simpleGroupsList();
                 },
-                editing: function(ApiRoutesUsers) {
-                    if(angular.isDefined(user)) {
-                        return (angular.isObject(user)) ? user : 
-                                ApiRoutesUsers.getUser(user);
-                    } else {
-                        return {};
-                    }
+                editing: function($q, ApiRoutesUsers) {
+                    return $q(function (resolve, reject) {
+                            if (angular.isObject(user)) {
+                                return resolve(user);
+                            } else if (angular.isNumber(+user)) {
+                                ApiRoutesUsers.getUser(user).then(function (result) {
+                                    console.log(result);
+                                    return resolve(result.user);
+                                }, function (error) {
+                                    console.log(error);
+                                    return reject(error);
+                                });
+                            } else {
+                                return resolve({});
+                            }
+                    });
                 }
             }
         });
@@ -176,6 +189,84 @@ angular.module('ModalService', [
             }
         });
     };
+
+    /*
+    * Open Signup Modal
+    * 
+    * @return uibModalInstance
+    */
+    api.openSignup = function (currentTeam) {
+        return api.openModal({
+            templateUrl: templatePath + 'auth/signup/signup.html',
+            controller: 'SignupModalCtrl',
+            resolve: {
+                ApiRoutesSimpleLists: 'ApiRoutesSimpleLists',
+                currentTeam: function() {
+                    return currentTeam || false;
+                },
+                teamsList: function(ApiRoutesSimpleLists) {
+                    return ApiRoutesSimpleLists.simpleTeamsList();
+                }
+            }
+        });
+    };
+
+    /*
+    * Open Forgot Password Modal
+    * 
+    * @return uibModalInstance
+    */
+    api.openForgotPassword = function (emailAddress) {
+        return api.openModal({
+            templateUrl: templatePath + 'auth/forgotPassword/forgotPassword.html',
+            controller: 'ForgotPasswordCtrl',
+            resolve: {
+                ForgotEmailAddress: function () {
+                    if (angular.isDefined(emailAddress)) {
+                        return emailAddress;
+                    } else {
+                        return '';
+                    }
+                }
+            }
+        });
+    };
+    
+    /*
+     * Open Invite Player to Trivia Joint Modal
+     * 
+     * @return uibModalInstance
+     */
+    api.openInviteSiteSignup = function() {
+        return api.openModal({
+            templateUrl: templatePath + 'auth/invitePlayer/invitePlayer.html',
+            controller: 'InvitePlayerModalCtrl',
+            resolve: {
+                InvitingPlayer: function() {
+                    return false;
+                }
+            }
+        });
+    };
+    
+    /*
+     * Open Invite Player to Team to Trivia Joint Modal
+     * 
+     * @return uibModalInstance
+     */
+    api.openInviteToTeam = function() {
+        return api.openModal({
+            templateUrl: templatePath + 'auth/invitePlayer/invitePlayer.html',
+            controller: 'InvitePlayerModalCtrl',
+            resolve: {
+                AuthService: 'AuthService',
+                InvitingPlayer: function(AuthService) {
+                    return AuthService.getUser();
+                }
+            }
+        });
+    };
+
 
     return api;
 }]);
