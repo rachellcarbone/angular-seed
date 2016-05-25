@@ -31,5 +31,4 @@ class DatatablesController {
         $table = ($data) ? $data : array();
         return $app->render(200, array('table' => $table ));
     }
-    
 }
