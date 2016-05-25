@@ -17,18 +17,20 @@
         <li data-ui-sref-active="active"><a data-ui-sref="app.public.contact">Contact</a></li>
     </ul>
     <ul class="nav navbar-nav navbar-right">
-        <li data-ui-sref-active="active" ng-if="userDisplayName"><a data-ui-sref="app.member.dashboard">Members Area</a></li>
-        <li ng-if="userDisplayName" data-uib-dropdown data-is-open="userNavDropdownIsOpen">
+        <li data-uib-dropdown data-is-open="userNavDropdownIsOpen">
             <a data-uib-dropdown-toggle>Hi {{userDisplayName}} <b class="caret"></b></a>
             <ul data-uib-dropdown-menu>
-                <li data-ui-sref-active="active"><a data-ui-sref="app.member.profile">Profile</a></li>
-                <li data-ui-sref-active="active"><a data-ui-sref="app.member.settings">Settings</a></li>
+                <li class="trigger-collapse" rc-auth-visible-if="user" data-ui-sref-active="active"><a data-ui-sref="app.member.dashboard">Dashboard</a></li>
+                <li class="trigger-collapse" rc-auth-visible-if="admin" data-ui-sref-active="active"><a data-ui-sref="app.admin.dashboard">Admin Area</a></li>
                 <li class="divider"></li>
-                <li><a ng-click="logout()">Logout</a></li>
+                <li class="trigger-collapse" data-ui-sref-active="active"><a data-ui-sref="app.member.profile">Profile</a></li>
+                <li class="trigger-collapse" data-ui-sref-active="active"><a data-ui-sref="app.member.settings">Settings</a></li>
+                <li class="divider"></li>
+                <li class="trigger-collapse"><a ng-click="logout()">Logout</a></li>
             </ul>
         </li>
         <li data-ui-sref-active="active" ng-if="!userDisplayName"><a data-ui-sref="app.auth.login">Login</a></li>
         <li data-ui-sref-active="active" ng-if="!userDisplayName"><a data-ui-sref="app.auth.signup">Sign Up</a></li>
-        <li data-ui-sref-active="active"><a data-ui-sref="app.store.cart">View Cart</a></li>
+        <li data-ui-sref-active="active" ng-if="!userDisplayName"><a data-ui-sref="app.auth.signupVenue">Venue Sign Up</a></li>
     </ul>
 </div>
