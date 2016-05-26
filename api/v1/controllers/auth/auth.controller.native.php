@@ -1,7 +1,6 @@
 <?php namespace API;
 require_once dirname(__FILE__) . '/auth.data.php';
 require_once dirname(__FILE__) . '/auth.additionalInfo.data.php';
-require_once dirname(dirname(__FILE__)) . '/teams/teams.controller.php';
 require_once dirname(dirname(__FILE__)) . '/system-variables/config.data.php';
 use \Respect\Validation\Validator as v;
 class AuthControllerNative {
@@ -63,15 +62,6 @@ class AuthControllerNative {
         if(!$userId) {
             /// FAIL - If Inserting the user failed
             return array('registered' => false, 'msg' => 'Signup failed. Could not save user.');
-        }
-        
-        // If a team ID was sent, add them to the team
-        if(v::key('teamId', v::intVal())->validate($post)) {
-            $addTeam = TeamController::addPlayerById($post['teamId'], "Team ID #{$post['teamId']}", $userId);
-            if(!isset($addTeam['error']) || $addTeam['error'] === true) {
-                /// FAIL - If Inserting the user failed (hopefully this is redundant)
-                return array('registered' => false, 'msg' => 'Could not add user to team.');  
-            }
         }
         
         // Select our new user

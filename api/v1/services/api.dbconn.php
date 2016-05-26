@@ -12,17 +12,8 @@ class DBConn {
      */
     static $logger;
     
-    /*
-     * DB Table Prefix
-     */
-    static $dbTablePrefix;
-    
     public static function prefix() {
-        if(!self::$dbTablePrefix) {
-            $config = new APIConfig();
-            self::$dbTablePrefix = $config->get('dbTablePrefix');
-        }
-        return self::$dbTablePrefix;
+        return APIConfig::get('dbTablePrefix');
     }
     
     /*
@@ -51,11 +42,14 @@ class DBConn {
                 // Error Mode: Throw Exceptions
                 \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION
             );
+            
+            // 
+            $invocation = ($c['dbHost']) ? "host={$c['dbHost']}" : "unix_socket={$c['dbUnixSocket']}";
 
             try {
-                // Connect to an MySQL database using driver invocation
-                self::$pdo = new \PDO("mysql:host={$c['dbHost']};dbname={$c['db']}", $c["dbUser"], $c["dbPass"], $options);
+                self::$pdo = new \PDO("mysql:{$invocation};dbname={$c['db']}", $c["dbUser"], $c["dbPass"], $options);
             } catch (\PDOException $e) {
+                self::logError("Could not connect to the DB \"mysql:{$invocation};dbname={$c['db']}\" from 'api.dbconn'.");
                 // If we cant connect to the database die
                 die('Could not connect to the database:<br/>' . $e);
             }
@@ -76,6 +70,19 @@ class DBConn {
         }
         // Write the error arry to the log file
         self::$logger->write($pdo->errorInfo());
+    }
+    
+    /*
+     * Log the last PDO error
+     */
+    private static function logError($error) {
+        // If the logger hasnt been instantiated
+        if(!self::$logger) {
+            // Create a new instance of the system Logging class
+            self::$logger = new Logging('pdo_exception');
+        }
+        // Write the error arry to the log file
+        self::$logger->write($error);
     }
     
     /* 
@@ -182,6 +189,33 @@ class DBConn {
             $q = $pdo->prepare($query);
             $q->execute($data);
             return $q->fetch($style);
+        } catch (\PDOException $e) {
+            self::logPDOError($q);
+            return false;
+        }
+    }
+    
+    /*
+     * Preform fetchAll opperation with on a prepared PDO query.
+     * If only one value is found, just the value is returned.
+     * 
+     * @param string A valid SQL statement template for the target database server.
+     * @param array|optional An array of values with as many elements as there 
+     * are bound parameters in the SQL statement being executed.
+     * @param enum This value must be one of the \PDO::FETCH_* constants, 
+     * defaulting to \PDO::FETCH_OBJ (php.net/manual/en/pdostatement.fetch.php)
+     * 
+     * @return array|bool returns a single column in the next row of a result set,
+     * or FALSE if no results were found. If only one value is found, just the 
+     * value is returned.
+     */
+    public static function selectColumn($query, $data = array()) {
+        $pdo = self::connect();
+        try {
+            $q = $pdo->prepare($query);            
+            $q->execute($data);
+            $found = $q->fetchAll(\PDO::FETCH_COLUMN);
+            return ($found && isset($found[0]) && count($found) === 1) ? $found[0] : $found;
         } catch (\PDOException $e) {
             self::logPDOError($q);
             return false;
