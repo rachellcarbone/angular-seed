@@ -11,7 +11,7 @@ class APIConfig {
             'debugMode' => true,
             'dbHost' => 'localhost',
             'dbUnixSocket' => false,
-            'db' => 'angular_seed',
+            'db' => 'seed',
             'dbUser' => 'angular_seed',
             'dbPass' => 'angular_seed',
             'dbTablePrefix' => 'as_',
