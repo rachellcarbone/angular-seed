@@ -27,19 +27,15 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
             abstract: true,
             data: {authorizedRoles: USER_ROLES.guest},
             views: {
-                'header@app.store': {
+                'header@app': {
                     templateUrl: 'app/views/public/publicHeader/publicHeader.html',
                     controller: 'PublicHeaderCtrl'
                 },
-                'subheader@app.store': {
+                'subheader@app': {
                     templateUrl: 'app/views/store/storeSubHeader/storeSubHeader.html',
                     controller: 'StoreSubHeaderCtrl'
                 },
-                'layout@': {
-                    templateUrl: 'app/views/store/storeLayout/storeLayout.html',
-                    controller: 'StoreLayoutCtrl'
-                },
-                'footer@app.store': {
+                'footer@app': {
                     templateUrl: 'app/views/public/publicFooter/publicFooter.html',
                     controller: 'PublicFooterCtrl'
                 }
@@ -50,7 +46,7 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
             title: 'Store Home',
             url: '',
             views: {
-                'content@app.store': {
+                'content@app': {
                     templateUrl: 'app/views/store/storeHome/storeHome.html',
                     controller: 'StoreHomeCtrl'
                 }
@@ -61,7 +57,7 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
             title: 'Shopping Cart',
             url: '/cart',
             views: {
-                'content@app.store': {
+                'content@app': {
                     templateUrl: 'app/views/store/cart/cart.html',
                     controller: 'CartCtrl'
                 }
@@ -72,7 +68,7 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
             title: 'Store Category',
             url: '/:category',
             views: {
-                'content@app.store': {
+                'content@app': {
                     templateUrl: 'app/views/store/category/category.html',
                     controller: 'StoreCategoryCtrl'
                 }
@@ -83,7 +79,7 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
             title: 'Store Item Details',
             url: '/:category/:itemId',
             views: {
-                'content@app.store': {
+                'content@app': {
                     templateUrl: 'app/views/store/item/item.html',
                     controller: 'ItemDetailCtrl'
                 }

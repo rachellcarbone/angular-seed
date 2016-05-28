@@ -85,6 +85,11 @@ app.config(['$stateProvider', '$urlRouterProvider', 'USER_ROLES',
                         siteCopywrite : 'All rights reserved.'
                     };
                 }
+            },
+            views: {
+                'layout@': {
+                    templateUrl: 'app/views/_elements/pageLayout.html'
+                }
             }
         });
 
@@ -92,13 +97,7 @@ app.config(['$stateProvider', '$urlRouterProvider', 'USER_ROLES',
         $stateProvider.state('app.error', {
             url: '/error',
             abstract: true,
-            data: {authorizedRoles: USER_ROLES.guest},
-            views: {
-                'layout@': {
-                    templateUrl: 'app/views/error/errorLayout/errorLayout.html',
-                    controller: 'ErrorLayoutCtrl'
-                }
-            }
+            data: {authorizedRoles: USER_ROLES.guest}
         });
 
         /* Error Pages */
@@ -106,7 +105,7 @@ app.config(['$stateProvider', '$urlRouterProvider', 'USER_ROLES',
             title: 'Page Not Found',
             url: '/404',
             views: {
-                'content@app.error': {
+                'content@app': {
                     templateUrl: 'app/views/error/notFound/notFound.html',
                     controller: 'ErrorNotFoundCtrl'
                 }
@@ -117,7 +116,7 @@ app.config(['$stateProvider', '$urlRouterProvider', 'USER_ROLES',
             title: 'User Not Authorized',
             url: '/unauthorized',
             views: {
-                'content@app.error': {
+                'content@app': {
                     templateUrl: 'app/views/error/notAuthorized/notAuthorized.html',
                     controller: 'ErrorNotAuthorizedCtrl'
                 }

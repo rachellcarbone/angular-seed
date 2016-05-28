@@ -11,6 +11,5 @@ angular.module('app.store', [
     'app.store.category',
     'app.store.item',
     'app.store.storeHome',
-    'app.store.layout',
     'app.store.subheader'
 ]);

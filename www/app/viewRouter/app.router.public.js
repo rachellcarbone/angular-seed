@@ -24,15 +24,11 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
             abstract: true,
             data: {authorizedRoles: USER_ROLES.guest},
             views: {
-                'header@app.public': {
+                'header@app': {
                     templateUrl: 'app/views/public/publicHeader/publicHeader.html',
                     controller: 'PublicHeaderCtrl'
                 },
-                'layout@': {
-                    templateUrl: 'app/views/public/publicLayout/publicLayout.html',
-                    controller: 'PublicLayoutCtrl'
-                },
-                'footer@app.public': {
+                'footer@app': {
                     templateUrl: 'app/views/public/publicFooter/publicFooter.html',
                     controller: 'PublicFooterCtrl'
                 }
@@ -43,7 +39,7 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
             title: 'Welcome',
             url: '/',
             views: {
-                'content@app.public': {
+                'content@app': {
                     templateUrl: 'app/views/public/landing/landing.html',
                     controller: 'PublicLandingCtrl'
                 }
@@ -54,7 +50,7 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
             title: 'About Us',
             url: '/about',
             views: {
-                'content@app.public': {
+                'content@app': {
                     templateUrl: 'app/views/public/about/about.html',
                     controller: 'PublicAboutCtrl'
                 }
@@ -65,7 +61,7 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
             title: 'Terms of Use',
             url: '/terms-of-use',
             views: {
-                'content@app.public': {
+                'content@app': {
                     templateUrl: 'app/views/public/terms/terms.html',
                     controller: 'PublicTermsCtrl'
                 }
@@ -76,7 +72,7 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
             title: 'Tour',
             url: '/tour',
             views: {
-                'content@app.public': {
+                'content@app': {
                     templateUrl: 'app/views/public/tour/tour.html',
                     controller: 'PublicTourCtrl'
                 }
@@ -87,7 +83,7 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
             title: 'Contact Us',
             url: '/contact',
             views: {
-                'content@app.public': {
+                'content@app': {
                     templateUrl: 'app/views/public/contact/contact.html',
                     controller: 'PublicContactCtrl'
                 }
@@ -104,7 +100,7 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
             title: 'Site Map',
             url: '/sitemap',
             views: {
-                'content@app.public': {
+                'content@app': {
                     templateUrl: 'app/views/public/sitemap/sitemap.html'
                 }
             }

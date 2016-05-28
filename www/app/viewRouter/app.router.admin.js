@@ -25,15 +25,11 @@ app.config(['$stateProvider', '$urlRouterProvider', 'USER_ROLES',
             abstract: true,
             data: {authorizedRoles: USER_ROLES.admin},
             views: {
-                'header@app.admin': {
+                'header@app': {
                     templateUrl: 'app/views/admin/adminHeader/adminHeader.html',
                     controller: 'AdminHeaderCtrl'
                 },
-                'layout@': {
-                    templateUrl: 'app/views/admin/adminLayout/adminLayout.html',
-                    controller: 'AdminLayoutCtrl'
-                },
-                'footer@app.admin': {
+                'footer@app': {
                     templateUrl: 'app/views/admin/adminFooter/adminFooter.html',
                     controller: 'AdminFooterCtrl'
                 }
@@ -45,7 +41,7 @@ app.config(['$stateProvider', '$urlRouterProvider', 'USER_ROLES',
             title: 'Admin Dashboard',
             url: '/dashboard',
             views: {
-                'content@app.admin': {
+                'content@app': {
                     templateUrl: 'app/views/admin/dashboard/dashboard.html',
                     controller: 'AdminDashboardCtrl'
                 }
@@ -57,7 +53,7 @@ app.config(['$stateProvider', '$urlRouterProvider', 'USER_ROLES',
             title: 'Group Roles',
             url: '/groups-roles',
             views: {
-                'content@app.admin': {
+                'content@app': {
                     templateUrl: 'app/views/admin/roles/roles.html',
                     controller: 'AdminRolesCtrl'
                 }
@@ -69,7 +65,7 @@ app.config(['$stateProvider', '$urlRouterProvider', 'USER_ROLES',
             title: 'User Groups',
             url: '/user-groups',
             views: {
-                'content@app.admin': {
+                'content@app': {
                     templateUrl: 'app/views/admin/groups/groups.html',
                     controller: 'AdminGroupsCtrl'
                 }
@@ -81,7 +77,7 @@ app.config(['$stateProvider', '$urlRouterProvider', 'USER_ROLES',
             title: 'System Users',
             url: '/users',
             views: {
-                'content@app.admin': {
+                'content@app': {
                     templateUrl: 'app/views/admin/users/users.html',
                     controller: 'AdminUsersCtrl'
                 }
@@ -93,7 +89,7 @@ app.config(['$stateProvider', '$urlRouterProvider', 'USER_ROLES',
             title: 'System Configuration Variables',
             url: '/system-variables',
             views: {
-                'content@app.admin': {
+                'content@app': {
                     templateUrl: 'app/views/admin/systemVariables/systemVariables.html',
                     controller: 'AdminSystemVariablesCtrl'
                 }
@@ -105,7 +101,7 @@ app.config(['$stateProvider', '$urlRouterProvider', 'USER_ROLES',
             title: 'Define Field Visibility',
             url: '/field-visibility',
             views: {
-                'content@app.admin': {
+                'content@app': {
                     templateUrl: 'app/views/admin/fieldVisibility/fieldVisibility.html',
                     controller: 'AdminFieldVisibilityCtrl'
                 }

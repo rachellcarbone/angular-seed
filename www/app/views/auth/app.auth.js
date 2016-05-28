@@ -7,7 +7,6 @@
  */
 
 angular.module('app.auth', [
-    'app.auth.layout',
     'app.auth.header',
     'app.auth.footer',
     'app.auth.login',

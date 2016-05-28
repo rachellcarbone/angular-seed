@@ -24,15 +24,11 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
             abstract: true,
             data: {authorizedRoles: USER_ROLES.user},
             views: {
-                'header@app.member': {
+                'header@app': {
                     templateUrl: 'app/views/member/memberHeader/memberHeader.html',
                     controller: 'MemberHeaderCtrl'
                 },
-                'layout@': {
-                    templateUrl: 'app/views/member/memberLayout/memberLayout.html',
-                    controller: 'MemberLayoutCtrl'
-                },
-                'footer@app.member': {
+                'footer@app': {
                     templateUrl: 'app/views/member/memberFooter/memberFooter.html',
                     controller: 'MemberFooterCtrl'
                 }
@@ -43,7 +39,7 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
             title: 'Member Dashboard',
             url: '/dashboard',
             views: {
-                'content@app.member': {
+                'content@app': {
                     templateUrl: 'app/views/member/dashboard/dashboard.html',
                     controller: 'MemberDashboardCtrl'
                 }
@@ -54,7 +50,7 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
             title: 'User Profile',
             url: '/profile',
             views: {
-                'content@app.member': {
+                'content@app': {
                     templateUrl: 'app/views/member/profile/profile.html',
                     controller: 'MemberProfileCtrl'
                 }
@@ -65,7 +61,7 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
             title: 'User Settings',
             url: '/settings',
             views: {
-                'content@app.member': {
+                'content@app': {
                     templateUrl: 'app/views/member/settings/settings.html',
                     controller: 'MemberSettingsCtrl'
                 }

@@ -7,7 +7,6 @@
  */
 
 angular.module('app.error', [
-    'app.error.layout',
     'app.error.notAuthorized',
     'app.error.notFound'
 ]);

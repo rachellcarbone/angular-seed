@@ -25,15 +25,11 @@ app.config(['$stateProvider', 'USER_ROLES',
             abstract: true,
             data: {authorizedRoles: USER_ROLES.guest},
             views: {
-                'header@app.auth': {
+                'header@app': {
                     templateUrl: 'app/views/auth/authHeader/authHeader.html',
                     controller: 'AuthHeaderCtrl'
                 },
-                'layout@': {
-                    templateUrl: 'app/views/auth/authLayout/authLayout.html',
-                    controller: 'AuthLayoutCtrl'
-                },
-                'footer@app.auth': {
+                'footer@app': {
                     templateUrl: 'app/views/auth/authFooter/authFooter.html',
                     controller: 'AuthFooterCtrl'
                 }
@@ -47,7 +43,7 @@ app.config(['$stateProvider', 'USER_ROLES',
             title: 'Sign Up',
             url: '/signup',
             views: {
-                'content@app.auth': {
+                'content@app': {
                     templateUrl: 'app/views/auth/signup/signup.html',
                     controller: 'AuthSignupCtrl'
                 }
@@ -59,11 +55,11 @@ app.config(['$stateProvider', 'USER_ROLES',
             title: 'You have been invited!',
             url: '/:token',
             views: {
-                'content@app.auth': {
+                'content@app': {
                     templateUrl: 'app/views/auth/playerInvite/playerInvite.html',
                     controller: 'AuthPlayerInviteCtrl'
                 },
-                'signupform@app.auth.signup.invite': {
+                'signupform@app.signup.invite': {
                     templateUrl: 'app/views/auth/signup/signupForm.html'
                 }
             },
@@ -100,7 +96,7 @@ app.config(['$stateProvider', 'USER_ROLES',
             title: 'Login',
             url: '/login',
             views: {
-                'content@app.auth': {
+                'content@app': {
                     templateUrl: 'app/views/auth/login/login.html',
                     controller: 'AuthLoginCtrl'
                 }
@@ -154,11 +150,11 @@ app.config(['$stateProvider', 'USER_ROLES',
             title: 'Reset Password',
             url: '/reset_password/:usertoken',
             views: {
-                'content@app.auth': {
+                'content@app': {
                     templateUrl: 'app/views/auth/resetPassword/resetPassword.html',
                     controller: 'ResetPasswordCtrl'
                 },
-                'signupform@app.auth.resetPassword': {
+                'signupform@app.resetPassword': {
                     templateUrl: 'app/views/auth/resetPassword/resetPasswordForm.html'
                 }
             },
