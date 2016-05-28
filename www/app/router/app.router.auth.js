@@ -101,7 +101,8 @@ app.config(['$stateProvider', 'USER_ROLES',
             url: '/login',
             views: {
                 'content@app.auth': {
-                    templateUrl: 'app/views/auth/login/login.html'
+                    templateUrl: 'app/views/auth/login/login.html',
+                    controller: 'AuthLoginCtrl'
                 }
             }/*,
             resolve: {
