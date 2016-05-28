@@ -36,8 +36,8 @@
     </div>
     
     <div class="col-xs-12 col-sm-6 col-md-3">
-        <h4>Member Pages</h4>
-        <ul class="list-unstyled">
+        <h4 rc-auth-visible-if="user">Member Pages</h4>
+        <ul class="list-unstyled" rc-auth-visible-if="user">
             <li><a data-ui-sref="app.member.dashboard">Dashboard</a></li>
             <li><a data-ui-sref="app.member.profile">User Profile</a></li>
             <li><a data-ui-sref="app.member.settings">User Settings</a></li>
@@ -45,8 +45,8 @@
     </div>
     
     <div class="col-xs-12 col-sm-6 col-md-3">
-        <h4>Admin Pages</h4>
-        <ul class="list-unstyled">
+        <h4 rc-auth-visible-if="admin">Admin Pages</h4>
+        <ul class="list-unstyled" rc-auth-visible-if="admin">
             <li><a data-ui-sref="app.admin.dashboard">Admin Dashboard</a></li>
             <li><a data-ui-sref="app.admin.users">Members / Users</a></li>
             <li><a data-ui-sref="app.admin.groups">User Groups</a></li>
@@ -57,8 +57,8 @@
     </div>
     
     <div class="col-xs-12 col-sm-6 col-md-3">
-        <h4>System Pages</h4>
-        <ul class="list-unstyled">
+        <h4 rc-auth-visible-if="admin">System Pages</h4>
+        <ul class="list-unstyled" rc-auth-visible-if="admin">
             <li><a data-ui-sref="app.maintenance">Maintenance Page</a></li>
         </ul>
     </div>

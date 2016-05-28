@@ -1,31 +1,35 @@
-<div class="navbar-header">
-    <button type="button" class="navbar-toggle collapsed" ng-click="navbarCollapsed = !navbarCollapsed">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-    </button>
-    <a class="navbar-brand" data-ui-sref="app.public.landing">{{siteOptions.siteTitle}}</a>
-</div>
+<nav class="navbar navbar-default">
+    <div class="container">
 
-<div class="collapse navbar-collapse" data-uib-collapse="navbarCollapsed">
-    <ul class="nav navbar-nav">
-        <li rc-auth-visible-if="user" data-ui-sref-active="active"><a data-ui-sref="app.member.dashboard">Player Dashboard</a></li>
-        <li rc-auth-visible-if="host" data-ui-sref-active="active"><a data-ui-sref="app.host.dashboard">Host Dashboard</a></li>
-        <li rc-auth-visible-if="venue" data-ui-sref-active="active"><a data-ui-sref="app.venue.dashboard">Joint Dashboard</a></li>
-    </ul>
-    <ul class="nav navbar-nav navbar-right">
-        <li data-uib-dropdown data-is-open="userNavDropdownIsOpen">
-            <a data-uib-dropdown-toggle>Hi {{userDisplayName}} <b class="caret"></b></a>
-            <ul data-uib-dropdown-menu>
-                <li class="trigger-collapse" rc-auth-visible-if="user" data-ui-sref-active="active"><a data-ui-sref="app.member.dashboard">Dashboard</a></li>
-                <li class="trigger-collapse" rc-auth-visible-if="admin" data-ui-sref-active="active"><a data-ui-sref="app.admin.dashboard">Admin Area</a></li>
-                <li class="divider"></li>
-                <li class="trigger-collapse" data-ui-sref-active="active"><a data-ui-sref="app.member.profile">Profile</a></li>
-                <li class="trigger-collapse" data-ui-sref-active="active"><a data-ui-sref="app.member.settings">Settings</a></li>
-                <li class="divider"></li>
-                <li class="trigger-collapse"><a ng-click="logout()">Logout</a></li>
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" ng-click="navbarCollapsed = !navbarCollapsed">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" data-ui-sref="app.member.dashboard">{{siteOptions.siteTitle}}</a>
+        </div>
+
+        <div class="collapse navbar-collapse" data-uib-collapse="navbarCollapsed">
+            <ul class="nav navbar-nav">
             </ul>
-        </li>
-    </ul>
-</div>
+            <ul class="nav navbar-nav navbar-right">
+                <li data-uib-dropdown data-is-open="userNavDropdownIsOpen">
+                    <a data-uib-dropdown-toggle>Hi {{userDisplayName}} <b class="caret"></b></a>
+                    <ul data-uib-dropdown-menu>
+                        <li class="trigger-collapse" data-ui-sref-active="active"><a data-ui-sref="app.public.landing">Public Landing</a></li>
+                        <li class="trigger-collapse" rc-auth-visible-if="user" data-ui-sref-active="active"><a data-ui-sref="app.member.dashboard">Dashboard</a></li>
+                        <li class="trigger-collapse" rc-auth-visible-if="admin" data-ui-sref-active="active"><a data-ui-sref="app.admin.dashboard">Admin Area</a></li>
+                        <li class="divider"></li>
+                        <li class="trigger-collapse" data-ui-sref-active="active"><a data-ui-sref="app.member.profile">Profile</a></li>
+                        <li class="trigger-collapse" data-ui-sref-active="active"><a data-ui-sref="app.member.settings">Settings</a></li>
+                        <li class="divider"></li>
+                        <li class="trigger-collapse"><a ng-click="logout()">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        
+    </div>
+</nav>
