@@ -26,7 +26,7 @@ app.config(['$stateProvider', '$urlRouterProvider', 'USER_ROLES',
             data: {authorizedRoles: USER_ROLES.admin},
             views: {
                 'header@app': {
-                    templateUrl: 'app/views/admin/adminHeader/adminHeader.html',
+                    templateUrl: 'app/views/_elements/adminHeader/adminHeader.html',
                     controller: 'AdminHeaderCtrl'
                 }
             }

@@ -6,7 +6,7 @@
  * Used to control the member layout header and top navigtion.
  */
 
-angular.module('app.member.header', [])
+angular.module('app.elements.memberHeader', [])
         .controller('MemberHeaderCtrl', ['$scope', 'UserSession', 'AuthService', 'siteSystemVariables', 
         function ($scope, UserSession, AuthService, siteSystemVariables) {
         

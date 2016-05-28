@@ -26,7 +26,7 @@ app.config(['$stateProvider', 'USER_ROLES',
             data: {authorizedRoles: USER_ROLES.guest},
             views: {
                 'header@app': {
-                    templateUrl: 'app/views/auth/authHeader/authHeader.html',
+                    templateUrl: 'app/views/_elements/authHeader/authHeader.html',
                     controller: 'AuthHeaderCtrl'
                 }
             }

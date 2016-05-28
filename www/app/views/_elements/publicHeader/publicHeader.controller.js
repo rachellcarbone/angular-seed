@@ -1,13 +1,13 @@
 'use strict';
 
 /* 
- * Layout Header: Admin
+ * Layout Header: Public
  * 
- * Used to control the admin layout header and top navigtion.
+ * Used to control the public layout header and top navigtion.
  */
 
-angular.module('app.admin.header', [])
-        .controller('AdminHeaderCtrl', ['$scope', 'UserSession', 'AuthService', 'siteSystemVariables', 
+angular.module('app.elements.publicHeader', [])
+        .controller('PublicHeaderCtrl', ['$scope', 'UserSession', 'AuthService', 'siteSystemVariables', 
         function ($scope, UserSession, AuthService, siteSystemVariables) {
         
         /* Site configuration variables are pre loaded within the 
@@ -26,12 +26,9 @@ angular.module('app.admin.header', [])
         /* ui.bootstrap logged in user menu drop down. */
         $scope.userNavDropdownIsOpen = false;
         
-        /* ui.bootstrap authentication menu drop down. */
-        $scope.authNavDropdownIsOpen = false;
-        
         /* Trigger the outtermost navbar to collapse (the hamburger button)
          * when a link is selected. */
         $(".navbar-nav li.trigger-collapse a").click(function (event) {
             $scope.navbarCollapsed = true;
-        });
+        });        
     }]);

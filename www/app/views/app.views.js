@@ -7,9 +7,13 @@
  */
 
 angular.module('app.views', [
+    'app.elements.adminHeader',
+    'app.elements.authHeader',
+    'app.elements.memberHeader',
     'app.elements.publicFooter',
+    'app.elements.publicHeader',
+    'app.elements.storeSubHeader',
     
-    'app.admin.header',
     'app.admin.dashboard',
     'app.admin.fieldVisibility',
     'app.admin.groups',
@@ -17,7 +21,6 @@ angular.module('app.views', [
     'app.admin.systemVariables',
     'app.admin.users',
     
-    'app.auth.header',
     'app.auth.login',
     'app.auth.resetPassword',
     'app.auth.signup',
@@ -27,12 +30,10 @@ angular.module('app.views', [
     'app.error.notAuthorized',
     'app.error.notFound',
     
-    'app.member.header',
     'app.member.dashboard',
     'app.member.profile',
     'app.member.settings',
     
-    'app.public.header',
     'app.public.about',
     'app.public.contact',
     'app.public.landing',
@@ -42,6 +43,5 @@ angular.module('app.views', [
     'app.store.cart',
     'app.store.category',
     'app.store.item',
-    'app.store.storeHome',
-    'app.store.subheader'
+    'app.store.storeHome'
 ]);

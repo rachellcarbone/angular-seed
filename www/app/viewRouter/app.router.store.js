@@ -27,11 +27,11 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
             data: {authorizedRoles: USER_ROLES.guest},
             views: {
                 'header@app': {
-                    templateUrl: 'app/views/public/publicHeader/publicHeader.html',
+                    templateUrl: 'app/views/_elements/publicHeader/publicHeader.html',
                     controller: 'PublicHeaderCtrl'
                 },
                 'subheader@app': {
-                    templateUrl: 'app/views/store/storeSubHeader/storeSubHeader.html',
+                    templateUrl: 'app/views/_elements/storeSubHeader/storeSubHeader.html',
                     controller: 'StoreSubHeaderCtrl'
                 }
             }

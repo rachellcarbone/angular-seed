@@ -6,7 +6,7 @@
  * Used to control the auth layout header and top navigtion.
  */
 
-angular.module('app.auth.header', [])
+angular.module('app.elements.authHeader', [])
         .controller('AuthHeaderCtrl', ['$scope', 'siteSystemVariables',  
         function ($scope, siteSystemVariables) {
         

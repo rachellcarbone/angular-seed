@@ -25,7 +25,7 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
             data: {authorizedRoles: USER_ROLES.user},
             views: {
                 'header@app': {
-                    templateUrl: 'app/views/member/memberHeader/memberHeader.html',
+                    templateUrl: 'app/views/_elements/memberHeader/memberHeader.html',
                     controller: 'MemberHeaderCtrl'
                 }
             }
