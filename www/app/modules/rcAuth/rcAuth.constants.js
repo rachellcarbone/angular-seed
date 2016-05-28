@@ -31,13 +31,10 @@ app.constant('AUTH_COOKIES', {
 app.constant('USER_ROLES', {
     guest: "1",
     admin: "2",
-    user: "3",
+    user: "3"
 });
 
 app.constant('FACEBOOK_CONFIG', {
     appId: '892044264250192', // Dev
-    //appId: '892044264250192', // Dev
-    appId: '1538616896450172', //QA
-    //appId: '1538601933118335', //PROD
     comma: 'placeholder'
 });

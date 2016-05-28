@@ -233,7 +233,7 @@ angular.module('ModalService', [
     };
     
     /*
-     * Open Invite Player to Trivia Joint Modal
+     * Open Invite New User Modal
      * 
      * @return uibModalInstance
      */

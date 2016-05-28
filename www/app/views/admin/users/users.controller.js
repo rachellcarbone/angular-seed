@@ -7,8 +7,8 @@
  */
 
 angular.module('app.admin.users', [])
-    .controller('AdminUsersCtrl', ['$scope', '$compile', '$filter', 'DTOptionsBuilder', 'DTColumnBuilder', 'DataTableHelper', 'ModalService', 'TriviaModalService',
-        function($scope, $compile, $filter, DTOptionsBuilder, DTColumnBuilder, DataTableHelper, ModalService, TriviaModalService) {
+    .controller('AdminUsersCtrl', ['$scope', '$compile', '$filter', 'DTOptionsBuilder', 'DTColumnBuilder', 'DataTableHelper', 'ModalService',
+        function($scope, $compile, $filter, DTOptionsBuilder, DTColumnBuilder, DataTableHelper, ModalService) {
 
         $scope.alertProxy = {};
         
@@ -24,13 +24,6 @@ angular.module('app.admin.users', [])
             }
         };
         
-        // Edit Team Modal
-        $scope.buttonOpenEditTeamModal = function (id) {
-            var modalInstance = TriviaModalService.openEditTeam(id);
-            modalInstance.result.then(function (selectedItem) {
-                $scope.dtTeams.reloadData();
-            }, function () {});
-        };
         
         $scope.buttonSignupPlayer = function() {
             var modalInstance = ModalService.openSignup(false);
