@@ -14,7 +14,7 @@
 
 var app = angular.module('app.router.public', [
     'rcAuth.constants',
-    'app.public'
+    'app.views'
 ]);
 app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES) {
 
@@ -27,10 +27,6 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
                 'header@app': {
                     templateUrl: 'app/views/public/publicHeader/publicHeader.html',
                     controller: 'PublicHeaderCtrl'
-                },
-                'footer@app': {
-                    templateUrl: 'app/views/public/publicFooter/publicFooter.html',
-                    controller: 'PublicFooterCtrl'
                 }
             }
         });

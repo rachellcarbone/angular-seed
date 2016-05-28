@@ -8,7 +8,7 @@
  * loaded from the index.html.
  */
 
-angular.module('app.maintenance', ['ui.bootstrap'])
+angular.module('app.error.maintenance', ['ui.bootstrap'])
     .controller('MaintenanceCtrl', ['$scope', '$timeout', 'siteSystemVariables',
         function($scope, $timeout, siteSystemVariables) {
         

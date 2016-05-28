@@ -14,7 +14,7 @@
 
 var app = angular.module('app.router.admin', [
     'rcAuth.constants',
-    'app.admin'
+    'app.views'
 ]);
 app.config(['$stateProvider', '$urlRouterProvider', 'USER_ROLES', 
     function ($stateProvider, $urlRouterProvider, USER_ROLES) {
@@ -28,10 +28,6 @@ app.config(['$stateProvider', '$urlRouterProvider', 'USER_ROLES',
                 'header@app': {
                     templateUrl: 'app/views/admin/adminHeader/adminHeader.html',
                     controller: 'AdminHeaderCtrl'
-                },
-                'footer@app': {
-                    templateUrl: 'app/views/admin/adminFooter/adminFooter.html',
-                    controller: 'AdminFooterCtrl'
                 }
             }
         });

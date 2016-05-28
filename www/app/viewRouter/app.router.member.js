@@ -14,7 +14,7 @@
 
 var app = angular.module('app.router.member', [
     'rcAuth.constants',
-    'app.member'
+    'app.views'
 ]);
 app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES) {
 
@@ -27,10 +27,6 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
                 'header@app': {
                     templateUrl: 'app/views/member/memberHeader/memberHeader.html',
                     controller: 'MemberHeaderCtrl'
-                },
-                'footer@app': {
-                    templateUrl: 'app/views/member/memberFooter/memberFooter.html',
-                    controller: 'MemberFooterCtrl'
                 }
             }
         });

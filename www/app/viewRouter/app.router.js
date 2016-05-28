@@ -58,8 +58,7 @@
 var app = angular.module('app.router', [
   'ui.router',
   'rcAuth.constants',
-  'app.maintenance',
-  'app.error',
+  'app.views',
   'app.router.admin',
   'app.router.auth',
   'app.router.member',
@@ -89,6 +88,10 @@ app.config(['$stateProvider', '$urlRouterProvider', 'USER_ROLES',
             views: {
                 'layout@': {
                     templateUrl: 'app/views/_elements/pageLayout.html'
+                },
+                'footer@app': {
+                    templateUrl: 'app/views/_elements/publicFooter/publicFooter.html',
+                    controller: 'PublicFooterCtrl'
                 }
             }
         });

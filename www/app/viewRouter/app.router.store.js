@@ -14,8 +14,7 @@
 
 var app = angular.module('app.router.store', [
     'rcAuth.constants',
-    'app.public',
-    'app.store'
+    'app.views'
 ]);
 app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES) {
         
@@ -34,10 +33,6 @@ app.config(['$stateProvider', 'USER_ROLES', function ($stateProvider, USER_ROLES
                 'subheader@app': {
                     templateUrl: 'app/views/store/storeSubHeader/storeSubHeader.html',
                     controller: 'StoreSubHeaderCtrl'
-                },
-                'footer@app': {
-                    templateUrl: 'app/views/public/publicFooter/publicFooter.html',
-                    controller: 'PublicFooterCtrl'
                 }
             }
         });
