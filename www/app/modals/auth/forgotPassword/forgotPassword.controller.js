@@ -1,6 +1,5 @@
 'use strict';
 
-/* @author  Kapil Akhia */
 
 angular.module('app.modal.forgotPassword', [])
     .controller('ForgotPasswordCtrl', ['$scope', '$uibModalInstance', 'ForgotEmailAddress', 'AuthService',

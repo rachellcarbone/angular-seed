@@ -32,12 +32,17 @@ angular.module('AuthService', [
                 if (credentials) {
                     API.getAuthenticatedUser(credentials)
                         .then(function (data) {
-                            data.user.apiKey = credentials.apiKey;
-                            data.user.apiToken = credentials.apiToken;
-                            if (!UserSession.create(data.user)) {
-                                $log.error('[authInit] Credentials found but session Couldn\'t be Created', data);
+                            if (angular.isUndefined(data.user)) {
+                                $log.error('[authInit] User not set.', data);
+                                return resolve(false);
+                            } else {
+                                data.user.apiKey = credentials.apiKey;
+                                data.user.apiToken = credentials.apiToken;
+                                if (!UserSession.create(data.user)) {
+                                    $log.error('[authInit] Credentials found but session Couldn\'t be Created', data);
+                                }
+                                return resolve(UserSession.get());
                             }
-                            return resolve(UserSession.get());
                         }, function (error) {
                             CookieService.destroyAuthCookie();
                             $log.info('[authInit]', error);
@@ -63,15 +68,20 @@ angular.module('AuthService', [
                 if (credentials) {
                     API.getAuthenticatedUser(credentials)
                         .then(function (data) {
-                            data.user.apiKey = credentials.apiKey;
-                            data.user.apiToken = credentials.apiToken;
-                            if (!UserSession.create(data.user)) {
-                                $log.error('[authInit] Credentials found but session Couldn\'t be Created', data);
+                            if (angular.isUndefined(data.user)) {
+                                $log.error('[authReloadUser] User not set.', data);
+                                return resolve(false);
+                            } else {
+                                data.user.apiKey = credentials.apiKey;
+                                data.user.apiToken = credentials.apiToken;
+                                if (!UserSession.create(data.user)) {
+                                    $log.error('[authReloadUser] Credentials found but session Couldn\'t be Created', data);
+                                }
+                                return resolve(UserSession.get());
                             }
-                            return resolve(UserSession.get());
                         }, function (error) {
                             CookieService.destroyAuthCookie();
-                            $log.info('[authInit]', error);
+                            $log.info('[authReloadUser]', error);
                             return resolve(false);
                         });
                 } else {
@@ -425,13 +435,18 @@ angular.module('AuthService', [
                 if (credentials) {
                     API.getAuthenticatedUser(credentials)
                             .then(function (data) {
-                                data.user.apiKey = credentials.apiKey;
-                                data.user.apiToken = credentials.apiToken;
-                                if (UserSession.create(data.user)) {
-                                    return resolve(UserSession.get());
-                                } else {
-                                    $log.error('[isAuthenticated] Session Couldn\'t be Created', data);
+                                if (angular.isUndefined(data.user)) {
+                                    $log.error('[isAuthenticated] User not set.', data);
                                     return reject('User is not authenticated.');
+                                } else {
+                                    data.user.apiKey = credentials.apiKey;
+                                    data.user.apiToken = credentials.apiToken;
+                                    if (UserSession.create(data.user)) {
+                                        return resolve(UserSession.get());
+                                    } else {
+                                        $log.error('[isAuthenticated] Session Couldn\'t be Created', data);
+                                        return reject('User is not authenticated.');
+                                    }
                                 }
                             }, function (error) {
                                 return reject(error);

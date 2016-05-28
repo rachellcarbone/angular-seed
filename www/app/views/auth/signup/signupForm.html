@@ -1,0 +1,88 @@
+<form name="form.terms" role="form" novalidate>
+
+    <div data-rc-bootstrap-alerts="facebookAlerts"></div>
+
+    <div class="checkbox text-center">
+        <label>
+            <input type="checkbox" ng-model="newUser.acceptTerms" ng-true-value="true" ng-false-value="false" required> Agree to our <a href="http://www.triviajoint.com/terms-and-conditions/" target="_blank">terms of service</a>
+        </label>
+    </div>
+    
+</form>
+
+<hr/>
+
+<div class="form-group">
+    <a ng-click="facebookSignup()" class="btn btn-block btn-social btn-facebook">
+        <span class="fa fa-facebook"></span>
+        Sign up with Facebook
+    </a>
+</div>
+
+<div class="row" >
+    <div class="col-sm-12 text-center">
+        <h3>&mdash; Or &mdash;</h3>
+    </div>
+    <div class="col-sm-12 text-center">
+        &nbsp;
+    </div>
+</div>
+
+<form name="form.signup" role="form" novalidate>
+    <div class="row">
+
+        <div data-rc-bootstrap-alerts="signupAlerts"></div>
+
+        <div class="form-group col-xs-12 col-sm-6">
+            <input ng-model="newUser.nameFirst" type="text" class="form-control" name="nameFirst" placeholder="Player First Name" maxlength="255">
+        </div>
+
+        <div class="form-group col-xs-12 col-sm-6">
+            <input ng-model="newUser.nameLast" type="text" class="form-control" name="nameLast" placeholder="Player Last Name" maxlength="255">
+        </div>
+
+        <div class="form-group col-xs-12 col-sm-6">
+            <input ng-model="newUser.email" type="email" class="form-control" name="email" placeholder="Player Email" maxlength="255" required>
+        </div>
+
+        <div class="form-group col-xs-12 col-sm-6">
+            <input ng-model="newUser.phone" type="text" class="form-control" name="phone" placeholder="Player Phone" maxlength="20">
+        </div>
+
+        <div ng-if="showPasswordRules" class="form-group">
+            <div class="col-xs-12">
+                <div class="alert alert-warning" role="alert">
+                    <p><strong>Passwords Must:</strong></p>
+                    <ul>
+                        <li>Be at least 8 characters in length.</li>
+                        <li>Contain at least one letter and number.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group col-xs-12 col-sm-6">
+            <input ng-model="newUser.password"
+                   ng-change="onChangeValidatePassword()" 
+                   type="password" class="form-control" name="password" placeholder="Player Password" maxlength="55" required>
+        </div>
+
+        <div class="form-group col-xs-12 col-sm-6">
+            <input ng-model="newUser.passwordB"
+                   ng-change="onChangeValidateConfirmPassword()" 
+                   type="password" class="form-control" name="passwordB" placeholder="Confirm Player Password" maxlength="55" required>
+        </div>
+
+        <div ng-if="showPasswordMissmatch" class="form-group">
+            <div  class="col-xs-12">
+                <div class="alert alert-warning" role="alert">
+                    <p>Passwords must match</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group col-xs-12">
+            <button type="submit" class="btn btn-block btn-primary text-left" ng-click="signup()"><span class="glyphicon glyphicon-envelope"></span>&nbsp;&nbsp;&nbsp;&nbsp;Sign up with Email Address</button>
+        </div>
+    </div>
+</form>

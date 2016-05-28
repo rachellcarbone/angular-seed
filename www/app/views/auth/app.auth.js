@@ -11,8 +11,7 @@ angular.module('app.auth', [
     'app.auth.header',
     'app.auth.footer',
     'app.auth.login',
-    'app.auth.playerInvite',
     'app.auth.signup',
-    'app.auth.signupVenue',
+    'app.auth.signupInvite',
     'app.auth.resetPassword'
 ]);

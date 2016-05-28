@@ -32,8 +32,6 @@ app.constant('USER_ROLES', {
     guest: "1",
     admin: "2",
     user: "3",
-    host: "4",
-    venue: "5"
 });
 
 app.constant('FACEBOOK_CONFIG', {

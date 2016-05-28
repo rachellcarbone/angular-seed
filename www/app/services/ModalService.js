@@ -15,7 +15,7 @@ angular.module('ModalService', [
     'app.modal.editUser',
     'app.modal.editVisibilityField',
     'app.modal.signup',
-    'app.modal.invitePlayer',
+    'app.modal.signupInvite',
     'app.modal.forgotPassword'
 ])
 .factory('ModalService', ['$uibModal', function($uibModal) {
@@ -240,7 +240,7 @@ angular.module('ModalService', [
     api.openInviteSiteSignup = function() {
         return api.openModal({
             templateUrl: templatePath + 'auth/invitePlayer/invitePlayer.html',
-            controller: 'InvitePlayerModalCtrl',
+            controller: 'SignupInviteModalCtrl',
             resolve: {
                 InvitingPlayer: function() {
                     return false;
@@ -249,24 +249,5 @@ angular.module('ModalService', [
         });
     };
     
-    /*
-     * Open Invite Player to Team to Trivia Joint Modal
-     * 
-     * @return uibModalInstance
-     */
-    api.openInviteToTeam = function() {
-        return api.openModal({
-            templateUrl: templatePath + 'auth/invitePlayer/invitePlayer.html',
-            controller: 'InvitePlayerModalCtrl',
-            resolve: {
-                AuthService: 'AuthService',
-                InvitingPlayer: function(AuthService) {
-                    return AuthService.getUser();
-                }
-            }
-        });
-    };
-
-
     return api;
 }]);

@@ -1,12 +1,10 @@
 <?php
-
 // create curl resource 
 $ch = curl_init(); 
 
 // set url 
-curl_setopt($ch, CURLOPT_URL, 'http://www.theoatmeal.com'); 
-curl_setopt($ch, CURLOPT_POST, false); 
-curl_setopt($ch, CURLOPT_POSTFIELDS, array());
+curl_setopt($ch, CURLOPT_URL, 'https://github.com/'); 
+curl_setopt($ch, CURLOPT_POST, false);
 
 //return the transfer as a string 
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 

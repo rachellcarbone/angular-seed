@@ -69,6 +69,21 @@ app.config(['$stateProvider', 'USER_ROLES',
                 'signupform@app.auth.signup.invite': {
                     templateUrl: 'app/views/auth/signup/signupForm.html'
                 }
+            }
+        });
+
+        $stateProvider.state('app.auth.signup.invite', {
+            bodyClass: 'auth signup',
+            title: 'You have been invited!',
+            url: '/:token',
+            views: {
+                'content@app.auth': {
+                    templateUrl: 'app/views/auth/playerInvite/playerInvite.html',
+                    controller: 'AuthPlayerInviteCtrl'
+                },
+                'signupform@app.auth.signup.invite': {
+                    templateUrl: 'app/views/auth/signup/signupForm.html'
+                }
             },
             resolve: {
                 $q: '$q',
@@ -105,10 +120,6 @@ app.config(['$stateProvider', 'USER_ROLES',
             views: {
                 'content@app.auth': {
                     templateUrl: 'app/views/auth/login/login.html'
-                },
-                'loginform@app.auth.login': {
-                    templateUrl: 'app/views/auth/login/loginForm.html',
-                    controller: 'AuthLoginCtrl'
                 }
             }/*,
             resolve: {

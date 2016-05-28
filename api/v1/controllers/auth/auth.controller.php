@@ -4,7 +4,6 @@ namespace API;
 
 require_once dirname(dirname(dirname(__FILE__))) . '/services/api.auth.php';
 require_once dirname(dirname(dirname(__FILE__))) . '/services/api.mailer.php';
-require_once dirname(dirname(__FILE__)) . '/venues/venues.data.php';
 require_once dirname(__FILE__) . '/auth.data.php';
 require_once dirname(__FILE__) . '/auth.additionalInfo.data.php';
 require_once dirname(__FILE__) . '/auth.controller.native.php';

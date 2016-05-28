@@ -1,14 +1,14 @@
 'use strict';
 
 /* 
- * Login Page
+ * Player Invite Signup Page
  * 
- * Controller for the login page.
+ * Controller for the sinup page accessed by a player invite.
  */
 
-angular.module('app.auth.signup', [])
-        .controller('AuthSignupCtrl', ['$scope', '$state', '$log', '$window', '$timeout', 'AuthService', 'AlertConfirmService',
-        function ($scope, $state, $log, $window, $timeout, AuthService, AlertConfirmService) {
+angular.module('app.auth.signupInvite', [])
+        .controller('AuthSignupInviteCtrl', ['$scope', '$state', '$log', '$window', '$timeout', '$stateParams', 'AuthService', 'AlertConfirmService', 'InvitationData',
+        function ($scope, $state, $log, $window, $timeout, $stateParams, AuthService, AlertConfirmService, InvitationData) {
         
         $scope.$state = $state;
         $scope.form = {};
@@ -20,17 +20,18 @@ angular.module('app.auth.signup', [])
 
         $scope.newUser = {
             'userGroup' : 'player',
-            'nameFirst' : '',
-            'nameLast' : '',
-            'email' : '',
-            'phone' : '',
+            'nameFirst' : InvitationData.nameFirst || '',
+            'nameLast' : InvitationData.nameFirst || '',
+            'email' : InvitationData.email,
+            'phone' : InvitationData.phone || '',
             'password' : '',
             'passwordB' : '',
-            'referrer' : '',
+            'referrer' : "Invited by user - " + InvitationData.invitedBy,
             'acceptTerms' : false
         };
 
         $scope.signup = function() {
+            $scope.newUser.token = $stateParams.token;
             if(!$scope.form.signup.$valid) {
                 $scope.form.signup.$setDirty();
                 $scope.signupAlerts.error('Please agree to our terms of service and fill in the Email, and Password fields.');
@@ -70,10 +71,11 @@ angular.module('app.auth.signup', [])
         };
 
         $scope.facebookSignup = function() {
+            var userToken = { 'token' : $stateParams.token };
             if(!$scope.newUser.acceptTerms) {
                 AlertConfirmService.confirm('Do you agree to our <a href="http://www.angularseed.com/terms-and-conditions/" target="_blank">Terms of Service</a>?', 'Terms of Service Agreement').result.then(function (resp) {
                     $scope.newUser.acceptTerms = true;
-                    AuthService.facebookSignup().then(function (resp) {
+                    AuthService.facebookSignup(userToken).then(function (resp) {
                         $log.debug(resp);
                         $scope.newUser = resp;
                         
