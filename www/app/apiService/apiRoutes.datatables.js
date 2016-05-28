@@ -43,24 +43,6 @@ angular.module('apiRoutes.datatables', [])
         return getPromise('/datatable/admin/visibility-fields');
     };
     
-    // Admin Trivia
-    
-    api.adminGamesList = function() { 
-        return getPromise('/datatable/admin/trivia-games');
-    };
-    
-    api.adminTeamsList = function() { 
-        return getPromise('/datatable/admin/trivia-teams');
-    };
-    
-    api.adminTeamCheckinsList = function(teamId) { 
-        return getPromise('/datatable/admin/game-checkins/' + teamId);
-    };
-    
-    api.adminVenuesList = function() { 
-        return getPromise('/datatable/admin/trivia-venues');
-    };
-    
     
     // Games
     
