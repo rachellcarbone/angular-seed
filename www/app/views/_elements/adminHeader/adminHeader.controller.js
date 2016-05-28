@@ -29,6 +29,9 @@ angular.module('app.elements.adminHeader', [])
         /* ui.bootstrap authentication menu drop down. */
         $scope.authNavDropdownIsOpen = false;
         
+        /* ui.bootstrap store menu drop down. */
+        $scope.storeNavDropdownIsOpen = false;
+        
         /* Trigger the outtermost navbar to collapse (the hamburger button)
          * when a link is selected. */
         $(".navbar-nav li.trigger-collapse a").click(function (event) {

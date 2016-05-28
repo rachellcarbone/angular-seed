@@ -18,6 +18,9 @@ angular.module('app.views', [
     'app.admin.fieldVisibility',
     'app.admin.groups',
     'app.admin.roles',
+    'app.admin.storeCategories',
+    'app.admin.storeProducts',
+    'app.admin.storeTags',
     'app.admin.systemVariables',
     'app.admin.users',
     

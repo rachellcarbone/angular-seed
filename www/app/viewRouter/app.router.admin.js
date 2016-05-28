@@ -103,6 +103,42 @@ app.config(['$stateProvider', '$urlRouterProvider', 'USER_ROLES',
                 }
             }
         });
+
+        $stateProvider.state('app.admin.storeCategories', {
+            bodyClass: 'admin store-categories',
+            title: 'Store Categories',
+            url: '/store/categories',
+            views: {
+                'content@app': {
+                    templateUrl: 'app/views/admin/storeCategories/storeCategories.html',
+                    controller: 'AdminStoreCategoriesCtrl'
+                }
+            }
+        });
+        
+        $stateProvider.state('app.admin.storeTags', {
+            bodyClass: 'admin store-tags',
+            title: 'Store Product Tags',
+            url: '/store/tags',
+            views: {
+                'content@app': {
+                    templateUrl: 'app/views/admin/storeTags/storeTags.html',
+                    controller: 'AdminStoreTagsCtrl'
+                }
+            }
+        });
+        
+        $stateProvider.state('app.admin.storeProducts', {
+            bodyClass: 'admin store-products',
+            title: 'Store Products',
+            url: '/store/products',
+            views: {
+                'content@app': {
+                    templateUrl: 'app/views/admin/storeProducts/storeProducts.html',
+                    controller: 'AdminStoreProductsCtrl'
+                }
+            }
+        });
         
         // For any unmatched url, redirect to /
         $urlRouterProvider.when('/admin/', '/admin/dashboard');

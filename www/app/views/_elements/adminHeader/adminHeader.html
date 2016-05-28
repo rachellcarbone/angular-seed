@@ -13,8 +13,8 @@
 
         <div class="collapse navbar-collapse" data-uib-collapse="navbarCollapsed">
             <ul class="nav navbar-nav">
-                <li class="trigger-collapse" data-ui-sref-active="active"><a data-ui-sref="app.admin.dashboard">Home</a></li>
                 <li class="trigger-collapse" data-ui-sref-active="active"><a data-ui-sref="app.admin.users">Users</a></li>
+                <li class="trigger-collapse" data-ui-sref-active="active"><a data-ui-sref="app.admin.config">System Variables</a></li>
                 <li data-uib-dropdown data-is-open="authNavDropdownIsOpen">
                     <a data-uib-dropdown-toggle>Auth <b class="caret"></b></a>
                     <ul data-uib-dropdown-menu>
@@ -23,7 +23,14 @@
                         <li class="trigger-collapse" data-ui-sref-active="active"><a data-ui-sref="app.admin.visibility">Visibility Fields</a></li>
                     </ul>
                 </li>
-                <li data-ui-sref-active="active"><a data-ui-sref="app.admin.config">System Variables</a></li>
+                <li data-uib-dropdown data-is-open="storeNavDropdownIsOpen">
+                    <a data-uib-dropdown-toggle>Store <b class="caret"></b></a>
+                    <ul data-uib-dropdown-menu>
+                        <li class="trigger-collapse" data-ui-sref-active="active"><a data-ui-sref="app.admin.storeProducts">Products</a></li>
+                        <li class="trigger-collapse" data-ui-sref-active="active"><a data-ui-sref="app.admin.storeCategories">Categories</a></li>
+                        <li class="trigger-collapse" data-ui-sref-active="active"><a data-ui-sref="app.admin.storeTags">Tags</a></li>
+                    </ul>
+                </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li data-uib-dropdown data-is-open="userNavDropdownIsOpen">
