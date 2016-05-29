@@ -19,6 +19,7 @@ angular.module('app.views', [
     'app.admin.groups',
     'app.admin.roles',
     'app.admin.storeCategories',
+    'app.admin.storeProduct',
     'app.admin.storeProducts',
     'app.admin.storeTags',
     'app.admin.systemVariables',

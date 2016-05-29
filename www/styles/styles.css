@@ -324,6 +324,10 @@ html body h6 {
   margin-top: 1.3em;
   margin-bottom: 1em;
 }
+html body code {
+  font-size: 80%;
+}
+/* Generic Alignment Classes */
 .align-right,
 .alignRight,
 .text-right,
@@ -342,6 +346,31 @@ html body h6 {
 .textLeft {
   text-align: left;
 }
+.clear-both,
+.clearBoth {
+  clear: both;
+}
+.clear-left,
+.clearLeft {
+  clear: left;
+}
+.clear-right,
+.clearRight {
+  clear: right;
+}
+.float-left,
+.floatLeft,
+.pull-left,
+.pullLeft {
+  float: left;
+}
+.float-right,
+.floatRight,
+.pull-right,
+.pullRight {
+  float: right;
+}
+/* End: Generic Alignment Classes */
 .alert {
   padding: 7px 7px 7px 14px;
   margin-bottom: 10px;

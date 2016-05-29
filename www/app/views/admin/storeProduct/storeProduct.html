@@ -1,0 +1,37 @@
+<div class="page admin user-roles">
+    
+    <div class="pull-right">
+        <div class="btn-group btn-group-sm" uib-dropdown>
+            <button id="split-button" type="button" class="btn btn-info"  ng-click="buttonNewProduct()">New Product</button>
+            <button type="button" class="btn btn-info" uib-dropdown-toggle>
+                <span class="caret"></span>
+                <span class="sr-only">Split button!</span>
+            </button>
+            <ul uib-dropdown-menu role="menu" aria-labelledby="split-button">
+                <li role="menuitem"><a ng-click="buttonNewProduct()">New Product</a></li>
+                <li role="menuitem"><a ng-click="buttonOpenNewCategoryModal()">New Category</a></li>
+                <li role="menuitem"><a ng-click="buttonOpenNewTagModal()">New Tag</a></li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="page-header">
+        <h1>Store Products</h1>
+    </div>
+      
+    <div data-rc-bootstrap-alerts="alertProxy"></div>
+      
+    <ul>
+        <li>All</li>
+        <li>Active</li>
+        <li>Inactive</li>
+        <li>Category List</li>
+    </ul>
+    <table
+        data-datatable=""
+        data-dt-options="dtProducts.options"
+        data-dt-columns="dtProducts.columns"
+        data-dt-instance="dtProducts.instance"
+        class="table table-hover"></table>
+    
+</div>

@@ -143,11 +143,16 @@ app.config(['$stateProvider', '$urlRouterProvider', 'USER_ROLES',
         $stateProvider.state('app.admin.storeProducts.new', {
             bodyClass: 'admin store-products new-product',
             title: 'New Product',
-            url: '/store/product/new',
+            url: '/new',
             views: {
                 'content@app': {
-                    templateUrl: 'app/views/admin/storeProducts/storeProducts.html',
-                    controller: 'AdminStoreProductsCtrl'
+                    templateUrl: 'app/views/admin/storeProduct/storeProduct.html',
+                    controller: 'AdminStoreProductCtrl'
+                }
+            },
+            render: {
+                'editing': function() {
+                    return {};
                 }
             }
         });
@@ -155,11 +160,27 @@ app.config(['$stateProvider', '$urlRouterProvider', 'USER_ROLES',
         $stateProvider.state('app.admin.storeProducts.edit', {
             bodyClass: 'admin store-products edit-product',
             title: 'Edit Product',
-            url: '/store/product/:productId',
+            url: '/item/:productId',
             views: {
                 'content@app': {
-                    templateUrl: 'app/views/admin/storeProducts/storeProducts.html',
-                    controller: 'AdminStoreProductsCtrl'
+                    templateUrl: 'app/views/admin/storeProduct/storeProduct.html',
+                    controller: 'AdminStoreProductCtrl'
+                },
+                render: {
+                    $q: '$q',
+                    $stateParams: '$stateParams',
+                    ApiRoutesProducts: 'ApiRoutesProducts',
+                    editing: function($q, $stateParams, ApiRoutesProducts) {
+                        return $q(function(resolve, reject) {
+                            ApiRoutesProducts.getPoduct($stateParams.productId).then(function(result) {
+                                console.log(result);
+                                resolve(result.product);
+                            }, function(error) {
+                                console.log(error);
+                                resolve(error);
+                            });
+                        });
+                    }
                 }
             }
         });
