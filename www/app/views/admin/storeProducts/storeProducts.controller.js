@@ -7,109 +7,54 @@
  */
 
 angular.module('app.admin.storeProducts', [])
-    .controller('AdminStoreProductsCtrl', ['$scope', '$compile', '$filter', 'DataTableHelper', 'DTColumnBuilder', 'ModalService',
-        function($scope, $compile, $filter, DataTableHelper, DTColumnBuilder, ModalService) {
+    .controller('AdminStoreProductsCtrl', ['$scope', '$compile', '$filter', '$state', 'DataTableHelper', 'DTColumnBuilder', 'ModalService',
+        function($scope, $compile, $filter, $state, DataTableHelper, DTColumnBuilder, ModalService) {
 
         $scope.alertProxy = {};
 
-        /* Modal triggers */
-            // Edit Role Modal
-            $scope.buttonOpenEditRoleModal = function (id) {
-                var found = $filter('filter')($scope.dtGroupRoles.instance.DataTable.data(), {id: id}, true);
-                if(angular.isDefined(found[0])) {
-                    var modalInstance = ModalService.openEditRole(found[0]);
-                    modalInstance.result.then(function (selectedItem) {
-                        $scope.dtGroupRoles.reloadData();
-                    }, function () {});
-                }
-            };
-            
-            // New Group Modal
-            $scope.buttonOpenNewGroupModal = ModalService.openEditGroup;
-            
-            // New Role Modal
-            $scope.buttonOpenNewRoleModal = function () {
-                var modalInstance = ModalService.openEditRole();
-                modalInstance.result.then(function (selectedItem) {
-                    $scope.dtGroupRoles.reloadData();
-                }, function () {});
-            };
-            
-            // New Visibility Field Modal
-            $scope.buttonOpenNewVisibilityFieldModal = ModalService.openEditVisibilityField;
+        // Button navigate to new product state
+        $scope.buttonNewProduct = function () {
+            $state.go('app.admin.storeProducts.new');
+        };
         
-            // New Group to Role Modal
-            $scope.buttonAssignGroupModal = function (id) {
-                var modalInstance = ModalService.openAssignGroupRole(id);
-                modalInstance.result.then(function (selectedItem) {
-                    $scope.dtUsers.reloadData();
-                }, function () {});
-            };
+        // Open New Product Category Modal Button Event
+        $scope.buttonOpenNewCategoryModal = function () {
+            var modalInstance = ModalService.openEditProductCategory();
+            modalInstance.result.then(function (selectedItem) {
+                $scope.dtProducts.reloadData();
+            }, function () {});
+        };
+
+        // Open New Product Tag Modal Button Event
+        $scope.buttonOpenNewTagModal = function () {
+            var modalInstance = ModalService.openEditRole();
+            modalInstance.result.then(function (selectedItem) {
+                $scope.dtProducts.reloadData();
+            }, function () {});
+        };
+                
+        // Open Edit Product Category Modal Button Event
+        $scope.buttonEditProduct = function (id) {
+            $state.go('app.admin.storeProducts.edit', { 'productId' : id });
+        };
 
         // DataTable Setup
-        $scope.dtGroupRoles = DataTableHelper.getDTStructure($scope, 'adminRolesList');
-        $scope.dtGroupRoles.options.withOption('order', [1, 'desc']).withOption('responsive', {
-                details: {
-                    type: 'column',
-                    renderer: function(api, rowIdx, columns) {
-                        // Get the role id
-                        var id = 0;
-                        var data = new Array();
-                        angular.forEach(columns, function (value, key) {
-                            if(value.title == 'ID') {
-                                id = value.data;
-                            }
-                            if(value.title == 'Role Groups') {
-                                data = value.data;
-                            }
-                        });
-
-                        var header = '<table datatable="" dt-options="dtRoleGroups.options" class="table table-hover sub-table">\n\
-                            <thead><tr>\n\
-                            <td>ID</td>\n\
-                            <td>Group</td>\n\
-                            <td>Description</td>\n\
-                            </tr></thead><tbody>';
-
-
-                        var body = '';
-                        $.each(data, function(index, value) {
-                            body += '<tr>' +
-                                '<td>' + value['id'] + '</td> ' +
-                                '<td>' + value['group'] + '</td> ' +
-                                '<td>' + value['desc'] + '</td> ' +
-                                '</tr>';
-                        });
-
-                        // Create angular table element
-                        body = (body) ? body : '<tr><td colspan="3"><p>This role is not associated with any groups.</p></td></tr>';
-
-                        var html = header + body + '</tbody></table>';
-
-                        var table = angular.element(html);
-
-                        // compile the table to keep the directives (ngClick)
-                        $compile(table.contents())($scope);
-
-                        return table;
-                    }
-                }
-            });
+        $scope.dtProducts = DataTableHelper.getDTStructure($scope, 'adminStoreProductList');
+        $scope.dtProducts.options.withOption('order', [0, 'desc']);
             
-        $scope.dtGroupRoles.columns = [
-            DTColumnBuilder.newColumn(null).withTitle('Groups').withClass('responsive-control text-right noclick').renderWith(function(data, type, full, meta) {
-                return '<a><small>(' + data.groups.length +')</small> <i class="fa"></i></a>';
-            }).notSortable(),
-            DTColumnBuilder.newColumn('id').withTitle('ID'),
-            DTColumnBuilder.newColumn('role').withTitle('Role'),
-            DTColumnBuilder.newColumn('desc').withTitle('Description'),
-            DTColumnBuilder.newColumn('lastUpdated').withTitle('Updated On').renderWith(function (data, type, full, meta) {
-                return moment(data, 'YYYY-MM-DD HH:mm:ss').format('M/D/YYYY h:mm a');
+        $scope.dtProducts.columns = [
+            DTColumnBuilder.newColumn('id').withTitle('Id'),
+            DTColumnBuilder.newColumn(null).withTitle('Qty').renderWith(function(data, type, full, meta) {
+                return (type !== 'display') ? data.item :
+                        '<a ng-click="buttonEditProduct(\'' + data.id + '\')">' + data.item + '</a>';
             }),
-            DTColumnBuilder.newColumn(null).withTitle('').withClass('text-center noclick').renderWith(function(data, type, full, meta) {
-            return '<button type="button" ng-click="buttonOpenEditRoleModal(\'' + data.id + '\')" class="btn btn-default btn-xs pull-right">View</button>';
-            }).notSortable(),
-            DTColumnBuilder.newColumn('groups').withTitle('Role Groups').withClass('none').notSortable()
+            DTColumnBuilder.newColumn('tagline').withTitle('Tagline'),
+            DTColumnBuilder.newColumn('description').withTitle('Description').notSortable(),
+            DTColumnBuilder.newColumn('quantityAvailable').withTitle('Qty Availiable').withTitle('Item').renderWith(function(data, type, full, meta) {
+                return (data === null) ? 'Unlimited' : data;
+            }),
+            DTColumnBuilder.newColumn('fullPrice').withTitle('Full Price'),
+            DTColumnBuilder.newColumn('currentPrice').withTitle('Price')
         ];
         
     }]);

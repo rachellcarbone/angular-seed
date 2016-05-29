@@ -8,10 +8,11 @@
  */
 
 angular.module('ModalService', [
-    'app.modal.editSystemVariable',
     'app.modal.editGroup',
+    'app.modal.editProductCategory',
+    'app.modal.editProductTag',
     'app.modal.editRole',
-    'app.modal.editRole',
+    'app.modal.editSystemVariable',
     'app.modal.editUser',
     'app.modal.editVisibilityField',
     'app.modal.signup',
@@ -244,6 +245,60 @@ angular.module('ModalService', [
             resolve: {
                 InvitingPlayer: function() {
                     return false;
+                }
+            }
+        });
+    };
+    
+    /*
+     * Open Edit Product Category Modal
+     * 
+     * @return uibModalInstance
+     */
+    api.openEditProductCategory = function(category) {
+        return api.openModal({
+            templateUrl: templatePath + 'admin/editProductCategory/editProductCategory.html',
+            controller: 'EditProductCategoryModalCtrl',
+            resolve: {
+                ApiRoutesSystemVisibility: 'ApiRoutesSystemVisibility',
+                ApiRoutesSimpleLists: 'ApiRoutesSimpleLists',
+                roleList: function(ApiRoutesSimpleLists) {
+                    return ApiRoutesSimpleLists.simpleRolesList();
+                },
+                editing: function(ApiRoutesSystemVisibility) {
+                    if(angular.isDefined(category)) {
+                        return (angular.isObject(category)) ? category : 
+                                ApiRoutesSystemVisibility.getField(category);
+                    } else {
+                        return {};
+                    }
+                }
+            }
+        });
+    };
+    
+    /*
+     * Open Edit Product Tag Modal
+     * 
+     * @return uibModalInstance
+     */
+    api.openEditProductTag = function(tag) {
+        return api.openModal({
+            templateUrl: templatePath + 'admin/editProductTag/editProductTag.html',
+            controller: 'EditProductTagModalCtrl',
+            resolve: {
+                ApiRoutesSystemVisibility: 'ApiRoutesSystemVisibility',
+                ApiRoutesSimpleLists: 'ApiRoutesSimpleLists',
+                roleList: function(ApiRoutesSimpleLists) {
+                    return ApiRoutesSimpleLists.simpleRolesList();
+                },
+                editing: function(ApiRoutesSystemVisibility) {
+                    if(angular.isDefined(tag)) {
+                        return (angular.isObject(tag)) ? tag : 
+                                ApiRoutesSystemVisibility.getField(tag);
+                    } else {
+                        return {};
+                    }
                 }
             }
         });

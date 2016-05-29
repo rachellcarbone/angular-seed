@@ -118,4 +118,32 @@ class DatatablesData {
 
         return $elements;
     }
+    
+    /* Store */
+    static function selectStoreCategories() {
+        return DBConn::selectAll("SELECT c.id, c.category, c.identifier, c.description, "
+                . "c.created, c.last_updated AS lastUpdated, "
+                . "CONCAT(u1.name_first, ' ', u1.name_last) AS createdBy, CONCAT(u2.name_first, ' ', u2.name_last) AS updatedBy "
+                . "FROM " . DBConn::prefix() . "store_categories AS c "
+                . "JOIN " . DBConn::prefix() . "users AS u1 ON u1.id = c.created_user_id "
+                . "JOIN " . DBConn::prefix() . "users AS u2 ON u2.id = c.last_updated_by;");
+    }
+    
+    static function selectStoreProducts() {
+        return DBConn::selectAll("SELECT p.id, p.item, p.tagline, p.description, "
+                . "p.quantity_available AS quantityAvailable, p.full_price AS fullPrice, "
+                . "p.current_price AS currentPrice, p.created, p.last_updated AS lastUpdated, "
+                . "CONCAT(u1.name_first, ' ', u1.name_last) AS createdBy, CONCAT(u2.name_first, ' ', u2.name_last) AS updatedBy "
+                . "FROM " . DBConn::prefix() . "store_products AS p "
+                . "JOIN " . DBConn::prefix() . "users AS u1 ON u1.id = p.created_user_id "
+                . "JOIN " . DBConn::prefix() . "users AS u2 ON u2.id = p.last_updated_by;");
+    }
+    
+    static function selectStoreTags() {
+        return DBConn::selectAll("SELECT t.id, t.tag, t.identifier, t.description, t.created, t.last_updated AS lastUpdated, "
+                . "CONCAT(u1.name_first, ' ', u1.name_last) AS createdBy, CONCAT(u2.name_first, ' ', u2.name_last) AS updatedBy "
+                . "FROM " . DBConn::prefix() . "store_tags AS t "
+                . "JOIN " . DBConn::prefix() . "users AS u1 ON u1.id = t.created_user_id "
+                . "JOIN " . DBConn::prefix() . "users AS u2 ON u2.id = t.last_updated_by;");
+    }
 }

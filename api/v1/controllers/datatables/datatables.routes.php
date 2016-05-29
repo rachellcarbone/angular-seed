@@ -28,6 +28,18 @@ class DatatableRoutes {
             $app->post("/visibility-fields", function () use ($app) {
                 DatatablesController::getVisibilityFields($app);
             });
+
+            $app->post("/store/categories", function () use ($app) {
+                DatatablesController::getStoreCategories($app);
+            });
+
+            $app->post("/store/products", function () use ($app) {
+                DatatablesController::getStoreProducts($app);
+            });
+
+            $app->post("/store/tags", function () use ($app) {
+                DatatablesController::getStoreTags($app);
+            });
             
         });
     }

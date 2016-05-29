@@ -279,6 +279,51 @@ table.dataTable tbody tr td {
  * 
  * General typography and text elements style overrides.
  */
+html body {
+  font-size: 12px;
+}
+html body .h1,
+html body h1 {
+  font-size: 2.5em;
+}
+html body .h2,
+html body h2 {
+  font-size: 2em;
+}
+html body .h3,
+html body h3 {
+  font-size: 1.8em;
+}
+html body .h4,
+html body h4 {
+  font-size: 1.5em;
+}
+html body .h5,
+html body h5 {
+  font-size: 1.3em;
+}
+html body .h6,
+html body h6 {
+  font-size: .8em;
+}
+html body .h1,
+html body .h2,
+html body .h3,
+html body h1,
+html body h2,
+html body h3 {
+  margin-top: .5em;
+  margin-bottom: .2em;
+}
+html body .h4,
+html body .h5,
+html body .h6,
+html body h4,
+html body h5,
+html body h6 {
+  margin-top: 1.3em;
+  margin-bottom: 1em;
+}
 .align-right,
 .alignRight,
 .text-right,

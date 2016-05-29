@@ -140,6 +140,30 @@ app.config(['$stateProvider', '$urlRouterProvider', 'USER_ROLES',
             }
         });
         
+        $stateProvider.state('app.admin.storeProducts.new', {
+            bodyClass: 'admin store-products new-product',
+            title: 'New Product',
+            url: '/store/product/new',
+            views: {
+                'content@app': {
+                    templateUrl: 'app/views/admin/storeProducts/storeProducts.html',
+                    controller: 'AdminStoreProductsCtrl'
+                }
+            }
+        });
+        
+        $stateProvider.state('app.admin.storeProducts.edit', {
+            bodyClass: 'admin store-products edit-product',
+            title: 'Edit Product',
+            url: '/store/product/:productId',
+            views: {
+                'content@app': {
+                    templateUrl: 'app/views/admin/storeProducts/storeProducts.html',
+                    controller: 'AdminStoreProductsCtrl'
+                }
+            }
+        });
+        
         // For any unmatched url, redirect to /
         $urlRouterProvider.when('/admin/', '/admin/dashboard');
         $urlRouterProvider.when('/admin', '/admin/dashboard');

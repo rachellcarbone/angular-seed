@@ -31,4 +31,22 @@ class DatatablesController {
         $table = ($data) ? $data : array();
         return $app->render(200, array('table' => $table ));
     }
+    
+    static function getStoreCategories($app) {
+        $data = DatatablesData::selectStoreCategories();
+        $table = ($data) ? $data : array();
+        return $app->render(200, array('table' => $table ));
+    }
+    
+    static function getStoreProducts($app) {
+        $data = DatatablesData::selectStoreProducts();
+        $table = ($data) ? $data : array();
+        return $app->render(200, array('table' => $table ));
+    }
+    
+    static function getStoreTags($app) {
+        $data = DatatablesData::selectStoreTags();
+        $table = ($data) ? $data : array();
+        return $app->render(200, array('table' => $table ));
+    }
 }
