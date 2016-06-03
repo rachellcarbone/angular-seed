@@ -1,3 +1,5 @@
+# GitLab Test Commit
+
 # Angular Seed Project v0.0.1
 
 Welcome to my AngularJS Seed project. As you can see this is still under heavy development (v0.0.1) and isn't ready for users to clone, install and use.
