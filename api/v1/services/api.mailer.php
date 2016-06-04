@@ -39,32 +39,11 @@ class ApiMailer {
         return self::sendEmailFromTemplate('NEW_USER_SIGNED_UP', $playerEmail, $playerName, [$websiteTitle, $websiteUrl, $loginLink], [$websiteTitle]);
     }
     
-    public static function sendWebsiteSignupJoinTeamConfirmation($teamName, $playerEmail, $playerName = '') {
-        $websiteTitle = APIConfig::get('WEBSITE_TITLE');
-        $websiteUrl = APIConfig::get('WEBSITE_URL');
-        $loginLink = "{$websiteUrl}login/";
-        return self::sendEmailFromTemplate('NEW_USER_SIGNED_UP_ADDED_TO_TEAM', $playerEmail, $playerName, [$websiteTitle, $websiteUrl, $loginLink, $teamName], [$websiteTitle]);
-    }
-    
     public static function sendWebsiteSignupInvite($token, $playerEmail, $playerName = '') {
         $websiteTitle = APIConfig::get('WEBSITE_TITLE');
         $websiteUrl = APIConfig::get('WEBSITE_URL');
         $inviteLink = "{$websiteUrl}signup/{$token}/";
         return self::sendEmailFromTemplate('SIGNUP_INVITE_PLAYER', $playerEmail, $playerName, [$websiteTitle, $inviteLink], [$websiteTitle]);
-    }
-    
-    public static function sendTeamInviteNewUser($token, $teamName, $playerEmail, $playerName = '') {
-        $websiteTitle = APIConfig::get('WEBSITE_TITLE');
-        $websiteUrl = APIConfig::get('WEBSITE_URL');
-        $inviteLink = "{$websiteUrl}signup/{$token}/";
-        return self::sendEmailFromTemplate('SIGNUP_TEAM_INVITE', $playerEmail, $playerName, [$websiteTitle, $inviteLink, $teamName], [$websiteTitle]);
-    }
-    
-    public static function sendTeamInviteRegisteredUser($token, $teamName, $playerEmail, $playerName = '') {
-        $websiteTitle = APIConfig::get('WEBSITE_TITLE');
-        $websiteUrl = APIConfig::get('WEBSITE_URL');
-        $inviteLink = "{$websiteUrl}login/";
-        return self::sendEmailFromTemplate('TEAM_INVITE_USER', $playerEmail, $playerName, [$websiteTitle, $inviteLink, $teamName], [$websiteTitle]);
     }
     
     private static function sendEmailFromTemplate($templateId, $recipientEmail, $recipientName = '', $bodyParams = [], $subjectParams = []) {
