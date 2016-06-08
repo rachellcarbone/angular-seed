@@ -50,7 +50,7 @@ angular.module('rcCart', [
                 qty: this.qty,
                 total: this.total
             };
-        }
+        };
 
         this.sku = this.setSku(sku);
         this.name = this.setName(name);
