@@ -8,6 +8,7 @@
 angular.module('app.services', [
     'AlertConfirmService',
     'AuthService',
+    'UiGridHelper',
     'DataTableHelper',
     'ModalService'
 ]);
