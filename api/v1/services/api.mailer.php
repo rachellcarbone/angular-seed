@@ -1,8 +1,10 @@
 <?php namespace API;
-require_once dirname(dirname(__FILE__)) . '/config/config.php';
+require_once dirname(dirname(__FILE__)) . '/services/APIConfig.php';
 require_once dirname(dirname(__FILE__)) . '/controllers/system-variables/config.data.php';
-require_once dirname(__FILE__) . '/logging.php';
+require_once dirname(__FILE__) . '/APILogging.php';
 require_once dirname(__FILE__) . '/api.dbconn.php';
+
+/* @author  Rachel L Carbone <hello@rachellcarbone.com> */
 
 class ApiMailer {
     
@@ -17,8 +19,8 @@ class ApiMailer {
     private static function logMailError($level, $error) {
         // If the logger hasnt been instantiated
         if(!self::$logger) {
-            // Create a new instance of the system Logging class
-            self::$logger = new Logging('mailer_log');
+            // Create a new instance of the system APILogging class
+            self::$logger = new APILogging('mailer_log');
         }
         // Write the error arry to the log file
         syslog($level, $error);

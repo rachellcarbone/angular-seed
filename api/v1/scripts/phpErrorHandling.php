@@ -8,7 +8,7 @@ ini_set('display_startup_errors', $debugMode);
 
 // Require dependencies after setting errors display incase 
 // there are errors with any dependencies.
-require_once dirname(dirname(__FILE__)) . '/services/logging.php';
+require_once dirname(dirname(__FILE__)) . '/services/APILogging.php';
 
 
 class PhpErrorHandling {
@@ -18,8 +18,8 @@ class PhpErrorHandling {
      */
     static function apiExceptionHandler($e) {
 
-        /* Set PHP Error Handler to Logging */
-        $LogException = new \API\Logging('php_exception');
+        /* Set PHP Error Handler to APILogging */
+        $LogException = new \API\APILogging('php_exception');
 
         $LogException->logException($e);
     }
@@ -29,8 +29,8 @@ class PhpErrorHandling {
      * http://php.net/manual/en/function.set-error-handler.php
      */
     static function apiErrorHandler($errno, $errstr, $errfile, $errline) {
-        /* Set PHP Error Handler to Logging */
-        $LogError = new \API\Logging('php_error');
+        /* Set PHP Error Handler to APILogging */
+        $Logger = new \API\APILogging('php_error');
 
         if (!(error_reporting() & $errno)) {
             // This error code is not included in error_reporting
@@ -41,7 +41,7 @@ class PhpErrorHandling {
         switch ($errno) {
             case E_ERROR:
             case E_USER_ERROR:
-                $LogError->write("PHP ERROR: [{$errno}] {$errstr}\r\n"
+                $Logger->write("PHP ERROR: [{$errno}] {$errstr}\r\n"
                     . "    Line {$errline} in file {$errfile},\r\n"
                     . "    PHP " . PHP_VERSION . " (" . PHP_OS . ")\r\n"
                     . "    Aborting...\r\n");
@@ -50,18 +50,18 @@ class PhpErrorHandling {
 
             case E_WARNING:
             case E_USER_WARNING:
-                $LogError->write("PHP WARNING: [{$errno}] {$errstr}\r\n"
+                $Logger->write("PHP WARNING: [{$errno}] {$errstr}\r\n"
                     . "    Line {$errline} in file {$errfile},\r\n");
                 break;
 
             case E_NOTICE:
             case E_USER_NOTICE:
-                $LogError->write("PHP NOTICE: [{$errno}] {$errstr}\r\n"
+                $Logger->write("PHP NOTICE: [{$errno}] {$errstr}\r\n"
                     . "    Line {$errline} in file {$errfile},\r\n");
                 break;
 
             default:
-                $LogError->write("UNKNOWN PHP ERROR: [{$errno}] {$errstr}\r\n"
+                $Logger->write("UNKNOWN PHP ERROR: [{$errno}] {$errstr}\r\n"
                     . "    Line {$errline} in file {$errfile},\r\n");
                 break;
         }

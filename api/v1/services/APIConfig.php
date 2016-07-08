@@ -1,6 +1,8 @@
 <?php namespace API;
  require_once dirname(dirname(__FILE__)) . '/services/api.dbconn.php';
 
+/* @author  Rachel L Carbone <hello@rachellcarbone.com> */
+
 class APIConfig {
     static $dbConfig = false;
     static $config = false;

@@ -1,5 +1,5 @@
 <?php namespace API\Test;
-require_once dirname(dirname(__FILE__)) . "/config/config.php";
+require_once dirname(dirname(__FILE__)) . "/services/APIConfig";
 
 echo "<h3>API Config</h3>";
 echo '<pre><code>';

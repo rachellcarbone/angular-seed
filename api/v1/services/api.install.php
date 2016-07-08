@@ -1,5 +1,7 @@
 <?php namespace API;
-require_once dirname(dirname(__FILE__)) . '/config/config.php';
+require_once dirname(dirname(__FILE__)) . '/services/APIConfig.php';
+
+/* @author  Rachel L Carbone <hello@rachellcarbone.com> */
 
 class APIInstall {
     private $config;
@@ -33,7 +35,7 @@ class APIInstall {
             }
         } catch (Exception $e) {
             // Log Exceptions
-            //$this->Logging->logException($e);
+            //$this->APILogging->logException($e);
             return false;
         }
     }

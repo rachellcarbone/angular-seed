@@ -1,11 +1,9 @@
 <?php namespace API;
-require_once dirname(dirname(__FILE__)) . '/config/config.php';
+require_once dirname(__FILE__) . '/APIConfig.php';
 
-/* 
- * @author  Rachel Carbone
- */
+/* @author  Rachel L Carbone <hello@rachellcarbone.com> */
 
-class Logging {
+class APILogging {
     
     // Path to the log file
     private $logFile;
@@ -33,7 +31,7 @@ class Logging {
     
     private function getExceptionString($e) {
         // If the api is in debug mode return a more verbose message
-        return ($this->debugMode) ? "{$e}\r\n" : $e->getMessage();
+        return ($this->debugMode) ? "{$e} \r\n" : $e->getMessage();
     }
     
     
@@ -50,28 +48,26 @@ class Logging {
     /* 
      * Alias for the write function
      */
-    function log($logItem) {
-        // This is just a different way to call write
-        $this->write($logItem);
+    function log($logItem, $level = 'alert') {
+        $this->write($logItem, $level);
     }
     
     /* 
      * Prepend a timestamp to a line of text and write it to the log file.
      */
-    function write($logItem) {
-        if(is_array($logItem)) {
-            syslog(LOG_ERR, json_encode($logItem));
-        } else {
-            syslog(LOG_ERR, $logItem);
-        }
+    function write($logItem, $level = 'alert') {
+        // Make sure the log item is in String format
+        $text = (is_array($logItem)) ? json_encode($logItem) : $logItem;
+
+        // Build a formatted error message
+        $message = date("m d, Y, G:i:s T") . " \r\n" . $text . " \r\n";
         
+        // Send it to the System Log
+        syslog(LOG_ERR, $message);
+
         try {
-            // Get the timestamp
-            file_put_contents($this->logFile, date("m d, Y, G:i:s T"), FILE_APPEND);
-            // Concatenate log text with the timestamp
-            file_put_contents($this->logFile, $logItem, FILE_APPEND);
             // Append the log item (string) to the log file 
-            file_put_contents($this->logFile, "\n\r", FILE_APPEND);
+            file_put_contents($this->logFile, $message, FILE_APPEND);
         } catch (\Exception $e) {
             syslog(LOG_ERR, $this->getExceptionString($e));
         }

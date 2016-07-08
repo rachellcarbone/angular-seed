@@ -1,5 +1,7 @@
 <?php namespace API;
-require_once dirname(dirname(__FILE__)) . '/config/config.php';
+require_once dirname(dirname(__FILE__)) . '/services/APIConfig.php';
+
+/* @author  Rachel L Carbone <hello@rachellcarbone.com> */
 
 class DBConn {
     /*
@@ -65,8 +67,8 @@ class DBConn {
     private static function logPDOError($pdo) {
         // If the logger hasnt been instantiated
         if(!self::$logger) {
-            // Create a new instance of the system Logging class
-            self::$logger = new Logging('pdo_exception');
+            // Create a new instance of the system APILogging class
+            self::$logger = new APILogging('pdo_exception');
         }
         // Write the error arry to the log file
         self::$logger->write($pdo->errorInfo());
@@ -78,8 +80,8 @@ class DBConn {
     private static function logError($error) {
         // If the logger hasnt been instantiated
         if(!self::$logger) {
-            // Create a new instance of the system Logging class
-            self::$logger = new Logging('pdo_exception');
+            // Create a new instance of the system APILogging class
+            self::$logger = new APILogging('pdo_exception');
         }
         // Write the error arry to the log file
         self::$logger->write($error);

@@ -1,5 +1,7 @@
 <?php namespace API;
 
+/* @author  Rachel L Carbone <hello@rachellcarbone.com> */
+
 class JsonResponseMiddleware {
     /**
      * Slim PHP Middleware to turn API Responses into a clean formatted JSON oject.
@@ -19,8 +21,10 @@ class JsonResponseMiddleware {
      * @return \Psr\Http\Message\ResponseInterface
      */
     public function __invoke($request, $response, $next) {
-        $response->getBody()->write('WHAT');
+
         ob_start();
+
+        $response->getBody()->write(' BEFORE ');
 
         /* Let the other middleware (and routing) go first */
         $response = $next($request, $response);
@@ -29,8 +33,6 @@ class JsonResponseMiddleware {
         // http://php.net/manual/en/function.ob-get-clean.php
         try {
             $body = ob_get_clean();
-            ob_clean();
-            ob_end_clean();
         } catch (Exception $e) {
             ob_end_clean();
             $body = 'meow';
@@ -45,14 +47,20 @@ class JsonResponseMiddleware {
             );
         } else {
             $output = array(
-                'data' => array('msg' => 'An unknown server error has occured.'), 
-                'meta' => array('status' => 500, 'error' => false)
+                'data' => array('msg' => 'ERrrr.')
             );
         }
 
+            $output = array(
+                'data' => $body, 
+                'meta' => array('status' => 200, 'error' => false)
+            );
+        $response->getBody()->write(' AFTER ');
+
+
         /* Set response content type */
         //$response = $response->withHeader('Content-Type', 'application/json');
-
+        //$response->getBody()->rewind();
         return $response->withJson($output, 200);
     }
 }
