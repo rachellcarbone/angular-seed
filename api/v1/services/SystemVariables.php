@@ -7,8 +7,8 @@ class SystemVariables {
     /* \API\DBConn */
     private $dbConn = false;
 
-    /* \API\APILogging */
-    private $apiLogging = false;
+    /* \API\ApiLogging */
+    private $ApiLogging = false;
 
     /* Array of key => value pairs */
     private $systemVariables = false;
@@ -17,18 +17,18 @@ class SystemVariables {
      * System Variables Handler to manage the use of variables stored in the database
      * to be used throught the API.
      * 
-     * $SystemVars = new SystemVariables( new \API\DBConn(), new \API\APILogging() );
+     * $SystemVars = new SystemVariables( new \API\DBConn(), new \API\ApiLogging() );
      *
      * @param  \API\DBConn      $dbConn  Database Connection Helper Method
-     * @param  \API\APILogging  $apiLogging optional System Logging Helper Method
+     * @param  \API\ApiLogging  $ApiLogging optional System Logging Helper Method
      *
      * @return Array
      */
-    public function __construct($dbConn, $apiLogging = false) {
+    public function __construct($dbConn, $ApiLogging = false) {
 
         $this->dbConn = $dbConn;
 
-        $this->apiLogging = $apiLogging;
+        $this->ApiLogging = $ApiLogging;
 
         /* Select and set the System Variables */
         $this->setSystemVariables();
@@ -89,6 +89,7 @@ class SystemVariables {
         
         /* If the system variables wern't set send error to the system logger */
         if(!$variables || !is_array($variables) || count($variables) <= 0) {
+            // Log the failure to set the system variables
             $this->log("Could not select system variables from the database.");
             // Ensure this is false if it failed
             $this->systemVariables = false;
@@ -107,8 +108,8 @@ class SystemVariables {
      * @return void
      */
     private function log($message) {
-        if($this->apiLogging) {
-            $this->apiLogging->log($message, 'error');
+        if($this->ApiLogging) {
+            $this->ApiLogging->log($message, 'error');
         } else {
             syslog(LOG_ERR, $message);
         }

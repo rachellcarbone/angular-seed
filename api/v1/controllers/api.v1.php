@@ -1,10 +1,10 @@
 <?php
 namespace API;
 
-require_once dirname(dirname(__FILE__)) . '/services/APIConfig.php';     // API Coifg File (Add your settings!)
-require_once dirname(dirname(__FILE__)) . '/services/APILogging.php';  // Router Module
+require_once dirname(dirname(__FILE__)) . '/services/ApiConfig.php';     // API Coifg File (Add your settings!)
+require_once dirname(dirname(__FILE__)) . '/services/ApiLogging.php';  // Router Module
 require_once dirname(dirname(__FILE__)) . '/services/api.auth.php'; // Auth Service
-require_once dirname(dirname(__FILE__)) . '/slimMiddleware/JsonResponseMiddleware.php'; // Response middleware to neatly format API responses to JSON
+require_once dirname(dirname(__FILE__)) . '/slimMiddleware/JsonResponseView.php'; // Response middleware to neatly format API responses to JSON
 require_once dirname(dirname(__FILE__)) . '/slimMiddleware/RouteAuthenticationMiddleware.php'; // Slim PHP Middleware to authenticate incomming requests for individual routes
 
 /* API Route Controllers */
@@ -27,23 +27,38 @@ class V1Controller {
 
     public function run() {
         /* Get our system config */
-        $systemConfig = new APIConfig();
+        $systemConfig = new ApiConfig();
         
         /* Create a new Slim app */
-        $slimApp = self::createSlim($systemConfig->get('debugMode'));
+        $slimApp = $this->createSlim($systemConfig->get('debugMode'));
 
         /* Format the API Response as JSON */
-        $slimApp->add(new \API\JsonResponseMiddleware());
+        //$slimApp->add(new \API\JsonResponseView());
 
         /* Add API Routes */
-        self::addRoutes($slimApp, $systemConfig->get('debugMode'));
+        $this->addRoutes($slimApp, $systemConfig->get('debugMode'));
 
         /* Start Slim */
         $slimApp->run();
     }
 
-    private function createSlim($debugEnabled) {         
-        $config = [
+    private function createSlim($debugEnabled) {
+        $slimSettings = $this->getSlimConfig($debugEnabled);
+        
+        $slimContainer = $this->getSlimContainer($slimSettings, $debugEnabled);
+
+        /* Create new Slim PHP API App */
+        // http://www.slimframework.com/docs/objects/application.html
+        $slimApp = new \Slim\App($slimContainer);
+        
+        return $slimApp;
+    }
+
+    private function getSlimConfig($debugEnabled) {
+        /* Slim PHP Congif Settings */
+        // http://www.slimframework.com/docs/objects/application.html
+
+        $slimSettings = [
             'settings' => [
                 /* If false, then no output buffering is enabled. If 'append' or 'prepend', 
                  * then any echo or print statements are captured and are either appended 
@@ -70,48 +85,57 @@ class V1Controller {
             ]
         ];
 
+        /* Dev Mode / Debug Settings */
+        /* if($debugEnabled) { } */
+        
+        return $slimSettings;
+    }
+
+    private function getSlimContainer($slimSettings, $debugEnabled) {
         /* Create new Slim PHP Dependency Container */
         // http://www.slimframework.com/docs/concepts/di.html
-        $slimContainer = new \Slim\Container($config);
+        $slimContainer = new \Slim\Container($slimSettings);
 
         /* Add app services to the container */
 
-        /* An instance of \API\APIConfig */
-        $slimContainer['_SystemConfig'] = function($thisContainer) {
+        /* An instance of \API\ApiConfig */
+        $slimContainer['_ApiConfig'] = function($this) {
             /* Return the System Config Class */
-            $systemConfig = new \API\APIConfig(); 
-            return $systemConfig;
+            $ApiConfig = new \API\ApiConfig(); 
+            return $ApiConfig;
         };
 
-        /* An instance of \API\APIConfig */
-        $slimContainer['_SystemConfig'] = function($thisContainer) {
-            /* Return the System Config Class */
-            $systemConfig = new \API\APIConfig(); 
-            return $systemConfig;
-        };
-
-        /* Create an instance of \API\DBConn */
-        $slimContainer['_DBConn'] = function($thisContainer) {
-            /* Return the Database Connection Class */
-            $db = new \API\DBConn(); 
-            return $db;
-        };
-
-        /* Create an instance of \API\APILogging */
-        $slimContainer['_APILogging'] = function($thisContainer) {
-            /* Set PHP Error Handler to APILogging */
-            $logging = new \API\APILogging('api_log'); 
+        /* Create an instance of \API\ApiLogging */
+        $slimContainer['_ApiLogging'] = function($this) {
+            /* Set PHP Error Handler to ApiLogging */
+            $logging = new \API\ApiLogging($this->_ApiConfig); 
             return $logging;
         };
 
-        /* Dev Mode / Debug Settings */
-        /* if($debugEnabled) { } */
+        /* Create an instance of \API\DBConn */
+        $slimContainer['_DBConn'] = function($this) {
+            /* Return the Database Connection Class */
+            $db = new \API\DBConn($this->_ApiConfig, $this->_ApiLogging); 
+            return $db;
+        };
 
-        /* Create new Slim PHP API App */
-        // http://www.slimframework.com/docs/objects/application.html
-        $slimApp = new \Slim\App($slimContainer);
+        /* An instance of \API\SystemConfig */
+        $slimContainer['_SystemConfig'] = function($this) {
+            /* Return the System Config Class */
+            $systemConfig = new \API\SystemConfig($this->_DBConn, $this->_ApiLogging); 
+            return $systemConfig;
+        }; 
         
-        return $slimApp;
+        $slimContainer['view'] = new \API\JsonResponseView();
+
+        /* Dev Mode / Debug Settings */
+        /* if(!$debugEnabled) { 
+            $this->addErrorHandlers($slimContainer);
+        } */
+
+        $this->addErrorHandlers($slimContainer);
+        
+        return $slimContainer;
     }
     
     public function addRoutes($slimApp, $debugEnabled) {
@@ -122,8 +146,8 @@ class V1Controller {
             };
         };
 
-        self::addDefaultRoutes($slimApp);
-        //self::addErrorRoutes($slimApp, $debugEnabled);
+        $this->addDefaultRoutes($slimApp);
+        //$this->addErrorRoutes($slimApp, $debugEnabled);
         
         /*
         TestRoutes::addRoutes($slimApp, $authenticateForRole);
@@ -143,7 +167,7 @@ class V1Controller {
     
     private function addDefaultRoutes($slimApp) {
         $slimApp->any('/', function ($request, $response, $args) {
-            echo('Congratulations, you have reached the Slim PHP API v1.1!');
+            $this->view->render($response, 700, 'Congratulations, you have reached the Slim PHP API v1.1!');
         });
         
         $slimApp->any('/about-this-api/possible-headers', function ($request, $response, $args) {
@@ -155,17 +179,19 @@ class V1Controller {
         
     }
     
-    private function addErrorRoutes() {
+    private function addErrorHandlers($slimContainer) {
+        
+        return $slimContainer;
     }
 }
 
 /*
  * APILogWriter: Custom log writer for our application
  * We must implement write(mixed $message, int $level) */
-class APILogWriter extends APILogging {
+class APILogWriter extends ApiLogging {
     public function write($message, $level = SlimLog::DEBUG) {
-        /* Set PHP Error Handler to APILogging */
-        $logger = new APILogging('api_log'); 
+        /* Set PHP Error Handler to ApiLogging */
+        $logger = new ApiLogging(new ApiConfig(), 'api_log'); 
         $logger->write("[Slim API : Level {$level}] - {$message}");
     }
 }

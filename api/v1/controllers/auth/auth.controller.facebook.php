@@ -46,11 +46,11 @@ class AuthControllerFacebook {
             $accessToken = $helper->getAccessToken();
         } catch (\Facebook\Exceptions\FacebookResponseException $e) {
             // When Graph returns an error
-            $logger = new APILogging('facebook_api_exception');
+            $logger = new ApiLogging(new ApiConfig(), 'facebook_api_exception');
             $logger->logException($e);
         } catch (\Facebook\Exceptions\FacebookSDKException $e) {
             // When validation fails or other local issues
-            $logger = new APILogging('facebook_api_exception');
+            $logger = new ApiLogging(new ApiConfig(), 'facebook_api_exception');
             $logger->logException($e);
         }
 
@@ -89,12 +89,12 @@ class AuthControllerFacebook {
             $response = $fb->get('/me?fields=id,first_name,last_name,age_range,link,gender,locale,timezone,email', $accessToken);
         } catch (\Facebook\Exceptions\FacebookResponseException $e) {
             // When Graph returns an error
-            $logger = new APILogging('facebook_api_exception');
+            $logger = new ApiLogging(new ApiConfig(), 'facebook_api_exception');
             $logger->logException($e);
             return false;
         } catch (\Facebook\Exceptions\FacebookSDKException $e) {
             // When validation fails or other local issues
-            $logger = new APILogging('facebook_api_exception');
+            $logger = new ApiLogging(new ApiConfig(), 'facebook_api_exception');
             $logger->logException($e);
             return false;
         }

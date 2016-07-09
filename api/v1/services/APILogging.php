@@ -1,9 +1,9 @@
 <?php namespace API;
-require_once dirname(__FILE__) . '/APIConfig.php';
+require_once dirname(__FILE__) . '/ApiConfig.php';
 
 /* @author  Rachel L Carbone <hello@rachellcarbone.com> */
 
-class APILogging {
+class ApiLogging {
     
     // Path to the log file
     private $logFile;
@@ -11,21 +11,21 @@ class APILogging {
     // Is the API in debug mode
     private $debugMode;
     
-    function __construct($logName = 'log') {
+    function __construct($ApiConfig, $logName = 'log') {
         // Name of the log file, either "yourname_log" or "log"
         $type = ($logName === 'log') ? 'log' : $logName . '_log';
         
         // Get the API config
-        $config = new APIConfig();
-        $c = $config->get();
+        $ApiConfig = new ApiConfig();
+        $c = $ApiConfig->get();
         
         //Is the app in debug mode
         $this->debugMode = $c["debugMode"];
         
-        // month_year - 01_15
-        $datestamp = date("m_y");
+        // year_month - 16_01
+        $datestamp = date("y_m");
         
-        // Example: C:/xampp/htdocs/angular-seed/api/system/logs/v1_11_15_error_log.txt
+        // Example: C:/xampp/htdocs/angular-seed/api/system/logs/v1_16_11_error_log.txt
         $this->logFile = $c['systemPath'] . $c['dirLogs'] . $c['apiVersion'] . '_' . $datestamp . '_' . $type . '.txt';
     }
     

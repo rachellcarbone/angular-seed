@@ -1,5 +1,5 @@
 <?php namespace API;
-require_once dirname(dirname(__FILE__)) . '/services/APIConfig.php';
+require_once dirname(dirname(__FILE__)) . '/services/ApiConfig.php';
 
 /* @author  Rachel L Carbone <hello@rachellcarbone.com> */
 
@@ -15,7 +15,8 @@ class DBConn {
     static $logger;
     
     public static function prefix() {
-        return APIConfig::get('dbTablePrefix');
+        $config = new ApiConfig();
+        return $config->get('dbTablePrefix');
     }
     
     /*
@@ -26,7 +27,7 @@ class DBConn {
         // If a PDO instance does not already exist
         if(!self::$pdo) {
             // Get the system configuration file
-            $config = new APIConfig();
+            $config = new ApiConfig();
             $c = $config->get();
 
             // Create a set of PDO options
@@ -67,8 +68,8 @@ class DBConn {
     private static function logPDOError($pdo) {
         // If the logger hasnt been instantiated
         if(!self::$logger) {
-            // Create a new instance of the system APILogging class
-            self::$logger = new APILogging('pdo_exception');
+            // Create a new instance of the system ApiLogging class
+            self::$logger = new ApiLogging(new ApiConfig(), 'pdo_exception');
         }
         // Write the error arry to the log file
         self::$logger->write($pdo->errorInfo());
@@ -80,8 +81,8 @@ class DBConn {
     private static function logError($error) {
         // If the logger hasnt been instantiated
         if(!self::$logger) {
-            // Create a new instance of the system APILogging class
-            self::$logger = new APILogging('pdo_exception');
+            // Create a new instance of the system ApiLogging class
+            self::$logger = new ApiLogging(new ApiConfig(), 'pdo_exception');
         }
         // Write the error arry to the log file
         self::$logger->write($error);

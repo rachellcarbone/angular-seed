@@ -1,5 +1,5 @@
 <?php namespace API;
-require_once dirname(dirname(__FILE__)) . '/services/APIConfig.php';
+require_once dirname(dirname(__FILE__)) . '/services/ApiConfig.php';
 require_once dirname(dirname(__FILE__)) . '/controllers/auth/auth.data.php';
 
 /* @author  Rachel L Carbone <hello@rachellcarbone.com> */

@@ -1,13 +1,76 @@
 <?php namespace API;
- require_once dirname(dirname(__FILE__)) . '/services/api.dbconn.php';
 
 /* @author  Rachel L Carbone <hello@rachellcarbone.com> */
 
-class APIConfig {
-    static $dbConfig = false;
-    static $config = false;
+class ApiConfig {
 
-    static function setAPIConfig() {
+    /* \API\ApiLogging */
+    private $ApiLogging = false;
+
+    /* Array of key => value pairs */
+    private $apiConfig = false;
+
+    /**
+     * Api Config variables Handler to manage the use of variables stored in the database
+     * to be used throught the API.
+     * 
+     * $SystemVars = new ApiConfig( new \API\ApiLogging( 'error_log' ) );
+     *
+     * @param  \API\ApiLogging  $ApiLogging optional System Logging Helper Method
+     *
+     * @return Array
+     */
+    public function __construct($ApiLogging = false) {
+
+        $this->ApiLogging = $ApiLogging;
+
+        /* Select and set the api config variables */
+        $this->setApiConfig();
+    }
+
+    /**
+     * This method works two ways:
+     * 
+     * One - Select a api config variable by its name, is the variable exists its value (mixed)
+     *      will be returned, or if the variable doesn't exist false (bool) will be returned. 
+     *
+     * Two - Return the api config variable key => value pairs (array), or if there was an 
+     *      error selecting the variables on init, return false (bool).
+     *
+     * $allVariablesArray = $SystemVariables->get();
+     * $oneVariableValue = $SystemVariables->get('UNIQUE_VARIABLE_IDENTIFIER');
+     *
+     * @param  String   $variableName optional Name of the api config variable requested.
+     *
+     * @return Mixed
+     */
+    public function get($variableName = false) {        
+        /* If a variable name was sent to the get function, 
+         * try to select just that variable. */
+        if ($this->apiConfig && $variableName !== false) {
+            return (isset($this->apiConfig[$variableName])) ? $this->apiConfig[$variableName] : false;
+        }
+        return $this->apiConfig;
+    }
+
+    /**
+     * Manually run the setApiConfig method and refresh the saved apiConfig.
+     *
+     * $allVariablesArray = $ApiConfig->refresh();
+     *
+     * @return Array
+     */
+    public function refresh() {        
+        /* Run the api config variable selection manually. */
+        return $this->setApiConfig();
+    }
+
+    /**
+     * Set the apiConfig array based on the current server address.
+     *
+     * @return Array
+     */
+    private function setApiConfig() {
         $default = array(
             'apiVersion' => 'v1',
             'debugMode' => true,
@@ -25,37 +88,25 @@ class APIConfig {
         
         if($_SERVER['HTTP_HOST'] === 'api.seed.dev') {
             // Localhost
-            self::$config = $default;
+            $this->apiConfig = $default;
         } else {
-            self::$config = false;
-	}
-        
-        if(self::$config !== false) {
-            $dbConfig = self::selectSystemVariables();
-            self::$config = array_merge(self::$config, $dbConfig);
-        }
+            // Log the failure to set the api config variables
+            $this->log("Could not set the api config variables: " . json_encode($_SERVER));
+            // Ensure this is false if it failed
+            $this->apiConfig = false;
+	    }
     }
 
-    static function get($opt = false) {
-        if(!self::$config) {
-            self::setAPIConfig();
+    /**
+     * Helper function to log to logger if it's set or syslog if it isn't.
+     *
+     * @return void
+     */
+    private function log($message) {
+        if($this->ApiLogging) {
+            $this->ApiLogging->log($message, 'error');
+        } else {
+            syslog(LOG_ERR, $message);
         }
-        
-        if ($opt !== false && isset(self::$config[$opt])) {
-            return self::$config[$opt];
-        }
-        return self::$config;
-    }
-
-    private static function selectSystemVariables() {
-        $qDBConfig = DBConn::executeQuery("SELECT name, value FROM " . DBConn::prefix() . "system_config WHERE disabled = 0;");
-        
-        $dbConfig = Array();
-        while($var = $qDBConfig->fetch(\PDO::FETCH_OBJ)) {  
-            $dbConfig[$var->name] = $var->value;
-        }
-        self::$dbConfig = $dbConfig;
-        
-        return self::$dbConfig;
     }
 }

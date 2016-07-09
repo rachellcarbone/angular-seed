@@ -8,7 +8,7 @@ ini_set('display_startup_errors', $debugMode);
 
 // Require dependencies after setting errors display incase 
 // there are errors with any dependencies.
-require_once dirname(dirname(__FILE__)) . '/services/APILogging.php';
+require_once dirname(dirname(__FILE__)) . '/services/ApiLogging.php';
 
 
 class PhpErrorHandling {
@@ -18,8 +18,8 @@ class PhpErrorHandling {
      */
     static function apiExceptionHandler($e) {
 
-        /* Set PHP Error Handler to APILogging */
-        $LogException = new \API\APILogging('php_exception');
+        /* Set PHP Error Handler to ApiLogging */
+        $LogException = new \API\ApiLogging('php_exception');
 
         $LogException->logException($e);
     }
@@ -29,8 +29,8 @@ class PhpErrorHandling {
      * http://php.net/manual/en/function.set-error-handler.php
      */
     static function apiErrorHandler($errno, $errstr, $errfile, $errline) {
-        /* Set PHP Error Handler to APILogging */
-        $Logger = new \API\APILogging('php_error');
+        /* Set PHP Error Handler to ApiLogging */
+        $Logger = new \API\ApiLogging('php_error');
 
         if (!(error_reporting() & $errno)) {
             // This error code is not included in error_reporting

@@ -1,6 +1,6 @@
 <?php namespace API\Test;
 
-require_once dirname(dirname(__FILE__)) . '/services/APIConfig.php';
+require_once dirname(dirname(__FILE__)) . '/services/ApiConfig.php';
 
 /* 
  * Config and PDO Connection Tester
@@ -9,7 +9,7 @@ require_once dirname(dirname(__FILE__)) . '/services/APIConfig.php';
  * Disply success or fail with data messages.
  */
 
-$config = new \API\APIConfig();
+$config = new \API\ApiConfig();
 $c = $config->get();
 
 echo "<pre><code>";

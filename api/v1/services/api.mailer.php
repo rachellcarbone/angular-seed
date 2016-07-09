@@ -1,7 +1,8 @@
 <?php namespace API;
-require_once dirname(dirname(__FILE__)) . '/services/APIConfig.php';
+require_once dirname(dirname(__FILE__)) . '/services/ApiConfig.php';
+require_once dirname(dirname(__FILE__)) . '/services/SystemVariables.php';
 require_once dirname(dirname(__FILE__)) . '/controllers/system-variables/config.data.php';
-require_once dirname(__FILE__) . '/APILogging.php';
+require_once dirname(__FILE__) . '/ApiLogging.php';
 require_once dirname(__FILE__) . '/api.dbconn.php';
 
 /* @author  Rachel L Carbone <hello@rachellcarbone.com> */
@@ -19,8 +20,8 @@ class ApiMailer {
     private static function logMailError($level, $error) {
         // If the logger hasnt been instantiated
         if(!self::$logger) {
-            // Create a new instance of the system APILogging class
-            self::$logger = new APILogging('mailer_log');
+            // Create a new instance of the system ApiLogging class
+            self::$logger = new ApiLogging(new ApiConfig(), 'mailer_log');
         }
         // Write the error arry to the log file
         syslog($level, $error);
@@ -29,21 +30,24 @@ class ApiMailer {
     }
     
     public static function sendSystemTest($extraText, $playerEmail, $playerName = '') {
-        $websiteTitle = APIConfig::get('WEBSITE_TITLE');
-        $websiteUrl = APIConfig::get('WEBSITE_URL');
+        $sysVars = new \API\SystemVariables();
+        $websiteTitle = $sysVars->get('WEBSITE_TITLE');
+        $websiteUrl = $sysVars->get('WEBSITE_URL');
         return self::sendEmailFromTemplate('SYSTEM_EMAIL_SERVICE_TEST_EMAIL', $playerEmail, $playerName, [$websiteTitle, $websiteUrl, $extraText], [$websiteTitle]);
     }
     
     public static function sendWebsiteSignupConfirmation($playerEmail, $playerName = '') {
-        $websiteTitle = APIConfig::get('WEBSITE_TITLE');
-        $websiteUrl = APIConfig::get('WEBSITE_URL');
+        $sysVars = new \API\SystemVariables();
+        $websiteTitle = $sysVars->get('WEBSITE_TITLE');
+        $websiteUrl = $sysVars->get('WEBSITE_URL');
         $loginLink = "{$websiteUrl}login/";
         return self::sendEmailFromTemplate('NEW_USER_SIGNED_UP', $playerEmail, $playerName, [$websiteTitle, $websiteUrl, $loginLink], [$websiteTitle]);
     }
     
     public static function sendWebsiteSignupInvite($token, $playerEmail, $playerName = '') {
-        $websiteTitle = APIConfig::get('WEBSITE_TITLE');
-        $websiteUrl = APIConfig::get('WEBSITE_URL');
+        $sysVars = new \API\SystemVariables();
+        $websiteTitle = $sysVars->get('WEBSITE_TITLE');
+        $websiteUrl = $sysVars->get('WEBSITE_URL');
         $inviteLink = "{$websiteUrl}signup/{$token}/";
         return self::sendEmailFromTemplate('SIGNUP_INVITE_PLAYER', $playerEmail, $playerName, [$websiteTitle, $inviteLink], [$websiteTitle]);
     }
