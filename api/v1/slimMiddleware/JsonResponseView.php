@@ -4,7 +4,7 @@
 
 class JsonResponseView {
 
-    private static $httpStatusCodes = array(
+    private $httpStatusCodes = array(
         //Informational 1xx
         100 => 'Informational: Continue',
         101 => 'Informational: Switching Protocols',
@@ -140,7 +140,7 @@ class JsonResponseView {
         if(isset($this->httpStatusCodes[$status])) {
            $meta['desc'] = $this->httpStatusCodes[$status];
         } else {
-           $meta['status'] = 500;
+           $meta['status'] = ($status >= 400) ? 500 : 200;
            $meta['desc'] = "System Error: Unknown Status Code Returned [{$status}]";
         }
 

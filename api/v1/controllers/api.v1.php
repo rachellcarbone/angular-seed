@@ -167,7 +167,7 @@ class V1Controller {
     
     private function addDefaultRoutes($slimApp) {
         $slimApp->any('/', function ($request, $response, $args) {
-            $this->view->render($response, 700, 'Congratulations, you have reached the Slim PHP API v1.1!');
+            $this->view->render($response, 222, 'Congratulations, you have reached the Slim PHP API v1.1!');
         });
         
         $slimApp->any('/about-this-api/possible-headers', function ($request, $response, $args) {
@@ -181,6 +181,14 @@ class V1Controller {
     
     private function addErrorHandlers($slimContainer) {
         
+        $slimContainer['errorHandler'] = function ($c) {
+            return function ($request, $response, $exception) use ($container) {
+                return $c['response']->withStatus(500)
+                                    ->withHeader('Content-Type', 'text/html')
+                                    ->write('Something went wrong!');
+            };
+        };
+
         return $slimContainer;
     }
 }
