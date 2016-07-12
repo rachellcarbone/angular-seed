@@ -106,23 +106,23 @@ class V1Controller {
         };
 
         /* Create an instance of \API\ApiLogging */
-        $slimContainer['_ApiLogging'] = function($this) {
+        $slimContainer['_ApiLogging'] = function($container) {
             /* Set PHP Error Handler to ApiLogging */
-            $logging = new \API\ApiLogging($this->_ApiConfig); 
+            $logging = new \API\ApiLogging($container['_ApiConfig'], 'api'); 
             return $logging;
         };
 
         /* Create an instance of \API\DBConn */
-        $slimContainer['_DBConn'] = function($this) {
+        $slimContainer['_DBConn'] = function($container) {
             /* Return the Database Connection Class */
-            $db = new \API\DBConn($this->_ApiConfig, $this->_ApiLogging); 
+            $db = new \API\DBConn($container['_ApiConfig'], $container['_ApiLogging']); 
             return $db;
         };
 
         /* An instance of \API\SystemConfig */
-        $slimContainer['_SystemConfig'] = function($this) {
+        $slimContainer['_SystemConfig'] = function($container) {
             /* Return the System Config Class */
-            $systemConfig = new \API\SystemConfig($this->_DBConn, $this->_ApiLogging); 
+            $systemConfig = new \API\SystemConfig($container['_DBConn'], $container['_ApiLogging']); 
             return $systemConfig;
         }; 
         
@@ -167,39 +167,108 @@ class V1Controller {
     
     private function addDefaultRoutes($slimApp) {
         $slimApp->any('/', function ($request, $response, $args) {
-            $this->view->render($response, 222, 'Congratulations, you have reached the Slim PHP API v1.1!');
+            return $this->view->render($response, 200, 'Congratulations, you have reached the Slim PHP API v1.1!');
         });
         
-        $slimApp->any('/about-this-api/possible-headers', function ($request, $response, $args) {
-            $headers = $response->getHeaders();
-            foreach ($headers as $name => $values) {
-                echo $name . ": " . implode(", ", $values);
-            }
+        $slimApp->any('/about-this-api', function ($request, $response, $args) {
+            $data = array(
+                'title' => 'Angular Seed Slim PHP API',
+                'version' => $this['_ApiConfig']->get('apiVersion'),
+                'author' => 'Rachel L Carbone <hello@rachellcarbone.com>',
+                'website' => 'https://gitlab.com/rachellcarbone/angular-seed'
+            );
+            return $this->view->render($response, 200, $data);
         });
         
     }
     
     private function addErrorHandlers($slimContainer) {
-        
-        $slimContainer['errorHandler'] = function ($c) {
+        /*
+         * Override the default Not Found Handler
+         *
+         * http://www.slimframework.com/docs/handlers/error.html
+         */
+        $slimContainer['errorHandler'] = function ($container) {
             return function ($request, $response, $exception) use ($container) {
-                return $c['response']->withStatus(500)
-                                    ->withHeader('Content-Type', 'text/html')
-                                    ->write('Something went wrong!');
+                // Build log message
+                $msg = '[500] System Error';
+                // https://github.com/php-fig/http-message/blob/master/src/ServerRequestInterface.php
+                if($request->getAttribute('routeInfo')) {
+                    $req = $request->getAttribute('routeInfo');
+                    // Add the type (GET, POST, etc) and Route (http://api.seed.com/path/path)
+                    if(isset($req['request'])) {
+                        $type = (isset($req['request'][0])) ? $req['request'][0] : 'unknown';
+                        $path = (isset($req['request'][1])) ? $req['request'][1] : 'unknown';
+                        $msg .= " - [{$type}] $path";
+                    }
+                }
+                // Log the 500
+                $container['_ApiLogging']->log($msg, 'error', 'api_errors');
+                $container['_ApiLogging']->logException($exception, 'error', 'api_errors');
+
+                // Return nice JSON 500 Message
+                return $container['view']->render($response, 500, 'Unknown System Error');
+            };
+        };
+
+        /*
+         * If your Slim Framework application has a route that matches the current HTTP request URI 
+         * but NOT the HTTP request method, the application invokes its Not Allowed handler and 
+         * returns a HTTP/1.1 405 Not Allowed response to the HTTP client.
+         *
+         * http://www.slimframework.com/docs/handlers/not-allowed.html
+         */
+        $slimContainer['notAllowedHandler'] = function ($container) {
+            return function ($request, $response, $methods) use ($container) {                    
+                // Build log message
+                $msg = '[405] Invalid method requested for app route.';
+                // https://github.com/php-fig/http-message/blob/master/src/ServerRequestInterface.php
+                if($request->getAttribute('routeInfo')) {
+                    $req = $request->getAttribute('routeInfo');
+                    // Add the type (GET, POST, etc) and Route (http://api.seed.com/path/path)
+                    if(isset($req['request'])) {
+                        $type = (isset($req['request'][0])) ? $req['request'][0] : 'unknown';
+                        $path = (isset($req['request'][1])) ? $req['request'][1] : 'unknown';
+                        $msg .= " - [{$type}] $path";
+                    }
+                }
+                $msg .= ' Accepted Methods: ' . implode(', ', $methods);
+
+                // Log the 405
+                $container['_ApiLogging']->log($msg, 'debug');
+
+                // Return nice JSON 405 Message
+                return $container['view']->render($response, 405, 'This header method is not defined for this route. Accepted method(s) are: ' . implode(', ', $methods));
+            };
+        };
+
+        /*
+         * Override the default Not Found Handler
+         *
+         * http://www.slimframework.com/docs/handlers/not-found.html
+         */
+        $slimContainer['notFoundHandler'] = function ($container) {
+            return function ($request, $response) use ($container) {
+                // Build log message
+                $msg = '[404] Undefined app route was requested';
+                // https://github.com/php-fig/http-message/blob/master/src/ServerRequestInterface.php
+                if($request->getAttribute('routeInfo')) {
+                    $req = $request->getAttribute('routeInfo');
+                    // Add the type (GET, POST, etc) and Route (http://api.seed.com/path/path)
+                    if(isset($req['request'])) {
+                        $type = (isset($req['request'][0])) ? $req['request'][0] : 'unknown';
+                        $path = (isset($req['request'][1])) ? $req['request'][1] : 'unknown';
+                        $msg .= " - [{$type}] $path";
+                    }
+                }
+                // Log the 404
+                $container['_ApiLogging']->log($msg, 'debug');
+
+                // Return nice JSON 404 Message
+                return $container['view']->render($response, 404, 'This API route is not defined.');
             };
         };
 
         return $slimContainer;
-    }
-}
-
-/*
- * APILogWriter: Custom log writer for our application
- * We must implement write(mixed $message, int $level) */
-class APILogWriter extends ApiLogging {
-    public function write($message, $level = SlimLog::DEBUG) {
-        /* Set PHP Error Handler to ApiLogging */
-        $logger = new ApiLogging(new ApiConfig(), 'api_log'); 
-        $logger->write("[Slim API : Level {$level}] - {$message}");
     }
 }

@@ -94,8 +94,8 @@ class JsonResponseView {
         $output = $this->fetch($response, $status, $data);
 
         /* Set response content type */
-        $response->withJson($output, $output['meta']['status']);
-
+        $response = $response->withJson($output, $output['meta']['status']);
+        
         return $response;
     }
     
